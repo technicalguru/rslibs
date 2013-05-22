@@ -12,7 +12,7 @@
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<url>http://download.ralph-schuster.eu/libs/</url>
+	<url>http://download.ralph-schuster.eu/eu.ralph-schuster.libs/</url>
 	<name>eu.ralph-schuster.libs</name>
 	<description>A collection of utilities</description>
 
@@ -29,6 +29,11 @@
 		</site>
 	</distributionManagement>
 
+	<issueManagement>
+		<system>Jira</system>
+		<url>https://jira.ralph-schuster.eu/</url>
+	</issueManagement>
+	
 	<developers>
 		<developer>
 			<id>ralph</id>
