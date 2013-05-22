@@ -25,15 +25,20 @@
 	<distributionManagement>
 		<site>
 			<id>strato-server</id>
-			<url>scp://h2031995.stratoserver.net/var/www/vosts/ralph-schuster.eu/download/eu.ralph-schuster.libs/${project.version}/${project.groupId}/${project.artifactId}</url>
+			<url>scp://h2031995.stratoserver.net/var/www/vhosts/ralph-schuster.eu/download/eu.ralph-schuster.libs/${project.version}/${project.groupId}/${project.artifactId}</url>
 		</site>
 	</distributionManagement>
 
 	<issueManagement>
 		<system>Jira</system>
-		<url>https://jira.ralph-schuster.eu/</url>
+		<url>http://jira.ralph-schuster.eu/browse/RSLIBS</url>
 	</issueManagement>
-	
+
+	<ciManagement>
+		<system>bamboo</system>
+		<url>http://bamboo.ralph-schuster.eu/browse/RSLIB</url>
+	</ciManagement>
+
 	<developers>
 		<developer>
 			<id>ralph</id>
@@ -46,14 +51,81 @@
 		<module>data</module>
 		<module>data-hibernate</module>
 	</modules>
-	
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-site-plugin</artifactId>
+					<version>3.2</version>
+					<dependencies>
+						<dependency><!-- add support for ssh/scp -->
+							<groupId>org.apache.maven.wagon</groupId>
+							<artifactId>wagon-ssh</artifactId>
+							<version>1.0</version>
+						</dependency>
+					</dependencies>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
 	<reporting>
 		<plugins>
+			<!-- JUnit test report -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+				<version>2.14.1</version>
+			</plugin>
+
+			<!-- Javadocs -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9</version>
+				<reportSets>
+					<reportSet><!-- by default, id = "default" -->
+						<reports><!-- select non-aggregate reports -->
+							<report>javadoc</report>
+							<report>test-javadoc</report>
+						</reports>
+					</reportSet>
+					<reportSet><!-- aggregate reportSet, to define in poms having modules -->
+						<id>aggregate</id>
+						<inherited>false</inherited><!-- don't run aggregate in child modules -->
+						<reports>
+							<report>aggregate</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+
+			<!-- Project Information -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>2.7</version>
+			</plugin>
+
+			<!-- Issue Tracking Report -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-changes-plugin</artifactId>
 				<version>2.8</version>
+				<configuration>
+					<useJql>true</useJql>
+				</configuration>
 			</plugin>
+
+			<!-- NCSS Report -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>javancss-maven-plugin</artifactId>
+				<version>2.0</version>
+			</plugin>
+
 		</plugins>
 	</reporting>
 

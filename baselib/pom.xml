@@ -9,8 +9,9 @@
 
 	<artifactId>baselib</artifactId>
 	<packaging>jar</packaging>
-	<name>Base Library for OSS projects</name>
-
+	<name>Base Library</name>
+	<description>General classes, interfaces and utilities</description>
+	
 	<dependencies>
 		<dependency>
 			<groupId>commons-beanutils</groupId>
