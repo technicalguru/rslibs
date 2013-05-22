@@ -3,28 +3,19 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>eu.ralph-schuster</groupId>
-		<artifactId>pom-oss</artifactId>
-		<version>1.2.0</version>
+		<artifactId>libs</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<groupId>eu.ralph-schuster</groupId>
 	<artifactId>data-hibernate</artifactId>
-	<version>0.0.4-SNAPSHOT</version>
 	<packaging>jar</packaging>
-	<url>http://techblog.ralph-schuster.eu/data-hibernate</url>
 	<name>Data Hibernate Classes</name>
-
-	<scm>
-		<connection>scm:svn:https://h2031995.stratoserver.net/svn/OSS/eu.ralph-schuster.data-hibernate/trunk</connection>
-		<developerConnection>scm:svn:https://h2031995.stratoserver.net/svn/OSS/eu.ralph-schuster.data-hibernate/trunk</developerConnection>
-		<url>https://h2031995.stratoserver.net/svn/OSS/eu.ralph-schuster.data-hibernate/trunk</url>
-	</scm>
 
 	<dependencies>
 		<dependency>
-			<groupId>eu.ralph-schuster</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>data</artifactId>
-			<version>0.0.3</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
