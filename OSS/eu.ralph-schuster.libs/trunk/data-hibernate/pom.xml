@@ -10,7 +10,8 @@
 	<artifactId>data-hibernate</artifactId>
 	<packaging>jar</packaging>
 	<name>Data Hibernate Classes</name>
-
+	<description>Hibernate extension for Data Access classes</description>
+	
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
