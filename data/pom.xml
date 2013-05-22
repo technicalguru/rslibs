@@ -3,28 +3,19 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>eu.ralph-schuster</groupId>
-		<artifactId>pom-oss</artifactId>
-		<version>1.2.0</version>
+		<artifactId>libs</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<groupId>eu.ralph-schuster</groupId>
 	<artifactId>data</artifactId>
-	<version>0.0.4-SNAPSHOT</version>
 	<packaging>jar</packaging>
-	<url>http://techblog.ralph-schuster.eu/data-base-classes</url>
 	<name>Data Base Classes</name>
-
-	<scm>
-		<connection>scm:svn:https://h2031995.stratoserver.net/svn/OSS/eu.ralph-schuster.data/trunk</connection>
-		<developerConnection>scm:svn:https://h2031995.stratoserver.net/svn/OSS/eu.ralph-schuster.data/trunk</developerConnection>
-		<url>https://h2031995.stratoserver.net/svn/OSS/eu.ralph-schuster.data/trunk</url>
-	</scm>
 
 	<dependencies>
 		<dependency>
-			<groupId>eu.ralph-schuster</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>baselib</artifactId>
-			<version>0.0.6</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.ow2.jotm</groupId>
