@@ -355,7 +355,7 @@ public abstract class AbstractBean implements IBean {
 	public void reset() {
         Collection<PropertyChangeEvent> changes = getChanges();
         for (PropertyChangeEvent evt : changes) {
-                set(evt.getPropertyName(), evt.getNewValue());
+                set(evt.getPropertyName(), evt.getOldValue());
         }
         setDirty(false);
 	}
