@@ -1,0 +1,49 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>eu.ralph-schuster</groupId>
+		<artifactId>pom-oss</artifactId>
+		<version>1.2.0</version>
+	</parent>
+
+	<groupId>eu.ralph-schuster</groupId>
+	<artifactId>baselib</artifactId>
+	<version>0.0.7-SNAPSHOT</version>
+	<packaging>jar</packaging>
+	<url>http://techblog.ralph-schuster.eu/baselib/</url>
+	<name>Base Library for OSS projects</name>
+
+	<scm>
+		<connection>scm:svn:https://h2031995.stratoserver.net/svn/OSS/eu.ralph-schuster.baselib/trunk</connection>
+		<developerConnection>scm:svn:https://h2031995.stratoserver.net/svn/OSS/eu.ralph-schuster.baselib/trunk</developerConnection>
+		<url>https://h2031995.stratoserver.net/svn/OSS/eu.ralph-schuster.baselib/trunk</url>
+	</scm>
+
+	<dependencies>
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>1.8.3</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.6</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-configuration</groupId>
+			<artifactId>commons-configuration</artifactId>
+			<version>1.8</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.6.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.6.4</version>
+		</dependency>
+	</dependencies>
+</project>
