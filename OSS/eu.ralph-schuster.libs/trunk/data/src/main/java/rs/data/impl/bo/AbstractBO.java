@@ -50,14 +50,14 @@ public abstract class AbstractBO<K extends Serializable, T extends GeneralDTO<K>
 			throw new RuntimeException("Cannot create empty instance: ", e);
 		}
 		setTransferObject(transferObject);
+		init();
 	}
 
 	/**
 	 * Initializes this BO.
 	 */
 	@SuppressWarnings("unchecked")
-	protected void init() {
-		super.init();
+	private void init() {
 		List<Class<?>> classes = LangUtils.getTypeArguments(AbstractBO.class, getClass());
 		this.transferClass = (Class<T>) classes.get(1);
 	}

@@ -3,17 +3,9 @@
  */
 package rs.data.impl.bo;
 
-import java.beans.PropertyChangeEvent;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-import org.apache.commons.beanutils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +15,6 @@ import rs.data.util.CID;
 import rs.data.util.LockInformation;
 import rsbaselib.bean.AbstractBean;
 import rsbaselib.lang.LangUtils;
-import rsbaselib.util.CommonUtils;
 
 /**
  * Abstract Implementation for Business Objects that do not require a Transfer Object.
