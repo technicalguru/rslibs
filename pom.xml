@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>eu.ralph-schuster</groupId>
 		<artifactId>pom-oss</artifactId>
-		<version>1.2.0</version>
+		<version>1.3.0</version>
 	</parent>
 
 	<groupId>eu.ralph-schuster</groupId>
@@ -51,121 +51,5 @@
 		<module>data</module>
 		<module>data-hibernate</module>
 	</modules>
-
-	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-site-plugin</artifactId>
-					<version>3.3</version>
-					<dependencies>
-						<dependency><!-- add support for ssh/scp -->
-							<groupId>org.apache.maven.wagon</groupId>
-							<artifactId>wagon-ssh</artifactId>
-							<version>1.0</version>
-						</dependency>
-					</dependencies>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-	</build>
-
-	<reporting>
-		<plugins>
-			<!-- JUnit test report -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-report-plugin</artifactId>
-				<version>2.14.1</version>
-			</plugin>
-
-			<!-- Javadocs -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9</version>
-				<reportSets>
-					<reportSet><!-- by default, id = "default" -->
-						<reports><!-- select non-aggregate reports -->
-							<report>javadoc</report>
-							<report>test-javadoc</report>
-						</reports>
-					</reportSet>
-					<reportSet><!-- aggregate reportSet, to define in poms having modules -->
-						<id>aggregate</id>
-						<inherited>false</inherited><!-- don't run aggregate in child modules -->
-						<reports>
-							<report>aggregate</report>
-						</reports>
-					</reportSet>
-				</reportSets>
-			</plugin>
-
-			<!-- Project Information -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>2.7</version>
-			</plugin>
-
-			<!-- Issue Tracking Report -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-changes-plugin</artifactId>
-				<version>2.8</version>
-				<configuration>
-					<useJql>true</useJql>
-				</configuration>
-			</plugin>
-
-			<!-- NCSS Report -->
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>javancss-maven-plugin</artifactId>
-				<version>2.0</version>
-			</plugin>
-
-			<!-- Taglist -->
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>taglist-maven-plugin</artifactId>
-				<version>2.4</version>
-				<configuration>
-					<tagListOptions>
-						<tagClasses>
-							<tagClass>
-								<displayName>TODO</displayName>
-								<tags>
-									<tag>
-										<matchString>todo</matchString>
-										<matchType>ignoreCase</matchType>
-									</tag>
-								</tags>
-							</tagClass>
-							<tagClass>
-								<displayName>FIXME</displayName>
-								<tags>
-									<tag>
-										<matchString>FIXME</matchString>
-										<matchType>ignoreCase</matchType>
-									</tag>
-								</tags>
-							</tagClass>
-							<tagClass>
-								<displayName>DEPRECATED</displayName>
-								<tags>
-									<tag>
-										<matchString>@deprecated</matchString>
-										<matchType>ignoreCase</matchType>
-									</tag>
-								</tags>
-							</tagClass>
-						</tagClasses>
-					</tagListOptions>
-				</configuration>
-			</plugin>
-		</plugins>
-	</reporting>
 
 </project>
