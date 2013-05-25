@@ -8,6 +8,7 @@ import java.util.List;
 
 import rs.data.impl.dto.GeneralDTO;
 import rs.data.util.CID;
+import rsbaselib.bean.BeanSupport;
 import rsbaselib.lang.LangUtils;
 import rsbaselib.util.RsDate;
 
@@ -23,8 +24,12 @@ public abstract class AbstractBO<K extends Serializable, T extends GeneralDTO<K>
 	/**
 	 * Serial UID.
 	 */
-	private static final long serialVersionUID = 2918149248925033131L;
+	private static final long serialVersionUID = 1L;
 	
+	static {
+		BeanSupport.INSTANCE.addForbiddenCopy(AbstractBO.class, "transferObject");
+	}
+
 	/** The persistent classes to manage */
 	private Class<T> transferClass;
 	private T transferObject;

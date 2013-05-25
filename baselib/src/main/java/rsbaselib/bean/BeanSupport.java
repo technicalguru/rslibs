@@ -6,8 +6,11 @@ package rsbaselib.bean;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.slf4j.Logger;
@@ -25,12 +28,14 @@ public class BeanSupport {
 	public static BeanSupport INSTANCE = new BeanSupport();
 	
 	private Map<Class<?>,Map<String,String>> beanPropertyMappings;
+	private Map<Class<?>,Set<String>> forbiddenCopies;
 	
 	/**
 	 * Constructor.
 	 */
 	protected BeanSupport() {
 		beanPropertyMappings = new HashMap<Class<?>, Map<String,String>>();
+		forbiddenCopies = new HashMap<Class<?>, Set<String>>();
 	}
 
 	/**
@@ -79,5 +84,62 @@ public class BeanSupport {
 				log.error("Error while firing property event: "+entry.getKey(), t);
 			}
 		}
+	}
+	
+	/**
+	 * Adds the given property to the list of forbidden properties for copies.
+	 * The property will not be copied anymore by {@link IBean#copyTo(Object)}.
+	 * @param beanClass the bean class
+	 * @param propertyName the name of the property
+	 * @see IBean#copyTo(Object)
+	 */
+	public void addForbiddenCopy(Class<?> beanClass, String propertyName) {
+		getForbiddenList(beanClass, true).add(propertyName);
+	}
+	
+	/**
+	 * Removes the given property from the list of forbidden properties for copies.
+	 * The property will be copied by {@link IBean#copyTo(Object)}.
+	 * @param beanClass the bean class
+	 * @param propertyName the name of the property
+	 * @see IBean#copyTo(Object)
+	 */
+	public void removeForbiddenCopy(Class<?> beanClass, String propertyName) {
+		getForbiddenList(beanClass, true).add(propertyName);
+	}
+	
+	/**
+	 * Returns whether the given property is forbidden to be copied.
+	 * @param beanClass the bean class
+	 * @param propertyName the name of the property
+	 * @return <code>true</code> when {@link IBean#copyTo(Object)} must not copy this property
+	 */
+	public boolean isCopyForbidden(Class<?> beanClass, String propertyName) {
+		if (propertyName.equals("class")) return false;
+		// We need to check all super classes
+		while (beanClass != null) {
+			if (getForbiddenList(beanClass, false).contains(propertyName)) {
+				return true;
+			}
+			beanClass = beanClass.getSuperclass();
+		}
+		return false;
+	}
+
+	/**
+	 * Returns the set of property names forbidden to be copied.
+	 * @param beanClass the class
+	 * @param create whether the list shall be created if it doesn't exist yet
+	 * @return the set of forbidden properties
+	 */
+	protected Set<String> getForbiddenList(Class<?> beanClass, boolean create) {
+		Set<String> rc = forbiddenCopies.get(beanClass);
+		if ((rc == null) && create) {
+			rc = new HashSet<String>();
+			forbiddenCopies.put(beanClass, rc);
+		}
+		
+		if (rc == null) return Collections.emptySet();
+		return rc;
 	}
 }

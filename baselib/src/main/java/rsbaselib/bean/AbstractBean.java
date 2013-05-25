@@ -6,6 +6,7 @@ package rsbaselib.bean;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -22,6 +23,10 @@ import rsbaselib.util.CommonUtils;
  */
 public abstract class AbstractBean implements IBean {
 
+	static {
+		BeanSupport.INSTANCE.addForbiddenCopy(AbstractBean.class, "dirty");
+	}
+	
 	/** The change support. */
 	private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 	/** Object is dirty? */
@@ -348,6 +353,48 @@ public abstract class AbstractBean implements IBean {
 		return new ArrayList<PropertyChangeEvent>(registeredChanges.values());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * <p>
+	 * The method will ask {@link #isCopyAllowed(PropertyDescriptor)} for each property of this bean.
+	 * </p>
+	 * @throws IllegalArgumentException when the destination is not of same type as this class
+	 */
+	@Override
+	public void copyTo(Object destination) {
+		if (!getClass().equals(destination.getClass())) {
+			throw new IllegalArgumentException("The destination must be of same type but is of "+destination.getClass().getName());
+		}
+		
+		PropertyDescriptor descriptors[] = PropertyUtils.getPropertyDescriptors(this);
+		for (PropertyDescriptor descriptor : descriptors) {
+			String name = descriptor.getName();
+			
+			if (isCopyAllowed(descriptor) && PropertyUtils.isReadable(this, name) && PropertyUtils.isWriteable(destination, name)) {
+				try {
+					Object value = PropertyUtils.getProperty(this, name);
+					PropertyUtils.setProperty(destination, name, value);
+				} catch (Exception e) {
+					
+				}
+			}
+		}
+	}
+
+	/**
+	 * Returns true when {@link #copyTo(GeneralBO)} is allowed to copy the given property.
+	 * <p>
+	 * This method relies on the forbidden property list managed by {@link BeanSupport}.
+	 * Descendants could easily add properties that shall not be copied by calling
+	 * {@link BeanSupport#addForbiddenCopy(Class, String)}.
+	 * </p>
+	 * @return <code>true</code> when copy is allowed
+	 * @see BeanSupport#isCopyForbidden(Class, String)
+	 */
+	protected boolean isCopyAllowed(PropertyDescriptor descriptor) {
+		return !BeanSupport.INSTANCE.isCopyForbidden(getClass(), descriptor.getName());
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */

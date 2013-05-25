@@ -14,6 +14,7 @@ import rs.data.api.dao.GeneralDAO;
 import rs.data.util.CID;
 import rs.data.util.LockInformation;
 import rsbaselib.bean.AbstractBean;
+import rsbaselib.bean.BeanSupport;
 import rsbaselib.lang.LangUtils;
 
 /**
@@ -29,6 +30,13 @@ public abstract class AbstractGeneralBO<K extends Serializable> extends Abstract
 	 */
 	private static final long serialVersionUID = 1332731487212304311L;
 
+	static {
+		BeanSupport.INSTANCE.addForbiddenCopy(AbstractGeneralBO.class, PROPERTY_CREATION_DATE);
+		BeanSupport.INSTANCE.addForbiddenCopy(AbstractGeneralBO.class, PROPERTY_CHANGE_DATE);
+		BeanSupport.INSTANCE.addForbiddenCopy(AbstractGeneralBO.class, "changed");
+		BeanSupport.INSTANCE.addForbiddenCopy(AbstractGeneralBO.class, "dao");
+	}
+	
 	/** The persistent classes to manage */
 	private Class<K> keyClass;
 	
@@ -176,7 +184,7 @@ public abstract class AbstractGeneralBO<K extends Serializable> extends Abstract
 	public boolean isInvalid() {
 		return invalid;
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
