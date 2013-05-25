@@ -508,7 +508,16 @@ public abstract class AbstractHibernateDAO<K extends Serializable, T extends Gen
 				scrollableResult = null;
 				criteria = null;
 				nextObject = null;
-				getFactory().commit();
+				try {
+					getFactory().commit();
+				} catch (Exception e) {
+					getLog().error("Cannot commit TX", e);
+					try {
+						getFactory().rollback();
+					} catch (Exception e2) {
+						getLog().error("Cannot rollback TX", e);
+					}
+				}
 			}
 		}
 
