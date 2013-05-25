@@ -36,6 +36,12 @@ public interface IBean extends PropertyChangeProvider, Dirtyable {
 	public Collection<PropertyChangeEvent> getChanges();
 
 	/**
+	 * Copies all properties to the given object.
+	 * @param destination destination object
+	 */
+	public void copyTo(Object destination);
+
+	/**
 	 * Reset all changes.
 	 */
 	public void reset();
