@@ -7,6 +7,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import rsbaselib.util.CommonUtils;
+
 /**
  * A key combining multiple other serializables.
  * @author ralph
@@ -96,4 +98,57 @@ public abstract class CombinedKey implements Serializable {
 	protected Class<? extends Serializable> getKeyClass(int index) {
 		return keyClasses.get(index);
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int rc = 1;
+		for (Serializable k : keys) {
+			rc = prime * rc + k.hashCode();
+		}
+		return rc;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) return false;
+		if (this == obj) return true;
+		if (obj.getClass().equals(getClass())) {
+			CombinedKey other = (CombinedKey)obj;
+			if (other.getSize() != getSize()) return false;
+			for (int i=0; i<getSize(); i++) {
+				if (!CommonUtils.equals(getKey(i), other.getKey(i))) {
+					return false;
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		StringBuffer rc = new StringBuffer();
+		rc.append(getClass().getSimpleName());
+		rc.append("[");
+		boolean first = true;
+		for (Serializable key : keys) {
+			if (!first) rc.append(";"); 
+			rc.append(key.toString());
+			first = false;
+		}
+		rc.append("]");
+		return rc.toString();
+	}
+
 }
