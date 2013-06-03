@@ -12,6 +12,13 @@
 	<name>Data Base Classes</name>
 	<description>Library for generic Data Access classes</description>
 	
+	<distributionManagement>
+		<site>
+			<id>strato-server</id>
+			<url>scp://h2031995.stratoserver.net/var/www/vhosts/ralph-schuster.eu/download/eu.ralph-schuster.libs/${project.version}/${project.groupId}/${project.artifactId}</url>
+		</site>
+	</distributionManagement>
+
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
