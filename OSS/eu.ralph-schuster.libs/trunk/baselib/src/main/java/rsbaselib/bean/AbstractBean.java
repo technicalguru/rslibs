@@ -57,7 +57,9 @@ public abstract class AbstractBean implements IBean {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Sets the dirty flag.
+	 * @param dirty <code>true</code> when bean shall be marked dirty. If the bean is marked as not dirty
+	 * then all registered changes will be removed.
 	 */
 	protected void setDirty(boolean dirty) {
 		this.dirty = dirty;
@@ -304,7 +306,7 @@ public abstract class AbstractBean implements IBean {
 	/**
 	 * Returns the original value.
 	 * The original value is the value of a property that existed at the
-	 * time when {@link #isChanged()} returned false.
+	 * time when {@link #isDirty()} returned false.
 	 * The value will be compared to the value currently held by this object
 	 * in order to detect any changes.
 	 * @param propertyName name of property
@@ -382,7 +384,7 @@ public abstract class AbstractBean implements IBean {
 	}
 
 	/**
-	 * Returns true when {@link #copyTo(GeneralBO)} is allowed to copy the given property.
+	 * Returns true when {@link #copyTo(Object)} is allowed to copy the given property.
 	 * <p>
 	 * This method relies on the forbidden property list managed by {@link BeanSupport}.
 	 * Descendants could easily add properties that shall not be copied by calling

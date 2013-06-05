@@ -29,6 +29,7 @@ public class BeanComparator<T> implements Comparator<T> {
 
 	/**
 	 * Constructor.
+	 * @param comparator the comparator to be used
 	 * @param beanProperties the properties in order of priority.
 	 */
 	public BeanComparator(Comparator<Object> comparator, String... beanProperties) {
@@ -37,7 +38,7 @@ public class BeanComparator<T> implements Comparator<T> {
 
 	/**
 	 * Constructor.
-	 * @param beanProperties the properties in order of priority.
+	 * @param valueProviders the value providers for each of the properties to be compared
 	 */
 	public BeanComparator(ValueProvider... valueProviders) {
 		this(null, valueProviders);
@@ -45,7 +46,8 @@ public class BeanComparator<T> implements Comparator<T> {
 
 	/**
 	 * Constructor.
-	 * @param beanProperties the properties in order of priority.
+	 * @param comparator the comparator to be used
+	 * @param valueProviders the value providers for each of the properties to be compared
 	 */
 	public BeanComparator(Comparator<Object> comparator, ValueProvider... valueProviders) {
 		this.comparator = comparator;
