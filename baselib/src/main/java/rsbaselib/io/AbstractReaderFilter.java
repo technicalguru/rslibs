@@ -50,7 +50,7 @@ public abstract class AbstractReaderFilter extends FilterReader {
 
 			int last = off;
 			for (int i=off; i<off+count; i++) {
-				if(!isValidChar(cbuf[i])) {
+				if(isValidChar(cbuf[i])) {
 					cbuf[last++] = cbuf[i];
 				}
 			}
