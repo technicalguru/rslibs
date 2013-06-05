@@ -39,6 +39,8 @@ public class ReleaseInformation {
 	public static final String KEY_SVN_STATUS = "status";
 	/** The Subversion special status key (specialStatus) */
 	public static final String KEY_SVN_SPECIAL_STATUS = "specialStatus";
+	/** The build date, e.g. 2012-12-19 11:17:24 +0100 */
+	public static final String KEY_BUILD_DATE = "buildDate"; 
 
 	/** The date formatter */
 	public static final DateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
@@ -52,9 +54,10 @@ public class ReleaseInformation {
 	private long svnRevision;
 	private boolean svnMixedRevisions;
 	private long svnCommittedRevision;
-	private Date svnCommittedDate; 
+	private RsDate svnCommittedDate; 
 	private String svnStatus;
 	private String svnSpecialStatus;
+	private RsDate buildDate; 
 	
 	/**
 	 * Constructor.
@@ -210,7 +213,7 @@ public class ReleaseInformation {
 	 * Returns the svnCommittedDate.
 	 * @return the svnCommittedDate
 	 */
-	public Date getSvnCommittedDate() {
+	public RsDate getSvnCommittedDate() {
 		return svnCommittedDate;
 	}
 
@@ -218,8 +221,16 @@ public class ReleaseInformation {
 	 * Sets the svnCommittedDate.
 	 * @param svnCommittedDate the svnCommittedDate to set
 	 */
-	public void setSvnCommittedDate(Date svnCommittedDate) {
+	public void setSvnCommittedDate(RsDate svnCommittedDate) {
 		this.svnCommittedDate = svnCommittedDate;
+	}
+
+	/**
+	 * Sets the svnCommittedDate.
+	 * @param svnCommittedDate the svnCommittedDate to set
+	 */
+	public void setSvnCommittedDate(Date svnCommittedDate) {
+		setSvnCommittedDate(svnCommittedDate != null ? new RsDate(svnCommittedDate) : null);
 	}
 
 	/**
@@ -252,6 +263,30 @@ public class ReleaseInformation {
 	 */
 	public void setSvnSpecialStatus(String svnSpecialStatus) {
 		this.svnSpecialStatus = svnSpecialStatus;
+	}
+
+	/**
+	 * Returns the buildDate.
+	 * @return the buildDate
+	 */
+	public RsDate getBuildDate() {
+		return buildDate;
+	}
+
+	/**
+	 * Sets the buildDate.
+	 * @param buildDate the buildDate to set
+	 */
+	public void setBuildDate(RsDate buildDate) {
+		this.buildDate = buildDate;
+	}
+
+	/**
+	 * Sets the buildDate.
+	 * @param buildDate the buildDate to set
+	 */
+	public void setBuildDate(Date buildDate) {
+		setBuildDate(buildDate != null ? new RsDate(buildDate) : null);
 	}
 
 	/**
@@ -327,6 +362,7 @@ public class ReleaseInformation {
 		else if (isKey(key, KEY_SVN_COMMITTED_DATE))     setSvnCommittedDate(DATE_FORMATTER.parse(value));
 		else if (isKey(key, KEY_SVN_STATUS))             setSvnStatus(value);
 		else if (isKey(key, KEY_SVN_SPECIAL_STATUS))     setSvnSpecialStatus(value);
+		else if (isKey(key, KEY_BUILD_DATE))             setBuildDate(DATE_FORMATTER.parse(value));
 	}
 	
 	/**
