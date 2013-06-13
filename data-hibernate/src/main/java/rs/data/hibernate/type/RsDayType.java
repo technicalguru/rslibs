@@ -12,7 +12,7 @@ import java.sql.Types;
 import org.hibernate.HibernateException;
 import org.hibernate.usertype.UserType;
 
-import rsbaselib.util.RsDay;
+import rs.baselib.util.RsDay;
 
 /**
  * Loads RsDay.

@@ -16,7 +16,7 @@ import javax.crypto.spec.PBEKeySpec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import rsbaselib.crypto.EncryptionUtils;
+import rs.baselib.crypto.EncryptionUtils;
 
 /**
  * Implements basic crypting decrypting.

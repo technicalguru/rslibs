@@ -3,8 +3,8 @@
  */
 package rs.data.util;
 
+import rs.baselib.util.RsDate;
 import rs.data.api.bo.GeneralBO;
-import rsbaselib.util.RsDate;
 
 /**
  * Tells information about the lock

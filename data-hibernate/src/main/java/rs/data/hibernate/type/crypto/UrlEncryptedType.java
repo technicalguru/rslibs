@@ -7,7 +7,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import rsbaselib.io.ConverterUtils;
+import rs.baselib.io.ConverterUtils;
 
 /**
  * Handles Long encryption.

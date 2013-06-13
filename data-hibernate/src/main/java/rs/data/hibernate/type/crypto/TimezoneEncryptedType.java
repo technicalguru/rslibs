@@ -6,7 +6,7 @@ package rs.data.hibernate.type.crypto;
 import java.io.UnsupportedEncodingException;
 import java.util.TimeZone;
 
-import rsbaselib.io.ConverterUtils;
+import rs.baselib.io.ConverterUtils;
 
 /**
  * Handles Long encryption.

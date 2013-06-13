@@ -18,7 +18,7 @@ import org.hibernate.usertype.UserType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import rsbaselib.util.RsDate;
+import rs.baselib.util.RsDate;
 
 /**
  * Load RsDate.

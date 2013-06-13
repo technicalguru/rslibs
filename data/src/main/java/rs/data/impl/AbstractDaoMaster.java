@@ -11,11 +11,11 @@ import java.util.Properties;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 
+import rs.baselib.configuration.Configurable;
+import rs.baselib.io.FileFinder;
 import rs.data.api.DaoFactory;
 import rs.data.api.DaoMaster;
 import rs.data.util.URLTransformer;
-import rsbaselib.configuration.Configurable;
-import rsbaselib.io.FileFinder;
 
 /**
  * Abstract implementation for DAO masters.

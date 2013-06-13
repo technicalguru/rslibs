@@ -3,7 +3,7 @@
  */
 package rs.data.hibernate.type.crypto;
 
-import rsbaselib.io.ConverterUtils;
+import rs.baselib.io.ConverterUtils;
 
 /**
  * Handles Boolean encryption.

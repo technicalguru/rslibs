@@ -47,7 +47,8 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Embed-Dependencies>groupId=${project.groupId};scope=compile|runtime</Embed-Dependencies>
+						<Export-Package>rs.*</Export-Package>
+						<Embed-Dependencies>groupId=${project.groupId};inline=false;scope=compile|runtime</Embed-Dependencies>
 					</instructions>
 				</configuration>
 			</plugin>

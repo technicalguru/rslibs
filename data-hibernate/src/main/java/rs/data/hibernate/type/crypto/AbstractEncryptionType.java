@@ -20,7 +20,7 @@ import org.hibernate.usertype.UserType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import rsbaselib.util.CommonUtils;
+import rs.baselib.util.CommonUtils;
 
 /**
  * Base class for encrypting data.

@@ -21,9 +21,9 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import rs.baselib.io.FileFinder;
 import rs.data.hibernate.util.DataSourceConnectionProvider;
 import rs.data.impl.AbstractDaoMaster;
-import rsbaselib.io.FileFinder;
 
 /**
  * @author ralph

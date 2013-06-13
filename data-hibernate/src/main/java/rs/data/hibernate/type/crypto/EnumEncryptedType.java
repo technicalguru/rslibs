@@ -7,7 +7,7 @@ import java.util.Properties;
 
 import org.hibernate.MappingException;
 
-import rsbaselib.io.ConverterUtils;
+import rs.baselib.io.ConverterUtils;
 
 /**
  * Reads enumerations.
