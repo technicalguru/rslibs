@@ -49,10 +49,16 @@
 				<configuration>
 					<instructions>
 						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+						<Embed-Dependencies>*;scope=compile|runtime;inline=false</Embed-Dependencies>
 						<Export-Package>rs.*</Export-Package>
-						<Embed-Dependencies>groupId=${project.groupId};inline=false;scope=compile|runtime</Embed-Dependencies>
 						<Import-Package>*</Import-Package>
 					</instructions>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<skipAssembly>true</skipAssembly>
 				</configuration>
 			</plugin>
 		</plugins>
