@@ -9,7 +9,7 @@
 
 	<artifactId>baselib</artifactId>
 	<packaging>jar</packaging>
-	<name>Base Library</name>
+	<name>${project.groupId}.${project.artifactId}</name>
 	<description>General classes, interfaces and utilities</description>
 	
 	<distributionManagement>

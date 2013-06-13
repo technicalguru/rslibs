@@ -9,9 +9,9 @@
 
 	<artifactId>libs-bundle</artifactId>
 	<packaging>bundle</packaging>
-	<name>eu.ralph-schuster.libs-bundle</name>
+	<name>${project.groupId}.${project.artifactId}</name>
 
-	<description>General classes, interfaces and utilities</description>
+	<description>The complete RS libs as OSGI bundle</description>
 
 	<distributionManagement>
 		<site>
@@ -47,6 +47,7 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
+						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
 						<Export-Package>rs.*</Export-Package>
 						<Embed-Dependencies>groupId=${project.groupId};inline=false;scope=compile|runtime</Embed-Dependencies>
 					</instructions>

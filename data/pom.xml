@@ -9,7 +9,7 @@
 
 	<artifactId>data</artifactId>
 	<packaging>jar</packaging>
-	<name>Data Base Classes</name>
+	<name>${project.groupId}.${project.artifactId}</name>
 	<description>Library for generic Data Access classes</description>
 	
 	<distributionManagement>
