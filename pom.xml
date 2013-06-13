@@ -50,6 +50,7 @@
 		<module>baselib</module>
 		<module>data</module>
 		<module>data-hibernate</module>
+		<module>libs-bundle</module>
 	</modules>
 
 </project>
