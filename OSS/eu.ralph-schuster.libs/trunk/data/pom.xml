@@ -8,7 +8,7 @@
 	</parent>
 
 	<artifactId>data</artifactId>
-	<packaging>jar</packaging>
+	<packaging>bundle</packaging>
 	<name>${project.groupId}.${project.artifactId}</name>
 	<description>Library for generic Data Access classes</description>
 	
@@ -32,6 +32,25 @@
 		</dependency>
 	</dependencies>
 	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<version>2.3.7</version>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+						<Embed-Dependencies>*;scope=compile|runtime;inline=false</Embed-Dependencies>
+						<Export-Package>rs.data.*</Export-Package>
+						<Import-Package>*</Import-Package>
+					</instructions>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 	<reporting>
 		<plugins>
 			<plugin>
