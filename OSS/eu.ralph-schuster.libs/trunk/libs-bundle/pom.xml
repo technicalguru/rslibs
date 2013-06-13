@@ -44,12 +44,14 @@
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
+				<version>2.3.7</version>
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
 						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
 						<Export-Package>rs.*</Export-Package>
 						<Embed-Dependencies>groupId=${project.groupId};inline=false;scope=compile|runtime</Embed-Dependencies>
+						<Import-Package>*</Import-Package>
 					</instructions>
 				</configuration>
 			</plugin>
