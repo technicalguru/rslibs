@@ -37,6 +37,7 @@ public class ReleaseRepository {
 
 	public static final String BASELIB_GROUP_ID = "eu.ralph-schuster";
 	public static final String BASELIB_ARTIFACT_ID = "baselib";
+	public static final String BUNDLE_ARTIFACT_ID = "lib-bundle";
 
 	private static Logger log = LoggerFactory.getLogger(ReleaseRepository.class);
 
