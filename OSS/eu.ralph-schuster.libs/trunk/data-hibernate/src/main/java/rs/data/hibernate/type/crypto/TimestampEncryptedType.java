@@ -5,7 +5,7 @@ package rs.data.hibernate.type.crypto;
 
 import java.sql.Timestamp;
 
-import rsbaselib.io.ConverterUtils;
+import rs.baselib.io.ConverterUtils;
 
 /**
  * Handles Long encryption.

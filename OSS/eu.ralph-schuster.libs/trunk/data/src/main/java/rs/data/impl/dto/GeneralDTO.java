@@ -5,7 +5,7 @@ package rs.data.impl.dto;
 
 import java.io.Serializable;
 
-import rsbaselib.util.RsDate;
+import rs.baselib.util.RsDate;
 
 /**
  * Abstract Implementation for Data Transfer Objects.

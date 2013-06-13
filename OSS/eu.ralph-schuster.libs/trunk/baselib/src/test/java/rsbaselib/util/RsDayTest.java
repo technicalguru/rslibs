@@ -9,6 +9,9 @@ import java.util.Calendar;
 
 import org.junit.Test;
 
+import rs.baselib.util.RsDate;
+import rs.baselib.util.RsDay;
+
 /**
  * Tests the {@link RsDay} class.
  * @author ralph
@@ -20,7 +23,7 @@ public class RsDayTest {
 	private static final long currentTime = System.currentTimeMillis();
 	
 	/**
-	 * Test method for {@link rsbaselib.util.RsDay#getEnd()}.
+	 * Test method for {@link rs.baselib.util.RsDay#getEnd()}.
 	 */
 	@Test
 	public void testGetEnd() {

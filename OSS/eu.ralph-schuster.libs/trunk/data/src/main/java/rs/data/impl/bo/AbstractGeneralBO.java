@@ -9,13 +9,13 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import rs.baselib.bean.AbstractBean;
+import rs.baselib.bean.BeanSupport;
+import rs.baselib.lang.LangUtils;
 import rs.data.api.bo.GeneralBO;
 import rs.data.api.dao.GeneralDAO;
 import rs.data.util.CID;
 import rs.data.util.LockInformation;
-import rsbaselib.bean.AbstractBean;
-import rsbaselib.bean.BeanSupport;
-import rsbaselib.lang.LangUtils;
 
 /**
  * Abstract Implementation for Business Objects that do not require a Transfer Object.

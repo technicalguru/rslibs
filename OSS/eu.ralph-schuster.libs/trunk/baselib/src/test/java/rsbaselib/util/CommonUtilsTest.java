@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import rs.baselib.util.CommonUtils;
+
 /**
  * Test the utilities.
  * @author ralph

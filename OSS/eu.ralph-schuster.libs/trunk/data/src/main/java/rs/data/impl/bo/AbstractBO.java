@@ -6,11 +6,11 @@ package rs.data.impl.bo;
 import java.io.Serializable;
 import java.util.List;
 
+import rs.baselib.bean.BeanSupport;
+import rs.baselib.lang.LangUtils;
+import rs.baselib.util.RsDate;
 import rs.data.impl.dto.GeneralDTO;
 import rs.data.util.CID;
-import rsbaselib.bean.BeanSupport;
-import rsbaselib.lang.LangUtils;
-import rsbaselib.util.RsDate;
 
 /**
  * Abstract Implementation for Business Objects that require a Transfer Object.

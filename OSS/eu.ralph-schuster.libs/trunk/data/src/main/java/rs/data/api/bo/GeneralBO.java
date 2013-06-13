@@ -5,10 +5,10 @@ package rs.data.api.bo;
 
 import java.io.Serializable;
 
+import rs.baselib.bean.IBean;
+import rs.baselib.util.RsDate;
 import rs.data.api.dao.GeneralDAO;
 import rs.data.util.LockInformation;
-import rsbaselib.bean.IBean;
-import rsbaselib.util.RsDate;
 
 /**
  * Interface for Business Objects.

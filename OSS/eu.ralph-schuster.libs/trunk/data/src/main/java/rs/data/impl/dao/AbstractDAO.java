@@ -9,13 +9,13 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import rs.baselib.lang.LangUtils;
 import rs.data.api.bo.GeneralBO;
 import rs.data.api.dao.GeneralDAO;
 import rs.data.impl.bo.AbstractBO;
 import rs.data.impl.dto.GeneralDTO;
 import rs.data.util.CID;
 import rs.data.util.DaoIterator;
-import rsbaselib.lang.LangUtils;
 
 /**
  * Abstract Implementation for Data Access Objects.

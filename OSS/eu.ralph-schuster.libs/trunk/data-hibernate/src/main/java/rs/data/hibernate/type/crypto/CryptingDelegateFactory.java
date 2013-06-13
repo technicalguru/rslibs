@@ -18,10 +18,10 @@ import org.apache.commons.configuration.XMLConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import rsbaselib.configuration.ConfigurationUtils;
-import rsbaselib.crypto.EncryptionUtils;
-import rsbaselib.io.FileFinder;
-import rsbaselib.security.PasswordCallback;
+import rs.baselib.configuration.ConfigurationUtils;
+import rs.baselib.crypto.EncryptionUtils;
+import rs.baselib.io.FileFinder;
+import rs.baselib.security.PasswordCallback;
 
 /**
  * Creates a crypting delegator.

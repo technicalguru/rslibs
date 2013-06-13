@@ -16,6 +16,9 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import rs.baselib.configuration.Configurable;
+import rs.baselib.lang.LangUtils;
+import rs.baselib.util.RsDate;
 import rs.data.api.DaoFactory;
 import rs.data.api.DaoMaster;
 import rs.data.api.bo.GeneralBO;
@@ -26,9 +29,6 @@ import rs.data.event.DaoListener;
 import rs.data.impl.bo.AbstractGeneralBO;
 import rs.data.util.CID;
 import rs.data.util.DaoIterator;
-import rsbaselib.configuration.Configurable;
-import rsbaselib.lang.LangUtils;
-import rsbaselib.util.RsDate;
 
 /**
  * Abstract Implementation for Data Access Objects.

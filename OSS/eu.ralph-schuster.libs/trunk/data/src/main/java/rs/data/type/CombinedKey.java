@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import rsbaselib.util.CommonUtils;
+import rs.baselib.util.CommonUtils;
 
 /**
  * A key combining multiple other serializables.

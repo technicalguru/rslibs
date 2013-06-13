@@ -13,8 +13,8 @@ import java.sql.Types;
 import org.hibernate.HibernateException;
 import org.hibernate.usertype.UserType;
 
-import rsbaselib.util.DateTimePeriod;
-import rsbaselib.util.RsDate;
+import rs.baselib.util.DateTimePeriod;
+import rs.baselib.util.RsDate;
 
 /**
  * @author ralph

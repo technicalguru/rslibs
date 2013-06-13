@@ -6,6 +6,9 @@ package rsbaselib.util;
 import java.util.Collection;
 
 import org.junit.Test;
+
+import rs.baselib.util.ReleaseInformation;
+import rs.baselib.util.ReleaseRepository;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNotNull;
 
@@ -17,7 +20,7 @@ import static org.junit.Assert.assertNotNull;
 public class ReleaseRepositoryTest {
 
 	/**
-	 * Test method for {@link rsbaselib.util.ReleaseRepository#getVersionInfos(java.lang.String, java.lang.String)}.
+	 * Test method for {@link rs.baselib.util.ReleaseRepository#getVersionInfos(java.lang.String, java.lang.String)}.
 	 */
 	@Test
 	public void testGetVersionInfos() {

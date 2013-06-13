@@ -12,6 +12,8 @@ import java.util.jar.Manifest;
 import java.util.regex.Pattern;
 
 import org.junit.Test;
+
+import rs.baselib.lang.ResourceList;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 

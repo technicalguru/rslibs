@@ -3,8 +3,8 @@
  */
 package rs.data.hibernate.type.crypto;
 
-import rsbaselib.io.ConverterUtils;
-import rsbaselib.util.CommonUtils;
+import rs.baselib.io.ConverterUtils;
+import rs.baselib.util.CommonUtils;
 
 /**
  * Handles Float encryption.
