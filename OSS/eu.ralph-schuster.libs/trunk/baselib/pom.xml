@@ -57,9 +57,6 @@
 				<configuration>
 					<instructions>
 						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-						<Embed-Dependencies>*;scope=compile|runtime;inline=false</Embed-Dependencies>
-						<Export-Package>rs.*</Export-Package>
-						<Import-Package>*</Import-Package>
 					</instructions>
 				</configuration>
 			</plugin>
