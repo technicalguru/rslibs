@@ -17,7 +17,7 @@ public class ConfigurationUtils {
 	/**
 	 * Loads an object from a configuration.
 	 * The object is configured if it is an instance of {@link IConfigurable}.
-	 * @param config configuration
+	 * @param config the configuration to apply
 	 * @return the object
 	 */
 	public static Object load(Configuration config, boolean configure) {
@@ -36,14 +36,14 @@ public class ConfigurationUtils {
 
 	/**
 	 * Configure the object accordingly.
-	 * @param configurable
-	 * @param config
-	 * @throws ConfigurationException
+	 * @param configurable the object to be configured
+	 * @param config the configuration to apply
+	 * @throws ConfigurationException when a problem occurs
 	 */
-	public static void configure(IConfigurable iConfigurable, Configuration config) throws ConfigurationException {
-		iConfigurable.beforeConfiguration();
-		iConfigurable.configure(config);
-		iConfigurable.afterConfiguration();
+	public static void configure(IConfigurable configurable, Configuration config) throws ConfigurationException {
+		configurable.beforeConfiguration();
+		configurable.configure(config);
+		configurable.afterConfiguration();
 	}
 	
 	/**
