@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 import rs.baselib.configuration.ConfigurationUtils;
 import rs.baselib.crypto.EncryptionUtils;
 import rs.baselib.io.FileFinder;
-import rs.baselib.security.PasswordCallback;
+import rs.baselib.security.IPasswordCallback;
 
 /**
  * Creates a crypting delegator.
@@ -42,7 +42,7 @@ public class CryptingDelegateFactory implements ICryptingDelegateFactory {
 	private String algorithm;
 	private AlgorithmParameterSpec paramSpec;
 	private XMLConfiguration config;
-	private Map<String, PasswordCallback> passwordCallbacks;
+	private Map<String, IPasswordCallback> passwordCallbacks;
 	
 	/**
 	 * Returns the crypting delegate factory.
@@ -65,7 +65,7 @@ public class CryptingDelegateFactory implements ICryptingDelegateFactory {
 	protected void init() {
 		try {
 			// Some init
-			passwordCallbacks = new HashMap<String, PasswordCallback>();
+			passwordCallbacks = new HashMap<String, IPasswordCallback>();
 			
 			// Load the configuration
 			String configLocation = System.getProperty("encryption.config");
@@ -113,13 +113,13 @@ public class CryptingDelegateFactory implements ICryptingDelegateFactory {
 	 * @param type type of password callback
 	 * @return the password callback
 	 */
-	protected synchronized PasswordCallback getPasswordCallback(String type) {
+	protected synchronized IPasswordCallback getPasswordCallback(String type) {
 		SubnodeConfiguration config = getPasswordCallbackConfig(type);
 		String className = config.getString("[@class]");
 		if (className != null) {
-			PasswordCallback rc = passwordCallbacks.get(className);
+			IPasswordCallback rc = passwordCallbacks.get(className);
 			if (rc == null) {
-				rc = (PasswordCallback)ConfigurationUtils.load(config, true);
+				rc = (IPasswordCallback)ConfigurationUtils.load(config, true);
 				passwordCallbacks.put(className, rc);
 			}
 			return rc;
@@ -151,7 +151,7 @@ public class CryptingDelegateFactory implements ICryptingDelegateFactory {
 	 */
 	protected char[] getPassword(String type) {
 		char rc[] = null;
-		PasswordCallback callback = getPasswordCallback(type);
+		IPasswordCallback callback = getPasswordCallback(type);
 		if (callback == null) rc = null;
 		else rc = callback.getPassword();
 		return rc;

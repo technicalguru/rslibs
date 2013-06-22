@@ -9,7 +9,7 @@ package rs.baselib.util;
  * @author ralph
  *
  */
-public interface DisplayProvider {
+public interface IDisplayProvider {
 
 	/**
 	 * Returns a displayable string for users.

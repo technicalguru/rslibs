@@ -188,8 +188,8 @@ public class CommonUtils {
 	 * @return display
 	 */
 	public static String getDisplay(Enum<?> e, Locale locale) {
-		if (e instanceof LocaleDisplayProvider) {
-			return ((LocaleDisplayProvider)e).getDisplay(locale);
+		if (e instanceof ILocaleDisplayProvider) {
+			return ((ILocaleDisplayProvider)e).getDisplay(locale);
 		}
 		return e.name();
 	}

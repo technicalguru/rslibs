@@ -11,7 +11,7 @@ import java.security.spec.AlgorithmParameterSpec;
  * @author ralph
  *
  */
-public interface CryptingDelegateFactory {
+public interface ICryptingDelegateFactory {
 
 	/**
 	 * Returns a crypting delegate.
