@@ -8,7 +8,7 @@ package rs.baselib.crypto;
  * @author ralph
  *
  */
-public interface CryptingDelegate {
+public interface ICryptingDelegate {
 
 	/**
 	 * Initialize the delegate.

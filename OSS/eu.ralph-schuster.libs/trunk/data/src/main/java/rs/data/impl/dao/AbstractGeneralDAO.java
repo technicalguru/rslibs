@@ -16,19 +16,19 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import rs.baselib.configuration.Configurable;
+import rs.baselib.configuration.IConfigurable;
 import rs.baselib.lang.LangUtils;
 import rs.baselib.util.RsDate;
-import rs.data.api.DaoFactory;
-import rs.data.api.DaoMaster;
-import rs.data.api.bo.GeneralBO;
-import rs.data.api.dao.GeneralDAO;
+import rs.data.api.IDaoFactory;
+import rs.data.api.IDaoMaster;
+import rs.data.api.bo.IGeneralBO;
+import rs.data.api.dao.IGeneralDAO;
 import rs.data.event.DaoEvent;
 import rs.data.event.DaoEvent.Type;
-import rs.data.event.DaoListener;
+import rs.data.event.IDaoListener;
 import rs.data.impl.bo.AbstractGeneralBO;
 import rs.data.util.CID;
-import rs.data.util.DaoIterator;
+import rs.data.util.IDaoIterator;
 
 /**
  * Abstract Implementation for Data Access Objects.
@@ -38,7 +38,7 @@ import rs.data.util.DaoIterator;
  * @author ralph
  *
  */
-public abstract class AbstractGeneralDAO<K extends Serializable, B extends AbstractGeneralBO<K>, C extends GeneralBO<K>> implements GeneralDAO<K, C>, Configurable {
+public abstract class AbstractGeneralDAO<K extends Serializable, B extends AbstractGeneralBO<K>, C extends IGeneralBO<K>> implements IGeneralDAO<K, C>, IConfigurable {
 
 	protected final Logger log = LoggerFactory.getLogger(getClass());
 	
@@ -47,10 +47,10 @@ public abstract class AbstractGeneralDAO<K extends Serializable, B extends Abstr
 	private Class<B> boImplementationClass;
 	private Class<C> boInterfaceClass;
 	
-	private DaoFactory factory;
-	private DaoMaster daoMaster;
+	private IDaoFactory factory;
+	private IDaoMaster daoMaster;
 	private Map<CID,WeakReference<B>> cache = new WeakHashMap<CID,WeakReference<B>>();
-	private Set<DaoListener> listeners = new HashSet<DaoListener>();
+	private Set<IDaoListener> listeners = new HashSet<IDaoListener>();
 	
 	/**
 	 * Constructor.
@@ -127,7 +127,7 @@ public abstract class AbstractGeneralDAO<K extends Serializable, B extends Abstr
 	 * {@inheritDoc}
 	 */
 	@Override
-	public DaoFactory getFactory() {
+	public IDaoFactory getFactory() {
 		return factory;
 	}
 
@@ -135,7 +135,7 @@ public abstract class AbstractGeneralDAO<K extends Serializable, B extends Abstr
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setFactory(DaoFactory factory) {
+	public void setFactory(IDaoFactory factory) {
 		this.factory = factory;
 	}
 
@@ -143,7 +143,7 @@ public abstract class AbstractGeneralDAO<K extends Serializable, B extends Abstr
 	 * {@inheritDoc}
 	 */
 	@Override
-	public DaoMaster getDaoMaster() {
+	public IDaoMaster getDaoMaster() {
 		return daoMaster;
 	}
 	
@@ -151,7 +151,7 @@ public abstract class AbstractGeneralDAO<K extends Serializable, B extends Abstr
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setDaoMaster(DaoMaster daoMaster) {
+	public void setDaoMaster(IDaoMaster daoMaster) {
 		this.daoMaster = daoMaster;
 	}
 	
@@ -304,7 +304,7 @@ public abstract class AbstractGeneralDAO<K extends Serializable, B extends Abstr
 	 * {@inheritDoc}
 	 */
 	@Override
-	public DaoIterator<C> iterateAll() {
+	public IDaoIterator<C> iterateAll() {
 		return iterateAll(-1, -1);
 	}
 
@@ -312,7 +312,7 @@ public abstract class AbstractGeneralDAO<K extends Serializable, B extends Abstr
 	 * {@inheritDoc}
 	 */
 	@Override
-	public DaoIterator<C> iterateDefaultAll() {
+	public IDaoIterator<C> iterateDefaultAll() {
 		return iterateDefaultAll(-1, -1);
 	}
 
@@ -386,7 +386,7 @@ public abstract class AbstractGeneralDAO<K extends Serializable, B extends Abstr
 	 * Saves the object.
 	 * This method assumes that the object already exists. 
 	 * @param object BO to be saved
-	 * @see #create(GeneralBO, boolean)
+	 * @see #create(IGeneralBO, boolean)
 	 */
 	protected abstract void _save(B object);
 
@@ -446,7 +446,7 @@ public abstract class AbstractGeneralDAO<K extends Serializable, B extends Abstr
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void addDaoListener(DaoListener listener) {
+	public void addDaoListener(IDaoListener listener) {
 		listeners.add(listener);
 	}
 
@@ -454,7 +454,7 @@ public abstract class AbstractGeneralDAO<K extends Serializable, B extends Abstr
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void removeDaoListener(DaoListener listener) {
+	public void removeDaoListener(IDaoListener listener) {
 		listeners.remove(listener);
 	}
 	
@@ -501,7 +501,7 @@ public abstract class AbstractGeneralDAO<K extends Serializable, B extends Abstr
 	 * @param event event to be fired
 	 */
 	protected void fireDaoEvent(DaoEvent event) {
-		for (DaoListener l : listeners) l.handleDaoEvent(event);
+		for (IDaoListener l : listeners) l.handleDaoEvent(event);
 	}
 
 }

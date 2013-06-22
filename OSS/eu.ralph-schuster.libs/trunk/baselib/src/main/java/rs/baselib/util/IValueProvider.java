@@ -11,7 +11,7 @@ package rs.baselib.util;
  * @author ralph
  *
  */
-public interface ValueProvider {
+public interface IValueProvider {
 
 	/**
 	 * Return the value for the given object.

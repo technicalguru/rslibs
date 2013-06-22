@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
 import rs.baselib.bean.AbstractBean;
 import rs.baselib.bean.BeanSupport;
 import rs.baselib.lang.LangUtils;
-import rs.data.api.bo.GeneralBO;
-import rs.data.api.dao.GeneralDAO;
+import rs.data.api.bo.IGeneralBO;
+import rs.data.api.dao.IGeneralDAO;
 import rs.data.util.CID;
 import rs.data.util.LockInformation;
 
@@ -23,7 +23,7 @@ import rs.data.util.LockInformation;
  * @author ralph
  *
  */
-public abstract class AbstractGeneralBO<K extends Serializable> extends AbstractBean implements GeneralBO<K> {
+public abstract class AbstractGeneralBO<K extends Serializable> extends AbstractBean implements IGeneralBO<K> {
 
 	/**
 	 * Serial UID.
@@ -43,7 +43,7 @@ public abstract class AbstractGeneralBO<K extends Serializable> extends Abstract
 	private Logger log = null; // Will be created upon request only
 	private boolean invalid;
 	private CID cid;
-	private GeneralDAO<K, ? extends GeneralBO<K>> dao;
+	private IGeneralDAO<K, ? extends IGeneralBO<K>> dao;
 	
 	/**
 	 * Constructor.
@@ -69,7 +69,7 @@ public abstract class AbstractGeneralBO<K extends Serializable> extends Abstract
 	 * {@inheritDoc}
 	 */
 	@Override
-	public GeneralDAO<K, ? extends GeneralBO<K>> getDao() {
+	public IGeneralDAO<K, ? extends IGeneralBO<K>> getDao() {
 		return dao;
 	}
 
@@ -77,7 +77,7 @@ public abstract class AbstractGeneralBO<K extends Serializable> extends Abstract
 	 * Sets the dao.
 	 * @param dao the dao to set
 	 */
-	public void setDao(GeneralDAO<K, ? extends GeneralBO<K>> dao) {
+	public void setDao(IGeneralDAO<K, ? extends IGeneralBO<K>> dao) {
 		this.dao = dao;
 	}
 
@@ -213,7 +213,7 @@ public abstract class AbstractGeneralBO<K extends Serializable> extends Abstract
 		if (o == null) return false;
 		if (this == o) return true;
 		if (!getClass().equals(o.getClass())) return false;
-		K otherId = ((GeneralBO<K>)o).getId();
+		K otherId = ((IGeneralBO<K>)o).getId();
 		K thisId = getId();
 		if ((otherId == null) || (thisId == null)) return false;
 		return thisId.equals(otherId);

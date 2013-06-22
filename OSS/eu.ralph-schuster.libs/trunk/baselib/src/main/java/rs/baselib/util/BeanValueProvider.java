@@ -6,7 +6,7 @@ package rs.baselib.util;
 import org.apache.commons.beanutils.PropertyUtils;
 
 /**
- * Default bean implementation for {@link ValueProvider}.
+ * Default bean implementation for {@link IValueProvider}.
  * The provider returns the value of the given bean property or - if NULL - the defined NULL value
  * which is NULL by default.
  * The provider will return the bean itself when the bean property is set to NULL.
@@ -14,7 +14,7 @@ import org.apache.commons.beanutils.PropertyUtils;
  * @author ralph
  *
  */
-public class BeanValueProvider implements ValueProvider {
+public class BeanValueProvider implements IValueProvider {
 
 	/** the bean property to be retrieved from an object for display */
 	private String beanProperty;

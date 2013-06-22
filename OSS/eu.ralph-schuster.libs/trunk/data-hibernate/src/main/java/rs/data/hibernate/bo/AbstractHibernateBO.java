@@ -11,9 +11,9 @@ import org.hibernate.engine.SessionImplementor;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.LazyInitializer;
 
-import rs.data.api.DaoFactory;
-import rs.data.api.bo.GeneralBO;
-import rs.data.api.dao.GeneralDAO;
+import rs.data.api.IDaoFactory;
+import rs.data.api.bo.IGeneralBO;
+import rs.data.api.dao.IGeneralDAO;
 import rs.data.hibernate.HibernateDaoMaster;
 import rs.data.impl.bo.AbstractBO;
 import rs.data.impl.dao.AbstractDAO;
@@ -49,7 +49,7 @@ public abstract class AbstractHibernateBO<K extends Serializable, T extends Gene
 	 * Returns the DAO factory.
 	 * @return the DAO factory
 	 */
-	protected DaoFactory getFactory() {
+	protected IDaoFactory getFactory() {
 		return getDao().getFactory();
 	}
 	
@@ -149,9 +149,9 @@ public abstract class AbstractHibernateBO<K extends Serializable, T extends Gene
 	 * @return the BO
 	 */
 	@SuppressWarnings("unchecked")
-	protected <X extends Serializable, Y extends GeneralDTO<X>, Z extends GeneralBO<X>> Z getBusinessObject(Y dto) {
+	protected <X extends Serializable, Y extends GeneralDTO<X>, Z extends IGeneralBO<X>> Z getBusinessObject(Y dto) {
 		if (dto == null) return null;
-		GeneralDAO<X, Z> dao = (GeneralDAO<X, Z>)getFactory().getDaoFor(dto);
+		IGeneralDAO<X, Z> dao = (IGeneralDAO<X, Z>)getFactory().getDaoFor(dto);
 		if ((dao == null) || !(dao instanceof AbstractDAO)) throw new RuntimeException("Cannot find DAO for: "+dto);
 		return ((AbstractDAO<X, Y, ?, Z>)dao).getBusinessObject(dto);
 	}

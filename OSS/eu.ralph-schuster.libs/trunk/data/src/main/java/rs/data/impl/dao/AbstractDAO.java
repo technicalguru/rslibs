@@ -10,12 +10,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import rs.baselib.lang.LangUtils;
-import rs.data.api.bo.GeneralBO;
-import rs.data.api.dao.GeneralDAO;
+import rs.data.api.bo.IGeneralBO;
+import rs.data.api.dao.IGeneralDAO;
 import rs.data.impl.bo.AbstractBO;
 import rs.data.impl.dto.GeneralDTO;
 import rs.data.util.CID;
-import rs.data.util.DaoIterator;
+import rs.data.util.IDaoIterator;
 
 /**
  * Abstract Implementation for Data Access Objects.
@@ -26,7 +26,7 @@ import rs.data.util.DaoIterator;
  * @author ralph
  *
  */
-public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K>, B extends AbstractBO<K, T>, C extends GeneralBO<K>> extends AbstractGeneralDAO<K, B, C> implements GeneralDAO<K, C> {
+public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K>, B extends AbstractBO<K, T>, C extends IGeneralBO<K>> extends AbstractGeneralDAO<K, B, C> implements IGeneralDAO<K, C> {
 
 	/** The persistent class to manage */
 	private Class<T> transferClass;
@@ -113,7 +113,7 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	 * @param i DTO iterator to be wrapped
 	 * @return iterator on BOs
 	 */
-	protected DaoIterator<C> wrap(Iterator<T> i) {
+	protected IDaoIterator<C> wrap(Iterator<T> i) {
 		return new BusinessIterator(i);
 	}
 	
@@ -132,7 +132,7 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	 * Creates the object.
 	 * This method assumes that the object already exists. 
 	 * @param object DTO to be saved
-	 * @see #create(GeneralBO, boolean)
+	 * @see #create(IGeneralBO, boolean)
 	 */
 	protected abstract void _create(T object);
 	
@@ -196,7 +196,7 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	 * {@inheritDoc}
 	 */
 	@Override
-	public DaoIterator<C> iterateAll(int firstResult, int maxResults) {
+	public IDaoIterator<C> iterateAll(int firstResult, int maxResults) {
 		return wrap(_iterateAll(firstResult, maxResults));
 	}
 
@@ -212,7 +212,7 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	 * {@inheritDoc}
 	 */
 	@Override
-	public DaoIterator<C> iterateDefaultAll(int firstResult, int maxResults) {
+	public IDaoIterator<C> iterateDefaultAll(int firstResult, int maxResults) {
 		return wrap(_iterateDefaultAll(firstResult, maxResults));
 	}
 	
@@ -240,7 +240,7 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	 * Saves the object.
 	 * This method assumes that the object already exists. 
 	 * @param object DTO to be saved
-	 * @see #save(GeneralBO, boolean)
+	 * @see #save(IGeneralBO, boolean)
 	 */
 	protected abstract void _save(T object);
 
@@ -299,7 +299,7 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	 * @author ralph
 	 *
 	 */
-	protected class BusinessIterator implements DaoIterator<C> {
+	protected class BusinessIterator implements IDaoIterator<C> {
 		
 		private Iterator<T> iterator;
 		
@@ -342,7 +342,7 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 		 */
 		@Override
 		public void close() {
-			if (iterator instanceof DaoIterator) ((DaoIterator<?>)iterator).close();
+			if (iterator instanceof IDaoIterator) ((IDaoIterator<?>)iterator).close();
 		}
 	}
 }

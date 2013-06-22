@@ -16,7 +16,7 @@ public class ConfigurationUtils {
 
 	/**
 	 * Loads an object from a configuration.
-	 * The object is configured if it is an instance of {@link Configurable}.
+	 * The object is configured if it is an instance of {@link IConfigurable}.
 	 * @param config configuration
 	 * @return the object
 	 */
@@ -25,8 +25,8 @@ public class ConfigurationUtils {
 			String className = config.getString("[@class]");
 			Class<?> clazz = Class.forName(className);
 			Object rc = clazz.newInstance();
-			if (configure && (rc instanceof Configurable)) {
-				configure((Configurable)rc, config);
+			if (configure && (rc instanceof IConfigurable)) {
+				configure((IConfigurable)rc, config);
 			}
 			return rc;
 		} catch (Exception e) {
@@ -40,10 +40,10 @@ public class ConfigurationUtils {
 	 * @param config
 	 * @throws ConfigurationException
 	 */
-	public static void configure(Configurable configurable, Configuration config) throws ConfigurationException {
-		configurable.beforeConfiguration();
-		configurable.configure(config);
-		configurable.afterConfiguration();
+	public static void configure(IConfigurable iConfigurable, Configuration config) throws ConfigurationException {
+		iConfigurable.beforeConfiguration();
+		iConfigurable.configure(config);
+		iConfigurable.afterConfiguration();
 	}
 	
 	/**

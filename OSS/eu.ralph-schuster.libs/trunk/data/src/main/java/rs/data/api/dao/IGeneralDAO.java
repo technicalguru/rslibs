@@ -6,11 +6,11 @@ package rs.data.api.dao;
 import java.io.Serializable;
 import java.util.List;
 
-import rs.data.api.DaoFactory;
-import rs.data.api.DaoMaster;
-import rs.data.api.bo.GeneralBO;
-import rs.data.event.DaoListener;
-import rs.data.util.DaoIterator;
+import rs.data.api.IDaoFactory;
+import rs.data.api.IDaoMaster;
+import rs.data.api.bo.IGeneralBO;
+import rs.data.event.IDaoListener;
+import rs.data.util.IDaoIterator;
 
 /**
  * Interface for Data Access Objects.
@@ -19,31 +19,31 @@ import rs.data.util.DaoIterator;
  * @author ralph
  *
  */
-public interface GeneralDAO<K extends Serializable, B extends GeneralBO<K>> {
+public interface IGeneralDAO<K extends Serializable, B extends IGeneralBO<K>> {
 
 	/**
 	 * Returns the DAO factory.
 	 * @return the DAO factory this DAO is assigned to
 	 */
-	public DaoFactory getFactory();
+	public IDaoFactory getFactory();
 	
 	/**
 	 * Sets the factory.
 	 * @param factory
 	 */
-	public void setFactory(DaoFactory factory);
+	public void setFactory(IDaoFactory factory);
 	
 	/**
 	 * Returns the DAO master.
 	 * @return the DAO master
 	 */
-	public DaoMaster getDaoMaster();
+	public IDaoMaster getDaoMaster();
 	
 	/**
 	 * Sets the DAO master.
 	 * @param daoMaster the master
 	 */
-	public void setDaoMaster(DaoMaster daoMaster);
+	public void setDaoMaster(IDaoMaster daoMaster);
 	
 	// CREATE
 	/**
@@ -66,7 +66,7 @@ public interface GeneralDAO<K extends Serializable, B extends GeneralBO<K>> {
 	 * Creates the object.
 	 * @param object object to be saved
 	 * @param setCreationDate whether creationDate will be set
-	 * @see #create(GeneralBO, boolean)
+	 * @see #create(IGeneralBO, boolean)
 	 */
 	public void createObject(Object object, boolean setCreationDate);
 
@@ -138,7 +138,7 @@ public interface GeneralDAO<K extends Serializable, B extends GeneralBO<K>> {
 	 * Returns all domain objects.
 	 * @return list of all objects
 	 */
-	public DaoIterator<B> iterateAll();
+	public IDaoIterator<B> iterateAll();
 	
 	/**
 	 * Returns a subset of all objects
@@ -146,14 +146,14 @@ public interface GeneralDAO<K extends Serializable, B extends GeneralBO<K>> {
 	 * @param maxResults maximum number of results to return
 	 * @return iterator of BO
 	 */
-	public DaoIterator<B> iterateAll(int firstResult, int maxResults);
+	public IDaoIterator<B> iterateAll(int firstResult, int maxResults);
 	
 	/**
 	 * Returns domain objects with default criteria.
 	 * A default criteria could hide objects not needed regulary (e.g. deleted objects)
 	 * @return list of all objects
 	 */
-	public DaoIterator<B> iterateDefaultAll();
+	public IDaoIterator<B> iterateDefaultAll();
 	
 	/**
 	 * Returns a subset of domain objects with default criteria.
@@ -162,7 +162,7 @@ public interface GeneralDAO<K extends Serializable, B extends GeneralBO<K>> {
 	 * @param maxResults maximum number of results to return
 	 * @return list of all objects
 	 */
-	public DaoIterator<B> iterateDefaultAll(int firstResult, int maxResults);
+	public IDaoIterator<B> iterateDefaultAll(int firstResult, int maxResults);
 	
 	/********************** UPDATING ********************/
 	
@@ -231,12 +231,12 @@ public interface GeneralDAO<K extends Serializable, B extends GeneralBO<K>> {
 	 * Adds a DAO event listener.
 	 * @param listener listener
 	 */
-	public void addDaoListener(DaoListener listener);
+	public void addDaoListener(IDaoListener listener);
 
 	/**
 	 * Removes a DAO event listener.
 	 * @param listener listener
 	 */
-	public void removeDaoListener(DaoListener listener);
+	public void removeDaoListener(IDaoListener listener);
 	
 }

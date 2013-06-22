@@ -36,7 +36,7 @@ public class DefaultCryptingDelegateFactory implements CryptingDelegateFactory {
 	
 	public static final DefaultCryptingDelegateFactory INSTANCE = new DefaultCryptingDelegateFactory();
 	
-	private CryptingDelegate cryptingDelegate = null;
+	private ICryptingDelegate iCryptingDelegate = null;
 	private KeyPair keyPair;
 	private String algorithm;
 	private AlgorithmParameterSpec paramSpec;
@@ -101,7 +101,7 @@ public class DefaultCryptingDelegateFactory implements CryptingDelegateFactory {
 	 * @return the name of delegate class
 	 */
 	protected String getDelegateClassName() {
-		String className = config.getString("cryptingDelegate(0)[@class]");
+		String className = config.getString("iCryptingDelegate(0)[@class]");
 		if (className == null) className = "rsbudget.data.encrypt.DefaultCryptingDelegate";
 		return className;
 
@@ -238,9 +238,9 @@ public class DefaultCryptingDelegateFactory implements CryptingDelegateFactory {
 	 * 
 	 * {@inheritDoc}
 	 */
-	public CryptingDelegate getCryptingDelegate() {
-		if (cryptingDelegate == null) createCryptingDelegate();
-		return cryptingDelegate;
+	public ICryptingDelegate getCryptingDelegate() {
+		if (iCryptingDelegate == null) createCryptingDelegate();
+		return iCryptingDelegate;
 	}
 	
 	/**
@@ -248,11 +248,11 @@ public class DefaultCryptingDelegateFactory implements CryptingDelegateFactory {
 	 */
 	@SuppressWarnings({ "unchecked" })
 	protected synchronized void createCryptingDelegate() {
-		if (cryptingDelegate != null) return;
+		if (iCryptingDelegate != null) return;
 		try {
-			Class<? extends CryptingDelegate> clazz = (Class<? extends CryptingDelegate>)Class.forName(getDelegateClassName());
-			cryptingDelegate = clazz.newInstance();
-			cryptingDelegate.init(this);
+			Class<? extends ICryptingDelegate> clazz = (Class<? extends ICryptingDelegate>)Class.forName(getDelegateClassName());
+			iCryptingDelegate = clazz.newInstance();
+			iCryptingDelegate.init(this);
 		} catch (Exception e) {
 			throw new RuntimeException("Cannot create crypting delegate", e);
 		}

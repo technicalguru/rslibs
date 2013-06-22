@@ -8,7 +8,7 @@ package rs.baselib.util;
  * @author ralph
  *
  */
-public interface Wrapper {
+public interface IWrapper {
 
 	/**
 	 * Returns the wrapped object. 

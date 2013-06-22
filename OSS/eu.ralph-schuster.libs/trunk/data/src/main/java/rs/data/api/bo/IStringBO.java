@@ -10,6 +10,6 @@ package rs.data.api.bo;
  * @author ralph
  *
  */
-public interface StringBO extends GeneralBO<String> {
+public interface IStringBO extends IGeneralBO<String> {
 
 }

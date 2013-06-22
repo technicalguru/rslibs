@@ -6,7 +6,7 @@ package rs.baselib.bean;
 import java.beans.PropertyChangeEvent;
 import java.util.Collection;
 
-import rs.baselib.util.Dirtyable;
+import rs.baselib.util.IDirtyable;
 
 
 /**
@@ -14,7 +14,7 @@ import rs.baselib.util.Dirtyable;
  * @author ralph
  *
  */
-public interface IBean extends PropertyChangeProvider, Dirtyable {
+public interface IBean extends IPropertyChangeProvider, IDirtyable {
 
 	/**
 	 * Set the property with given name to the value

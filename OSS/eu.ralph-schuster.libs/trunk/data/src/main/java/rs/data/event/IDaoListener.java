@@ -8,7 +8,7 @@ package rs.data.event;
  * @author ralph
  *
  */
-public interface DaoListener {
+public interface IDaoListener {
 
 	/**
 	 * Handle the given DAO event.
