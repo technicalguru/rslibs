@@ -8,18 +8,18 @@ package rs.data.api;
  * @author ralph
  *
  */
-public interface DaoMaster {
+public interface IDaoMaster {
 
 	/**
 	 * Returns the factory that this master is registered for.
 	 * @return the factory that this DAO master is assigned to.
 	 */
-	public DaoFactory getFactory();
+	public IDaoFactory getFactory();
 	
 
 	/**
 	 * Sets the factory that this master is registered for.
 	 * @param factory the factory
 	 */
-	public void setFactory(DaoFactory factory);
+	public void setFactory(IDaoFactory factory);
 }

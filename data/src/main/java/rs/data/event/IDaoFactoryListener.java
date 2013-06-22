@@ -8,7 +8,7 @@ package rs.data.event;
  * @author ralph
  *
  */
-public interface DaoFactoryListener {
+public interface IDaoFactoryListener {
 
 	/**
 	 * Handle the given DAO factory event.

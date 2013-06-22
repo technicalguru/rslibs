@@ -8,7 +8,7 @@ package rs.baselib.util;
  * @author ralph
  *
  */
-public interface Dirtyable {
+public interface IDirtyable {
 
 	/**
 	 * Returns whether this object has changed.

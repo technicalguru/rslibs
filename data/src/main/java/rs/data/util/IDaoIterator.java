@@ -9,7 +9,7 @@ import java.util.Iterator;
  * @author ralph
  *
  */
-public interface DaoIterator<E> extends Iterator<E> {
+public interface IDaoIterator<E> extends Iterator<E> {
 
 	/**
 	 * This must always be called at the end.

@@ -10,7 +10,7 @@ import java.util.Iterator;
  * @author ralph
  *
  */
-public class DaoIteratorImpl<E> implements DaoIterator<E> {
+public class DaoIteratorImpl<E> implements IDaoIterator<E> {
 
 	private Iterator<E> iterator;
 	
@@ -50,8 +50,8 @@ public class DaoIteratorImpl<E> implements DaoIterator<E> {
 	 */
 	@Override
 	public void close() {
-		if (iterator instanceof DaoIterator) {
-			((DaoIterator<E>)iterator).close();
+		if (iterator instanceof IDaoIterator) {
+			((IDaoIterator<E>)iterator).close();
 		}
 	}
 

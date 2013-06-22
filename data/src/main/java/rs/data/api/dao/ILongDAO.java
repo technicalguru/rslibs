@@ -3,7 +3,7 @@
  */
 package rs.data.api.dao;
 
-import rs.data.api.bo.LongBO;
+import rs.data.api.bo.ILongBO;
 
 /**
  * Data Access Object interface for {@link Long} key-based DTOs and BOs.
@@ -11,6 +11,6 @@ import rs.data.api.bo.LongBO;
  * @author ralph
  *
  */
-public interface LongDAO<B extends LongBO> extends GeneralDAO<Long, B> {
+public interface ILongDAO<B extends ILongBO> extends IGeneralDAO<Long, B> {
 
 }

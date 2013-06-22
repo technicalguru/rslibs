@@ -7,14 +7,14 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.lang.ArrayUtils;
 
-import rs.baselib.configuration.Configurable;
+import rs.baselib.configuration.IConfigurable;
 
 /**
  * Returns the password given in configuration.
  * @author ralph
  *
  */
-public class DefaultPasswordCallback implements PasswordCallback, Configurable {
+public class DefaultPasswordCallback implements PasswordCallback, IConfigurable {
 
 	private char[] password;
 	

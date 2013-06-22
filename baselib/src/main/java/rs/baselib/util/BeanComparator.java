@@ -17,7 +17,7 @@ public class BeanComparator<T> implements Comparator<T> {
 	/** The comparator being used */
 	private Comparator<Object> comparator;
 	/** The value providers */
-	private ValueProvider valueProviders[];
+	private IValueProvider valueProviders[];
 
 	/**
 	 * Constructor.
@@ -40,7 +40,7 @@ public class BeanComparator<T> implements Comparator<T> {
 	 * Constructor.
 	 * @param valueProviders the value providers for each of the properties to be compared
 	 */
-	public BeanComparator(ValueProvider... valueProviders) {
+	public BeanComparator(IValueProvider... valueProviders) {
 		this(null, valueProviders);
 	}
 
@@ -49,7 +49,7 @@ public class BeanComparator<T> implements Comparator<T> {
 	 * @param comparator the comparator to be used
 	 * @param valueProviders the value providers for each of the properties to be compared
 	 */
-	public BeanComparator(Comparator<Object> comparator, ValueProvider... valueProviders) {
+	public BeanComparator(Comparator<Object> comparator, IValueProvider... valueProviders) {
 		this.comparator = comparator;
 		this.valueProviders = valueProviders;
 	}
@@ -66,7 +66,7 @@ public class BeanComparator<T> implements Comparator<T> {
 	 * Returns the value providers of this comparator.
 	 * @return providers that will be used
 	 */
-	public ValueProvider[] getValueProviders() {
+	public IValueProvider[] getValueProviders() {
 		return valueProviders;
 	}
 
@@ -75,7 +75,7 @@ public class BeanComparator<T> implements Comparator<T> {
 	 */
 	@Override
 	public int compare(T o1, T o2) {
-		for (ValueProvider provider : getValueProviders()) {
+		for (IValueProvider provider : getValueProviders()) {
 			Object v1 = o1;
 			Object v2 = o2;
 			if (provider != null) {

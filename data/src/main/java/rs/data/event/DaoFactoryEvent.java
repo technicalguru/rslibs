@@ -5,7 +5,7 @@ package rs.data.event;
 
 import java.util.EventObject;
 
-import rs.data.api.DaoFactory;
+import rs.data.api.IDaoFactory;
 
 /**
  * Event notification from Dao Factory.
@@ -34,7 +34,7 @@ public class DaoFactoryEvent extends EventObject {
 	 * Constructor.
 	 * @param source factory
 	 */
-	public DaoFactoryEvent(DaoFactory source, Type type) {
+	public DaoFactoryEvent(IDaoFactory source, Type type) {
 		super(source);
 		this.type = type;
 	}

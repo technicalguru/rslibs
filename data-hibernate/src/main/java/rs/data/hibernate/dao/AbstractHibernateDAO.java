@@ -18,12 +18,12 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
-import rs.data.api.bo.GeneralBO;
+import rs.data.api.bo.IGeneralBO;
 import rs.data.hibernate.HibernateDaoMaster;
 import rs.data.impl.bo.AbstractBO;
 import rs.data.impl.dao.AbstractDAO;
 import rs.data.impl.dto.GeneralDTO;
-import rs.data.util.DaoIterator;
+import rs.data.util.IDaoIterator;
 
 /**
  * Implements the Hibernate specific functions.
@@ -34,7 +34,7 @@ import rs.data.util.DaoIterator;
  * @author ralph
  *
  */
-public abstract class AbstractHibernateDAO<K extends Serializable, T extends GeneralDTO<K>, B extends AbstractBO<K, T>, C extends GeneralBO<K>> extends AbstractDAO<K, T, B, C> {
+public abstract class AbstractHibernateDAO<K extends Serializable, T extends GeneralDTO<K>, B extends AbstractBO<K, T>, C extends IGeneralBO<K>> extends AbstractDAO<K, T, B, C> {
 
 	/**
 	 * Constructor.
@@ -320,7 +320,7 @@ public abstract class AbstractHibernateDAO<K extends Serializable, T extends Gen
 	 * @param criterions Hibernate criterions
 	 * @return iterator object for the criteria
 	 */
-	protected DaoIterator<T> _iterateByCriteria(Criterion criterions[]) {
+	protected IDaoIterator<T> _iterateByCriteria(Criterion criterions[]) {
 		return _iterateByCriteria(criterions, null, -1, -1);
 	}
 
@@ -331,7 +331,7 @@ public abstract class AbstractHibernateDAO<K extends Serializable, T extends Gen
 	 * @param orders Hibernate orders
 	 * @return iterator object for the criteria
 	 */
-	protected DaoIterator<T> _iterateByCriteria(Criterion criterions[], Order orders[]) {
+	protected IDaoIterator<T> _iterateByCriteria(Criterion criterions[], Order orders[]) {
 		return _iterateByCriteria(criterions, orders, -1, -1);
 	}
 
@@ -344,7 +344,7 @@ public abstract class AbstractHibernateDAO<K extends Serializable, T extends Gen
 	 * @param maxResults maximum number of results to return
 	 * @return iterator object for the criteria
 	 */
-	protected DaoIterator<T> _iterateByCriteria(Criterion criterions[], Order orders[], int firstResult, int maxResults) {
+	protected IDaoIterator<T> _iterateByCriteria(Criterion criterions[], Order orders[], int firstResult, int maxResults) {
 		return new IteratorImpl(criterions, orders, firstResult, maxResults);
 	}
 
@@ -358,7 +358,7 @@ public abstract class AbstractHibernateDAO<K extends Serializable, T extends Gen
 	 * @param maxResults maximum number of results to return
 	 * @return iterator object for the criteria
 	 */
-	protected DaoIterator<C> iterateBy(Criterion criterions[], Order orders[], int firstResult, int maxResults) {
+	protected IDaoIterator<C> iterateBy(Criterion criterions[], Order orders[], int firstResult, int maxResults) {
 		return wrap(_iterateByCriteria(criterions, orders, firstResult, maxResults));
 	}
 
@@ -409,7 +409,7 @@ public abstract class AbstractHibernateDAO<K extends Serializable, T extends Gen
 	 * @author ralph
 	 *
 	 */
-	protected class IteratorImpl implements DaoIterator<T> {
+	protected class IteratorImpl implements IDaoIterator<T> {
 
 		private ScrollableResults scrollableResult = null;
 		private T nextObject = null;

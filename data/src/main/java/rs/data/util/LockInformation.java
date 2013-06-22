@@ -4,7 +4,7 @@
 package rs.data.util;
 
 import rs.baselib.util.RsDate;
-import rs.data.api.bo.GeneralBO;
+import rs.data.api.bo.IGeneralBO;
 
 /**
  * Tells information about the lock
@@ -13,7 +13,7 @@ import rs.data.api.bo.GeneralBO;
  */
 public class LockInformation {
 
-	private GeneralBO<?> lockObject;
+	private IGeneralBO<?> lockObject;
 	private LockState lockState = LockState.UNLOCKED;
 	private Object lockOwner = null;
 	private RsDate expirationDate = null;
@@ -21,7 +21,7 @@ public class LockInformation {
 	/**
 	 * Constructor.
 	 */
-	public LockInformation(GeneralBO<?> lockObject) {
+	public LockInformation(IGeneralBO<?> lockObject) {
 		this.lockObject = lockObject;
 	}
 
@@ -29,7 +29,7 @@ public class LockInformation {
 	 * Returns the lockObject.
 	 * @return the lockObject
 	 */
-	public GeneralBO<?> getLockObject() {
+	public IGeneralBO<?> getLockObject() {
 		return lockObject;
 	}
 
@@ -37,7 +37,7 @@ public class LockInformation {
 	 * Sets the lockObject.
 	 * @param lockObject the lockObject to set
 	 */
-	public void setLockObject(GeneralBO<?> lockObject) {
+	public void setLockObject(IGeneralBO<?> lockObject) {
 		this.lockObject = lockObject;
 	}
 

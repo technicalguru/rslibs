@@ -13,7 +13,7 @@ import org.apache.commons.configuration.ConfigurationException;
  * @author ralph
  *
  */
-public interface Configurable {
+public interface IConfigurable {
 
 	/**
 	 * Called before configuration starts.

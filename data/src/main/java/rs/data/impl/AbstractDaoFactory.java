@@ -23,38 +23,38 @@ import org.apache.commons.configuration.SubnodeConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import rs.baselib.configuration.Configurable;
+import rs.baselib.configuration.IConfigurable;
 import rs.baselib.configuration.ConfigurationUtils;
 import rs.baselib.io.FileFinder;
 import rs.data.TransactionSupport;
-import rs.data.api.DaoFactory;
-import rs.data.api.DaoMaster;
-import rs.data.api.dao.GeneralDAO;
+import rs.data.api.IDaoFactory;
+import rs.data.api.IDaoMaster;
+import rs.data.api.dao.IGeneralDAO;
 import rs.data.event.DaoEvent;
 import rs.data.event.DaoFactoryEvent;
 import rs.data.event.DaoFactoryEvent.Type;
-import rs.data.event.DaoFactoryListener;
-import rs.data.event.DaoListener;
-import rs.data.util.URLTransformer;
+import rs.data.event.IDaoFactoryListener;
+import rs.data.event.IDaoListener;
+import rs.data.util.IUrlTransformer;
 
 /**
  * The basic implementation of a DAO factory.
  * @author ralph
  *
  */
-public abstract class AbstractDaoFactory implements DaoFactory, Configurable {
+public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 
 	// TX Management	
 	private Logger log = LoggerFactory.getLogger(getClass());
 	
 	private ThreadLocal<TransactionContext> txContext = new ThreadLocal<TransactionContext>();
-	private Set<DaoFactoryListener> listeners = new HashSet<DaoFactoryListener>();
-	private DaoListener daoListener = new MyDaoListener();
+	private Set<IDaoFactoryListener> listeners = new HashSet<IDaoFactoryListener>();
+	private IDaoListener daoListener = new MyDaoListener();
 	private Map<String, Object> properties = new HashMap<String, Object>();
 	private Map<String, String> params = new HashMap<String, String>();
 	private TransactionManager txManager;
-	private URLTransformer urlTransformer;
-	private Map<String, DaoMaster> daoMasters = new HashMap<String, DaoMaster>();
+	private IUrlTransformer urlTransformer;
+	private Map<String, IDaoMaster> daoMasters = new HashMap<String, IDaoMaster>();
 	
 	/**
 	 * Constructor.
@@ -94,8 +94,8 @@ public abstract class AbstractDaoFactory implements DaoFactory, Configurable {
 		
 		// Load the URL transformer, if it exists:
 		try {
-			SubnodeConfiguration tCfg = ((HierarchicalConfiguration)cfg).configurationAt("URLTransformer(0)");
-			setUrlTransformer((URLTransformer)ConfigurationUtils.load(tCfg, true));
+			SubnodeConfiguration tCfg = ((HierarchicalConfiguration)cfg).configurationAt("IUrlTransformer(0)");
+			setUrlTransformer((IUrlTransformer)ConfigurationUtils.load(tCfg, true));
 		} catch (Exception e) {
 			log.info("No URL Transformer loaded");
 		}
@@ -110,9 +110,9 @@ public abstract class AbstractDaoFactory implements DaoFactory, Configurable {
 			int index = 0;
 			while (index >= 0) {
 				try {
-					SubnodeConfiguration tCfg = ((HierarchicalConfiguration)cfg).configurationAt("DaoMaster("+index+")");
-					DaoMaster daoMaster = loadDaoMaster(tCfg);
-					String id = cfg.getString("DaoMaster("+index+")[@name]");
+					SubnodeConfiguration tCfg = ((HierarchicalConfiguration)cfg).configurationAt("IDaoMaster("+index+")");
+					IDaoMaster daoMaster = loadDaoMaster(tCfg);
+					String id = cfg.getString("IDaoMaster("+index+")[@name]");
 					if (id == null) id = "default";
 					getLog().debug("DAO Master \""+id+"\": "+daoMaster.getClass().getName());
 					setDaoMaster(id, daoMaster);
@@ -120,7 +120,7 @@ public abstract class AbstractDaoFactory implements DaoFactory, Configurable {
 				} catch (IllegalArgumentException e) {
 					index = -1;
 				} catch (Exception e) {
-					getLog().error("Cannit load DaoMaster: ", e);
+					getLog().error("Cannit load IDaoMaster: ", e);
 					index = -1;
 				}
 			}
@@ -148,18 +148,18 @@ public abstract class AbstractDaoFactory implements DaoFactory, Configurable {
 
 	/**
 	 * Loads an object from a configuration.
-	 * The object is configured if it is an instance of {@link Configurable}.
+	 * The object is configured if it is an instance of {@link IConfigurable}.
 	 * @param config configuration
 	 * @return the object
 	 */
-	public DaoMaster loadDaoMaster(SubnodeConfiguration config) {
+	public IDaoMaster loadDaoMaster(SubnodeConfiguration config) {
 		try {
 			String className = config.getString("[@class]");
 			Class<?> clazz = Class.forName(className);
-			DaoMaster rc = (DaoMaster)clazz.newInstance();
+			IDaoMaster rc = (IDaoMaster)clazz.newInstance();
 			rc.setFactory(this);
-			if (rc instanceof Configurable) {
-				((Configurable)rc).configure(config);
+			if (rc instanceof IConfigurable) {
+				((IConfigurable)rc).configure(config);
 			}
 			return rc;
 		} catch (Exception e) {
@@ -172,7 +172,7 @@ public abstract class AbstractDaoFactory implements DaoFactory, Configurable {
 	 * @param id id of master
 	 * @param daoMaster master to bet set
 	 */
-	public void setDaoMaster(String id, DaoMaster daoMaster) {
+	public void setDaoMaster(String id, IDaoMaster daoMaster) {
 		if (daoMasters.containsKey(id)) throw new RuntimeException("DAO Master already exists: "+id);
 		daoMasters.put(id, daoMaster);
 	}
@@ -181,7 +181,7 @@ public abstract class AbstractDaoFactory implements DaoFactory, Configurable {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public DaoMaster getDaoMaster(String id) {
+	public IDaoMaster getDaoMaster(String id) {
 		return daoMasters.get(id);
 	}
 
@@ -191,13 +191,13 @@ public abstract class AbstractDaoFactory implements DaoFactory, Configurable {
 	 * @param key key to process
 	 * @return DAO created
 	 */
-	protected GeneralDAO<?,?> createDAO(Configuration mainCfg, String key) throws Exception {
+	protected IGeneralDAO<?,?> createDAO(Configuration mainCfg, String key) throws Exception {
 		// Tweak the class loader to avoid some unexpected RCP problems
 		Thread thread = Thread.currentThread();
 		ClassLoader loader = thread.getContextClassLoader();
 		thread.setContextClassLoader(this.getClass().getClassLoader());
 
-		GeneralDAO<?,?> rc = null;
+		IGeneralDAO<?,?> rc = null;
 		try {
 			HierarchicalConfiguration hCfg = (HierarchicalConfiguration)mainCfg;
 			SubnodeConfiguration cfg = hCfg.configurationAt(key+"(0)");
@@ -206,7 +206,7 @@ public abstract class AbstractDaoFactory implements DaoFactory, Configurable {
 			String className = cfg.getString("[@class]");
 			getLog().debug(key+": "+className);
 			@SuppressWarnings("unchecked")
-			Class<? extends GeneralDAO<?,?>> clazz = (Class<? extends GeneralDAO<?,?>>) Class.forName(className);
+			Class<? extends IGeneralDAO<?,?>> clazz = (Class<? extends IGeneralDAO<?,?>>) Class.forName(className);
 			rc = clazz.newInstance();
 			
 			// Set the factory
@@ -218,7 +218,7 @@ public abstract class AbstractDaoFactory implements DaoFactory, Configurable {
 			rc.setDaoMaster(getDaoMaster(masterId));
 			
 			// Configure it
-			if (rc instanceof Configurable) ((Configurable)rc).configure(cfg);
+			if (rc instanceof IConfigurable) ((IConfigurable)rc).configure(cfg);
 			
 			// Add the factory as a listener
 			rc.addDaoListener(daoListener);
@@ -268,7 +268,7 @@ public abstract class AbstractDaoFactory implements DaoFactory, Configurable {
 	public URL getParameterUrl(String name) throws MalformedURLException {
 		String value = getParameter(name);
 		if (value == null) return null;
-		URLTransformer transformer = getUrlTransformer();
+		IUrlTransformer transformer = getUrlTransformer();
 		if (transformer != null) return transformer.toURL(value);
 		return FileFinder.find(value);
 	}
@@ -280,7 +280,7 @@ public abstract class AbstractDaoFactory implements DaoFactory, Configurable {
 	 * Returns the urlTransformer.
 	 * @return the urlTransformer
 	 */
-	public URLTransformer getUrlTransformer() {
+	public IUrlTransformer getUrlTransformer() {
 		return urlTransformer;
 	}
 
@@ -288,7 +288,7 @@ public abstract class AbstractDaoFactory implements DaoFactory, Configurable {
 	 * Sets the urlTransformer.
 	 * @param urlTransformer the urlTransformer to set
 	 */
-	public void setUrlTransformer(URLTransformer urlTransformer) {
+	public void setUrlTransformer(IUrlTransformer urlTransformer) {
 		this.urlTransformer = urlTransformer;
 	}
 
@@ -372,7 +372,7 @@ public abstract class AbstractDaoFactory implements DaoFactory, Configurable {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void addDaoFactoryListener(DaoFactoryListener listener) {
+	public void addDaoFactoryListener(IDaoFactoryListener listener) {
 		listeners.add(listener);
 	}
 
@@ -380,7 +380,7 @@ public abstract class AbstractDaoFactory implements DaoFactory, Configurable {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void removeDaoFactoryListener(DaoFactoryListener listener) {
+	public void removeDaoFactoryListener(IDaoFactoryListener listener) {
 		listeners.remove(listener);
 	}
 
@@ -389,7 +389,7 @@ public abstract class AbstractDaoFactory implements DaoFactory, Configurable {
 	 * @param event event to be fired
 	 */
 	protected void fireDaoFactoryEvent(DaoFactoryEvent event) {
-		for (DaoFactoryListener l : listeners) l.handleDaoFactoryEvent(event);
+		for (IDaoFactoryListener l : listeners) l.handleDaoFactoryEvent(event);
 	}
 	
 	/**
@@ -511,7 +511,7 @@ public abstract class AbstractDaoFactory implements DaoFactory, Configurable {
 	 * @author ralph
 	 *
 	 */
-	protected class MyDaoListener implements DaoListener {
+	protected class MyDaoListener implements IDaoListener {
 
 		/**
 		 * {@inheritDoc}

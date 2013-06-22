@@ -17,7 +17,7 @@ public interface CryptingDelegateFactory {
 	 * Returns a crypting delegate.
 	 * @return a delegate
 	 */
-	public CryptingDelegate getCryptingDelegate();
+	public ICryptingDelegate getCryptingDelegate();
 	
 	/**
 	 * Returns the key.

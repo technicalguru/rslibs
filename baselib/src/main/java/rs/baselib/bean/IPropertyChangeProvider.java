@@ -10,7 +10,7 @@ import java.beans.PropertyChangeListener;
  * @author ralph
  *
  */
-public interface PropertyChangeProvider {
+public interface IPropertyChangeProvider {
 
 	/**
 	 * Add a change listener.

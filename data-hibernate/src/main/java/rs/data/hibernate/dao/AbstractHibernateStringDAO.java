@@ -3,7 +3,7 @@
  */
 package rs.data.hibernate.dao;
 
-import rs.data.api.bo.GeneralBO;
+import rs.data.api.bo.IGeneralBO;
 import rs.data.impl.bo.AbstractBO;
 import rs.data.impl.dto.GeneralDTO;
 
@@ -12,7 +12,7 @@ import rs.data.impl.dto.GeneralDTO;
  * @author ralph
  *
  */
-public class AbstractHibernateStringDAO<T extends GeneralDTO<String>, B extends  AbstractBO<String,T>, C extends GeneralBO<String>> extends AbstractHibernateDAO<String, T, B, C> {
+public class AbstractHibernateStringDAO<T extends GeneralDTO<String>, B extends  AbstractBO<String,T>, C extends IGeneralBO<String>> extends AbstractHibernateDAO<String, T, B, C> {
 
 	/**
 	 * Constructor.

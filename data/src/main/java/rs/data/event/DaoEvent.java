@@ -5,8 +5,8 @@ package rs.data.event;
 
 import java.util.EventObject;
 
-import rs.data.api.bo.GeneralBO;
-import rs.data.api.dao.GeneralDAO;
+import rs.data.api.bo.IGeneralBO;
+import rs.data.api.dao.IGeneralDAO;
 
 /**
  * Event that will be fired from a DAO.
@@ -29,19 +29,19 @@ public class DaoEvent extends EventObject {
 	};
 	
 	private Type type;
-	private  GeneralBO<?> object;
+	private  IGeneralBO<?> object;
 	
 	/**
 	 * Constructor for DELETE_ALL events.
 	 */
-	public DaoEvent(GeneralDAO<?, ?> source, Type type) {
+	public DaoEvent(IGeneralDAO<?, ?> source, Type type) {
 		this(source, type, null);
 	}
 
 	/**
 	 * Constructor.
 	 */
-	public DaoEvent(GeneralDAO<?, ?> source, Type type, GeneralBO<?> object) {
+	public DaoEvent(IGeneralDAO<?, ?> source, Type type, IGeneralBO<?> object) {
 		super(source);
 		this.type = type;
 		this.object = object;
@@ -59,7 +59,7 @@ public class DaoEvent extends EventObject {
 	 * Returns the object.
 	 * @return the object
 	 */
-	public GeneralBO<?> getObject() {
+	public IGeneralBO<?> getObject() {
 		return object;
 	}
 

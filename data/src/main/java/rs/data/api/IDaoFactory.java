@@ -12,18 +12,18 @@ import javax.transaction.SystemException;
 import javax.transaction.Transaction;
 import javax.transaction.TransactionManager;
 
-import rs.data.api.bo.GeneralBO;
-import rs.data.api.dao.GeneralDAO;
-import rs.data.event.DaoFactoryListener;
+import rs.data.api.bo.IGeneralBO;
+import rs.data.api.dao.IGeneralDAO;
+import rs.data.event.IDaoFactoryListener;
 import rs.data.impl.dto.GeneralDTO;
-import rs.data.util.URLTransformer;
+import rs.data.util.IUrlTransformer;
 
 /**
  * A general interface describing a DAO factory.
  * @author ralph
  *
  */
-public interface DaoFactory {
+public interface IDaoFactory {
 
 	/**
 	 * Returns the factory property.
@@ -57,20 +57,20 @@ public interface DaoFactory {
 	 * Returns the urlTransformer.
 	 * @return the urlTransformer
 	 */
-	public URLTransformer getUrlTransformer();
+	public IUrlTransformer getUrlTransformer();
 
 	/**
 	 * Sets the urlTransformer.
 	 * @param urlTransformer the urlTransformer to set
 	 */
-	public void setUrlTransformer(URLTransformer urlTransformer);
+	public void setUrlTransformer(IUrlTransformer urlTransformer);
 
 	/**
 	 * Returns the DAO master with given ID.
 	 * @param id ID of master
 	 * @return the master or null
 	 */
-	public DaoMaster getDaoMaster(String id);
+	public IDaoMaster getDaoMaster(String id);
 	
 	/**
 	 * Returns an iterator of all property keys.
@@ -83,7 +83,7 @@ public interface DaoFactory {
 	 * @param o the object to look for
 	 * @return DAO or null if not found
 	 */
-	public <K extends Serializable, T extends GeneralDTO<K>> GeneralDAO<K,?> getDaoFor(T o);
+	public <K extends Serializable, T extends GeneralDTO<K>> IGeneralDAO<K,?> getDaoFor(T o);
 	
 
 	/**
@@ -91,7 +91,7 @@ public interface DaoFactory {
 	 * @param o the object to look for
 	 * @return DAO or null if not found
 	 */
-	public <K extends Serializable, B extends GeneralBO<K>> GeneralDAO<K,B> getDaoFor(B o);
+	public <K extends Serializable, B extends IGeneralBO<K>> IGeneralDAO<K,B> getDaoFor(B o);
 	
 	/********************* TRANSACTIONS ************************/
 	
@@ -142,12 +142,12 @@ public interface DaoFactory {
 	 * Adds a factory listener.
 	 * @param listener listener
 	 */
-	public void addDaoFactoryListener(DaoFactoryListener listener);
+	public void addDaoFactoryListener(IDaoFactoryListener listener);
 	
 	/**
 	 * Removes a factory listener.
 	 * @param listener listener
 	 */
-	public void removeDaoFactoryListener(DaoFactoryListener listener);
+	public void removeDaoFactoryListener(IDaoFactoryListener listener);
 	
 }

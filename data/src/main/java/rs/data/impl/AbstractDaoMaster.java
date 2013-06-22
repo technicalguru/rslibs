@@ -11,20 +11,20 @@ import java.util.Properties;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 
-import rs.baselib.configuration.Configurable;
+import rs.baselib.configuration.IConfigurable;
 import rs.baselib.io.FileFinder;
-import rs.data.api.DaoFactory;
-import rs.data.api.DaoMaster;
-import rs.data.util.URLTransformer;
+import rs.data.api.IDaoFactory;
+import rs.data.api.IDaoMaster;
+import rs.data.util.IUrlTransformer;
 
 /**
  * Abstract implementation for DAO masters.
  * @author ralph
  *
  */
-public abstract class AbstractDaoMaster implements DaoMaster, Configurable {
+public abstract class AbstractDaoMaster implements IDaoMaster, IConfigurable {
 
-	private DaoFactory factory;
+	private IDaoFactory factory;
 	private Properties properties = new Properties();
 	
 	/**
@@ -37,7 +37,7 @@ public abstract class AbstractDaoMaster implements DaoMaster, Configurable {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public DaoFactory getFactory() {
+	public IDaoFactory getFactory() {
 		return factory;
 	}
 
@@ -45,7 +45,7 @@ public abstract class AbstractDaoMaster implements DaoMaster, Configurable {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setFactory(DaoFactory factory) {
+	public void setFactory(IDaoFactory factory) {
 		this.factory = factory;
 	}
 
@@ -102,7 +102,7 @@ public abstract class AbstractDaoMaster implements DaoMaster, Configurable {
 	public URL getPropertyUrl(String key) throws MalformedURLException {
 		String value = getProperty(key);
 		if (value == null) return null;
-		URLTransformer transformer = getFactory().getUrlTransformer();
+		IUrlTransformer transformer = getFactory().getUrlTransformer();
 		if (transformer != null) return transformer.toURL(value);
 		return FileFinder.find(value);
 	}

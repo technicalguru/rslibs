@@ -11,7 +11,7 @@ import java.net.URL;
  * @author ralph
  *
  */
-public interface URLTransformer {
+public interface IUrlTransformer {
 
 	/**
 	 * Converts the given string to a URL.

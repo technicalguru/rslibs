@@ -10,6 +10,6 @@ package rs.data.api.bo;
  * @author ralph
  *
  */
-public interface LongBO extends GeneralBO<Long> {
+public interface ILongBO extends IGeneralBO<Long> {
 
 }

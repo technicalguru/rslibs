@@ -3,7 +3,7 @@
  */
 package rs.data.api.dao;
 
-import rs.data.api.bo.StringBO;
+import rs.data.api.bo.IStringBO;
 
 /**
  * Data Access Object interface for {@link String} key-based DTOs and BOs.
@@ -11,6 +11,6 @@ import rs.data.api.bo.StringBO;
  * @author ralph
  *
  */
-public interface StringDAO<B extends StringBO> extends GeneralDAO<String, B> {
+public interface IStringDAO<B extends IStringBO> extends IGeneralDAO<String, B> {
 
 }

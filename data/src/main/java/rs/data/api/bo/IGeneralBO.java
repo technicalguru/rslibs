@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 import rs.baselib.bean.IBean;
 import rs.baselib.util.RsDate;
-import rs.data.api.dao.GeneralDAO;
+import rs.data.api.dao.IGeneralDAO;
 import rs.data.util.LockInformation;
 
 /**
@@ -16,7 +16,7 @@ import rs.data.util.LockInformation;
  * @author ralph
  *
  */
-public interface GeneralBO<K extends Serializable> extends Serializable, IBean {
+public interface IGeneralBO<K extends Serializable> extends Serializable, IBean {
 	
 	public static final String PROPERTY_CREATION_DATE = "creationDate";
 	public static final String PROPERTY_CHANGE_DATE = "changeDate";
@@ -25,7 +25,7 @@ public interface GeneralBO<K extends Serializable> extends Serializable, IBean {
 	 * Returns the responsible DAO.
 	 * @return the DAO that this business object was created by
 	 */
-	public GeneralDAO<K, ? extends GeneralBO<K>> getDao();
+	public IGeneralDAO<K, ? extends IGeneralBO<K>> getDao();
 	
 	/**
 	 * Returns the id.

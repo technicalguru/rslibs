@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
  * @author ralph
  *
  */
-public class DefaultCryptingDelegate implements CryptingDelegate {
+public class DefaultCryptingDelegate implements ICryptingDelegate {
 
 	private static Logger log = LoggerFactory.getLogger(DefaultCryptingDelegate.class);
 
