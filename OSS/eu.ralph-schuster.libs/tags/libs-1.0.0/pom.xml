@@ -1,0 +1,54 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>eu.ralph-schuster</groupId>
+		<artifactId>pom-oss</artifactId>
+		<version>1.3.2</version>
+	</parent>
+
+	<groupId>eu.ralph-schuster</groupId>
+	<artifactId>libs</artifactId>
+	<version>1.0.0</version>
+	<packaging>pom</packaging>
+
+	<url>http://download.ralph-schuster.eu/eu.ralph-schuster.libs/</url>
+	<name>eu.ralph-schuster.libs</name>
+	<description>A collection of utilities</description>
+
+	<scm>
+		<connection>scm:svn:https://h2031995.stratoserver.net/svn/OSS/eu.ralph-schuster.libs/tags/libs-1.0.0</connection>
+		<developerConnection>scm:svn:https://h2031995.stratoserver.net/svn/OSS/eu.ralph-schuster.libs/tags/libs-1.0.0</developerConnection>
+		<url>https://h2031995.stratoserver.net/svn/OSS/eu.ralph-schuster.libs/tags/libs-1.0.0</url>
+	</scm>
+
+	<distributionManagement>
+		<site>
+			<id>strato-server</id>
+			<url>scp://h2031995.stratoserver.net/var/www/vhosts/ralph-schuster.eu/download/eu.ralph-schuster.libs/${project.version}/${project.groupId}/${project.artifactId}</url>
+		</site>
+	</distributionManagement>
+
+	<issueManagement>
+		<system>Jira</system>
+		<url>http://jira.ralph-schuster.eu/browse/RSLIBS</url>
+	</issueManagement>
+
+	<ciManagement>
+		<system>bamboo</system>
+		<url>http://bamboo.ralph-schuster.eu/browse/RSLIB</url>
+	</ciManagement>
+
+	<developers>
+		<developer>
+			<id>ralph</id>
+			<name>Ralph Schuster</name>
+		</developer>
+	</developers>
+
+	<modules>
+		<module>baselib</module>
+		<module>data</module>
+		<module>data-hibernate</module>
+	</modules>
+
+</project>
