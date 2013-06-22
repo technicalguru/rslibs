@@ -39,7 +39,7 @@ public class DefaultCryptingDelegate implements ICryptingDelegate {
 	 * Initializes this instance.
 	 * @param factory the factory providing initialization parameters
 	 */
-	public void init(CryptingDelegateFactory factory) {
+	public void init(ICryptingDelegateFactory factory) {
 		try {
 			KeyPair keyPair = factory.getKeyPair();
 			String algorithm = factory.getAlgorithm();

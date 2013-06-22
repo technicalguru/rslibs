@@ -14,7 +14,7 @@ public interface ICryptingDelegate {
 	 * Initialize the delegate.
 	 * @param factory factory for the delegate.
 	 */
-	public void init(CryptingDelegateFactory factory);
+	public void init(ICryptingDelegateFactory factory);
 	
 	/**
 	 * Encrypts the given bytes.

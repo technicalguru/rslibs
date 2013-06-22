@@ -14,7 +14,7 @@ import rs.baselib.configuration.IConfigurable;
  * @author ralph
  *
  */
-public class DefaultPasswordCallback implements PasswordCallback, IConfigurable {
+public class DefaultPasswordCallback implements IPasswordCallback, IConfigurable {
 
 	private char[] password;
 	

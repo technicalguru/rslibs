@@ -8,7 +8,7 @@ package rs.baselib.security;
  * @author ralph
  *
  */
-public interface PasswordCallback {
+public interface IPasswordCallback {
 
 	/**
 	 * Delivers the password.

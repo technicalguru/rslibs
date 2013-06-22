@@ -10,7 +10,7 @@ import java.util.Locale;
  * @author ralph
  *
  */
-public interface Displayable {
+public interface IDisplayable {
 
 	/**
 	 * Return the display string in given locale.
