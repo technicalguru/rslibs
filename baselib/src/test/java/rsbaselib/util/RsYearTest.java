@@ -9,9 +9,6 @@ import java.util.Calendar;
 
 import org.junit.Test;
 
-import rs.baselib.util.RsDate;
-import rs.baselib.util.RsYear;
-
 /**
  * Tests the {@link RsYear} class.
  * @author ralph
@@ -23,7 +20,7 @@ public class RsYearTest {
 	private static final long currentTime = System.currentTimeMillis();
 	
 	/**
-	 * Test method for {@link rs.baselib.util.RsYear#getEnd()}.
+	 * Test method for {@link rsbaselib.util.RsYear#getEnd()}.
 	 */
 	@Test
 	public void testGetEnd() {

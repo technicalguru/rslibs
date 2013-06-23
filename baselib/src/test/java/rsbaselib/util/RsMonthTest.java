@@ -9,9 +9,6 @@ import java.util.Calendar;
 
 import org.junit.Test;
 
-import rs.baselib.util.RsDate;
-import rs.baselib.util.RsMonth;
-
 /**
  * Tests the {@link RsMonth} class.
  * @author ralph
@@ -23,7 +20,7 @@ public class RsMonthTest {
 	private static final long currentTime = System.currentTimeMillis();
 	
 	/**
-	 * Test method for {@link rs.baselib.util.RsMonth#getEnd()}.
+	 * Test method for {@link rsbaselib.util.RsMonth#getEnd()}.
 	 */
 	@Test
 	public void testGetEnd() {
