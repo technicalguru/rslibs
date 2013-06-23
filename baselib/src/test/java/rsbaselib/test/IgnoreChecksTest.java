@@ -11,9 +11,6 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import rs.baselib.test.IgnoreChecks;
-import rs.baselib.test.IgnoreTest;
-
 /**
  * Tests the {@link IgnoreChecks} class if it correctly identifies
  * {@link IgnoreTest} annotations.
