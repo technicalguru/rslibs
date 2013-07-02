@@ -133,20 +133,6 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 	}
 
 	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void beforeConfiguration() {
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void afterConfiguration() {
-	}
-
-	/**
 	 * Loads an object from a configuration.
 	 * The object is configured if it is an instance of {@link IConfigurable}.
 	 * @param config configuration

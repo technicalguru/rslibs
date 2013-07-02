@@ -78,20 +78,6 @@ public abstract class AbstractGeneralDAO<K extends Serializable, B extends Abstr
 	}
 	
 	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void beforeConfiguration() {
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void afterConfiguration() {
-	}
-
-	/**
 	 * Returns the log.
 	 * @return the log
 	 */

@@ -71,20 +71,6 @@ public abstract class AbstractDaoMaster implements IDaoMaster, IConfigurable {
 	}
 
 	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void beforeConfiguration() {
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void afterConfiguration() {
-	}
-
-	/**
 	 * Returns the property of this DAO master.
 	 * @param key key
 	 * @return value

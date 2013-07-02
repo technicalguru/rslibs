@@ -17,13 +17,50 @@ public class ConfigurationUtils {
 	/**
 	 * Loads an object from a configuration.
 	 * The object is configured if it is an instance of {@link IConfigurable}.
+	 * The class will be taken from attribute <code>[@class]</code>.
 	 * @param config the configuration to apply
+	 * @param configure whether the object shall be configured (if it is a {@link IConfigurable}).
 	 * @return the object
 	 */
 	public static Object load(Configuration config, boolean configure) {
 		try {
 			String className = config.getString("[@class]");
+			return load(className, config, configure);
+		} catch (Exception e) {
+			if (e instanceof RuntimeException) {
+				throw (RuntimeException)e;
+			}
+			throw new RuntimeException("Cannot load class from configuration", e);
+		}
+	}
+
+	/**
+	 * Loads an object from a configuration.
+	 * The object is configured if it is an instance of {@link IConfigurable}.
+	 * @param className the name of class to be instantiated
+	 * @param config the configuration to apply
+	 * @param configure whether the object shall be configured (if it is a {@link IConfigurable}).
+	 * @return the object
+	 */
+	public static Object load(String className, Configuration config, boolean configure) {
+		try {
 			Class<?> clazz = Class.forName(className);
+			return load(clazz, config, configure);
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Cannot load class from configuration", e);
+		}
+	}
+
+	/**
+	 * Loads an object from a configuration.
+	 * The object is configured if it is an instance of {@link IConfigurable}.
+	 * @param clazz the class to be instantiated
+	 * @param config the configuration to apply
+	 * @param configure whether the object shall be configured (if it is a {@link IConfigurable}).
+	 * @return the object
+	 */
+	public static Object load(Class<?> clazz, Configuration config, boolean configure) {
+		try {
 			Object rc = clazz.newInstance();
 			if (configure && (rc instanceof IConfigurable)) {
 				configure((IConfigurable)rc, config);
@@ -33,7 +70,7 @@ public class ConfigurationUtils {
 			throw new RuntimeException("Cannot load class from configuration", e);
 		}
 	}
-
+	
 	/**
 	 * Configure the object accordingly.
 	 * @param configurable the object to be configured
@@ -41,9 +78,7 @@ public class ConfigurationUtils {
 	 * @throws ConfigurationException when a problem occurs
 	 */
 	public static void configure(IConfigurable configurable, Configuration config) throws ConfigurationException {
-		configurable.beforeConfiguration();
 		configurable.configure(config);
-		configurable.afterConfiguration();
 	}
 	
 	/**

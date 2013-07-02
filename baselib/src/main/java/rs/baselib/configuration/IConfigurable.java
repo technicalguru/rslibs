@@ -16,20 +16,10 @@ import org.apache.commons.configuration.ConfigurationException;
 public interface IConfigurable {
 
 	/**
-	 * Called before configuration starts.
-	 */
-	public void beforeConfiguration();
-	
-	/**
 	 * Configure using the given configuration
 	 * @param cfg configuration
 	 * @throws ConfigurationException if a problem occurs
 	 */
 	public void configure(Configuration cfg) throws ConfigurationException;
 	
-	/**
-	 * Called after configuration finished.
-	 */
-	public void afterConfiguration();
-
 }

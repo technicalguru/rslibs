@@ -39,20 +39,6 @@ public class DefaultPasswordCallback implements IPasswordCallback, IConfigurable
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void beforeConfiguration() {
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void afterConfiguration() {
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public char[] getPassword() {
 		return password;
 	}
