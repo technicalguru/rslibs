@@ -7,6 +7,7 @@ import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -332,4 +333,12 @@ public class CommonUtils {
 		}
 	}
 
+	/**
+	 * Returns an iterable for the given iterator.
+	 * @param iterator the iterator to be wrapped
+	 * @return the iterable.
+	 */
+	public static <T> Iterable<T> iterable(Iterator<T> iterator) {
+		return new IterableImpl<T>(iterator);
+	}
 }
