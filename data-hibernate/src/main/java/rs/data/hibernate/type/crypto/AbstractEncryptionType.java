@@ -13,6 +13,7 @@ import java.sql.Types;
 import java.util.Properties;
 
 import org.hibernate.HibernateException;
+import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.type.descriptor.sql.BasicBinder;
 import org.hibernate.type.descriptor.sql.BasicExtractor;
 import org.hibernate.usertype.ParameterizedType;
@@ -95,9 +96,8 @@ public abstract class AbstractEncryptionType implements UserType, ParameterizedT
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("deprecation")
 	@Override
-	public Object nullSafeGet(ResultSet rs, String[] names, Object owner) throws HibernateException, SQLException {
+	public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session, Object owner) throws HibernateException, SQLException {
 		try {
 			byte encrypted[] = rs.getBytes(names[0]);
 			if (encrypted == null) {
@@ -140,9 +140,8 @@ public abstract class AbstractEncryptionType implements UserType, ParameterizedT
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("deprecation")
 	@Override
-	public void nullSafeSet(PreparedStatement st, Object value, int index) throws HibernateException, SQLException {
+	public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session) throws HibernateException, SQLException {
 		try {
 			if (value != null) {
 				byte decrypted[] = convert(value);

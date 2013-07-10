@@ -11,6 +11,11 @@ import org.hibernate.ejb.connection.InjectedDataSourceConnectionProvider;
  */
 public class DataSourceConnectionProvider extends InjectedDataSourceConnectionProvider {
 
+	/**
+	 * Serial UID.
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private static DataSource myDatasource;
 	
 	/**
