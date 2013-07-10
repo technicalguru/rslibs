@@ -85,14 +85,19 @@ public interface IDaoFactory {
 	 */
 	public <K extends Serializable, T extends GeneralDTO<K>> IGeneralDAO<K,?> getDaoFor(T o);
 	
+	/**
+	 * Registers a DAO with this factory.
+	 * @param dao the DAO to be registered.
+	 */
+	public void registerDao(IGeneralDAO<? extends Serializable,? extends IGeneralBO<? extends Serializable>> dao);
 
 	/**
-	 * Returns the correct DAO for the given model object.
-	 * @param o the object to look for
-	 * @return DAO or null if not found
+	 * Returns a registered DAO of given class
+	 * @param clazz the class of the DAO to be returned
+	 * @return the DAO or null if not registered
 	 */
-	public <K extends Serializable, B extends IGeneralBO<K>> IGeneralDAO<K,B> getDaoFor(B o);
-	
+	public <X extends IGeneralDAO<?, ?>> X getDao(Class<X> clazz);
+
 	/********************* TRANSACTIONS ************************/
 	
 	/**

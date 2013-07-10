@@ -3,6 +3,7 @@
  */
 package rs.data.impl;
 
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
@@ -23,18 +24,21 @@ import org.apache.commons.configuration.SubnodeConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import rs.baselib.configuration.IConfigurable;
 import rs.baselib.configuration.ConfigurationUtils;
+import rs.baselib.configuration.IConfigurable;
 import rs.baselib.io.FileFinder;
 import rs.data.TransactionSupport;
 import rs.data.api.IDaoFactory;
 import rs.data.api.IDaoMaster;
+import rs.data.api.bo.IGeneralBO;
 import rs.data.api.dao.IGeneralDAO;
 import rs.data.event.DaoEvent;
 import rs.data.event.DaoFactoryEvent;
 import rs.data.event.DaoFactoryEvent.Type;
 import rs.data.event.IDaoFactoryListener;
 import rs.data.event.IDaoListener;
+import rs.data.impl.dao.AbstractDAO;
+import rs.data.impl.dto.GeneralDTO;
 import rs.data.util.IUrlTransformer;
 
 /**
@@ -46,7 +50,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 
 	// TX Management	
 	private Logger log = LoggerFactory.getLogger(getClass());
-	
+
 	private ThreadLocal<TransactionContext> txContext = new ThreadLocal<TransactionContext>();
 	private Set<IDaoFactoryListener> listeners = new HashSet<IDaoFactoryListener>();
 	private IDaoListener daoListener = new MyDaoListener();
@@ -55,7 +59,9 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 	private TransactionManager txManager;
 	private IUrlTransformer urlTransformer;
 	private Map<String, IDaoMaster> daoMasters = new HashMap<String, IDaoMaster>();
-	
+	private Map<String,IGeneralDAO<? extends Serializable,? extends IGeneralBO<? extends Serializable>>> daos =
+			new HashMap<String, IGeneralDAO<? extends Serializable,? extends IGeneralBO<? extends Serializable>>>();
+
 	/**
 	 * Constructor.
 	 */
@@ -69,7 +75,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 	protected Logger getLog() {
 		return log;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -91,7 +97,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 				}
 			}
 		}
-		
+
 		// Load the URL transformer, if it exists:
 		try {
 			SubnodeConfiguration tCfg = ((HierarchicalConfiguration)cfg).configurationAt("IUrlTransformer(0)");
@@ -124,12 +130,12 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 					index = -1;
 				}
 			}
-			
+
 			// Restore the class loader
 			thread.setContextClassLoader(loader);
 
 		}
-		
+
 	}
 
 	/**
@@ -162,7 +168,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 		if (daoMasters.containsKey(id)) throw new RuntimeException("DAO Master already exists: "+id);
 		daoMasters.put(id, daoMaster);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -183,31 +189,34 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 		ClassLoader loader = thread.getContextClassLoader();
 		thread.setContextClassLoader(this.getClass().getClassLoader());
 
-		IGeneralDAO<?,?> rc = null;
+		IGeneralDAO<? extends Serializable,? extends IGeneralBO<? extends Serializable>> rc = null;
 		try {
 			HierarchicalConfiguration hCfg = (HierarchicalConfiguration)mainCfg;
 			SubnodeConfiguration cfg = hCfg.configurationAt(key+"(0)");
-			
+
 			// Create the class
 			String className = cfg.getString("[@class]");
 			getLog().debug(key+": "+className);
 			@SuppressWarnings("unchecked")
 			Class<? extends IGeneralDAO<?,?>> clazz = (Class<? extends IGeneralDAO<?,?>>) Class.forName(className);
 			rc = clazz.newInstance();
-			
+
 			// Set the factory
 			rc.setFactory(this);
-			
+
 			// Set the DAO Master
 			String masterId = cfg.getString("[@daoMaster]");
 			if (masterId == null) masterId = "default";
 			rc.setDaoMaster(getDaoMaster(masterId));
-			
+
 			// Configure it
 			if (rc instanceof IConfigurable) ((IConfigurable)rc).configure(cfg);
-			
+
 			// Add the factory as a listener
 			rc.addDaoListener(daoListener);
+
+			// Add the DAO to our list
+			registerDao(rc);
 		} finally {
 			// Restore the class loader
 			thread.setContextClassLoader(loader);
@@ -259,9 +268,54 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 		return FileFinder.find(value);
 	}
 
+
+	/********************* DAO Handling ************************/
 	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void registerDao(IGeneralDAO<? extends Serializable,? extends IGeneralBO<? extends Serializable>> dao) {
+		this.daos.put(dao.getClass().getName(), dao);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@SuppressWarnings("unchecked")
+	public <X extends IGeneralDAO<?, ?>> X getDao(Class<X> clazz) {
+		X rc = null;
+		rc = (X) daos.get(clazz.getName());
+		if (rc == null) {
+			for (IGeneralDAO<? extends Serializable,? extends IGeneralBO<? extends Serializable>> dao : daos.values()) {
+				if (clazz.isInstance(dao)) {
+					rc = (X)dao;
+					break;
+				}
+			}
+		}
+		return rc;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public <K extends Serializable, T extends GeneralDTO<K>> IGeneralDAO<K, ?> getDaoFor(T o) {
+		for (IGeneralDAO<? extends Serializable,? extends IGeneralBO<? extends Serializable>> dao : daos.values()) {
+			if (dao instanceof AbstractDAO) {
+				if (((AbstractDAO<?,?,?,?>)dao).getTransferClass().isInstance(o)) {
+					return (IGeneralDAO<K, ?>) dao;
+				}
+			}
+		}
+		return null;
+	}
+
 	/********************* TRANSACTIONS ************************/
-	
+
 	/**
 	 * Returns the urlTransformer.
 	 * @return the urlTransformer
@@ -302,7 +356,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 			throw new RuntimeException("Cannot create Transaction Manager", t);
 		}
 	}
-	
+
 	/**
 	 * Sets the given TX manager to be used.
 	 * This method will throw an exception if there is already a TX manager active.
@@ -377,7 +431,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 	protected void fireDaoFactoryEvent(DaoFactoryEvent event) {
 		for (IDaoFactoryListener l : listeners) l.handleDaoFactoryEvent(event);
 	}
-	
+
 	/**
 	 * Registers the current context that the model changed underneath.
 	 */
@@ -385,17 +439,17 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 		TransactionContext context = txContext.get();
 		if (context != null) context.setModelChanged(true);
 	}
-	
+
 	/**
 	 * Keeps track of transaction creation.
 	 * @author ralph
 	 *
 	 */
 	protected class TransactionContext {
-		
+
 		private int beginCount;
 		private boolean modelChanged;
-		
+
 		public TransactionContext() {
 			this.beginCount = 0;
 			this.modelChanged = false;
@@ -408,12 +462,12 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 		public void begin() {
 			try {
 				boolean startTx = true;
-				
+
 				// Do we have an active transaction?
-				
+
 				Transaction tx = getTransaction();
 				if (tx != null) startTx = (tx.getStatus() != Status.STATUS_ACTIVE);
-				
+
 				// Start the TX if required
 				if (startTx) {
 					getTransactionManager().begin();
@@ -450,7 +504,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 				throw new RuntimeException("No active transaction found");
 			}
 		}
-		
+
 		/**
 		 * Rolls back a transaction.
 		 * If the last call to {@link #begin()} did not start a new TX then
@@ -473,7 +527,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 				throw new RuntimeException("No active transaction found");
 			}
 		}
-		
+
 		/**
 		 * Returns the modelChanged.
 		 * @return the modelChanged
@@ -506,8 +560,8 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 		public void handleDaoEvent(DaoEvent event) {
 			modelChanged();
 		}
-		
+
 	}
-	
+
 
 }
