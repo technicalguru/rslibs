@@ -12,6 +12,7 @@ import java.util.Properties;
 
 import org.hibernate.HibernateException;
 import org.hibernate.MappingException;
+import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.usertype.ParameterizedType;
 import org.hibernate.usertype.UserType;
 
@@ -55,9 +56,9 @@ public class EnumerationType implements UserType, ParameterizedType {
 	/**
 	 * {@inheritDoc}
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	@SuppressWarnings({ "unchecked", "deprecation" })
-	public Object nullSafeGet(ResultSet resultSet, String[] names, Object owner) throws HibernateException, SQLException { 
+	public Object nullSafeGet(ResultSet resultSet, String[] names, SessionImplementor session, Object owner) throws HibernateException, SQLException { 
 		String name = resultSet.getString(names[0]);
 
 		Enum<?> result = null; 
@@ -76,8 +77,7 @@ public class EnumerationType implements UserType, ParameterizedType {
 	 * {@inheritDoc}
 	 */
 	@Override
-	@SuppressWarnings("deprecation")
-	public void nullSafeSet(PreparedStatement preparedStatement, Object value, int index) throws HibernateException, SQLException { 
+	public void nullSafeSet(PreparedStatement preparedStatement, Object value, int index, SessionImplementor session) throws HibernateException, SQLException { 
 		if (null == value) { 
 			preparedStatement.setNull(index, Types.VARCHAR);
 		} else { 

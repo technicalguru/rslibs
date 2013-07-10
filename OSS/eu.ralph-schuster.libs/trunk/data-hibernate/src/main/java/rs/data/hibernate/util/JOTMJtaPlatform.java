@@ -3,10 +3,11 @@
  */
 package rs.data.hibernate.util;
 
+import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;
 
 import org.hibernate.HibernateException;
-import org.hibernate.transaction.JTATransactionFactory;
+import org.hibernate.service.jta.platform.internal.AbstractJtaPlatform;
 
 import rs.data.TransactionSupport;
 
@@ -16,19 +17,32 @@ import rs.data.TransactionSupport;
  * @author ralph
  *
  */
-public class JOTMTransactionFactory extends JTATransactionFactory {
+public class JOTMJtaPlatform extends AbstractJtaPlatform {
+
+	/**
+	 * Serial UID.
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Constructor.
 	 */
-	public JOTMTransactionFactory() {
+	public JOTMJtaPlatform() {
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected UserTransaction getUserTransaction() {
+	protected TransactionManager locateTransactionManager() {
+		return TransactionSupport.getTransactionManager();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected UserTransaction locateUserTransaction() {
 		UserTransaction rc = TransactionSupport.getUserTransaction();
 		if (rc == null) throw new HibernateException("No user transaction started");
 		return rc;

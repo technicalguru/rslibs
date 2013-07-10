@@ -11,6 +11,7 @@ import java.sql.Timestamp;
 import java.sql.Types;
 
 import org.hibernate.HibernateException;
+import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.usertype.UserType;
 
 import rs.baselib.util.DateTimePeriod;
@@ -78,9 +79,8 @@ public class DateTimePeriodType implements UserType {
     /**
      * {@inheritDoc}
      */
-	@SuppressWarnings("deprecation")
 	@Override
-    public Object nullSafeGet(ResultSet rs, String names[], Object owner) throws HibernateException, SQLException {
+    public Object nullSafeGet(ResultSet rs, String names[], SessionImplementor session, Object owner) throws HibernateException, SQLException {
     	RsDate from = RsDate.get(rs.getTimestamp(names[0]));
     	RsDate until = RsDate.get(rs.getTimestamp(names[1]));
     	return new DateTimePeriod(from, until);
@@ -89,9 +89,8 @@ public class DateTimePeriodType implements UserType {
     /**
      * {@inheritDoc}
      */
-	@SuppressWarnings("deprecation")
 	@Override
-    public void nullSafeSet(PreparedStatement st, Object value, int index) throws HibernateException, SQLException {
+    public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session) throws HibernateException, SQLException {
     	if (value != null) {
     		DateTimePeriod period = (DateTimePeriod)value;
     		RsDate from = period.getFrom();
