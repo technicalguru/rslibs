@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import rs.baselib.bean.BeanSupport;
+import rs.baselib.bean.NamedObject;
 import rs.baselib.lang.LangUtils;
 import rs.baselib.util.RsDate;
 import rs.data.impl.dto.GeneralDTO;
@@ -135,6 +136,25 @@ public abstract class AbstractBO<K extends Serializable, T extends GeneralDTO<K>
 		RsDate oldValue = getChangeDate();
 		getTransferObject().setChangeDate(changeDate);
 		firePropertyChange(PROPERTY_CHANGE_DATE, oldValue, changeDate);
+	}
+	
+	/**
+	 * Returns the name.
+	 * @return the name
+	 */
+	public String getName() {
+		if (!(this instanceof NamedObject)) throw new IllegalArgumentException("This is not a NamedObject");
+		return getTransferObject().getName();
+	}
+
+	/**
+	 * Sets the name.
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		String oldValue = getName();
+		getTransferObject().setName(name);
+		firePropertyChange(NamedObject.PROPERTY_NAME, oldValue, name);
 	}
 	
 }
