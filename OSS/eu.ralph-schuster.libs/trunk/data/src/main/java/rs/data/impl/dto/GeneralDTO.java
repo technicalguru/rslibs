@@ -23,6 +23,7 @@ public abstract class GeneralDTO<K extends Serializable> implements Serializable
 	private K id;
 	private RsDate creationDate;
 	private RsDate changeDate;
+	private String name;
 	
 	/**
 	 * Constructor.
@@ -78,5 +79,20 @@ public abstract class GeneralDTO<K extends Serializable> implements Serializable
 		this.changeDate = changeDate;
 	}
 
-	
+	/**
+	 * Returns the name.
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * Sets the name.
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
 }
