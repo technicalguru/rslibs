@@ -332,6 +332,14 @@ public class CommonUtils {
 			s.append('}');
 		}
 	}
+	
+	/**
+	 * Returns the unix timestamp.
+	 * @return time in seconds since January 1st, 1970, 00:00:00 UTC.
+	 */
+	public static long getUnixTimestamp() {
+		return System.currentTimeMillis()/1000L;
+	}
 
 	/**
 	 * Returns an iterable for the given iterator.
