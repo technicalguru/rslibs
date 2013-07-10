@@ -51,7 +51,7 @@ public abstract class AbstractGeneralDAO<K extends Serializable, B extends Abstr
 	private IDaoMaster daoMaster;
 	private Map<CID,WeakReference<B>> cache = new WeakHashMap<CID,WeakReference<B>>();
 	private Set<IDaoListener> listeners = new HashSet<IDaoListener>();
-	
+
 	/**
 	 * Constructor.
 	 */

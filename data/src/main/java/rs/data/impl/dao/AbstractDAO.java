@@ -52,7 +52,7 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	 * Returns the dtoInterfaceClass.
 	 * @return the dtoInterfaceClass
 	 */
-	protected Class<T> getTransferClass() {
+	public Class<T> getTransferClass() {
 		return transferClass;
 	}
 
