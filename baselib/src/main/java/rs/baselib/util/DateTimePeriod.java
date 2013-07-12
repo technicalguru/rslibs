@@ -24,9 +24,16 @@ public class DateTimePeriod implements Serializable {
 	 * Constructor.
 	 */
 	public DateTimePeriod() {
+		this(null, null);
+	}
+	
+	/**
+	 * Constructor.
+	 */
+	public DateTimePeriod(RsDate from, long duration) {
+		this(from, new RsDate(from.getTimeInMillis()+duration));
 	}
 
-	
 	/**
 	 * Constructor.
 	 */
@@ -67,6 +74,17 @@ public class DateTimePeriod implements Serializable {
 		this.until = until;
 	}
 
+	/**
+	 * Returns the time in ms of this period or -1 if infinite.
+	 * @return
+	 */
+	public long getDuration() {
+		RsDate from = getFrom();
+		RsDate until = getUntil();
+		if ((from == null) || (until == null)) return -1;
+		return until.getTimeInMillis()-from.getTimeInMillis();
+	}
+	
 	/**
 	 * Tells whether date is in this range.
 	 * @param date date to be checked

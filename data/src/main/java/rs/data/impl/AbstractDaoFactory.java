@@ -100,25 +100,20 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 
 		// Load the URL transformer, if it exists:
 		try {
-			SubnodeConfiguration tCfg = ((HierarchicalConfiguration)cfg).configurationAt("IUrlTransformer(0)");
+			SubnodeConfiguration tCfg = ((HierarchicalConfiguration)cfg).configurationAt("UrlTransformer(0)");
 			setUrlTransformer((IUrlTransformer)ConfigurationUtils.load(tCfg, true));
 		} catch (Exception e) {
 			log.info("No URL Transformer loaded");
 		}
 
 		{
-			// Tweak the class loader to avoid some unexpected RCP problems
-			Thread thread = Thread.currentThread();
-			ClassLoader loader = thread.getContextClassLoader();
-			thread.setContextClassLoader(this.getClass().getClassLoader());
-
 			// Load DAO masters
 			int index = 0;
 			while (index >= 0) {
 				try {
-					SubnodeConfiguration tCfg = ((HierarchicalConfiguration)cfg).configurationAt("IDaoMaster("+index+")");
+					SubnodeConfiguration tCfg = ((HierarchicalConfiguration)cfg).configurationAt("DaoMaster("+index+")");
 					IDaoMaster daoMaster = loadDaoMaster(tCfg);
-					String id = cfg.getString("IDaoMaster("+index+")[@name]");
+					String id = cfg.getString("DaoMaster("+index+")[@name]");
 					if (id == null) id = "default";
 					getLog().debug("DAO Master \""+id+"\": "+daoMaster.getClass().getName());
 					setDaoMaster(id, daoMaster);
@@ -126,16 +121,31 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 				} catch (IllegalArgumentException e) {
 					index = -1;
 				} catch (Exception e) {
-					getLog().error("Cannit load IDaoMaster: ", e);
+					getLog().error("Cannit load DaoMaster: ", e);
 					index = -1;
 				}
 			}
 
-			// Restore the class loader
-			thread.setContextClassLoader(loader);
-
 		}
 
+		{
+			// Load DAOs
+			int index = 0;
+			while (index >= 0) {
+				try {
+					SubnodeConfiguration dCfg = ((HierarchicalConfiguration)cfg).configurationAt("Dao("+index+")");
+					IGeneralDAO<?, ?> dao = loadDao(dCfg);
+					getLog().debug("DAO: "+dao.getClass().getName());
+					index++;
+				} catch (IllegalArgumentException e) {
+					index = -1;
+				} catch (Exception e) {
+					getLog().error("Cannot load DAO: ", e);
+					index = -1;
+				}
+			}
+
+		}
 	}
 
 	/**
@@ -145,6 +155,11 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 	 * @return the object
 	 */
 	public IDaoMaster loadDaoMaster(SubnodeConfiguration config) {
+		// Tweak the class loader to avoid some unexpected RCP problems
+		Thread thread = Thread.currentThread();
+		ClassLoader loader = thread.getContextClassLoader();
+		thread.setContextClassLoader(this.getClass().getClassLoader());
+
 		try {
 			String className = config.getString("[@class]");
 			Class<?> clazz = Class.forName(className);
@@ -156,7 +171,11 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 			return rc;
 		} catch (Exception e) {
 			throw new RuntimeException("Cannot load class from configuration", e);
+		} finally {
+			// Restore the class loader
+			thread.setContextClassLoader(loader);
 		}
+
 	}
 
 	/**
@@ -178,12 +197,13 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 	}
 
 	/**
-	 * Creates an DAO from the configuration
-	 * @param mainCfg main config object
-	 * @param key key to process
-	 * @return DAO created
+	 * Loads an object from a configuration.
+	 * The object is configured if it is an instance of {@link IConfigurable}.
+	 * @param config configuration
+	 * @return the object
 	 */
-	protected IGeneralDAO<?,?> createDAO(Configuration mainCfg, String key) throws Exception {
+	@SuppressWarnings("unchecked")
+	public IGeneralDAO<? extends Serializable,? extends IGeneralBO<? extends Serializable>> loadDao(HierarchicalConfiguration config) {
 		// Tweak the class loader to avoid some unexpected RCP problems
 		Thread thread = Thread.currentThread();
 		ClassLoader loader = thread.getContextClassLoader();
@@ -191,32 +211,29 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 
 		IGeneralDAO<? extends Serializable,? extends IGeneralBO<? extends Serializable>> rc = null;
 		try {
-			HierarchicalConfiguration hCfg = (HierarchicalConfiguration)mainCfg;
-			SubnodeConfiguration cfg = hCfg.configurationAt(key+"(0)");
 
 			// Create the class
-			String className = cfg.getString("[@class]");
-			getLog().debug(key+": "+className);
-			@SuppressWarnings("unchecked")
-			Class<? extends IGeneralDAO<?,?>> clazz = (Class<? extends IGeneralDAO<?,?>>) Class.forName(className);
-			rc = clazz.newInstance();
+			rc = (IGeneralDAO<? extends Serializable,? extends IGeneralBO<? extends Serializable>>) ConfigurationUtils.load(config, false);
+			getLog().debug("DAO: "+rc.getClass().getName());
 
 			// Set the factory
 			rc.setFactory(this);
 
 			// Set the DAO Master
-			String masterId = cfg.getString("[@daoMaster]");
+			String masterId = config.getString("[@daoMaster]");
 			if (masterId == null) masterId = "default";
 			rc.setDaoMaster(getDaoMaster(masterId));
 
 			// Configure it
-			if (rc instanceof IConfigurable) ((IConfigurable)rc).configure(cfg);
+			if (rc instanceof IConfigurable) ConfigurationUtils.configure((IConfigurable)rc, config);
 
 			// Add the factory as a listener
 			rc.addDaoListener(daoListener);
 
 			// Add the DAO to our list
 			registerDao(rc);
+		} catch (Exception e) {
+			throw new RuntimeException("Cannot load class from configuration", e);
 		} finally {
 			// Restore the class loader
 			thread.setContextClassLoader(loader);
@@ -270,7 +287,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 
 
 	/********************* DAO Handling ************************/
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
