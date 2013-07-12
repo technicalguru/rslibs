@@ -9,7 +9,7 @@ import javax.transaction.UserTransaction;
 import org.hibernate.HibernateException;
 import org.hibernate.service.jta.platform.internal.AbstractJtaPlatform;
 
-import rs.data.TransactionSupport;
+import rs.data.JotmSupport;
 
 /**
  * Extends the standard JTA implementation by getting the TX
@@ -35,7 +35,7 @@ public class JOTMJtaPlatform extends AbstractJtaPlatform {
 	 */
 	@Override
 	protected TransactionManager locateTransactionManager() {
-		return TransactionSupport.getTransactionManager();
+		return JotmSupport.getTransactionManager();
 	}
 
 	/**
@@ -43,7 +43,7 @@ public class JOTMJtaPlatform extends AbstractJtaPlatform {
 	 */
 	@Override
 	protected UserTransaction locateUserTransaction() {
-		UserTransaction rc = TransactionSupport.getUserTransaction();
+		UserTransaction rc = JotmSupport.getUserTransaction();
 		if (rc == null) throw new HibernateException("No user transaction started");
 		return rc;
 	}

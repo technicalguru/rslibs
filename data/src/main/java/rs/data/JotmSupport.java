@@ -8,32 +8,42 @@ import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;
 
 import org.objectweb.jotm.Jotm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Involves transactions.
  * @author ralph
  *
  */
-public class TransactionSupport {
+public class JotmSupport {
 
+	private static Logger log = LoggerFactory.getLogger(JotmSupport.class);
+	
 	private static Jotm jotm;
 	private static TransactionManager txManager;
 	
 	/**
 	 * Starts transaction support.
 	 */
-	public static synchronized TransactionManager start() throws NamingException {
-		if (txManager != null) throw new RuntimeException("Transaction Manager already started");
-		jotm = new Jotm(true, false);
-		setTransactionManager(jotm.getTransactionManager());
-		return getTransactionManager();
+	public static synchronized void start() throws NamingException {
+		if (txManager == null) {
+			jotm = new Jotm(true, false);
+			setTransactionManager(jotm.getTransactionManager());
+			log.info("JOTM started");
+		}
 	}
 
 	/**
 	 * Stops the transaction support.
 	 */
 	public static synchronized void stop() {
-		if (jotm != null) jotm.stop();
+		if (txManager != null) {
+			jotm.stop();
+			jotm = null;
+			txManager = null;
+			log.info("JOTM stopped");
+		}
 	}
 	
 	/**
@@ -49,7 +59,7 @@ public class TransactionSupport {
 	 * @param txManager the txManager to set
 	 */
 	public static void setTransactionManager(TransactionManager txManager) {
-		TransactionSupport.txManager = txManager;
+		JotmSupport.txManager = txManager;
 	}
 
 	/**

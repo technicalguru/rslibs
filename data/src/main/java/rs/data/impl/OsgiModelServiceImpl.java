@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import rs.baselib.configuration.ConfigurationUtils;
 import rs.baselib.io.FileFinder;
-import rs.data.TransactionSupport;
+import rs.data.JotmSupport;
 import rs.data.api.IDaoFactory;
 import rs.data.api.IOsgiModelService;
 
@@ -94,8 +94,9 @@ public class OsgiModelServiceImpl implements IOsgiModelService {
 	public TransactionManager getTransactionManager() {
 		if (txManager == null) {
 			try {
-				// Create TX Manager
-				txManager = TransactionSupport.start();
+				// Create JOTM TX Manager
+				JotmSupport.start();
+				setTransactionManager(JotmSupport.getTransactionManager());
 			} catch (Exception e) {
 				throw new RuntimeException("Cannot setup Transaction Manager", e);
 			}			

@@ -27,7 +27,6 @@ import org.slf4j.LoggerFactory;
 import rs.baselib.configuration.ConfigurationUtils;
 import rs.baselib.configuration.IConfigurable;
 import rs.baselib.io.FileFinder;
-import rs.data.TransactionSupport;
 import rs.data.api.IDaoFactory;
 import rs.data.api.IDaoMaster;
 import rs.data.api.bo.IGeneralBO;
@@ -367,7 +366,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 	 */
 	protected TransactionManager createTransactionManager() {
 		try {
-			return TransactionSupport.start();
+			return OsgiModelServiceImpl.getModelService().getTransactionManager();
 		} catch (Throwable t) {
 			throw new RuntimeException("Cannot create Transaction Manager", t);
 		}
