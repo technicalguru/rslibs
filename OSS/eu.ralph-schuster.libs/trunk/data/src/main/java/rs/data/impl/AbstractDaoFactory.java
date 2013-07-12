@@ -214,7 +214,6 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 
 			// Create the class
 			rc = (IGeneralDAO<? extends Serializable,? extends IGeneralBO<? extends Serializable>>) ConfigurationUtils.load(config, false);
-			getLog().debug("DAO: "+rc.getClass().getName());
 
 			// Set the factory
 			rc.setFactory(this);
