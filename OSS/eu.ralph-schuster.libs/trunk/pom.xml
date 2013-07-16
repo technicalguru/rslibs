@@ -24,7 +24,7 @@
 	<distributionManagement>
 		<site>
 			<id>strato-server</id>
-			<url>scp://h2031995.stratoserver.net/var/www/vhosts/ralph-schuster.eu/download/eu.ralph-schuster.libs/${project.version}/${project.groupId}/${project.artifactId}</url>
+			<url>scp://h2031995.stratoserver.net/var/www/vhosts/ralph-schuster.eu/download/eu.ralph-schuster.libs/${project.version}</url>
 		</site>
 	</distributionManagement>
 
