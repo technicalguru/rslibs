@@ -11,13 +11,6 @@
 	<name>${project.groupId}.${project.artifactId}</name>
 	<description>General classes, interfaces and utilities</description>
 	
-	<distributionManagement>
-		<site>
-			<id>strato-server</id>
-			<url>scp://h2031995.stratoserver.net/var/www/vhosts/ralph-schuster.eu/download/eu.ralph-schuster.libs/${project.version}/${project.groupId}/${project.artifactId}</url>
-		</site>
-	</distributionManagement>
-
 	<dependencies>
 		<dependency>
 			<groupId>commons-beanutils</groupId>
