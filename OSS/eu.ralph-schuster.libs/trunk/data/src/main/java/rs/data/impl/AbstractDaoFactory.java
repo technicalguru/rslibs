@@ -6,6 +6,7 @@ package rs.data.impl;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -329,6 +330,16 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 		return null;
 	}
 
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Iterable<IGeneralDAO<?, ?>> getDaos() {
+		return new ArrayList<IGeneralDAO<?,?>>(daos.values());
+	}
+
 	/********************* TRANSACTIONS ************************/
 
 	/**
@@ -388,13 +399,21 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 	 */
 	@Override
 	public void begin() {
+		begin(0L);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void begin(long timeout) {
 		TransactionContext context = txContext.get();
 		if (context == null) {
 			context = new TransactionContext();
 			txContext.set(context);
 		}
 
-		context.begin();
+		context.begin(timeout);
 	}
 
 	/**
@@ -475,16 +494,30 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 		 * If there is already a transaction started then nothing will be performed.
 		 */
 		public void begin() {
+			begin(0L);
+		}
+
+		/**
+		 * Starts the transaction (or increments the internal counter).
+		 * If there is already a transaction started then nothing will be performed.
+		 * @param timeout in ms
+		 */
+		public void begin(long timeout) {
 			try {
 				boolean startTx = true;
 
 				// Do we have an active transaction?
 
 				Transaction tx = getTransaction();
-				if (tx != null) startTx = (tx.getStatus() != Status.STATUS_ACTIVE);
+				if (tx != null) {
+					int txStatus = tx.getStatus();
+					startTx = (txStatus != Status.STATUS_ACTIVE) && (txStatus != Status.STATUS_MARKED_ROLLBACK) && (txStatus != Status.STATUS_ROLLEDBACK);
+				}
 
 				// Start the TX if required
 				if (startTx) {
+					int seconds = (int)(timeout > 0 ? timeout/1000L : DEFAULT_TX_TIMEOUT/1000L); 
+					getTransactionManager().setTransactionTimeout(seconds);
 					getTransactionManager().begin();
 					beginCount = 1;
 					modelChanged = false;
@@ -505,10 +538,22 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 		public void commit() {
 			try {
 				if (beginCount == 1) {
-					if (isModelChanged()) fireDaoFactoryEvent(new DaoFactoryEvent(AbstractDaoFactory.this, Type.MODEL_CHANGED));
-					fireDaoFactoryEvent(new DaoFactoryEvent(AbstractDaoFactory.this, Type.TRANSACTION_COMMITTING));
-					getTransaction().commit();
-					fireDaoFactoryEvent(new DaoFactoryEvent(AbstractDaoFactory.this, Type.TRANSACTION_COMMITTED));
+					boolean doRollback = false;
+					Transaction tx = getTransaction();
+					if (tx != null) {
+						int txStatus = tx.getStatus();
+						doRollback = (txStatus == Status.STATUS_MARKED_ROLLBACK) || (txStatus == Status.STATUS_ROLLEDBACK);
+					}
+
+					if (!doRollback) {
+						if (isModelChanged()) fireDaoFactoryEvent(new DaoFactoryEvent(AbstractDaoFactory.this, Type.MODEL_CHANGED));
+						fireDaoFactoryEvent(new DaoFactoryEvent(AbstractDaoFactory.this, Type.TRANSACTION_COMMITTING));
+						getTransaction().commit();
+						fireDaoFactoryEvent(new DaoFactoryEvent(AbstractDaoFactory.this, Type.TRANSACTION_COMMITTED));
+					} else {
+						rollback();
+						beginCount++; // Has been decreased in rollback call
+					}
 
 				}
 				beginCount--;

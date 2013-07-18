@@ -16,6 +16,8 @@ import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.usertype.ParameterizedType;
 import org.hibernate.usertype.UserType;
 
+import rs.baselib.lang.LangUtils;
+
 /**
  * Reads enumerations.
  * @author ralph
@@ -59,17 +61,23 @@ public class EnumerationType implements UserType, ParameterizedType {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object nullSafeGet(ResultSet resultSet, String[] names, SessionImplementor session, Object owner) throws HibernateException, SQLException { 
-		String name = resultSet.getString(names[0]);
-
 		Enum<?> result = null; 
-		if (!resultSet.wasNull()) {
-			name = name.trim();
+		Object value = resultSet.getObject(names[0]);
+		if (value instanceof Number) {
+			int i = LangUtils.getInt(value);
+			result = clazz.getEnumConstants()[i];
+		} else if (value != null) {
+			String name = LangUtils.getString(value);
 
-			// This is the name of the enum
-			if (name.length() > 0) {
-				result = Enum.valueOf(clazz, name); 
-			}
-		} 
+			if (!resultSet.wasNull()) {
+				name = name.trim();
+
+				// This is the name of the enum
+				if (name.length() > 0) {
+					result = Enum.valueOf(clazz, name); 
+				}
+			} 
+		}
 		return result; 
 	} 
 
