@@ -127,8 +127,7 @@ public class OsgiModelServiceImpl implements IOsgiModelService {
 	
 	/**
 	 * Loads the factory with the progress monitor.
-	 * @param monitor
-	 * @param progressOffset
+	 * @param name factory to be loaded (from {@link OsgiModelServiceImpl#setConfiguration(HierarchicalConfiguration) configuration})
 	 */
 	protected synchronized IDaoFactory loadFactory(String name) {
 		IDaoFactory rc = factories.get(name);
