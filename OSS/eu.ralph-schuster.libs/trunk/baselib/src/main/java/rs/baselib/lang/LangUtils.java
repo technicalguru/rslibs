@@ -132,6 +132,21 @@ public class LangUtils {
 	}
 	
 	/**
+	 * Converts the object to a string.
+	 * @param o object to be converted
+	 * @return null if object is null, string value of object otherwise
+	 */
+	public static String getString(Object o) {
+		if (o == null) return null;
+		
+		if (o instanceof String) {
+			return (String)o;
+		}
+		
+		return o.toString();
+	}
+
+	/**
 	 * Converts the object to an int.
 	 * @param o object to be converted
 	 * @return 0 if object is null, int value of object otherwise
