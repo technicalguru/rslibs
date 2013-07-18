@@ -26,6 +26,11 @@ import rs.data.util.IUrlTransformer;
 public interface IDaoFactory {
 
 	/**
+	 * Default timeout of transactions.
+	 */
+	public static final long DEFAULT_TX_TIMEOUT = 30000L;
+	
+	/**
 	 * Returns the factory property.
 	 * @param name name of property
 	 * @return value or NULL
@@ -98,6 +103,12 @@ public interface IDaoFactory {
 	 */
 	public <X extends IGeneralDAO<?, ?>> X getDao(Class<X> clazz);
 
+	/**
+	 * Return an iterable of the registered DAOs.
+	 * @return the iterable
+	 */
+	public Iterable<IGeneralDAO<?, ?>> getDaos();
+	
 	/********************* TRANSACTIONS ************************/
 	
 	/**
@@ -117,6 +128,13 @@ public interface IDaoFactory {
 	 * This method does nothing if the thread is already within a transaction.
 	 */
 	public void begin();
+	
+	/**
+	 * Begins a transaction.
+	 * This method does nothing if the thread is already within a transaction.
+	 * @param timeout timeout of transaction in ms
+	 */
+	public void begin(long timeout);
 	
 	/**
 	 * Commits a transaction.
