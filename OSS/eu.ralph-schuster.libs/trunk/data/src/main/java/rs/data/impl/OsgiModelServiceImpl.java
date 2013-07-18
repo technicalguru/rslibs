@@ -141,11 +141,13 @@ public class OsgiModelServiceImpl implements IOsgiModelService {
 			while (rc == null) {
 				HierarchicalConfiguration subConfig = daoConfig.configurationAt("DaoFactory("+i+")");
 				String s = subConfig.getString("[@name]");
+				if (s == null) s = DEFAULT_NAME;
 				if (name.equals(s)) {
 					// Create the DAO factory
 					rc = (IDaoFactory)ConfigurationUtils.load(subConfig, true);
 					rc.setTransactionManager(txManager);
 				}
+				i++;
 			}
 		} catch (Exception e) {
 			log.error("Cannot create OSGI service for Oventa model", e);
