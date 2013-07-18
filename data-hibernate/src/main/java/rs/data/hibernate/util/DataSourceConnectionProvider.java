@@ -1,7 +1,10 @@
 package rs.data.hibernate.util;
 
+import java.util.Map;
+
 import javax.sql.DataSource;
 
+import org.hibernate.cfg.Environment;
 import org.hibernate.ejb.connection.InjectedDataSourceConnectionProvider;
 
 /**
@@ -48,6 +51,18 @@ public class DataSourceConnectionProvider extends InjectedDataSourceConnectionPr
 	 */
 	public static void setMyDatasource(DataSource myDatasource) {
 		DataSourceConnectionProvider.myDatasource = myDatasource;
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public void configure(Map configValues) {
+		// Do nothing here to avoid runtime configuration.
+		configValues.put( Environment.DATASOURCE, getMyDatasource() );
+		super.configure(configValues);
 	}
 
 	
