@@ -7,7 +7,6 @@ import java.io.Serializable;
 
 import org.hibernate.LockOptions;
 import org.hibernate.Session;
-import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.LazyInitializer;
 
