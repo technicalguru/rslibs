@@ -340,6 +340,15 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 		return new ArrayList<IGeneralDAO<?,?>>(daos.values());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public void clearCache() {
+		for (IGeneralDAO<?, ?> dao : getDaos()) {
+			dao.clearCache();
+		}
+	}
+	
 	/********************* TRANSACTIONS ************************/
 
 	/**
