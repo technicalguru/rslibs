@@ -34,6 +34,7 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
+						<Export-Package>rs.data.*</Export-Package>
 						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
 					</instructions>
 				</configuration>
