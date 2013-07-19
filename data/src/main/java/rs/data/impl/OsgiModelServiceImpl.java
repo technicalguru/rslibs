@@ -28,10 +28,10 @@ import rs.data.api.IOsgiModelService;
 public class OsgiModelServiceImpl implements IOsgiModelService {
 
 	private static Logger log = LoggerFactory.getLogger(OsgiModelServiceImpl.class);
-	
+
 	/** Non-OSGI environment */
 	private static volatile IOsgiModelService modelService = null;
-	
+
 	/**
 	 * Returns the model service in a non-OSGI environment.
 	 * @return the model service singleton
@@ -46,21 +46,23 @@ public class OsgiModelServiceImpl implements IOsgiModelService {
 		}
 		return modelService;
 	}
-	
+
 	/** All factories */
 	private Map<String,IDaoFactory> factories = new HashMap<String,IDaoFactory>();
 	/** The DAO configurations */
 	private HierarchicalConfiguration daoConfig;
 	/** TX Manager */
 	private TransactionManager txManager;
-	
+	/** Already loaded? */
+	private boolean factoriesLoaded = false;
+
 	/**
 	 * Constructor.
 	 */
 	public OsgiModelServiceImpl() {
 		modelService = this;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -68,8 +70,8 @@ public class OsgiModelServiceImpl implements IOsgiModelService {
 	public void setConfiguration(HierarchicalConfiguration config) {
 		this.daoConfig = config;
 	}
-	
-	
+
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -116,49 +118,62 @@ public class OsgiModelServiceImpl implements IOsgiModelService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public IDaoFactory getFactory(String name) {
-		if (name == null) name = DEFAULT_NAME;
-		IDaoFactory rc = factories.get(name);
-		if (rc == null) {
-			rc = loadFactory(name);
-		}
-		return rc;
-	}
-	
-	/**
-	 * Loads the factory with the progress monitor.
-	 * @param name factory to be loaded (from {@link OsgiModelServiceImpl#setConfiguration(HierarchicalConfiguration) configuration})
-	 */
-	protected synchronized IDaoFactory loadFactory(String name) {
-		IDaoFactory rc = factories.get(name);
-		if (rc != null) {
-			return rc;
-		}
-		
-		try {
-			// Find the configuration
-			int i=0;
-			while (rc == null) {
-				HierarchicalConfiguration subConfig = daoConfig.configurationAt("DaoFactory("+i+")");
-				String s = subConfig.getString("[@name]");
-				if (s == null) s = DEFAULT_NAME;
-				if (name.equals(s)) {
-					// Create the DAO factory
-					rc = (IDaoFactory)ConfigurationUtils.load(subConfig, true);
-					rc.setTransactionManager(txManager);
-				}
-				i++;
-			}
-		} catch (Exception e) {
-			log.error("Cannot create OSGI service for Oventa model", e);
-		}
-		
-		if (rc != null) {
-			registerFactory(name, rc);
-		}
-		return rc;
+	public IDaoFactory getFactory() {
+		return getFactory((String)null);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public IDaoFactory getFactory(String name) {
+		if (!factoriesLoaded) loadFactories();
+		if (name == null) name = DEFAULT_NAME;
+		return factories.get(name);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T extends IDaoFactory> T getFactory(Class<T> clazz) {
+		if (!factoriesLoaded) loadFactories();
+		for (Map.Entry<String, IDaoFactory> entry : factories.entrySet()) {
+			if (clazz.isInstance(entry.getValue())) return (T)entry.getValue();
+		}
+		return null;
+	}
+
+	/**
+	 * Loads the factories.
+	 */
+	protected void loadFactories() {
+		if (factoriesLoaded) return;
+
+		synchronized (factories) {
+			if (factoriesLoaded) return;
+			int i=0;
+			try {
+				while (true) {
+					HierarchicalConfiguration subConfig = daoConfig.configurationAt("DaoFactory("+i+")");
+					String s = subConfig.getString("[@name]");
+					if (s == null) s = DEFAULT_NAME;
+
+					// Create the DAO factory
+					IDaoFactory factory = (IDaoFactory)ConfigurationUtils.load(subConfig, true);
+					factory.setTransactionManager(txManager);
+					registerFactory(s, factory);
+
+					i++;
+				}
+			} catch (Exception e) {
+				// End of config
+			}
+			factoriesLoaded = true;
+		}
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -169,5 +184,5 @@ public class OsgiModelServiceImpl implements IOsgiModelService {
 		}
 		factories.put(name, factory);
 	}
-	
+
 }

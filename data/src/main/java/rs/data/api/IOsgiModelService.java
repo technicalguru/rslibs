@@ -43,11 +43,25 @@ public interface IOsgiModelService {
 	public void setTransactionManager(TransactionManager txManager);
 
 	/**
+	 * Returns the default factory.
+	 * @see #DEFAULT_NAME
+	 * @return factory
+	 */
+	public IDaoFactory getFactory();
+	
+	/**
 	 * Returns the factory with given name.
 	 * @param name name of factory
 	 * @return factory
 	 */
 	public IDaoFactory getFactory(String name);
+	
+	/**
+	 * Returns the factory of the given type.
+	 * @param clazz clazz of factory to be returned
+	 * @return the factory
+	 */
+	public <T extends IDaoFactory> T getFactory(Class<T> clazz);
 	
 	/**
 	 * Registers a new factory.
