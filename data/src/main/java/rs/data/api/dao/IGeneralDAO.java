@@ -239,4 +239,8 @@ public interface IGeneralDAO<K extends Serializable, B extends IGeneralBO<K>> {
 	 */
 	public void removeDaoListener(IDaoListener listener);
 	
+	/**
+	 * Clears the cache.
+	 */
+	public void clearCache();
 }

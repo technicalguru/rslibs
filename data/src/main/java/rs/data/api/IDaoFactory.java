@@ -109,6 +109,11 @@ public interface IDaoFactory {
 	 */
 	public Iterable<IGeneralDAO<?, ?>> getDaos();
 	
+	/**
+	 * Clear cache of all DAOs.
+	 */
+	public void clearCache();
+	
 	/********************* TRANSACTIONS ************************/
 	
 	/**

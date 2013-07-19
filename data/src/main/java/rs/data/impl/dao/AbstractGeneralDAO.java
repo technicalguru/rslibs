@@ -189,6 +189,13 @@ public abstract class AbstractGeneralDAO<K extends Serializable, B extends Abstr
 		return null;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
+	public void clearCache() {
+		cache.clear();
+	}
+	
 	/************************* CREATION ************************/
 	
 	/**
