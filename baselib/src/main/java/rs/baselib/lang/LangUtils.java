@@ -219,63 +219,99 @@ public class LangUtils {
 	 * Returns the date using the first {@link DateFormat} that produces a result.
 	 * @param o object to be transformed
 	 * @param formats formats to be used
-	 * @return the date if it could be parsed
+	 * @return the date if it could be parsed or <code>null</code>
 	 */
 	public RsDate getRsDate(Object o, DateFormat formats[]) {
-		if (o == null) return null;
-		if (o instanceof RsDate) return (RsDate)o;
-		RsDate rc = null; 
-		for (DateFormat format : formats) {
-			rc = getRsDate(o, format, false);
-			if (rc != null) break;
-		}
-		return rc;
-	}
-	
-	/**
-	 * Converts the object to a {@link RsDate}.
-	 * @param o object to be converted
-	 * @param format format to be applied
-	 * @return null if object is null, {@link RsDate} value of object otherwise
-	 */
-	public static RsDate getRsDate(Object o, DateFormat format) {
-		return getRsDate(o, format, true);
-	}
-	
-	/**
-	 * Converts the object to a {@link RsDate}.
-	 * @param o object to be converted
-	 * @param format format to be applied
-	 * @param logError whether parsing error shall be logged
-	 * @return null if object is null, {@link RsDate} value of object otherwise
-	 */
-	private static RsDate getRsDate(Object o, DateFormat format, boolean logError) {
-		if (o == null) return null;
-		if (o instanceof RsDate) return (RsDate)o;
-		try {
-			String s = o.toString().trim();
-			if (s.length() == 0) return null;
-			return new RsDate(format.parse(s));
-		} catch (ParseException e) {
-			if (logError)log.error("Cannot parse date: "+o.toString(), e);
-		}
-		return null;
+		return getRsDate(o, formats, null);
 	}
 	
 	/**
 	 * Returns the date using the first {@link DateFormat} that produces a result.
 	 * @param o object to be transformed
 	 * @param formats formats to be used
-	 * @return the date if it could be parsed
+	 * @param defaultValue value to be returned when object cannot be transformed.
+	 * @return the date if it could be parsed, the default value otherwise
+	 */
+	public RsDate getRsDate(Object o, DateFormat formats[], RsDate defaultValue) {
+		if (o == null) return defaultValue;
+		if (o instanceof RsDate) return (RsDate)o;
+		RsDate rc = null; 
+		for (DateFormat format : formats) {
+			rc = getRsDate(o, format, null, false);
+			if (rc != null) break;
+		}
+		if (rc == null) rc = defaultValue;
+		return rc;
+	}
+	
+	/**
+	 * Converts the object to a {@link RsDate}.
+	 * @param o object to be converted
+	 * @param format format to be applied
+	 * @return {@link RsDate} value of object, <code>null</code> otherwise
+	 */
+	public static RsDate getRsDate(Object o, DateFormat format) {
+		return getRsDate(o, format, null, true);
+	}
+	
+	/**
+	 * Converts the object to a {@link RsDate}.
+	 * @param o object to be converted
+	 * @param format format to be applied
+	 * @param defaultValue value to be returned when object cannot be transformed.
+	 * @return {@link RsDate} value of object, the default value otherwise
+	 */
+	public static RsDate getRsDate(Object o, DateFormat format, RsDate defaultValue) {
+		return getRsDate(o, format, defaultValue, true);
+	}
+	
+	/**
+	 * Converts the object to a {@link RsDate}.
+	 * @param o object to be converted
+	 * @param format format to be applied
+	 * @param defaultValue value to be returned when object cannot be transformed.
+	 * @param logError whether parsing error shall be logged
+	 * @return {@link RsDate} value of object, the default value otherwise
+	 */
+	private static RsDate getRsDate(Object o, DateFormat format, RsDate defaultValue, boolean logError) {
+		if (o == null) return defaultValue;
+		if (o instanceof RsDate) return (RsDate)o;
+		try {
+			String s = o.toString().trim();
+			if (s.length() == 0) return defaultValue;
+			return new RsDate(format.parse(s));
+		} catch (ParseException e) {
+			if (logError)log.error("Cannot parse date: "+o.toString(), e);
+		}
+		return defaultValue;
+	}
+	
+	/**
+	 * Returns the date using the first {@link DateFormat} that produces a result.
+	 * @param o object to be transformed
+	 * @param formats formats to be used
+	 * @return the date if it could be parsed, <code>null</code> otherwise
 	 */
 	public Date getDate(Object o, DateFormat formats[]) {
-		if (o == null) return null;
+		return getDate(o, formats, null);
+	}
+	
+	/**
+	 * Returns the date using the first {@link DateFormat} that produces a result.
+	 * @param o object to be transformed
+	 * @param formats formats to be used
+	 * @param defaultValue value to be returned when object cannot be transformed.
+	 * @return the date if it could be parsed, the default value otherwise
+	 */
+	public Date getDate(Object o, DateFormat formats[], Date defaultValue) {
+		if (o == null) return defaultValue;
 		if (o instanceof Date) return (Date)o;
 		Date rc = null; 
 		for (DateFormat format : formats) {
-			rc = getDate(o, format, false);
+			rc = getDate(o, format, null, false);
 			if (rc != null) break;
 		}
+		if (rc == null) rc = defaultValue;
 		return rc;
 	}
 	
@@ -283,30 +319,42 @@ public class LangUtils {
 	 * Converts the object to a date.
 	 * @param o object to be converted
 	 * @param format format to be applied
-	 * @return null if object is null, {@link Date} value of object otherwise
+	 * @return {@link Date} value of object, <code>null</code> otherwise
 	 */
 	public static Date getDate(Object o, DateFormat format) {
-		return getDate(o, format, true);
+		return getDate(o, format, null, true);
 	}
 	
 	/**
 	 * Converts the object to a date.
 	 * @param o object to be converted
 	 * @param format format to be applied
-	 * @param logError whether parsing error shall be logged
-	 * @return null if object is null, {@link Date} value of object otherwise
+	 * @param defaultValue value to be returned when object cannot be transformed.
+	 * @return {@link Date} value of object, the default value otherwise
 	 */
-	public static Date getDate(Object o, DateFormat format, boolean logError) {
-		if (o == null) return null;
+	public static Date getDate(Object o, DateFormat format, Date defaultValue) {
+		return getDate(o, format, defaultValue, true);
+	}
+	
+	/**
+	 * Converts the object to a date.
+	 * @param o object to be converted
+	 * @param format format to be applied
+	 * @param defaultValue value to be returned when object cannot be transformed.
+	 * @param logError whether parsing error shall be logged
+	 * @return {@link Date} value of object, the default value otherwise
+	 */
+	public static Date getDate(Object o, DateFormat format, Date defaultValue, boolean logError) {
+		if (o == null) return defaultValue;
 		if (o instanceof Date) return (Date)o;
 		try {
 			String s = o.toString().trim();
-			if (s.length() == 0) return null;
+			if (s.length() == 0) return defaultValue;
 			return format.parse(s);
 		} catch (ParseException e) {
 			if (logError) log.error("Cannot parse date: "+o.toString(), e);
 		}
-		return null;
+		return defaultValue;
 	}
 	
 	/**
