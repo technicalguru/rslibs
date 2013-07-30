@@ -247,6 +247,15 @@ public class LangUtils {
 	/**
 	 * Converts the object to a {@link RsDate}.
 	 * @param o object to be converted
+	 * @return {@link RsDate} value of object, <code>null</code> otherwise
+	 */
+	public static RsDate getRsDate(Object o) {
+		return getRsDate(o, DateFormat.getDateTimeInstance(), null, true);
+	}
+
+	/**
+	 * Converts the object to a {@link RsDate}.
+	 * @param o object to be converted
 	 * @param format format to be applied
 	 * @return {@link RsDate} value of object, <code>null</code> otherwise
 	 */
@@ -315,6 +324,15 @@ public class LangUtils {
 		return rc;
 	}
 	
+	/**
+	 * Converts the object to a {@link Date}.
+	 * @param o object to be converted
+	 * @return {@link Date} value of object, <code>null</code> otherwise
+	 */
+	public static Date getDate(Object o) {
+		return getDate(o, DateFormat.getDateTimeInstance(), null, true);
+	}
+
 	/**
 	 * Converts the object to a date.
 	 * @param o object to be converted
