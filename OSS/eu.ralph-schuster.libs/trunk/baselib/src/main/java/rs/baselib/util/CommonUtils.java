@@ -7,6 +7,7 @@ import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -334,13 +335,40 @@ public class CommonUtils {
 	}
 	
 	/**
-	 * Returns the unix timestamp.
+	 * Returns the current time as UNIX timestamp.
 	 * @return time in seconds since January 1st, 1970, 00:00:00 UTC.
 	 */
 	public static long getUnixTimestamp() {
-		return System.currentTimeMillis()/1000L;
+		return getUnixTimestamp(System.currentTimeMillis());
 	}
-
+	
+	/**
+	 * Returns the given date as UNIX timestamp.
+	 * @param date date object.
+	 * @return time in seconds since January 1st, 1970, 00:00:00 UTC.
+	 */
+	public static long getUnixTimestamp(Date date) {
+		return getUnixTimestamp(date.getTime());
+	}
+	
+	/**
+	 * Returns the given date as UNIX timestamp.
+	 * @param date date object.
+	 * @return time in seconds since January 1st, 1970, 00:00:00 UTC.
+	 */
+	public static long getUnixTimestamp(RsDate date) {
+		return getUnixTimestamp(date.getTimeInMillis());
+	}
+	
+	/**
+	 * Returns the given Java time as UNIX timestamp.
+	 * @param time Java timestamp
+	 * @return time in seconds since January 1st, 1970, 00:00:00 UTC.
+	 */
+	public static long getUnixTimestamp(long time) {
+		return time / 1000;
+	}
+	
 	/**
 	 * Returns an iterable for the given iterator.
 	 * @param iterator the iterator to be wrapped
