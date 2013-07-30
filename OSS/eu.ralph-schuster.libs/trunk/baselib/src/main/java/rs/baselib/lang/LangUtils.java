@@ -24,6 +24,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import rs.baselib.util.RsDate;
+
 /**
  * Reflection and language Utils.
  * @author ralph
@@ -214,18 +216,95 @@ public class LangUtils {
 	}
 	
 	/**
+	 * Returns the date using the first {@link DateFormat} that produces a result.
+	 * @param o object to be transformed
+	 * @param formats formats to be used
+	 * @return the date if it could be parsed
+	 */
+	public RsDate getRsDate(Object o, DateFormat formats[]) {
+		if (o == null) return null;
+		if (o instanceof RsDate) return (RsDate)o;
+		RsDate rc = null; 
+		for (DateFormat format : formats) {
+			rc = getRsDate(o, format, false);
+			if (rc != null) break;
+		}
+		return rc;
+	}
+	
+	/**
+	 * Converts the object to a {@link RsDate}.
+	 * @param o object to be converted
+	 * @param format format to be applied
+	 * @return null if object is null, {@link RsDate} value of object otherwise
+	 */
+	public static RsDate getRsDate(Object o, DateFormat format) {
+		return getRsDate(o, format, true);
+	}
+	
+	/**
+	 * Converts the object to a {@link RsDate}.
+	 * @param o object to be converted
+	 * @param format format to be applied
+	 * @param logError whether parsing error shall be logged
+	 * @return null if object is null, {@link RsDate} value of object otherwise
+	 */
+	private static RsDate getRsDate(Object o, DateFormat format, boolean logError) {
+		if (o == null) return null;
+		if (o instanceof RsDate) return (RsDate)o;
+		try {
+			String s = o.toString().trim();
+			if (s.length() == 0) return null;
+			return new RsDate(format.parse(s));
+		} catch (ParseException e) {
+			if (logError)log.error("Cannot parse date: "+o.toString(), e);
+		}
+		return null;
+	}
+	
+	/**
+	 * Returns the date using the first {@link DateFormat} that produces a result.
+	 * @param o object to be transformed
+	 * @param formats formats to be used
+	 * @return the date if it could be parsed
+	 */
+	public Date getDate(Object o, DateFormat formats[]) {
+		if (o == null) return null;
+		if (o instanceof Date) return (Date)o;
+		Date rc = null; 
+		for (DateFormat format : formats) {
+			rc = getDate(o, format, false);
+			if (rc != null) break;
+		}
+		return rc;
+	}
+	
+	/**
 	 * Converts the object to a date.
 	 * @param o object to be converted
-	 * @return null if object is null, Date value of object otherwise
+	 * @param format format to be applied
+	 * @return null if object is null, {@link Date} value of object otherwise
 	 */
 	public static Date getDate(Object o, DateFormat format) {
+		return getDate(o, format, true);
+	}
+	
+	/**
+	 * Converts the object to a date.
+	 * @param o object to be converted
+	 * @param format format to be applied
+	 * @param logError whether parsing error shall be logged
+	 * @return null if object is null, {@link Date} value of object otherwise
+	 */
+	public static Date getDate(Object o, DateFormat format, boolean logError) {
 		if (o == null) return null;
+		if (o instanceof Date) return (Date)o;
 		try {
 			String s = o.toString().trim();
 			if (s.length() == 0) return null;
 			return format.parse(s);
 		} catch (ParseException e) {
-			log.error("Cannot parse date: "+o.toString(), e);
+			if (logError) log.error("Cannot parse date: "+o.toString(), e);
 		}
 		return null;
 	}
