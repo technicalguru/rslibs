@@ -5,7 +5,7 @@ package rs.data.example.impl;
 
 import rs.data.example.api.Customer;
 import rs.data.impl.bo.AbstractBO;
-import rs.data.type.PropertiesDTO;
+import rs.data.impl.dto.PropertiesDTO;
 
 /**
  * Example implementation

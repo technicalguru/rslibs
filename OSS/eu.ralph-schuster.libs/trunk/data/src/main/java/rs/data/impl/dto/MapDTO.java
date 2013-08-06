@@ -1,30 +1,29 @@
 /**
  * 
  */
-package rs.data.type;
+package rs.data.impl.dto;
 
 import java.io.Serializable;
-import java.util.Properties;
-
-import rs.data.impl.dto.GeneralDTO;
+import java.util.Collections;
+import java.util.Map;
 
 /**
- * A DTO using a Properties object as storage.
+ * A DTO using a Map object as storage.
  * @author ralph
  *
  */
-public class PropertiesDTO<K extends Serializable> extends GeneralDTO<K> {
+public class MapDTO<K extends Serializable> extends GeneralDTO<K> {
 
 	/** Serial UID */
 	private static final long serialVersionUID = 1L;
 
 	/** The properties object */
-	private Properties properties;
+	private Map<String,Object> map;
 	
 	/**
 	 * Constructor.
 	 */
-	public PropertiesDTO() {
+	public MapDTO() {
 	}
 
 	/**
@@ -32,8 +31,8 @@ public class PropertiesDTO<K extends Serializable> extends GeneralDTO<K> {
 	 * @param name key of property.
 	 * @return value of property
 	 */
-	public String getProperty(String name) {
-		return properties.getProperty(name);
+	public Object getProperty(String name) {
+		return map.get(name);
 		
 	}
 
@@ -42,16 +41,16 @@ public class PropertiesDTO<K extends Serializable> extends GeneralDTO<K> {
 	 * @param name key of property
 	 * @param value new value of property
 	 */
-	public void setProperty(String name, String value) {
-		properties.setProperty(name, value);
+	public void setProperty(String name, Object value) {
+		map.put(name, value);
 	}
 
 	/**
 	 * Returns the {@link #properties}.
 	 * @return the properties
 	 */
-	public Properties getProperties() {
-		return properties;
+	public Map<String, Object> getProperties() {
+		return Collections.unmodifiableMap(map);
 	}
 	
 	
