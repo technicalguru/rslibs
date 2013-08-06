@@ -10,12 +10,8 @@ import org.hibernate.Session;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.LazyInitializer;
 
-import rs.data.api.IDaoFactory;
-import rs.data.api.bo.IGeneralBO;
-import rs.data.api.dao.IGeneralDAO;
 import rs.data.hibernate.HibernateDaoMaster;
 import rs.data.impl.bo.AbstractBO;
-import rs.data.impl.dao.AbstractDAO;
 import rs.data.impl.dto.GeneralDTO;
 
 /**
@@ -45,14 +41,6 @@ public abstract class AbstractHibernateBO<K extends Serializable, T extends Gene
 	}
 
 	/**
-	 * Returns the DAO factory.
-	 * @return the DAO factory
-	 */
-	protected IDaoFactory getFactory() {
-		return getDao().getFactory();
-	}
-	
-	/**
 	 * Returns the DAO master.
 	 * @return the DAO master
 	 */
@@ -69,34 +57,6 @@ public abstract class AbstractHibernateBO<K extends Serializable, T extends Gene
 	}
 	
 	/**
-	 * Begins a TX.
-	 * @throws SystemException
-	 * @throws NotSupportedException
-	 */
-	protected void beginTx() {
-		getFactory().begin();
-	}
-	
-	/**
-	 * Commits a TX.
-	 * @throws SystemException
-	 * @throws HeuristicRollbackException
-	 * @throws HeuristicMixedException
-	 * @throws RollbackException
-	 */
-	protected void commitTx() {
-		getFactory().commit();
-	}
-	
-	/**
-	 * Rollsback the TX.
-	 * @throws SystemException
-	 */
-	protected void rollbackTx() {
-		getFactory().rollback();
-	}
-	
-	/**
 	 * Returns the transferObject.
 	 * @return the transferObject
 	 */
@@ -109,17 +69,6 @@ public abstract class AbstractHibernateBO<K extends Serializable, T extends Gene
 		}
 		if (needsInit) t = initialize();
 		return t;
-	}
-	
-	/**
-	 * Returns the DTO from that BO (or null).
-	 * @param o the BO
-	 * @return the DTO underneath
-	 */
-	public <X extends Serializable, Y extends GeneralDTO<X>> Y getTransferObject(AbstractBO<X,Y> o) {
-		if (o == null) return null;
-		if (o instanceof AbstractBO) return o.getTransferObject();
-		return null;
 	}
 	
 	/**
@@ -140,19 +89,6 @@ public abstract class AbstractHibernateBO<K extends Serializable, T extends Gene
 			return t;
 		}
 		return (T)getSession().get(getTransferClass(), getId());
-	}
-	
-	/**
-	 * Fetches the BO from the DAO factory.
-	 * @param dto the DTO
-	 * @return the BO
-	 */
-	@SuppressWarnings("unchecked")
-	protected <X extends Serializable, Y extends GeneralDTO<X>, Z extends IGeneralBO<X>> Z getBusinessObject(Y dto) {
-		if (dto == null) return null;
-		IGeneralDAO<X, Z> dao = (IGeneralDAO<X, Z>)getFactory().getDaoFor(dto);
-		if ((dao == null) || !(dao instanceof AbstractDAO)) throw new RuntimeException("Cannot find DAO for: "+dto);
-		return ((AbstractDAO<X, Y, ?, Z>)dao).getBusinessObject(dto);
 	}
 	
 	/**
