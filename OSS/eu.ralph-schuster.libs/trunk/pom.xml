@@ -48,6 +48,7 @@
 	<modules>
 		<module>baselib</module>
 		<module>data</module>
+		<module>data-file</module>
 		<module>data-hibernate</module>
 		<module>templating</module>
 	</modules>
