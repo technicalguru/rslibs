@@ -22,4 +22,18 @@ public interface IDaoMaster {
 	 * @param factory the factory
 	 */
 	public void setFactory(IDaoFactory factory);
+	
+	/**
+	 * Return the value of the given property.
+	 * @param key key of value
+	 * @return value
+	 */
+	public String getProperty(String key);
+	
+	/**
+	 * Sets a property
+	 * @param key key of property
+	 * @param value value of property
+	 */
+	public void setProperty(String key, String value);
 }
