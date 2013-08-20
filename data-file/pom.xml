@@ -14,7 +14,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>baselib</artifactId>
+			<artifactId>data</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
