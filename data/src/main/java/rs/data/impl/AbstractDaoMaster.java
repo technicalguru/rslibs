@@ -71,10 +71,9 @@ public abstract class AbstractDaoMaster implements IDaoMaster, IConfigurable {
 	}
 
 	/**
-	 * Returns the property of this DAO master.
-	 * @param key key
-	 * @return value
+	 * {@inheritDoc}
 	 */
+	@Override
 	public String getProperty(String key) {
 		return properties.getProperty(key);
 	}
@@ -94,10 +93,9 @@ public abstract class AbstractDaoMaster implements IDaoMaster, IConfigurable {
 	}
 	
 	/**
-	 * Sets a property for the DAO master.
-	 * @param key key
-	 * @param value value
+	 * {@inheritDoc}
 	 */
+	@Override
 	public void setProperty(String key, String value) {
 		properties.setProperty(key, value);
 	}
