@@ -145,7 +145,7 @@ public class DefaultFilenameStrategy<K extends Serializable> implements IFilenam
 	public Collection<File> getFiles() {
 		List<File> rc = new ArrayList<File>();
 		for (File child : getParentDir().listFiles()) {
-			if (matchesFilename(child.getName())) rc.add(child);
+			if (matchesFilename(child.getName()) && child.canRead()) rc.add(child);
 		}
 		Collections.sort(rc);
 		return rc;

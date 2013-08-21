@@ -26,7 +26,7 @@ public abstract class AbstractPropertiesFileBO<K extends Serializable> extends A
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected void load() throws IOException {
+	public void load() throws IOException {
 		// TODO Auto-generated method stub
 		
 	}
@@ -35,7 +35,7 @@ public abstract class AbstractPropertiesFileBO<K extends Serializable> extends A
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected void persist() throws IOException {
+	public void persist() throws IOException {
 		// TODO Auto-generated method stub
 		
 	}
