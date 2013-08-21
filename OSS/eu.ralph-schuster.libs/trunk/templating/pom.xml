@@ -8,7 +8,7 @@
 
 	<artifactId>templating</artifactId>
 	<packaging>bundle</packaging>
-	<name>Templating library for Typo3-alike templates</name>
+	<name>${project.groupId}.${project.artifactId}</name>
 	<description>Using Typo3 templates with Java</description>
 	
 	<dependencies>
