@@ -52,13 +52,13 @@ public abstract class AbstractFileBO<K extends Serializable> extends AbstractGen
 	/**
 	 * Loads the data.
 	 */
-	protected abstract void load() throws IOException;
+	public abstract void load() throws IOException;
 	
 	/**
 	 * Persists the data.
 	 * @param file file object to persist to
 	 */
-	protected abstract void persist() throws IOException;
+	public abstract void persist() throws IOException;
 
 	/**
 	 * {@inheritDoc}
