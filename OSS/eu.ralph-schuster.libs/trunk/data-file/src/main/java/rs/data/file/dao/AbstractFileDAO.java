@@ -249,7 +249,7 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 
 	/**
 	 * Returns a new Id.
-	 * @return
+	 * @return the generated new ID
 	 */
 	protected abstract K getNewId();
 	
