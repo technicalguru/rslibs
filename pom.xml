@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>eu.ralph-schuster</groupId>
 		<artifactId>pom-oss</artifactId>
-		<version>1.3.2</version>
+		<version>1.3.3</version>
 	</parent>
 
 	<groupId>eu.ralph-schuster</groupId>
