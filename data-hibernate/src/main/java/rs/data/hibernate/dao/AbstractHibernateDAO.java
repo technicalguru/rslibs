@@ -50,7 +50,7 @@ public abstract class AbstractHibernateDAO<K extends Serializable, T extends Gen
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	protected T _findById(K id) {
+	protected T _findBy(K id) {
 		T rc = (T) getSession().get(getTransferClass(), id);
 		return rc;
 	}

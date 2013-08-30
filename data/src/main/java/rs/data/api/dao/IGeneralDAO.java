@@ -4,6 +4,7 @@
 package rs.data.api.dao;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 import rs.data.api.IDaoFactory;
@@ -104,7 +105,14 @@ public interface IGeneralDAO<K extends Serializable, B extends IGeneralBO<K>> {
 	 * @param id id of object
 	 * @return object
 	 */
-	public B findById(K id);
+	public B findBy(K id);
+	
+	/**
+	 * Find the given objects in model.
+	 * @param ids ids of objects
+	 * @return object
+	 */
+	public List<B> findBy(Collection<K> ids);
 	
 	/**
 	 * Returns all domain objects.
@@ -207,11 +215,32 @@ public interface IGeneralDAO<K extends Serializable, B extends IGeneralBO<K>> {
 	public void deleteObject(Object object);
 	
 	/**
-	 * Deletes the object.
-	 * This method assumes that the object existed before.
-	 * @param object object to be deleted.
+	 * Deletes the objects.
+	 * This method assumes that the objects existed before.
+	 * @param objects objects to be deleted.
 	 */
-	public void delete(B object);
+	public void delete(B... objects);
+	
+	/**
+	 * Deletes the objects.
+	 * This method assumes that the objects existed before.
+	 * @param objects objects to be deleted.
+	 */
+	public void delete(Collection<B> objects);
+	
+	/**
+	 * Deletes the objects.
+	 * This method assumes that the object existed before.
+	 * @param ids id of objects to be deleted.
+	 */
+	public void deleteByKeys(K... ids);
+	
+	/**
+	 * Deletes the objects.
+	 * This method assumes that the object existed before.
+	 * @param ids id of objects to be deleted.
+	 */
+	public void deleteByKeys(Collection<K> ids);
 	
 	/**
 	 * Deletes all objects.

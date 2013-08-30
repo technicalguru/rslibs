@@ -5,6 +5,9 @@ package rs.data.impl.dao;
 
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -41,12 +44,12 @@ import rs.data.util.IDaoIterator;
 public abstract class AbstractGeneralDAO<K extends Serializable, B extends AbstractGeneralBO<K>, C extends IGeneralBO<K>> implements IGeneralDAO<K, C>, IConfigurable {
 
 	protected final Logger log = LoggerFactory.getLogger(getClass());
-	
+
 	/** The persistent class to manage */
 	private Class<K> keyClass;
 	private Class<B> boImplementationClass;
 	private Class<C> boInterfaceClass;
-	
+
 	private IDaoFactory factory;
 	private IDaoMaster daoMaster;
 	private Map<CID,WeakReference<B>> cache = new WeakHashMap<CID,WeakReference<B>>();
@@ -69,14 +72,14 @@ public abstract class AbstractGeneralDAO<K extends Serializable, B extends Abstr
 		this.boImplementationClass = (Class<B>) classes.get(1);		
 		this.boInterfaceClass = (Class<C>) classes.get(2);		
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	public void configure(Configuration cfg) throws ConfigurationException {
-		
+
 	}
-	
+
 	/**
 	 * Returns the log.
 	 * @return the log
@@ -132,7 +135,7 @@ public abstract class AbstractGeneralDAO<K extends Serializable, B extends Abstr
 	public IDaoMaster getDaoMaster() {
 		return daoMaster;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -140,9 +143,9 @@ public abstract class AbstractGeneralDAO<K extends Serializable, B extends Abstr
 	public void setDaoMaster(IDaoMaster daoMaster) {
 		this.daoMaster = daoMaster;
 	}
-	
+
 	/************************* INSTANTIATION ************************/
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -168,7 +171,7 @@ public abstract class AbstractGeneralDAO<K extends Serializable, B extends Abstr
 	 */
 	protected void afterNewInstance(C object) {		
 	}
-	
+
 	/**
 	 * Add the given object to the cache.
 	 * @param object object to add
@@ -177,7 +180,7 @@ public abstract class AbstractGeneralDAO<K extends Serializable, B extends Abstr
 		// It is important to have the CID held by the BO to avoid losing the cache
 		cache.put(object.getCID(), new WeakReference<B>(object));
 	}
-	
+
 	/**
 	 * Returns an object from the cache.
 	 * @param cid CID of object
@@ -188,16 +191,16 @@ public abstract class AbstractGeneralDAO<K extends Serializable, B extends Abstr
 		if (ref != null) return ref.get();
 		return null;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	public void clearCache() {
 		cache.clear();
 	}
-	
+
 	/************************* CREATION ************************/
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -231,22 +234,22 @@ public abstract class AbstractGeneralDAO<K extends Serializable, B extends Abstr
 	@Override
 	public void create(C object, boolean setCreationDate) {
 		B b = (B)object;
-		
+
 		if (b.getId() != null) throw new RuntimeException("Object already exists: "+object);
-		
+
 		if (setCreationDate) {
 			b.setCreationDate(new RsDate());
 			b.setChangeDate(new RsDate());
 		}
-		
+
 		beforeCreate(object);
 		_create(b);
-		
+
 		// Add the object to the cache
 		addCached(b);
-		
+
 		afterCreate(object);
-		
+
 		fireObjectCreated(object);
 	}
 
@@ -265,7 +268,7 @@ public abstract class AbstractGeneralDAO<K extends Serializable, B extends Abstr
 	 */
 	protected void beforeCreate(C object) {		
 	}
-	
+
 	/**
 	 * Called immediately after creation.
 	 * This method does nothing.
@@ -274,8 +277,28 @@ public abstract class AbstractGeneralDAO<K extends Serializable, B extends Abstr
 	protected void afterCreate(C object) {
 		object.setChanged(false);
 	}
-	
+
 	/************************* FINDING ************************/
+
+	/**
+	 * {@inheritDoc}
+	 * <p>
+	 * This implementation calls {@link #findBy(Serializable)} for each key.
+	 * Descendants shall override when there are more efficient ways for
+	 * finding multiple objects via their ID.
+	 */
+	@Override
+	public List<C> findBy(Collection<K> ids) {
+		List<C> rc = new ArrayList<C>();
+		for (K id : ids) {
+			C c = findBy(id);
+			if (c != null) {
+				rc.add(c);
+			}
+		}
+		return rc;
+	}
+
 
 	/**
 	 * {@inheritDoc}
@@ -310,7 +333,7 @@ public abstract class AbstractGeneralDAO<K extends Serializable, B extends Abstr
 	}
 
 	/********************** UPDATING ********************/
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -345,16 +368,16 @@ public abstract class AbstractGeneralDAO<K extends Serializable, B extends Abstr
 	public void save(C object, boolean setChangeDate) {
 		if (object == null) return;
 		if (object.isInvalid()) throw new RuntimeException("Cannot save an invalid object");
-		
+
 		B b = (B)object;
-		
+
 		if (b.getId() == null) throw new IllegalStateException("Object was not created yet: "+b);
 		if (setChangeDate) b.setChangeDate(new RsDate());
-		
+
 		beforeSave(object);
 		_save(b);
 		afterSave(object);
-		
+
 		fireObjectUpdated(object);
 	}
 
@@ -365,7 +388,7 @@ public abstract class AbstractGeneralDAO<K extends Serializable, B extends Abstr
 	 */
 	protected void beforeSave(C object) {
 	}
-	
+
 	/**
 	 * Called immediately after saving.
 	 * This method does nothing.
@@ -384,7 +407,7 @@ public abstract class AbstractGeneralDAO<K extends Serializable, B extends Abstr
 	protected abstract void _save(B object);
 
 	/********************** DELETING ********************/
-	
+
 	@SuppressWarnings("unchecked")
 	/**
 	 * {@inheritDoc}
@@ -400,14 +423,47 @@ public abstract class AbstractGeneralDAO<K extends Serializable, B extends Abstr
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void delete(C object) {
-		B b = (B)object;
-		
-		beforeDelete(object);
-		_delete(b);
-		afterDelete(object);
-		
-		fireObjectDeleted(object);
+	public void delete(C... objects) {
+		for (C c : objects) {
+			if (c != null) {
+				B b = (B)c;
+
+				beforeDelete(c);
+				_delete(b);
+				afterDelete(c);
+
+				fireObjectDeleted(c);
+			}
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public void delete(Collection<C> objects) {
+		delete(objects.toArray((C[])Array.newInstance(getBoInterfaceClass(), objects.size())));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void deleteByKeys(K... ids) {
+		List<K> l = new ArrayList<K>();
+		for (K id : ids) {
+			l.add(id);
+		}
+		deleteByKeys(l);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void deleteByKeys(Collection<K> ids) {
+		delete(findBy(ids));
 	}
 
 	/**
@@ -417,7 +473,7 @@ public abstract class AbstractGeneralDAO<K extends Serializable, B extends Abstr
 	 */
 	protected void beforeDelete(C object) {
 	}
-	
+
 	/**
 	 * Called immediately after deletion.
 	 * This method does nothing.
@@ -425,16 +481,16 @@ public abstract class AbstractGeneralDAO<K extends Serializable, B extends Abstr
 	 */
 	protected void afterDelete(C object) {
 	}
-	
+
 	/**
 	 * Deletes the object.
 	 * This method assumes that the object existed before.
 	 * @param object DTO to be deleted.
 	 */
 	protected abstract void _delete(B object);
-	
+
 	/****************************** LISTENER SUPPORT *****************************/
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -450,7 +506,7 @@ public abstract class AbstractGeneralDAO<K extends Serializable, B extends Abstr
 	public void removeDaoListener(IDaoListener listener) {
 		listeners.remove(listener);
 	}
-	
+
 	/**
 	 * Fires a DAO create event.
 	 * @param object object created

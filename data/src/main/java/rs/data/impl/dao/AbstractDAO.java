@@ -142,8 +142,18 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	 * {@inheritDoc}
 	 */
 	@Override
-	public C findById(K id) {
-		return getBusinessObject(_findById(id));
+	public C findBy(K id) {
+		return getBusinessObject(_findBy(id));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<C> findBy(Collection<K> ids) {
+		List<C> rc = new ArrayList<C>();
+		wrap(rc, _findBy(ids));
+		return rc;
 	}
 
 	/**
@@ -151,7 +161,24 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	 * @param id id of object
 	 * @return DTO
 	 */
-	protected abstract T _findById(K id);
+	protected abstract T _findBy(K id);
+	
+	/**
+	 * Find the objects in underlying store.
+	 * This implementation calls {@link #_findBy(Serializable)} for each of the given
+	 * IDs. Descendants shall override when there are more efficient ways to return the
+	 * appropriate list. 
+	 * @param ids ids of objects
+	 * @return DTOs found
+	 */
+	protected List<T> _findBy(Collection<K> ids) {
+		List<T> rc = new ArrayList<T>();
+		for (K id : ids) {
+			T t = _findBy(id);
+			if (t != null) rc.add(t);
+		}
+		return rc;
+	}
 	
 	/**
 	 * {@inheritDoc}
