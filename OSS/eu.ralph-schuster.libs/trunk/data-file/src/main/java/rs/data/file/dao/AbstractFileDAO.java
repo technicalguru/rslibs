@@ -121,7 +121,7 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public C findById(K id) {
+	public C findBy(K id) {
 		B rc = getCached(new CID(getBoImplementationClass(), id));
 		if (rc == null) {
 			File file = getFilenameStrategy().getFile(id);
