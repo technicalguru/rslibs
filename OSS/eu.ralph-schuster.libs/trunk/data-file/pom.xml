@@ -9,7 +9,8 @@
 	<artifactId>data-file</artifactId>
 	<packaging>bundle</packaging>
 	<name>${project.groupId}.${project.artifactId}</name>
-	<description>Library for generic Data Access classes</description>
+	<description>Library for file-based data access</description>
+	<url>http://techblog.ralph-schuster.eu/rs-library/data-file/</url>
 	
 	<dependencies>
 		<dependency>

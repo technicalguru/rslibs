@@ -10,6 +10,7 @@
 	<packaging>bundle</packaging>
 	<name>${project.groupId}.${project.artifactId}</name>
 	<description>Using Typo3 templates with Java</description>
+	<url>http://techblog.ralph-schuster.eu/templating-java-package/</url>
 	
 	<dependencies>
 		<dependency>
