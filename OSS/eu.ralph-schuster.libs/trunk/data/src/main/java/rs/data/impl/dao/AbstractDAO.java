@@ -19,6 +19,7 @@ import rs.data.util.IDaoIterator;
 
 /**
  * Abstract Implementation for Data Access Objects.
+ * This implementation assumes that the BO derives from {@link AbstractBO} (using a {@link GeneralDTO Transfer Object}).
  * @param <K> type of primary key
  * @param <T> type of Transfer Object
  * @param <B> type of Business Object Implementation
@@ -26,7 +27,7 @@ import rs.data.util.IDaoIterator;
  * @author ralph
  *
  */
-public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K>, B extends AbstractBO<K, T>, C extends IGeneralBO<K>> extends AbstractGeneralDAO<K, B, C> implements IGeneralDAO<K, C> {
+public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K>, B extends AbstractBO<K, T>, C extends IGeneralBO<K>> extends AbstractExtendedGeneralDAO<K, B, C> implements IGeneralDAO<K, C> {
 
 	/** The persistent class to manage */
 	private Class<T> transferClass;
@@ -67,19 +68,19 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 		try {
 			// Return the cached BO if it exists
 			CID cid = new CID(getBoImplementationClass(), object.getId());
-			B cached = getCached(cid);
-			if (cached != null) return (C)cached;
+			C cached = getCached(cid);
+			if (cached != null) return cached;
 			
 			// Create the BO
-			B rc = getBoImplementationClass().newInstance();
-			rc.setDao(this);
+			C rc = (C)getBoImplementationClass().newInstance();
+			((B)rc).setDao(this);
 			afterNewInstance((C)rc);
-			rc.setTransferObject(object);
+			((B)rc).setTransferObject(object);
 			
 			// Add it to our cache
 			addCached(rc);
 			
-			return (C)rc;
+			return rc;
 		} catch (IllegalAccessException e) {
 			log.error("Error creating new object: ", e);
 		} catch (InstantiationException e) {
@@ -122,9 +123,10 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	/**
 	 * {@inheritDoc}
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	protected void _create(B object) {
-		T t = object.getTransferObject();
+	protected void _create(C object) {
+		T t = ((B)object).getTransferObject();
 		_create(t);
 	}
 
@@ -257,9 +259,10 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	/**
 	 * {@inheritDoc}
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	protected void _save(B object) {
-		T t = object.getTransferObject();
+	protected void _save(C object) {
+		T t = ((B)object).getTransferObject();
 		_save(t);
 	}
 
@@ -276,9 +279,10 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	/**
 	 * {@inheritDoc}
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	protected void _delete(B object) {
-		T t = object.getTransferObject();
+	protected void _delete(C object) {
+		T t = ((B)object).getTransferObject();
 		_delete(t);
 	}
 
