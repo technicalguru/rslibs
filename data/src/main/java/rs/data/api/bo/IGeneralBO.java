@@ -8,6 +8,7 @@ import java.io.Serializable;
 import rs.baselib.bean.IBean;
 import rs.baselib.util.RsDate;
 import rs.data.api.dao.IGeneralDAO;
+import rs.data.util.CID;
 import rs.data.util.LockInformation;
 
 /**
@@ -32,6 +33,12 @@ public interface IGeneralBO<K extends Serializable> extends Serializable, IBean 
 	 * @return the id
 	 */
 	public K getId();
+
+	/**
+	 * Returns the CID.
+	 * @return the CID
+	 */
+	public CID getCID();
 
 	/**
 	 * Returns true when this object has not yet been created.

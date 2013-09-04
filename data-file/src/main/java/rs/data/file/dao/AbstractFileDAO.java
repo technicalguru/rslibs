@@ -16,7 +16,7 @@ import rs.data.api.bo.IGeneralBO;
 import rs.data.file.bo.AbstractFileBO;
 import rs.data.file.util.DefaultFilenameStrategy;
 import rs.data.file.util.IFilenameStrategy;
-import rs.data.impl.dao.AbstractGeneralDAO;
+import rs.data.impl.dao.AbstractExtendedGeneralDAO;
 import rs.data.util.CID;
 import rs.data.util.IDaoIterator;
 
@@ -25,7 +25,7 @@ import rs.data.util.IDaoIterator;
  * @author ralph
  *
  */
-public abstract class AbstractFileDAO<K extends Serializable, B extends AbstractFileBO<K>, C extends IGeneralBO<K>> extends AbstractGeneralDAO<K, B, C> {
+public abstract class AbstractFileDAO<K extends Serializable, B extends AbstractFileBO<K>, C extends IGeneralBO<K>> extends AbstractExtendedGeneralDAO<K, B, C> {
 
 	/** The key for the data directory as stored in DAO Master */
 	public static final String PROPERTY_DATA_DIR = "dataDir";
@@ -119,10 +119,9 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public C findBy(K id) {
-		B rc = getCached(new CID(getBoImplementationClass(), id));
+		C rc = getCached(new CID(getBoImplementationClass(), id));
 		if (rc == null) {
 			File file = getFilenameStrategy().getFile(id);
 			if (!file.canRead()) return null;
@@ -137,11 +136,11 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	 * @return the business object
 	 */
 	@SuppressWarnings("unchecked")
-	protected B _load(File file) {
-		B rc = (B)newInstance();
+	protected C _load(File file) {
+		C rc = newInstance();
 		try {
-			rc.setFile(file);
-			rc.load();
+			((B)rc).setFile(file);
+			((B)rc).load();
 		} catch (Exception e) {
 			throw new RuntimeException("Cannot load file", e);
 		}
@@ -172,7 +171,6 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	 * @param maxResults maximum number of results (-1 for not limited)
 	 * @return loaded objects
 	 */
-	@SuppressWarnings("unchecked")
 	protected List<C> load(Collection<File> files, int firstResult, int maxResults) {
 		List<C> rc = new ArrayList<C>();
 		int i = 0;
@@ -224,6 +222,7 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	 * @param objects objects to be deleted
 	 * @return number of objects deleted
 	 */
+	@SuppressWarnings("unchecked")
 	protected int delete(List<C> objects) {
 		int cnt = 0;
 		for (C object : objects) {
@@ -236,12 +235,13 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	/**
 	 * {@inheritDoc}
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	protected void _create(B object) {
+	protected void _create(C object) {
 		K id = getNewId();
-		object.setId(id);
+		((B)object).setId(id);
 		try {
-			object.persist();
+			((B)object).persist();
 		} catch (IOException e) {
 			throw new RuntimeException("Cannot create object", e);
 		}
@@ -256,10 +256,11 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	/**
 	 * {@inheritDoc}
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	protected void _save(B object) {
+	protected void _save(C object) {
 		try {
-			object.persist();
+			((B)object).persist();
 		} catch (IOException e) {
 			throw new RuntimeException("Cannot save object", e);
 		}
@@ -269,7 +270,7 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected void _delete(B object) {
+	protected void _delete(C object) {
 		File file = getFile(object.getId());
 		file.delete();
 	}
@@ -329,11 +330,10 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 		/**
 		 * {@inheritDoc}
 		 */
-		@SuppressWarnings("unchecked")
 		@Override
 		public C next() {
 			if (!hasNext()) throw new IllegalArgumentException("No more objects!");
-			return (C)_load(files.next());
+			return _load(files.next());
 		}
 
 		/**
