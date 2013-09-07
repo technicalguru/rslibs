@@ -27,11 +27,11 @@ import rs.data.util.IDaoIterator;
  * @author ralph
  *
  */
-public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K>, B extends AbstractBO<K, T>, C extends IGeneralBO<K>> extends AbstractExtendedGeneralDAO<K, B, C> implements IGeneralDAO<K, C> {
+public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K>, B extends AbstractBO<K, T>, C extends IGeneralBO<K>> extends AbstractGeneralDAO<K, B, C> implements IGeneralDAO<K, C> {
 
 	/** The persistent class to manage */
 	private Class<T> transferClass;
-	
+
 	/**
 	 * Constructor.
 	 */
@@ -58,46 +58,66 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	}
 
 	/************************* INSTANTIATION ************************/
+
+	/**
+	 * {@inheritDoc}
+	 * <P>This method overrides the default method by forwarding the call
+	 * to {@link #newTransferObject()} and {@link #newInstance(GeneralDTO)}.</p>
+	 */
+	@Override
+	public C newInstance() {
+		return newInstance(newTransferObject());
+	}
+	
+	/**
+	 * Returns an instance based on the given BO.
+	 * <p>Descendants shall override {@link #_newInstance(GeneralDTO)}.</p>
+	 * @param transferObject the transfer object
+	 * @return the business object
+	 */
+	protected C newInstance(T transferObject) {
+		C rc = _newInstance(transferObject);
+		rc.set("dao", this);
+		afterNewInstance(rc);
+		return rc;
+	}
+
+	/**
+	 * Create a new instance with given Transfer Object.
+	 * @param transferObject the transfer object to be assigned
+	 * @return the business object
+	 */
+	@SuppressWarnings("unchecked")
+	protected C _newInstance(T transferObject) {
+		try {
+			B rc = getBoImplementationClass().newInstance();
+			rc.setTransferObject(transferObject);
+			return (C)rc;
+		} catch (Exception e) {
+			throw new RuntimeException("Cannot create Business Object", e);
+		}
+	}
 	
 	/**
 	 * Returns the business objects for the transfer object.
 	 */
-	@SuppressWarnings("unchecked")
 	public C getBusinessObject(T object) {
 		if (object == null) return null;
-		try {
-			// Return the cached BO if it exists
-			CID cid = new CID(getBoImplementationClass(), object.getId());
-			C cached = getCached(cid);
-			if (cached != null) return cached;
-			
-			// Create the BO
-			C rc = (C)getBoImplementationClass().newInstance();
-			((B)rc).setDao(this);
-			afterNewInstance((C)rc);
-			((B)rc).setTransferObject(object);
-			
-			// Add it to our cache
-			addCached(rc);
-			
-			return rc;
-		} catch (IllegalAccessException e) {
-			log.error("Error creating new object: ", e);
-		} catch (InstantiationException e) {
-			log.error("Error creating new object: ", e);
-		}
-		return null;
+
+		// Return the cached BO if it exists
+		CID cid = getCID(object.getId());
+		C cached = getCached(cid);
+		if (cached != null) return cached;
+
+		// Create the BO
+		C rc = newInstance(object);
+
+		// Add it to our cache
+		addCached(rc);
+
+		return rc;
 	}
 
-	/**
-	 * Returns the CID for this object.
-	 * @param object object
-	 * @return CID
-	 */
-	protected CID getCID(T object) {
-		return new CID(getBoImplementationClass(), object.getId());
-	}
-	
 	/**
 	 * Wraps the collection into business objects.
 	 * @param rc the collection where to store the BO.
@@ -108,7 +128,7 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 			rc.add(getBusinessObject(t));
 		}
 	}
-	
+
 	/**
 	 * Returns the wrapper for DTO iterators.
 	 * @param i DTO iterator to be wrapped
@@ -117,9 +137,21 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	protected IDaoIterator<C> wrap(Iterator<T> i) {
 		return new BusinessIterator(i);
 	}
+
+	/**
+	 * Create an instance of the transfer class.
+	 * @return a new transfer object
+	 */
+	protected T newTransferObject() {
+		try {
+			return getTransferClass().newInstance();
+		} catch (Exception e) {
+			throw new RuntimeException("Cannot create Transfer Object", e);
+		}
+	}
 	
 	/************************* CREATION ************************/
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -137,8 +169,8 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	 * @see #create(IGeneralBO, boolean)
 	 */
 	protected abstract void _create(T object);
-	
-	/************************* CREATION ************************/
+
+	/************************* FINDING ************************/
 
 	/**
 	 * {@inheritDoc}
@@ -164,7 +196,7 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	 * @return DTO
 	 */
 	protected abstract T _findBy(K id);
-	
+
 	/**
 	 * Find the objects in underlying store.
 	 * This implementation calls {@link #_findBy(Serializable)} for each of the given
@@ -181,7 +213,7 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 		}
 		return rc;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -200,7 +232,7 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	 * @return list of DTO
 	 */
 	protected abstract List<T> _findAll(int firstResult, int maxResults);
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -220,7 +252,7 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	 * @return list of all DTO
 	 */
 	protected abstract List<T> _findDefaultAll(int firstResult, int maxResults);
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -236,7 +268,7 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	 * @return iterator of DTO
 	 */
 	protected abstract Iterator<T> _iterateAll(int firstResult, int maxResults);
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -244,7 +276,7 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	public IDaoIterator<C> iterateDefaultAll(int firstResult, int maxResults) {
 		return wrap(_iterateDefaultAll(firstResult, maxResults));
 	}
-	
+
 	/**
 	 * Returns a subset of domain objects with default criteria.
 	 * A default criteria could hide objects not needed regulary (e.g. deleted objects)
@@ -253,9 +285,9 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	 * @return list of all objects
 	 */
 	protected abstract Iterator<T> _iterateDefaultAll(int firstResult, int maxResults);
-	
+
 	/********************** UPDATING ********************/
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -275,7 +307,7 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	protected abstract void _save(T object);
 
 	/********************** DELETING ********************/
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -292,7 +324,7 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	 * @param object DTO to be deleted.
 	 */
 	protected abstract void _delete(T object);
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -308,7 +340,7 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	 * @return number of object deleted
 	 */
 	protected abstract int _deleteAll();
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -324,16 +356,16 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	 * @return number of object deleted
 	 */
 	protected abstract int _deleteDefaultAll();
-	
+
 	/**
 	 * Wrapping all DTOs into BOs when returning.
 	 * @author ralph
 	 *
 	 */
 	protected class BusinessIterator implements IDaoIterator<C> {
-		
+
 		private Iterator<T> iterator;
-		
+
 		/**
 		 * Constructor.
 		 * @param iterator DTO iterator to be wrapped.

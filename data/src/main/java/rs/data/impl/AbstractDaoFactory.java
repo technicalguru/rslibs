@@ -121,7 +121,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 				} catch (IllegalArgumentException e) {
 					index = -1;
 				} catch (Exception e) {
-					getLog().error("Cannit load DaoMaster: ", e);
+					getLog().error("Cannot load DaoMaster: ", e);
 					index = -1;
 				}
 			}
