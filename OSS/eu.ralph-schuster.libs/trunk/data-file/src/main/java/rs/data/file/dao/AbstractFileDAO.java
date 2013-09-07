@@ -16,7 +16,7 @@ import rs.data.api.bo.IGeneralBO;
 import rs.data.file.bo.AbstractFileBO;
 import rs.data.file.util.DefaultFilenameStrategy;
 import rs.data.file.util.IFilenameStrategy;
-import rs.data.impl.dao.AbstractExtendedGeneralDAO;
+import rs.data.impl.dao.AbstractGeneralDAO;
 import rs.data.util.CID;
 import rs.data.util.IDaoIterator;
 
@@ -25,7 +25,7 @@ import rs.data.util.IDaoIterator;
  * @author ralph
  *
  */
-public abstract class AbstractFileDAO<K extends Serializable, B extends AbstractFileBO<K>, C extends IGeneralBO<K>> extends AbstractExtendedGeneralDAO<K, B, C> {
+public abstract class AbstractFileDAO<K extends Serializable, B extends AbstractFileBO<K>, C extends IGeneralBO<K>> extends AbstractGeneralDAO<K, B, C> {
 
 	/** The key for the data directory as stored in DAO Master */
 	public static final String PROPERTY_DATA_DIR = "dataDir";

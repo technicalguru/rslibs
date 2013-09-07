@@ -42,7 +42,8 @@ public abstract class AbstractGeneralBO<K extends Serializable> extends Abstract
 	
 	/** The persistent classes to manage */
 	private Class<K> keyClass;
-	
+	/** The interface class of this BO. */
+	private Class<? extends IGeneralBO<K>> interfaceClass;
 	private Logger log = null; // Will be created upon request only
 	private boolean invalid;
 	private CID cid;
@@ -63,8 +64,14 @@ public abstract class AbstractGeneralBO<K extends Serializable> extends Abstract
 	@SuppressWarnings("unchecked")
 	private void init() {
 		List<Class<?>> classes = LangUtils.getTypeArguments(AbstractGeneralBO.class, getClass());
+		this.keyClass = (Class<K>) classes.get(0);
 		
-		this.keyClass = (Class<K>) classes.get(0);		
+		for (Class<?> clazz : getClass().getInterfaces()) {
+			if (IGeneralBO.class.isAssignableFrom(clazz)) {
+				this.interfaceClass = (Class<? extends IGeneralBO<K>>)clazz;
+			}
+		}
+		
 		invalid = false;
 	}
 	
@@ -131,11 +138,19 @@ public abstract class AbstractGeneralBO<K extends Serializable> extends Abstract
 	public CID getCID() {
 		if (cid == null) {
 			K id = getId();
-			if (id != null) setCID(new CID(getClass(), id));
+			if (id != null) setCID(new CID(getInterfaceClass(), id));
 		}
 		return cid;
 	}
 
+	/**
+	 * Returns the interface class of this BO.
+	 * @return the BO interface class
+	 */
+	public Class<? extends IGeneralBO<K>> getInterfaceClass() {
+		return interfaceClass;
+	}
+	
 	/**
 	 * Sets the cid.
 	 * @param cid the cid to set
