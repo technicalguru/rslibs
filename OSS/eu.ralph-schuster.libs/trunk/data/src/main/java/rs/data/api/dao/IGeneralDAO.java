@@ -108,6 +108,12 @@ public interface IGeneralDAO<K extends Serializable, B extends IGeneralBO<K>> {
 	public B findBy(K id);
 	
 	/**
+	 * Refresh the given object.
+	 * @param object object to be refreshed
+	 */
+	public void refresh(B object);
+	
+	/**
 	 * Find the given objects in model.
 	 * @param ids ids of objects
 	 * @return object

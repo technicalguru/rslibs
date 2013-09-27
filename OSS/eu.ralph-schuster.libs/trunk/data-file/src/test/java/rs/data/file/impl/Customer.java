@@ -4,13 +4,13 @@
 package rs.data.file.impl;
 
 import rs.baselib.type.Address;
-import rs.data.file.bo.AbstractPropertiesFileBO;
+import rs.data.file.bo.AbstractFileBO;
 
 /**
  * @author ralph
  *
  */
-public class Customer extends AbstractPropertiesFileBO<Long> implements ICustomer {
+public class Customer extends AbstractFileBO<Long> implements ICustomer {
 
 	/**  */
 	private static final long serialVersionUID = 1L;
@@ -27,7 +27,7 @@ public class Customer extends AbstractPropertiesFileBO<Long> implements ICustome
 	 */
 	@Override
 	public String getName() {
-		return (String)get(PROPERTY_NAME);
+		return (String)getData(PROPERTY_NAME);
 	}
 
 	/**
@@ -35,7 +35,7 @@ public class Customer extends AbstractPropertiesFileBO<Long> implements ICustome
 	 */
 	@Override
 	public void setName(String name) {
-		set(PROPERTY_NAME, name);
+		setData(PROPERTY_NAME, name);
 	}
 
 	/**
@@ -43,7 +43,7 @@ public class Customer extends AbstractPropertiesFileBO<Long> implements ICustome
 	 */
 	@Override
 	public Address getAddress() {
-		return (Address)get(PROPERTY_ADDRESS);
+		return (Address)getData(PROPERTY_ADDRESS);
 	}
 
 	/**
@@ -51,7 +51,7 @@ public class Customer extends AbstractPropertiesFileBO<Long> implements ICustome
 	 */
 	@Override
 	public void setAddress(Address address) {
-		set(PROPERTY_ADDRESS, address);
+		setData(PROPERTY_ADDRESS, address);
 	}
 
 }

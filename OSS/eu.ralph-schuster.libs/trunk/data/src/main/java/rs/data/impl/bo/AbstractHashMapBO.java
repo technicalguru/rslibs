@@ -1,7 +1,7 @@
 /**
  * 
  */
-package rs.data.file.bo;
+package rs.data.impl.bo;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -10,11 +10,13 @@ import java.util.Map;
 import rs.baselib.util.RsDate;
 
 /**
- * A simplified file-based BO storing its data in a HashMap.
+ * A simplified BO storing its data in a HashMap.
+ * The save/load mechanism of this BO implementation is externalized and used e.g. for
+ * file-based storage. 
  * @author ralph
  *
  */
-public abstract class AbstractHashMapFileBO<K extends Serializable> extends AbstractFileBO<K> {
+public abstract class AbstractHashMapBO<K extends Serializable> extends AbstractGeneralBO<K> {
 
 	/** Serial UID */
 	private static final long serialVersionUID = 1L;
@@ -24,7 +26,7 @@ public abstract class AbstractHashMapFileBO<K extends Serializable> extends Abst
 	/**
 	 * Constructor.
 	 */
-	public AbstractHashMapFileBO() {
+	public AbstractHashMapBO() {
 		dataMap = createDataMap();
 	}
 
@@ -66,9 +68,9 @@ public abstract class AbstractHashMapFileBO<K extends Serializable> extends Abst
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Sets the id.
+	 * @param id id of object
 	 */
-	@Override
 	public void setId(K id) {
 		setData("id", id);
 	}

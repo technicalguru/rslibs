@@ -4,17 +4,16 @@
 package rs.data.file.bo;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
 
-import rs.data.impl.bo.AbstractGeneralBO;
+import rs.data.impl.bo.AbstractHashMapBO;
 
 /**
  * A Business Object with a File underneath.
  * @author ralph
  *
  */
-public abstract class AbstractFileBO<K extends Serializable> extends AbstractGeneralBO<K> {
+public abstract class AbstractFileBO<K extends Serializable> extends AbstractHashMapBO<K> {
 
 	/** Serial UID */
 	private static final long serialVersionUID = 1L;
@@ -43,37 +42,4 @@ public abstract class AbstractFileBO<K extends Serializable> extends AbstractGen
 		this.file = file;
 	}
 
-	/**
-	 * Sets the id.
-	 * @param id id of object
-	 */
-	public abstract void setId(K id);
-	
-	/**
-	 * Loads the data.
-	 */
-	public abstract void load() throws IOException;
-	
-	/**
-	 * Persists the data.
-	 * @param file file object to persist to
-	 */
-	public abstract void persist() throws IOException;
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void refresh() {
-		try {
-			beginTx();
-			load();
-			commitTx();
-		} catch (IOException e) {
-			rollbackTx();
-			throw new RuntimeException("Cannot refresh from file", e);
-		}
-	}
-	
-	
 }
