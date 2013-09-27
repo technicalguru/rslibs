@@ -5,7 +5,6 @@ package rs.data.hibernate.bo;
 
 import java.io.Serializable;
 
-import org.hibernate.LockOptions;
 import org.hibernate.Session;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.LazyInitializer;
@@ -76,7 +75,7 @@ public abstract class AbstractHibernateBO<K extends Serializable, T extends Gene
 	 * @return the session attached transferObject
 	 */
 	@SuppressWarnings("unchecked")
-	protected T getAttachedTransferObject() {
+	public T getAttachedTransferObject() {
 		// First check whether T is still attached
 		T t = super.getTransferObject();
 		if (t instanceof HibernateProxy) {
@@ -120,22 +119,5 @@ public abstract class AbstractHibernateBO<K extends Serializable, T extends Gene
 		return t;
 	}
 	
-
-	@Override
-	public void refresh() {
-		try {
-			beginTx();
-			T t = getAttachedTransferObject();
-			getSession().refresh(t, LockOptions.NONE);
-			commitTx();
-		} catch (Exception e) {
-			try {
-				rollbackTx();
-			} catch (Exception e2) {
-				throw new RuntimeException("Cannot rollback exception", e2);
-			}
-			throw new RuntimeException("Cannot initialize DTO", e);
-		}
-	}
 
 }

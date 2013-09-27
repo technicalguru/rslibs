@@ -36,14 +36,6 @@ public class CustomerImpl extends AbstractBO<Long,PropertiesDTO<Long>> implement
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void refresh() {
-		// Reread from disk 
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public String getName() {
 		return getTransferObject().getProperty(NAME);
 	}

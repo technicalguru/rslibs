@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.LockOptions;
 import org.hibernate.ScrollMode;
 import org.hibernate.ScrollableResults;
 import org.hibernate.Session;
@@ -20,7 +21,7 @@ import org.hibernate.criterion.Restrictions;
 
 import rs.data.api.bo.IGeneralBO;
 import rs.data.hibernate.HibernateDaoMaster;
-import rs.data.impl.bo.AbstractBO;
+import rs.data.hibernate.bo.AbstractHibernateBO;
 import rs.data.impl.dao.AbstractDAO;
 import rs.data.impl.dto.GeneralDTO;
 import rs.data.util.IDaoIterator;
@@ -34,7 +35,7 @@ import rs.data.util.IDaoIterator;
  * @author ralph
  *
  */
-public abstract class AbstractHibernateDAO<K extends Serializable, T extends GeneralDTO<K>, B extends AbstractBO<K, T>, C extends IGeneralBO<K>> extends AbstractDAO<K, T, B, C> {
+public abstract class AbstractHibernateDAO<K extends Serializable, T extends GeneralDTO<K>, B extends AbstractHibernateBO<K, T>, C extends IGeneralBO<K>> extends AbstractDAO<K, T, B, C> {
 
 	/**
 	 * Constructor.
@@ -54,6 +55,28 @@ public abstract class AbstractHibernateDAO<K extends Serializable, T extends Gen
 		T rc = (T) getSession().get(getTransferClass(), id);
 		return rc;
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public void refresh(C object) {
+		try {
+			getFactory().begin();
+			T t = ((B)object).getAttachedTransferObject();
+			getSession().refresh(t, LockOptions.NONE);
+			getFactory().commit();
+		} catch (Exception e) {
+			try {
+				getFactory().rollback();
+			} catch (Exception e2) {
+				throw new RuntimeException("Cannot rollback exception", e2);
+			}
+			throw new RuntimeException("Cannot initialize DTO", e);
+		}
+	}
+
 
 	/**
 	 * Find objects by IDs.

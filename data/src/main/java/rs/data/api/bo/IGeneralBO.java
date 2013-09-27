@@ -71,11 +71,6 @@ public interface IGeneralBO<K extends Serializable> extends Serializable, IBean 
 	public void invalidate();
 	
 	/**
-	 * Immediately refresh all values from persistence store.
-	 */
-	public void refresh();
-	
-	/**
 	 * Try to lock this object.
 	 * @param timeout timeout when trying to lock, 0 for no timeout
 	 * @return the new lock information

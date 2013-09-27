@@ -16,6 +16,7 @@ import rs.data.api.bo.IGeneralBO;
 import rs.data.file.bo.AbstractFileBO;
 import rs.data.file.util.DefaultFilenameStrategy;
 import rs.data.file.util.IFilenameStrategy;
+import rs.data.file.util.IStorageStrategy;
 import rs.data.impl.dao.AbstractGeneralDAO;
 import rs.data.util.CID;
 import rs.data.util.IDaoIterator;
@@ -36,6 +37,9 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 
 	/** The filename strategy */
 	private IFilenameStrategy<K> filenameStrategy;
+
+	/** The storage strategy */
+	private IStorageStrategy storageStrategy;
 
 	/**
 	 * Constructor.
@@ -91,6 +95,22 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	}
 
 	/**
+	 * Returns the {@link #storageStrategy}.
+	 * @return the storageStrategy
+	 */
+	public IStorageStrategy getStorageStrategy() {
+		return storageStrategy;
+	}
+
+	/**
+	 * Sets the {@link #storageStrategy}.
+	 * @param storageStrategy the storageStrategy to set
+	 */
+	public void setStorageStrategy(IStorageStrategy storageStrategy) {
+		this.storageStrategy = storageStrategy;
+	}
+
+	/**
 	 * Returns the file that shall have the object with given key.
 	 * @param key key of business object
 	 * @return the file for this object
@@ -135,12 +155,10 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	 * @param file file to load from
 	 * @return the business object
 	 */
-	@SuppressWarnings("unchecked")
 	protected C _load(File file) {
 		C rc = newInstance();
 		try {
-			((B)rc).setFile(file);
-			((B)rc).load();
+			getStorageStrategy().load(rc, file);
 		} catch (Exception e) {
 			throw new RuntimeException("Cannot load file", e);
 		}
@@ -241,7 +259,8 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 		K id = getNewId();
 		((B)object).setId(id);
 		try {
-			((B)object).persist();
+			File file = getFilenameStrategy().getFile(id);
+			getStorageStrategy().save(object, file);
 		} catch (IOException e) {
 			throw new RuntimeException("Cannot create object", e);
 		}
@@ -256,11 +275,11 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void _save(C object) {
 		try {
-			((B)object).persist();
+			File file = getFilenameStrategy().getFile(object.getId());
+			getStorageStrategy().save(object, file);
 		} catch (IOException e) {
 			throw new RuntimeException("Cannot save object", e);
 		}
