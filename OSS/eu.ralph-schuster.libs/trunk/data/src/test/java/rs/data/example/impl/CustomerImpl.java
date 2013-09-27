@@ -4,15 +4,15 @@
 package rs.data.example.impl;
 
 import rs.data.example.api.Customer;
-import rs.data.impl.bo.AbstractBO;
-import rs.data.impl.dto.PropertiesDTO;
+import rs.data.impl.bo.AbstractMapBO;
+import rs.data.impl.dto.MapDTO;
 
 /**
  * Example implementation
  * @author ralph
  *
  */
-public class CustomerImpl extends AbstractBO<Long,PropertiesDTO<Long>> implements Customer {
+public class CustomerImpl extends AbstractMapBO<Long> implements Customer {
 
 	/** Serial UID */
 	private static final long serialVersionUID = 1L;
@@ -21,14 +21,14 @@ public class CustomerImpl extends AbstractBO<Long,PropertiesDTO<Long>> implement
 	 * Constructor.
 	 */
 	public CustomerImpl() {
-		this(new PropertiesDTO<Long>());
+		this(new MapDTO<Long>());
 	}
 
 	/**
 	 * Constructor.
 	 * @param transferObject
 	 */
-	public CustomerImpl(PropertiesDTO<Long> transferObject) {
+	public CustomerImpl(MapDTO<Long> transferObject) {
 		super(transferObject);
 	}
 
@@ -37,7 +37,7 @@ public class CustomerImpl extends AbstractBO<Long,PropertiesDTO<Long>> implement
 	 */
 	@Override
 	public String getName() {
-		return getTransferObject().getProperty(NAME);
+		return (String)getData(NAME);
 	}
 
 	/**
@@ -45,9 +45,7 @@ public class CustomerImpl extends AbstractBO<Long,PropertiesDTO<Long>> implement
 	 */
 	@Override
 	public void setName(String name) {
-		String oldValue = getAddress();
-		getTransferObject().setProperty(NAME, name);
-		firePropertyChange(NAME, oldValue, name);
+		setData(NAME, name);
 	}
 
 	/**
@@ -55,7 +53,7 @@ public class CustomerImpl extends AbstractBO<Long,PropertiesDTO<Long>> implement
 	 */
 	@Override
 	public String getAddress() {
-		return getTransferObject().getProperty(ADDRESS);
+		return (String)getData(ADDRESS);
 	}
 
 	/**
@@ -63,9 +61,7 @@ public class CustomerImpl extends AbstractBO<Long,PropertiesDTO<Long>> implement
 	 */
 	@Override
 	public void setAddress(String address) {
-		String oldValue = getAddress();
-		getTransferObject().setProperty(ADDRESS, address);
-		firePropertyChange(ADDRESS, oldValue, address);
+		setData(ADDRESS, address);
 	}
 
 	/**
@@ -73,7 +69,7 @@ public class CustomerImpl extends AbstractBO<Long,PropertiesDTO<Long>> implement
 	 */
 	@Override
 	public String getPhone() {
-		return getTransferObject().getProperty(PHONE);
+		return (String)getData(PHONE);
 	}
 
 	/**
@@ -81,9 +77,7 @@ public class CustomerImpl extends AbstractBO<Long,PropertiesDTO<Long>> implement
 	 */
 	@Override
 	public void setPhone(String phone) {
-		String oldValue = getPhone();
-		getTransferObject().setProperty(PHONE, phone);
-		firePropertyChange(PHONE, oldValue, phone);
+		setData(PHONE, phone);
 	}
 
 }

@@ -6,14 +6,14 @@ package rs.data.file.bo;
 import java.io.File;
 import java.io.Serializable;
 
-import rs.data.impl.bo.AbstractHashMapBO;
+import rs.data.impl.bo.AbstractMapBO;
 
 /**
  * A Business Object with a File underneath.
  * @author ralph
  *
  */
-public abstract class AbstractFileBO<K extends Serializable> extends AbstractHashMapBO<K> {
+public abstract class AbstractFileBO<K extends Serializable> extends AbstractMapBO<K> {
 
 	/** Serial UID */
 	private static final long serialVersionUID = 1L;
