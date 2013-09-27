@@ -4,10 +4,9 @@
 package rs.data.impl.bo;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 import rs.baselib.util.RsDate;
+import rs.data.impl.dto.MapDTO;
 
 /**
  * A simplified BO storing its data in a HashMap.
@@ -16,35 +15,32 @@ import rs.baselib.util.RsDate;
  * @author ralph
  *
  */
-public abstract class AbstractHashMapBO<K extends Serializable> extends AbstractGeneralBO<K> {
+public abstract class AbstractMapBO<K extends Serializable> extends AbstractBO<K, MapDTO<K>> {
 
 	/** Serial UID */
 	private static final long serialVersionUID = 1L;
-	/** The map data */
-	private Map<String, Object> dataMap;
 	
 	/**
 	 * Constructor.
 	 */
-	public AbstractHashMapBO() {
-		dataMap = createDataMap();
+	public AbstractMapBO() {
+		this (new MapDTO<K>());
 	}
 
 	/**
-	 * Creates a new data map on request.
-	 * @return a new data map.
+	 * Constructor.
 	 */
-	protected Map<String, Object> createDataMap() {
-		return new HashMap<String, Object>();
+	public AbstractMapBO(MapDTO<K> transferObject) {
+		super(transferObject);
 	}
-	
+
 	/**
 	 * Returns the data from the map.
 	 * @param key key of data
 	 * @return data value
 	 */
 	protected Object getData(String key) {
-		return dataMap.get(key);
+		return getTransferObject().getProperty(key);
 	}
 	
 	/**
@@ -54,19 +50,10 @@ public abstract class AbstractHashMapBO<K extends Serializable> extends Abstract
 	 */
 	protected void setData(String key, Object value) {
 		Object oldValue = getData(key);
-		dataMap.put(key, value);
+		getTransferObject().setProperty(key, value);
 		firePropertyChange(key, oldValue, value);
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public K getId() {
-		return (K)getData("id");
-	}
-
 	/**
 	 * Sets the id.
 	 * @param id id of object
