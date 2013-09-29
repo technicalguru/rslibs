@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.Serializable;
 
 import rs.data.impl.bo.AbstractMapBO;
+import rs.data.impl.dto.MapDTO;
 
 /**
  * A Business Object with a File underneath.
@@ -24,6 +25,14 @@ public abstract class AbstractFileBO<K extends Serializable> extends AbstractMap
 	 * Constructor.
 	 */
 	public AbstractFileBO() {
+		this(new MapDTO<K>());
+	}
+
+	/**
+	 * Constructor.
+	 */
+	public AbstractFileBO(MapDTO<K> dto) {
+		super(dto);
 	}
 
 	/**
