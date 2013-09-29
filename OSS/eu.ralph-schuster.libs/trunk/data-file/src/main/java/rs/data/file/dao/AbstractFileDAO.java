@@ -11,12 +11,20 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.HierarchicalConfiguration;
+
+import rs.baselib.configuration.ConfigurationUtils;
 import rs.data.api.IDaoMaster;
 import rs.data.api.bo.IGeneralBO;
 import rs.data.file.bo.AbstractFileBO;
+import rs.data.file.storage.IStorageStrategy;
+import rs.data.file.storage.XmlStorageStrategy;
 import rs.data.file.util.DefaultFilenameStrategy;
 import rs.data.file.util.IFilenameStrategy;
-import rs.data.file.util.IStorageStrategy;
+import rs.data.file.util.IKeyGenerator;
+import rs.data.file.util.LongKeyGenerator;
 import rs.data.impl.dao.AbstractGeneralDAO;
 import rs.data.util.CID;
 import rs.data.util.IDaoIterator;
@@ -35,19 +43,38 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	/** The key for the prefix as stored in DAO Master */
 	public static final String PROPERTY_DATA_PREFIX = "dataPrefix";
 
+	/** The Key Generator */
+	private IKeyGenerator<K> keyGenerator;
+	
 	/** The filename strategy */
 	private IFilenameStrategy<K> filenameStrategy;
 
 	/** The storage strategy */
-	private IStorageStrategy storageStrategy;
+	private IStorageStrategy<File> storageStrategy;
 
 	/**
 	 * Constructor.
 	 */
 	public AbstractFileDAO() {
-		filenameStrategy = createFilenameStrategy();
+		setKeyGenerator(createKeyGenerator());
+		setFilenameStrategy(createFilenameStrategy());
+		setStorageStrategy(createStorageStrategy());
 	}
 
+	/**
+	 * Creates a default key generation strategy (for numbers only!).
+	 * Descendants shall override this method or configure their DAO through XML.
+	 * @return the default strategy in case of numbers or <code>null</code>
+	 * @see #configure(Configuration)
+	 */
+	@SuppressWarnings("unchecked")
+	protected IKeyGenerator<K> createKeyGenerator() {
+		if (Long.class.isAssignableFrom(getKeyClass())) {
+			return (IKeyGenerator<K>)new LongKeyGenerator();
+		}
+		return null;
+	}
+	
 	/**
 	 * Sets the {@link #filenameStrategy}.
 	 * The method instantiates a {@link DefaultFilenameStrategy} with properties from the DAO Master.
@@ -55,7 +82,7 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	 * @see #PROPERTY_DATA_PREFIX
 	 * @see #PROPERTY_DATA_SUFFIX
 	 */
-	public IFilenameStrategy<K> createFilenameStrategy() {
+	protected IFilenameStrategy<K> createFilenameStrategy() {
 		String dataDir = null;
 		String prefix  = null;
 		String suffix  = null;
@@ -68,6 +95,46 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 		if (dataDir == null) dataDir = IFilenameStrategy.DEFAULT_DATA_DIR;
 		if (suffix  == null) suffix  = IFilenameStrategy.DEFAULT_DATA_SUFFIX;
 		return new DefaultFilenameStrategy<K>(new File(dataDir, getBoInterfaceClass().getSimpleName()), prefix, suffix);
+	}
+
+	/**
+	 * Creates a storage strategy, here a XML strategy.
+	 * Descendants shall override this method if they do not wish to store their data in XML files
+	 * or use the configuration method.
+	 * @return the storage strategy.
+	 * @see #configure(Configuration)
+	 */
+	protected IStorageStrategy<File> createStorageStrategy() {
+		return new XmlStorageStrategy();
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public void configure(Configuration cfg) throws ConfigurationException {
+		super.configure(cfg);
+		try {
+			Configuration subConfig = ((HierarchicalConfiguration)cfg).configurationAt("keyGenerator(0)");
+			setKeyGenerator((IKeyGenerator<K>)ConfigurationUtils.load(subConfig, true));
+		} catch (Exception e) {
+			// Ignore
+		}
+		
+		try {
+			Configuration subConfig = ((HierarchicalConfiguration)cfg).configurationAt("filenameStrategy(0)");
+			setFilenameStrategy((IFilenameStrategy<K>)ConfigurationUtils.load(subConfig, true));
+		} catch (Exception e) {
+			// Ignore
+		}
+		
+		try {
+			Configuration subConfig = ((HierarchicalConfiguration)cfg).configurationAt("storageStrategy(0)");
+			setStorageStrategy((IStorageStrategy<File>)ConfigurationUtils.load(subConfig, true));
+		} catch (Exception e) {
+			// Ignore
+		}
 	}
 
 	/**
@@ -87,6 +154,22 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	}
 
 	/**
+	 * Returns the keyGenerator.
+	 * @return the keyGenerator
+	 */
+	public IKeyGenerator<K> getKeyGenerator() {
+		return keyGenerator;
+	}
+
+	/**
+	 * Sets the keyGenerator.
+	 * @param keyGenerator the keyGenerator to set
+	 */
+	public void setKeyGenerator(IKeyGenerator<K> keyGenerator) {
+		this.keyGenerator = keyGenerator;
+	}
+
+	/**
 	 * Returns the {@link #filenameStrategy}.
 	 * @return the filenameStrategy
 	 */
@@ -95,10 +178,18 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	}
 
 	/**
+	 * Sets the filenameStrategy.
+	 * @param filenameStrategy the filenameStrategy to set
+	 */
+	public void setFilenameStrategy(IFilenameStrategy<K> filenameStrategy) {
+		this.filenameStrategy = filenameStrategy;
+	}
+
+	/**
 	 * Returns the {@link #storageStrategy}.
 	 * @return the storageStrategy
 	 */
-	public IStorageStrategy getStorageStrategy() {
+	public IStorageStrategy<File> getStorageStrategy() {
 		return storageStrategy;
 	}
 
@@ -106,7 +197,7 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	 * Sets the {@link #storageStrategy}.
 	 * @param storageStrategy the storageStrategy to set
 	 */
-	public void setStorageStrategy(IStorageStrategy storageStrategy) {
+	public void setStorageStrategy(IStorageStrategy<File> storageStrategy) {
 		this.storageStrategy = storageStrategy;
 	}
 
@@ -148,6 +239,18 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 			rc = _load(file);
 		}
 		return (C)rc;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void refresh(C object) {
+		try {
+			getStorageStrategy().refresh(object, getFilenameStrategy().getFile(object.getId()));
+		} catch (Exception e) {
+			throw new RuntimeException("Cannot load file", e);
+		}
 	}
 
 	/**
@@ -218,7 +321,7 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	public IDaoIterator<C> iterateDefaultAll(int firstResult, int maxResults) {
 		return iterate(getDefaultAll(), firstResult, maxResults);
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -270,7 +373,9 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	 * Returns a new Id.
 	 * @return the generated new ID
 	 */
-	protected abstract K getNewId();
+	protected K getNewId() {
+		return getKeyGenerator().getNewId();
+	}
 	
 	/**
 	 * {@inheritDoc}

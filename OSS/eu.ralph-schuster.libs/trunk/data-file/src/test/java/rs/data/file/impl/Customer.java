@@ -7,6 +7,7 @@ import rs.baselib.type.Address;
 import rs.data.file.bo.AbstractFileBO;
 
 /**
+ * Reference Implementation for file-based business objects.
  * @author ralph
  *
  */
@@ -19,7 +20,6 @@ public class Customer extends AbstractFileBO<Long> implements ICustomer {
 	 * Constructor.
 	 */
 	public Customer() {
-		// TODO Auto-generated constructor stub
 	}
 
 	/**

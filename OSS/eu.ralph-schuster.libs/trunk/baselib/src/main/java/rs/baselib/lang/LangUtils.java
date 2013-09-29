@@ -3,8 +3,12 @@
  */
 package rs.baselib.lang;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.lang.reflect.Array;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
@@ -21,6 +25,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -414,6 +419,48 @@ public class LangUtils {
 			}
 		}
 		return rc;
+	}
+
+	/**
+	 * Serializes the given value into BASE64.
+	 * @param value value to be serialized
+	 * @return the serialized string
+	 */
+	public static String serializeBase64(Object value) throws IOException {
+		return new String(Base64.encodeBase64(serialize(value)));
+	}
+	
+	/**
+	 * Serializes the given value.
+	 * @param value value to be serialized
+	 * @return the serialized string
+	 */
+	public static byte[] serialize(Object value) throws IOException {
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		ObjectOutputStream s = new ObjectOutputStream(stream);
+		s.writeObject(value);
+		s.close();
+		return stream.toByteArray();
+	}
+	
+	/**
+	 * Unserializes the given value.
+	 * @param value the serialized string (BASE64 encoded)
+	 * @return the object (or null)
+	 */
+	public static Object unserialize(String value) throws ClassNotFoundException, IOException {
+		return unserialize(Base64.decodeBase64(value));
+	}
+
+	/**
+	 * Unserializes the given value.
+	 * @param value the serialized string
+	 * @return the object (or null)
+	 */
+	public static Object unserialize(byte bytes[]) throws ClassNotFoundException, IOException {
+		ByteArrayInputStream in = new ByteArrayInputStream(bytes);
+		ObjectInputStream s = new ObjectInputStream(in);
+		return s.readObject();
 	}
 
 }
