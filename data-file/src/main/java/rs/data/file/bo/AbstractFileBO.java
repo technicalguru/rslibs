@@ -3,6 +3,7 @@
  */
 package rs.data.file.bo;
 
+import java.beans.Transient;
 import java.io.File;
 import java.io.Serializable;
 
@@ -39,6 +40,7 @@ public abstract class AbstractFileBO<K extends Serializable> extends AbstractMap
 	 * Returns the {@link #file}.
 	 * @return the file
 	 */
+	@Transient
 	public File getFile() {
 		return file;
 	}

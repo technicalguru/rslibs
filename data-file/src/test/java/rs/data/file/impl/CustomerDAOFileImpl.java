@@ -15,24 +15,24 @@ import rs.data.file.dao.AbstractFileDAO;
  * @author ralph
  *
  */
-public class CustomerDAOImpl extends AbstractFileDAO<Long, Customer, ICustomer> implements ICustomerDAO {
+public class CustomerDAOFileImpl extends AbstractFileDAO<Long, CustomerFileImpl, Customer> implements CustomerDAO {
 
 	/**
 	 * Constructor.
 	 */
-	public CustomerDAOImpl() {
+	public CustomerDAOFileImpl() {
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<ICustomer> findBy(Country country, String city) {
-		List<ICustomer> rc = new ArrayList<ICustomer>();
+	public List<Customer> findBy(Country country, String city) {
+		List<Customer> rc = new ArrayList<Customer>();
 		// There is no index in this reference implementation
 		// So we need to iterate all customers.
-		for (ICustomer customer : findAll()) {
-			Address address = customer.getAddress();
+		for (Customer customer : findAll()) {
+			Address address = customer.getInvoiceAddress();
 			if (address != null) {
 				Country cc = address.getCountry();
 				if ((cc != null) && cc.equals(country)) {

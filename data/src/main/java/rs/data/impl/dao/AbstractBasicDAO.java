@@ -169,6 +169,8 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 	 * @param object object being created
 	 */
 	protected void afterNewInstance(C object) {	
+		object.setCreationDate(new RsDate());
+		object.setChangeDate(new RsDate());
 	}
 
 	/**

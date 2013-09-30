@@ -4,6 +4,7 @@
 package rs.baselib.bean;
 
 import java.beans.PropertyChangeEvent;
+import java.beans.Transient;
 import java.util.Collection;
 
 import rs.baselib.util.IDirtyable;
@@ -33,6 +34,7 @@ public interface IBean extends IPropertyChangeProvider, IDirtyable {
 	 * Returns the list of changes that this bean has performed since loading.
 	 * @return the list of changes so far
 	 */
+	@Transient
 	public Collection<PropertyChangeEvent> getChanges();
 
 	/**

@@ -50,6 +50,47 @@ public class Address extends AbstractBean implements Serializable {
 	}
 
 	/**
+	 * Constructor.
+	 * @param street1 street
+	 * @param city name of city
+	 * @param zipCode ZIP code of city
+	 * @param country country
+	 */
+	public Address(String street1, String city, String zipCode, Country country) {
+		this(street1, null, city, zipCode, null, country);
+	}
+
+	/**
+	 * Constructor.
+	 * @param street1 street (1st line)
+	 * @param city name of city
+	 * @param zipCode ZIP code of city
+	 * @param state state of city
+	 * @param country country
+	 */
+	public Address(String street1, String city, String zipCode, String state, Country country) {
+		this(street1, null, city, zipCode, state, country);
+	}
+
+	/**
+	 * Constructor.
+	 * @param street1 street (1st line)
+	 * @param street2 street (2nd line)
+	 * @param city name of city
+	 * @param zipCode ZIP code of city
+	 * @param state state of city
+	 * @param country country
+	 */
+	public Address(String street1, String street2, String city, String zipCode, String state, Country country) {
+		setStreet1(street1);
+		setStreet2(street2);
+		setCity(city);
+		setZipCode(zipCode);
+		setState(state);
+		setCountry(country);
+	}
+
+	/**
 	 * Returns the {@link #street1}.
 	 * @return the street1
 	 */

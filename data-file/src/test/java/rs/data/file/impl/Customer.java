@@ -3,55 +3,102 @@
  */
 package rs.data.file.impl;
 
+import java.util.Collection;
+import java.util.Map;
+
 import rs.baselib.type.Address;
-import rs.data.file.bo.AbstractFileBO;
+import rs.data.api.bo.ILongBO;
 
 /**
- * Reference Implementation for file-based business objects.
+ * Exmaple customer interface.
  * @author ralph
  *
  */
-public class Customer extends AbstractFileBO<Long> implements ICustomer {
-
-	/**  */
-	private static final long serialVersionUID = 1L;
-
-	/**
-	 * Constructor.
-	 */
-	public Customer() {
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getName() {
-		return (String)getData(PROPERTY_NAME);
-	}
+public interface Customer extends ILongBO {
+	
+	/** Property name for name */
+	public static final String NAME    = "name";
+	/** Property name for address */
+	public static final String INVOICE_ADDRESS = "invoiceAddress";
+	/** Property name for phones */
+	public static final String PHONES   = "phones";
+	/** Property name for a single phone */
+	public static final String PHONE   = "phone";
+	/** Property name for all delivery addresses */
+	public static final String DELIVERY_ADDRESSES   = "deliveryAddresses";
+	/** Property name for a single delivery address */
+	public static final String DELIVERY_ADDRESS   = "deliveryAddress";
 
 	/**
-	 * {@inheritDoc}
+	 * Returns the name of this customer.
+	 * @return name of customer
 	 */
-	@Override
-	public void setName(String name) {
-		setData(PROPERTY_NAME, name);
-	}
+	public String getName();
+	
+	/**
+	 * Sets the name of this customer.
+	 * @param name new name
+	 */
+	public void   setName(String name);
+	
+	/**
+	 * Returns the complete address of the customer.
+	 * @return the current address
+	 */
+	public Address getInvoiceAddress();
+	
+	/**
+	 * Sets the new address for this customer.
+	 * @param address complete new address
+	 */
+	public void   setInvoiceAddress(Address address);
+	
+	/**
+	 * Returns the phone numbers of this customer.
+	 * @return phone numbers
+	 */
+	public Map<String,String> getPhones();
+	
+	/**
+	 * Sets the phone numbers of this customer.
+	 * @param phone new phone numbers
+	 */
+	public void   setPhones(Map<String,String> phones);
 
 	/**
-	 * {@inheritDoc}
+	 * Adds a new phone number.
+	 * @param purpose the purpose of this phone number
+	 * @param phone the phone number
 	 */
-	@Override
-	public Address getAddress() {
-		return (Address)getData(PROPERTY_ADDRESS);
-	}
+	public void addPhone(String purpose, String phone);
+	
+	/**
+	 * Removes a phone number
+	 * @param purpose the phone purpose
+	 */
+	public void removePhone(String purpose);
+	
+	/**
+	 * Returns all delivery addresses.
+	 * @return the delivery addresses
+	 */
+	public Collection<Address> getDeliveryAddresses();
 
 	/**
-	 * {@inheritDoc}
+	 * Adds a delivery address.
+	 * @param address the address to be added
 	 */
-	@Override
-	public void setAddress(Address address) {
-		setData(PROPERTY_ADDRESS, address);
-	}
+	public void addDeliveryAddress(Address address);
 
+	/**
+	 * Removes a delivery address.
+	 * @param address the address to be removed
+	 */
+	public void removeDeliveryAddress(Address address);
+	
+	/**
+	 * Sets all delivery addresses.
+	 * @param addresses the delivery addresses
+	 */
+	public void setDeliveryAddresses(Collection<Address> addresses);
 }

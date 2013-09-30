@@ -5,6 +5,7 @@ package rs.data.impl.dto;
 
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -24,6 +25,7 @@ public class MapDTO<K extends Serializable> extends GeneralDTO<K> {
 	 * Constructor.
 	 */
 	public MapDTO() {
+		map = new HashMap<String, Object>();
 	}
 
 	/**

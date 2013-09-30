@@ -374,7 +374,17 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	 * @return the generated new ID
 	 */
 	protected K getNewId() {
-		return getKeyGenerator().getNewId();
+		K rc = null;
+		IKeyGenerator<K> generator = getKeyGenerator();
+		IFilenameStrategy<K> nameStrategy = getFilenameStrategy();
+		while (rc == null) {
+			rc = generator.getNewId();
+			File f = nameStrategy.getFile(rc);
+			if (f.exists()) {
+				rc = null;
+			}
+		}
+		return rc;
 	}
 	
 	/**

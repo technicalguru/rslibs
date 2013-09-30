@@ -48,9 +48,9 @@ import rs.data.util.IUrlTransformer;
  */
 public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 
-	// TX Management	
 	private Logger log = LoggerFactory.getLogger(getClass());
 
+	// TX Management	
 	private ThreadLocal<TransactionContext> txContext = new ThreadLocal<TransactionContext>();
 	private Set<IDaoFactoryListener> listeners = new HashSet<IDaoFactoryListener>();
 	private IDaoListener daoListener = new MyDaoListener();

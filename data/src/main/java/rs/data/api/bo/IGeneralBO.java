@@ -3,6 +3,7 @@
  */
 package rs.data.api.bo;
 
+import java.beans.Transient;
 import java.io.Serializable;
 
 import rs.baselib.bean.IBean;
@@ -26,30 +27,35 @@ public interface IGeneralBO<K extends Serializable> extends Serializable, IBean 
 	 * Returns the responsible DAO.
 	 * @return the DAO that this business object was created by
 	 */
+	@Transient
 	public IGeneralDAO<K, ? extends IGeneralBO<K>> getDao();
 	
 	/**
 	 * Returns the id.
 	 * @return the id
 	 */
+	@Transient
 	public K getId();
 
 	/**
 	 * Returns the CID.
 	 * @return the CID
 	 */
+	@Transient
 	public CID getCID();
 
 	/**
 	 * Returns true when this object has not yet been created.
 	 * @return true when object is not persisted yet
 	 */
+	@Transient
 	public boolean isNew();
 	
 	/**
 	 * Returns whether this object has changed.
 	 * @return true or false
 	 */
+	@Transient
 	public boolean isChanged();
 	
 	/**
@@ -62,6 +68,7 @@ public interface IGeneralBO<K extends Serializable> extends Serializable, IBean 
 	 * Returns true when object was invalidated.
 	 * @return true or false 
 	 */
+	@Transient
 	public boolean isInvalid();
 	
 	/**
@@ -87,6 +94,7 @@ public interface IGeneralBO<K extends Serializable> extends Serializable, IBean 
 	 * Get the current lock information.
 	 * @return the current lock information
 	 */
+	@Transient
 	public LockInformation getLockInformation();
 	
 	/**
