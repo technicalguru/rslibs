@@ -7,7 +7,6 @@ import java.beans.PropertyDescriptor;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Serializable;
 import java.io.Writer;
 import java.util.Collection;
 import java.util.Map;
@@ -42,18 +41,25 @@ public class XmlStorageStrategy extends AbstractStorageStrategy<File> {
 			XMLConfiguration cfg = new XMLConfiguration(specifier);
 			for (String name : propertyNames) {
 				PropertyDescriptor desc = PropertyUtils.getPropertyDescriptor(bo, name);
-				Class<?> type = desc.getPropertyType();	
 				String value = cfg.getString(name+"(0)");
-				String className = cfg.getString(name+"(0)[@class]");
 				if ((value != null) && !value.isEmpty()) {
-					//				if (IConfigurable.class.isAssignableFrom(type)) {
-					//					SubnodeConfiguration subConfig = cfg.configurationAt(desc.getName()+"(0)");
-					//					ConfigurationUtils.configure((IConfigurable)bo, subConfig);
-					//				} else 
-					if (Serializable.class.isAssignableFrom(type)) {
-						bo.set(desc.getName(), unserialize(className, value));
+					String className = cfg.getString(name+"(0)[@class]");
+					Class<?> clazz = Class.forName(className);
+					if (IGeneralBO.class.isAssignableFrom(clazz)) {
+						// TODO getDao().findBy()
+					} else if (Collection.class.isAssignableFrom(clazz)) {
+						// TODO load each item
+					} else if (Map.class.isAssignableFrom(clazz)) {
+						// TODO load each item
+					} else if (IBean.class.isAssignableFrom(clazz)) {
+						// TODO	load each property	
 					} else {
-						throw new RuntimeException("Cannot unserialize \""+value+"\"");
+						Object o = unserialize(className, value);
+						if (o != null) {
+							bo.set(desc.getName(), o);
+						} else {
+							throw new RuntimeException("Cannot unserialize property: "+className+": "+value);
+						}
 					}
 				} else {
 					bo.set(desc.getName(), null);
@@ -101,6 +107,9 @@ public class XmlStorageStrategy extends AbstractStorageStrategy<File> {
 			//					ConfigurationUtils.configure((IConfigurable)bo, subConfig);
 			//				} else
 			if (value instanceof IGeneralBO) {
+				out.write("\n");
+				writeValue(out, indent+1, ((IGeneralBO<?>) value).getId(), "refid");
+				out.write(indentS);
 			} else if (value instanceof Collection) {
 				out.write("\n");
 				// We need to split this up
