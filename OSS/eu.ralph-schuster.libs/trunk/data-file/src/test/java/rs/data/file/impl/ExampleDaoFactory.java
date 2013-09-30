@@ -1,7 +1,7 @@
 /**
  * 
  */
-package rs.data.example.api;
+package rs.data.file.impl;
 
 import rs.data.api.IDaoFactory;
 

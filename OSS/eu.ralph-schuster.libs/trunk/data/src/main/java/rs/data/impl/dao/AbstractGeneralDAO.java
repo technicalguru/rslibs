@@ -9,7 +9,6 @@ import java.util.List;
 import rs.baselib.lang.LangUtils;
 import rs.data.api.bo.IGeneralBO;
 import rs.data.impl.bo.AbstractGeneralBO;
-import rs.data.util.IDaoIterator;
 
 /**
  * Abstract Implementation for Data Access Objects.
@@ -48,87 +47,6 @@ public abstract class AbstractGeneralDAO<K extends Serializable, B extends Abstr
 	 */
 	protected Class<B> getBoImplementationClass() {
 		return boImplementationClass;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public int getObjectCount() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public int getDefaultObjectCount() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public C findBy(K id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<C> findAll(int firstResult, int maxResults) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<C> findDefaultAll(int firstResult, int maxResults) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public IDaoIterator<C> iterateAll(int firstResult, int maxResults) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public IDaoIterator<C> iterateDefaultAll(int firstResult, int maxResults) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public int deleteAll() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public int deleteDefaultAll() {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	/**

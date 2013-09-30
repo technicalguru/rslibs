@@ -7,6 +7,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.beans.PropertyDescriptor;
+import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -52,6 +53,7 @@ public abstract class AbstractBean implements IBean {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transient
 	public boolean isDirty() {
 		return dirty;
 	}
@@ -351,6 +353,7 @@ public abstract class AbstractBean implements IBean {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transient
 	public Collection<PropertyChangeEvent> getChanges() {
 		return new ArrayList<PropertyChangeEvent>(registeredChanges.values());
 	}

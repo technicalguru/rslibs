@@ -23,7 +23,7 @@ public class DefaultFilenameStrategy<K extends Serializable> implements IFilenam
 	private String prefix;
 	/** The suffix of a filename */
 	private String suffix;
-	
+
 	/**
 	 * Constructor.
 	 * Data will be stored in current working directory, sub-directory data with suffix ".data".
@@ -38,7 +38,7 @@ public class DefaultFilenameStrategy<K extends Serializable> implements IFilenam
 	public DefaultFilenameStrategy(String parentDir, String prefix, String suffix) {
 		this(new File(parentDir), prefix, suffix);
 	}
-	
+
 	/**
 	 * Constructor.
 	 */
@@ -102,6 +102,9 @@ public class DefaultFilenameStrategy<K extends Serializable> implements IFilenam
 	@Override
 	public File getFile(K key) {
 		File parentDir = getParentDir();
+		if (!parentDir.exists()) {
+			createParent(parentDir);
+		}
 		String filename = "";
 		String prefix = getPrefix();
 		if (prefix != null) filename += prefix;
@@ -109,6 +112,15 @@ public class DefaultFilenameStrategy<K extends Serializable> implements IFilenam
 		String suffix = getSuffix(); 
 		if (suffix != null) filename += suffix;
 		return new File(parentDir, filename);
+	}
+
+	/**
+	 * Called when a new file is required to be created.
+	 * Creates the parent dir.
+	 * @param dir the directory to be created
+	 */
+	protected void createParent(File dir) {
+		dir.mkdirs();
 	}
 
 	/**
@@ -120,7 +132,7 @@ public class DefaultFilenameStrategy<K extends Serializable> implements IFilenam
 		if (!file.getParentFile().equals(getParentDir())) return false;
 		return matchesFilename(file.getName());
 	}
-	
+
 	/**
 	 * Returns true when the given filename (last path component!) matches this strategy.
 	 * @param filename filename to be matched
@@ -144,12 +156,14 @@ public class DefaultFilenameStrategy<K extends Serializable> implements IFilenam
 	@Override
 	public Collection<File> getFiles() {
 		List<File> rc = new ArrayList<File>();
-		for (File child : getParentDir().listFiles()) {
-			if (matchesFilename(child.getName()) && child.canRead()) rc.add(child);
+		if (getParentDir().exists() && getParentDir().isDirectory()) { 
+			for (File child : getParentDir().listFiles()) {
+				if (matchesFilename(child.getName()) && child.canRead()) rc.add(child);
+			}
+			Collections.sort(rc);
 		}
-		Collections.sort(rc);
 		return rc;
 	}
 
-	
+
 }

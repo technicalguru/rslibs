@@ -3,6 +3,7 @@
  */
 package rs.data.impl.bo;
 
+import java.beans.Transient;
 import java.io.Serializable;
 import java.util.List;
 
@@ -87,6 +88,7 @@ public abstract class AbstractGeneralBO<K extends Serializable> extends Abstract
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transient
 	public IGeneralDAO<K, ? extends IGeneralBO<K>> getDao() {
 		return dao;
 	}
@@ -127,6 +129,7 @@ public abstract class AbstractGeneralBO<K extends Serializable> extends Abstract
 	 * Returns the keyClass.
 	 * @return the keyClass
 	 */
+	@Transient
 	public Class<K> getKeyClass() {
 		return keyClass;
 	}
@@ -135,6 +138,7 @@ public abstract class AbstractGeneralBO<K extends Serializable> extends Abstract
 	 * Returns the cid.
 	 * @return the cid
 	 */
+	@Transient
 	public CID getCID() {
 		if (cid == null) {
 			K id = getId();
@@ -147,6 +151,7 @@ public abstract class AbstractGeneralBO<K extends Serializable> extends Abstract
 	 * Returns the interface class of this BO.
 	 * @return the BO interface class
 	 */
+	@Transient
 	public Class<? extends IGeneralBO<K>> getInterfaceClass() {
 		return interfaceClass;
 	}
@@ -196,6 +201,7 @@ public abstract class AbstractGeneralBO<K extends Serializable> extends Abstract
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transient
 	public boolean isChanged() {
 		return isDirty();
 	}

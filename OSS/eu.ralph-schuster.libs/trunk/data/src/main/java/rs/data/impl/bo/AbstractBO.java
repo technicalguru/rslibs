@@ -3,6 +3,7 @@
  */
 package rs.data.impl.bo;
 
+import java.beans.Transient;
 import java.io.Serializable;
 import java.util.List;
 
@@ -72,6 +73,7 @@ public abstract class AbstractBO<K extends Serializable, T extends GeneralDTO<K>
 	 * Returns the transferClass.
 	 * @return the transferClass
 	 */
+	@Transient
 	public Class<T> getTransferClass() {
 		return transferClass;
 	}
@@ -80,6 +82,7 @@ public abstract class AbstractBO<K extends Serializable, T extends GeneralDTO<K>
 	 * Returns the Transfer Object.
 	 * @return transfer object
 	 */
+	@Transient
 	public T getTransferObject() {
 		return transferObject;
 	}
