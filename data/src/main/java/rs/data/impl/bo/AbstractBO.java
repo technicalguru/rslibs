@@ -7,8 +7,8 @@ import java.beans.Transient;
 import java.io.Serializable;
 import java.util.List;
 
-import rs.baselib.bean.BeanSupport;
 import rs.baselib.bean.NamedObject;
+import rs.baselib.bean.NoCopy;
 import rs.baselib.lang.LangUtils;
 import rs.baselib.util.RsDate;
 import rs.data.impl.dto.GeneralDTO;
@@ -28,10 +28,6 @@ public abstract class AbstractBO<K extends Serializable, T extends GeneralDTO<K>
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	static {
-		BeanSupport.INSTANCE.addForbiddenCopy(AbstractBO.class, "transferObject");
-	}
-
 	/** The persistent classes to manage */
 	private Class<T> transferClass;
 	private T transferObject;
@@ -83,6 +79,7 @@ public abstract class AbstractBO<K extends Serializable, T extends GeneralDTO<K>
 	 * @return transfer object
 	 */
 	@Transient
+	@NoCopy
 	public T getTransferObject() {
 		return transferObject;
 	}

@@ -32,6 +32,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import rs.baselib.bean.NoCopy;
 import rs.baselib.util.RsDate;
 
 /**
@@ -492,7 +493,7 @@ public class LangUtils {
 	
 	/**
 	 * Returns true when given property is transient.
-	 * A transient property has either a missing getter or setter or its setter is
+	 * A transient property has either a missing getter or setter or its getter is
 	 * marked with {@link Transient} annotation.
 	 * @param desc property descriptor
 	 * @return true when property is transient and must not be persisted
@@ -502,6 +503,20 @@ public class LangUtils {
 		Method wm = desc.getWriteMethod();
 		if ((rm == null) || (wm == null)) return true;
 		return rm.isAnnotationPresent(Transient.class);
+	}
+
+	/**
+	 * Returns true when given property is not allowed to be copied with {@link rs.baselib.bean.IBean#copyTo(Object)}.
+	 * A {@link NoCopy} property has either a missing getter or setter or its getter is
+	 * marked with {@link NoCopy} annotation.
+	 * @param desc property descriptor
+	 * @return true when property is transient and must not be persisted
+	 */
+	public static boolean isNoCopy(PropertyDescriptor desc) {
+		Method rm = desc.getReadMethod();
+		Method wm = desc.getWriteMethod();
+		if ((rm == null) || (wm == null)) return true;
+		return rm.isAnnotationPresent(NoCopy.class);
 	}
 
 

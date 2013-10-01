@@ -7,6 +7,7 @@ import java.beans.Transient;
 import java.io.Serializable;
 
 import rs.baselib.bean.IBean;
+import rs.baselib.bean.NoCopy;
 import rs.baselib.util.RsDate;
 import rs.data.api.dao.IGeneralDAO;
 import rs.data.util.CID;
@@ -101,6 +102,7 @@ public interface IGeneralBO<K extends Serializable> extends Serializable, IBean 
 	 * Returns the creationDate.
 	 * @return the creationDate
 	 */
+	@NoCopy
 	public RsDate getCreationDate();
 
 	/**
@@ -113,6 +115,7 @@ public interface IGeneralBO<K extends Serializable> extends Serializable, IBean 
 	 * Returns the changeDate.
 	 * @return the changeDate
 	 */
+	@NoCopy
 	public RsDate getChangeDate();
 
 	/**
