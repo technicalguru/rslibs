@@ -96,28 +96,6 @@ public class BeanSupport {
 	}
 	
 	/**
-	 * Adds the given property to the list of forbidden properties for copies.
-	 * The property will not be copied anymore by {@link IBean#copyTo(Object)}.
-	 * @param beanClass the bean class
-	 * @param propertyName the name of the property
-	 * @see IBean#copyTo(Object)
-	 */
-	public void addForbiddenCopy(Class<?> beanClass, String propertyName) {
-		getForbiddenList(beanClass, true).add(propertyName);
-	}
-	
-	/**
-	 * Removes the given property from the list of forbidden properties for copies.
-	 * The property will be copied by {@link IBean#copyTo(Object)}.
-	 * @param beanClass the bean class
-	 * @param propertyName the name of the property
-	 * @see IBean#copyTo(Object)
-	 */
-	public void removeForbiddenCopy(Class<?> beanClass, String propertyName) {
-		getForbiddenList(beanClass, true).add(propertyName);
-	}
-	
-	/**
 	 * Returns whether the given property is forbidden to be copied.
 	 * The property was either explicitly registered as forbidden or is {@link #isTransient(Object, String)}.
 	 * @param beanClass the bean class
@@ -127,14 +105,8 @@ public class BeanSupport {
 	public boolean isCopyForbidden(Class<?> beanClass, String propertyName) {
 		if (propertyName.equals("class")) return false;
 		if (isTransient(beanClass, propertyName)) return true;
-		// We need to check all super classes
-		while (beanClass != null) {
-			if (getForbiddenList(beanClass, false).contains(propertyName)) {
-				return true;
-			}
-			beanClass = beanClass.getSuperclass();
-		}
-		return false;
+
+		return getForbiddenList(beanClass, false).contains(propertyName);
 	}
 
 	/**
@@ -147,11 +119,34 @@ public class BeanSupport {
 		Set<String> rc = forbiddenCopies.get(beanClass);
 		if ((rc == null) && create) {
 			rc = new HashSet<String>();
-			forbiddenCopies.put(beanClass, rc);
+			collectForbiddenCopies(rc, beanClass);
+			forbiddenCopies.put(beanClass, Collections.unmodifiableSet(rc));
 		}
 		
 		if (rc == null) return Collections.emptySet();
 		return rc;
+	}
+
+	/**
+	 * Collects the {@link NoCopy} properties (self-recursive).
+	 * @param rc collection where properties need to be collected
+	 * @param clazz class to be inspected
+	 * @see LangUtils#isForbiddenCopy(PropertyDescriptor)
+	 */
+	protected void collectForbiddenCopies(Set<String> rc, Class<?> clazz) {
+		PropertyDescriptor arr[] = PropertyUtils.getPropertyDescriptors(clazz);
+		for (PropertyDescriptor desc : arr) {
+			if (LangUtils.isNoCopy(desc) && !rc.contains(desc.getName())) {
+				rc.add(desc.getName());
+			}
+		}
+		for (Class<?> clazz2 : clazz.getInterfaces()) {
+			collectForbiddenCopies(rc, clazz2);
+		}
+		Class<?> clazz2  = clazz.getSuperclass();
+		if (clazz2 != null) {
+			collectForbiddenCopies(rc, clazz2);
+		}
 	}
 
 	/**
@@ -195,7 +190,7 @@ public class BeanSupport {
 			rc = new ArrayList<String>();
 			List<String> transientProperties = getTransientProperties(clazz);
 			for (PropertyDescriptor desc : PropertyUtils.getPropertyDescriptors(clazz)) {
-				if (transientProperties.contains(desc.getName())) {
+				if (!transientProperties.contains(desc.getName())) {
 					rc.add(desc.getName());
 				}
 			}

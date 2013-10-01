@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import rs.baselib.bean.AbstractBean;
-import rs.baselib.bean.BeanSupport;
 import rs.baselib.lang.LangUtils;
 import rs.data.api.IDaoFactory;
 import rs.data.api.bo.IGeneralBO;
@@ -32,13 +31,8 @@ public abstract class AbstractGeneralBO<K extends Serializable> extends Abstract
 	/**
 	 * Serial UID.
 	 */
-	private static final long serialVersionUID = 1332731487212304311L;
+	private static final long serialVersionUID = 1L;
 
-	static {
-		BeanSupport.INSTANCE.addForbiddenCopy(AbstractGeneralBO.class, PROPERTY_CREATION_DATE);
-		BeanSupport.INSTANCE.addForbiddenCopy(AbstractGeneralBO.class, PROPERTY_CHANGE_DATE);
-	}
-	
 	/** The persistent classes to manage */
 	private Class<K> keyClass;
 	/** The interface class of this BO. */
