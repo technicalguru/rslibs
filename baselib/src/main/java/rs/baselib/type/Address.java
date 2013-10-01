@@ -198,5 +198,4 @@ public class Address extends AbstractBean implements Serializable {
 		firePropertyChange(COUNTRY, oldValue, country);
 	}
 
-	
 }
