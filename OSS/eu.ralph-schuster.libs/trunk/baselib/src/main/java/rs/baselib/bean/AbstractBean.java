@@ -11,10 +11,12 @@ import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.beanutils.PropertyUtils;
 
+import rs.baselib.lang.LangUtils;
 import rs.baselib.util.CommonUtils;
 
 /**
@@ -24,10 +26,6 @@ import rs.baselib.util.CommonUtils;
  */
 public abstract class AbstractBean implements IBean {
 
-	static {
-		BeanSupport.INSTANCE.addForbiddenCopy(AbstractBean.class, "dirty");
-	}
-	
 	/** The change support. */
 	private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 	/** Object is dirty? */
@@ -370,17 +368,17 @@ public abstract class AbstractBean implements IBean {
 		if (!getClass().equals(destination.getClass())) {
 			throw new IllegalArgumentException("The destination must be of same type but is of "+destination.getClass().getName());
 		}
-		
-		PropertyDescriptor descriptors[] = PropertyUtils.getPropertyDescriptors(this);
+
+		PropertyDescriptor descriptors[] = PropertyUtils.getPropertyDescriptors(getClass());
 		for (PropertyDescriptor descriptor : descriptors) {
 			String name = descriptor.getName();
-			
+
 			if (isCopyAllowed(descriptor) && PropertyUtils.isReadable(this, name) && PropertyUtils.isWriteable(destination, name)) {
 				try {
 					Object value = PropertyUtils.getProperty(this, name);
 					PropertyUtils.setProperty(destination, name, value);
 				} catch (Exception e) {
-					
+
 				}
 			}
 		}
@@ -397,19 +395,38 @@ public abstract class AbstractBean implements IBean {
 	 * @see BeanSupport#isCopyForbidden(Class, String)
 	 */
 	protected boolean isCopyAllowed(PropertyDescriptor descriptor) {
-		return !BeanSupport.INSTANCE.isCopyForbidden(getClass(), descriptor.getName());
+		return !BeanSupport.INSTANCE.isTransient(getClass(), descriptor.getName());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void reset() {
-        Collection<PropertyChangeEvent> changes = getChanges();
-        for (PropertyChangeEvent evt : changes) {
-                set(evt.getPropertyName(), evt.getOldValue());
-        }
-        setDirty(false);
+		Collection<PropertyChangeEvent> changes = getChanges();
+		for (PropertyChangeEvent evt : changes) {
+			set(evt.getPropertyName(), evt.getOldValue());
+		}
+		setDirty(false);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		List<Object> properties = new ArrayList<Object>();
+		PropertyDescriptor descriptors[] = PropertyUtils.getPropertyDescriptors(getClass());
+		for (PropertyDescriptor descriptor : descriptors) {
+			try {
+				String name = descriptor.getName();
+				Object value = PropertyUtils.getProperty(this, name);
+				properties.add(name);
+				properties.add(value);
+			} catch (Exception e) { // Ignore }
+			}
+		}
+		return LangUtils.toString(getClass().getSimpleName(), properties.toArray());
 	}
 
 

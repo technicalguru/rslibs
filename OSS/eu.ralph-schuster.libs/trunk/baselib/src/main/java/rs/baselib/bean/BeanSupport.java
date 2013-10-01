@@ -5,16 +5,21 @@ package rs.baselib.bean;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyDescriptor;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import rs.baselib.lang.LangUtils;
 
 /**
  * Support Bean property actions.
@@ -29,6 +34,8 @@ public class BeanSupport {
 	
 	private Map<Class<?>,Map<String,String>> beanPropertyMappings;
 	private Map<Class<?>,Set<String>> forbiddenCopies;
+	private Map<Class<?>,List<String>> nonTransientProperties;
+	private Map<Class<?>,List<String>> transientProperties;
 	
 	/**
 	 * Constructor.
@@ -36,6 +43,8 @@ public class BeanSupport {
 	protected BeanSupport() {
 		beanPropertyMappings = new HashMap<Class<?>, Map<String,String>>();
 		forbiddenCopies = new HashMap<Class<?>, Set<String>>();
+		nonTransientProperties = new HashMap<Class<?>, List<String>>();
+		transientProperties = new HashMap<Class<?>, List<String>>();
 	}
 
 	/**
@@ -110,12 +119,14 @@ public class BeanSupport {
 	
 	/**
 	 * Returns whether the given property is forbidden to be copied.
+	 * The property was either explicitly registered as forbidden or is {@link #isTransient(Object, String)}.
 	 * @param beanClass the bean class
 	 * @param propertyName the name of the property
 	 * @return <code>true</code> when {@link IBean#copyTo(Object)} must not copy this property
 	 */
 	public boolean isCopyForbidden(Class<?> beanClass, String propertyName) {
 		if (propertyName.equals("class")) return false;
+		if (isTransient(beanClass, propertyName)) return true;
 		// We need to check all super classes
 		while (beanClass != null) {
 			if (getForbiddenList(beanClass, false).contains(propertyName)) {
@@ -141,5 +152,76 @@ public class BeanSupport {
 		
 		if (rc == null) return Collections.emptySet();
 		return rc;
+	}
+
+	/**
+	 * Returns true when the given property is transient.
+	 * The method is a cached version of {@link LangUtils#isTransient(PropertyDescriptor)}.
+	 * @param bean Bean or class of bean
+	 * @param propertyName name of property
+	 * @return true when property is transient
+	 */
+	public boolean isTransient(Object bean, String propertyName) {
+		return getTransientProperties(bean).contains(propertyName);
+	}
+	
+	/**
+	 * Returns the transient properties of the bean or class.
+	 * @param bean bean or class of bean
+	 * @return list of non-transient properties
+	 * @see #isTransient(Object, String)
+	 */
+	public List<String> getTransientProperties(Object bean) {
+		Class<?> clazz = bean instanceof Class ? (Class<?>)bean : bean.getClass();
+		List<String> rc = transientProperties.get(clazz);
+		if (rc == null) {
+			rc = new ArrayList<String>();
+			collectTransientProperties(rc, clazz);
+			transientProperties.put(clazz, Collections.unmodifiableList(rc));
+		}
+		return rc;
+	}
+	
+	/**
+	 * Returns the non-transient properties of the bean or class.
+	 * @param bean bean or class of bean
+	 * @return list of non-transient properties
+	 * @see #isTransient(Object, String)
+	 */
+	public List<String> getNonTransientProperties(Object bean) {
+		Class<?> clazz = bean instanceof Class ? (Class<?>)bean : bean.getClass();
+		List<String> rc = nonTransientProperties.get(clazz);
+		if (rc == null) {
+			rc = new ArrayList<String>();
+			List<String> transientProperties = getTransientProperties(clazz);
+			for (PropertyDescriptor desc : PropertyUtils.getPropertyDescriptors(clazz)) {
+				if (transientProperties.contains(desc.getName())) {
+					rc.add(desc.getName());
+				}
+			}
+			nonTransientProperties.put(clazz, Collections.unmodifiableList(rc));
+		}
+		return rc;
+	}
+	
+	/**
+	 * Collects the non-transient properties (self-recursive).
+	 * @param rc collection where properties need to be collected
+	 * @param clazz class to be inspected
+	 * @see #isTransient(Object, String)
+	 */
+	protected void collectTransientProperties(List<String> rc, Class<?> clazz) {
+		for (PropertyDescriptor desc : PropertyUtils.getPropertyDescriptors(clazz)) {
+			if (LangUtils.isTransient(desc) && !rc.contains(desc.getName())) {
+				rc.add(desc.getName());
+			}
+		}
+		for (Class<?> clazz2 : clazz.getInterfaces()) {
+			collectTransientProperties(rc, clazz2);
+		}
+		Class<?> clazz2  = clazz.getSuperclass();
+		if (clazz2 != null) {
+			collectTransientProperties(rc, clazz2);
+		}
 	}
 }

@@ -3,6 +3,8 @@
  */
 package rs.baselib.lang;
 
+import java.beans.PropertyDescriptor;
+import java.beans.Transient;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -11,6 +13,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Array;
 import java.lang.reflect.GenericArrayType;
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -462,5 +465,44 @@ public class LangUtils {
 		ObjectInputStream s = new ObjectInputStream(in);
 		return s.readObject();
 	}
+
+	/**
+	 * Creates a unified <code>toString()</code> output.
+	 * <p>Properties must be represented with two values: name of property and its value, e.g. the call</p>
+	 * <pre>
+	 *    toString("ClassName", "property1", "value1", "property2", "value2")
+	 * </pre>
+	 * <p>will produce <code>ClassName[property1=value1;property2=value2]</code>.</p> 
+	 * @param className the class name to be used
+	 * @param properties the properties where each property is represented with two values: name of property and its value.
+	 * @return a unified toString() output, .
+	 */
+	public static String toString(String className, Object... properties) {
+		StringBuffer rc = new StringBuffer();
+		rc.append(className);
+		rc.append("[");
+		for (int i=0; i<properties.length; i+=2) {
+			rc.append(properties[i]);
+			rc.append("=");
+			rc.append(properties[i+1]);
+		}
+		rc.append("]");
+		return rc.toString();
+	}
+	
+	/**
+	 * Returns true when given property is transient.
+	 * A transient property has either a missing getter or setter or its setter is
+	 * marked with {@link Transient} annotation.
+	 * @param desc property descriptor
+	 * @return true when property is transient and must not be persisted
+	 */
+	public static boolean isTransient(PropertyDescriptor desc) {
+		Method rm = desc.getReadMethod();
+		Method wm = desc.getWriteMethod();
+		if ((rm == null) || (wm == null)) return true;
+		return rm.isAnnotationPresent(Transient.class);
+	}
+
 
 }

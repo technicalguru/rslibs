@@ -7,10 +7,12 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import rs.baselib.io.FileFinder;
 import rs.baselib.type.Address;
 import rs.baselib.type.Country;
 import rs.data.file.impl.Customer;
@@ -50,4 +52,11 @@ public class XmlStorageStrategyTest {
 		assertTrue("File was not created", f.exists());
 	}
 
+	//@Test
+	public void testLoad() throws IOException, URISyntaxException {
+		File f = new File(FileFinder.find("xmlStorageTest1.xml").toURI());
+		Customer loaded = new CustomerFileImpl();
+		strategy.load(loaded, f);
+		
+	}
 }

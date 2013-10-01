@@ -37,8 +37,6 @@ public abstract class AbstractGeneralBO<K extends Serializable> extends Abstract
 	static {
 		BeanSupport.INSTANCE.addForbiddenCopy(AbstractGeneralBO.class, PROPERTY_CREATION_DATE);
 		BeanSupport.INSTANCE.addForbiddenCopy(AbstractGeneralBO.class, PROPERTY_CHANGE_DATE);
-		BeanSupport.INSTANCE.addForbiddenCopy(AbstractGeneralBO.class, "changed");
-		BeanSupport.INSTANCE.addForbiddenCopy(AbstractGeneralBO.class, "dao");
 	}
 	
 	/** The persistent classes to manage */

@@ -3,11 +3,8 @@
  */
 package rs.data.file.storage;
 
-import java.beans.PropertyDescriptor;
-import java.beans.Transient;
 import java.io.IOException;
 import java.io.Serializable;
-import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.Collections;
@@ -16,9 +13,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.collections.CollectionUtils;
 
+import rs.baselib.bean.BeanSupport;
 import rs.baselib.lang.LangUtils;
 
 /**
@@ -30,9 +28,6 @@ public abstract class AbstractStorageStrategy<S> implements IStorageStrategy<S> 
 
 	/** Cache of transient properties per class */
 	private static Map<Class<?>, Set<String>> transientCache = new HashMap<Class<?>, Set<String>>();
-
-	/** Local storage of transient properties */
-	private ThreadLocal<Set<String>> transientProperties = new ThreadLocal<Set<String>>();
 
 	/** The encoding used */
 	private String encoding = Charset.defaultCharset().name();
@@ -103,30 +98,24 @@ public abstract class AbstractStorageStrategy<S> implements IStorageStrategy<S> 
 	 * @param object the object
 	 * @return the names of all relevant interfaces
 	 */
+	@SuppressWarnings("unchecked")
 	protected Collection<String> getPropertyNames(Object object) {
 		Set<String> rc = transientCache.get(object.getClass());
 		if (rc == null) {
-			rc = new HashSet<String>();
-			transientCache.put(object.getClass(), rc);
-			
-			// Initialize transient properties for this run
-			Set<String> transients = transientProperties.get();
-			if (transients != null) {
-				transients.clear();
-			} else {
-				transients = new HashSet<String>();
-				transientProperties.set(transients);
-			}
-			// Collect on interfaces only
+			Set<String> transients = new HashSet<String>();
+			Set<String> nontransients = new HashSet<String>();
+			// Collect all transient and persistent properties from interfaces
 			for (Class<?> clazz2 : object.getClass().getInterfaces()) {
-				collectPropertyNames(rc, clazz2);
+				transients.addAll(BeanSupport.INSTANCE.getTransientProperties(clazz2));
+				nontransients.addAll(BeanSupport.INSTANCE.getNonTransientProperties(clazz2));
 			}
-			// Remove all transient properties
-			for (String s : transients) {
-				rc.remove(s);
-			}
+			// Make difference of both sets
+			;
+			// Add all others to the return
+			rc = new HashSet<String>(CollectionUtils.subtract(nontransients, transients));
+			transientCache.put(object.getClass(), Collections.unmodifiableSet(rc));
 		}
-		return Collections.unmodifiableSet(rc);
+		return rc;
 	}
 
 	/**
@@ -135,63 +124,7 @@ public abstract class AbstractStorageStrategy<S> implements IStorageStrategy<S> 
 	 * @return the names of all relevant interfaces
 	 */
 	protected Collection<String> getBeanPropertyNames(Object object) {
-		Set<String> rc = transientCache.get(object.getClass());
-		if (rc == null) {
-			rc = new HashSet<String>();
-			transientCache.put(object.getClass(), rc);
-			
-			// Initialize transient properties for this run
-			Set<String> transients = transientProperties.get();
-			if (transients != null) {
-				transients.clear();
-			} else {
-				transients = new HashSet<String>();
-				transientProperties.set(transients);
-			}
-			// Collect all
-			collectPropertyNames(rc, object.getClass());
-			// Remove all transient properties
-			for (String s : transients) {
-				rc.remove(s);
-			}
-		}
-		return Collections.unmodifiableSet(rc);
-	}
-
-	/**
-	 * Returns all properties as defined in the BO interface.
-	 * @param object the object
-	 * @return the names of all relevant interfaces
-	 */
-	protected void collectPropertyNames(Collection<String> rc, Class<?> clazz) {
-		for (PropertyDescriptor desc : PropertyUtils.getPropertyDescriptors(clazz)) {
-			if (isTransient(desc)) {
-				transientProperties.get().add(desc.getName());
-			} else {
-				if (!rc.contains(desc.getName())) {
-					rc.add(desc.getName());
-				}
-			}
-		}
-		for (Class<?> clazz2 : clazz.getInterfaces()) {
-			collectPropertyNames(rc, clazz2);
-		}
-		Class<?> clazz2  = clazz.getSuperclass();
-		if (clazz2 != null) {
-			collectPropertyNames(rc, clazz2);
-		}
-	}
-
-	/**
-	 * Returns true when given property is transient.
-	 * @param desc property descriptor
-	 * @return true when property is transient and must not be persisted
-	 */
-	protected boolean isTransient(PropertyDescriptor desc) {
-		Method rm = desc.getReadMethod();
-		Method wm = desc.getWriteMethod();
-		if ((rm == null) || (wm == null)) return true;
-		return rm.isAnnotationPresent(Transient.class);
+		return BeanSupport.INSTANCE.getNonTransientProperties(object);
 	}
 
 	/**

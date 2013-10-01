@@ -3,15 +3,17 @@
  */
 package rs.data.file.storage;
 
-import java.beans.PropertyDescriptor;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.configuration.HierarchicalConfiguration;
+import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;
 
 import rs.baselib.bean.IBean;
@@ -40,36 +42,59 @@ public class XmlStorageStrategy extends AbstractStorageStrategy<File> {
 		try {
 			XMLConfiguration cfg = new XMLConfiguration(specifier);
 			for (String name : propertyNames) {
-				PropertyDescriptor desc = PropertyUtils.getPropertyDescriptor(bo, name);
-				String value = cfg.getString(name+"(0)");
-				if ((value != null) && !value.isEmpty()) {
-					String className = cfg.getString(name+"(0)[@class]");
-					Class<?> clazz = Class.forName(className);
-					if (IGeneralBO.class.isAssignableFrom(clazz)) {
-						// TODO getDao().findBy()
-					} else if (Collection.class.isAssignableFrom(clazz)) {
-						// TODO load each item
-					} else if (Map.class.isAssignableFrom(clazz)) {
-						// TODO load each item
-					} else if (IBean.class.isAssignableFrom(clazz)) {
-						// TODO	load each property	
-					} else {
-						Object o = unserialize(className, value);
-						if (o != null) {
-							bo.set(desc.getName(), o);
-						} else {
-							throw new RuntimeException("Cannot unserialize property: "+className+": "+value);
-						}
-					}
-				} else {
-					bo.set(desc.getName(), null);
-				}
+				SubnodeConfiguration subConfig = cfg.configurationAt(name+"(0)");
+				System.out.println(name+":");
+				bo.set(name, loadValue(subConfig));
 			}
 		} catch (Exception e) {
 			throw new IOException("Cannot load XML file", e);
 		}
 	}
 
+	protected Object loadValue(HierarchicalConfiguration cfg) throws IOException, ReflectiveOperationException {
+		String className = cfg.getString("[@class]");
+		if ((className != null) && !className.isEmpty()) {
+			Class<?> clazz = Class.forName(className);
+			Object rc = null;
+			if (IGeneralBO.class.isAssignableFrom(clazz)) {
+				// TODO getDao().findBy()
+			} else if (Collection.class.isAssignableFrom(clazz)) {
+				@SuppressWarnings("unchecked")
+				Collection<Object> collection = (Collection<Object>)clazz.newInstance();
+				for (HierarchicalConfiguration subConfig : cfg.configurationsAt("item")) {
+					collection.add(loadValue(subConfig));
+				}
+				rc = collection;
+			} else if (Map.class.isAssignableFrom(clazz)) {
+				Map<Object,Object> map = new HashMap<Object, Object>();
+				for (HierarchicalConfiguration subConfig : cfg.configurationsAt("item")) {
+					Object key = loadValue(subConfig.configurationAt("key(0)"));
+					Object value = loadValue(subConfig.configurationAt("value(0)"));
+					map.put(key, value);
+				}
+				rc = map;
+			} else if (IBean.class.isAssignableFrom(clazz)) {
+				IBean bean = (IBean)clazz.newInstance();
+				for (String name : getBeanPropertyNames(clazz)) {
+					bean.set(name, loadValue(cfg.configurationAt(name+"(0)")));
+				}
+				rc = bean;
+			} else {
+				String valueString = cfg.getString(""); // ?
+				rc = unserialize(className, valueString);
+				if (rc == null) {
+					throw new RuntimeException("Cannot unserialize property: "+className+": "+valueString);
+				}
+			}
+			if (rc != null) System.out.println("   Loaded: "+rc.getClass().getName()+" = "+rc.toString());
+			else System.out.println("   Loaded: NULL");
+			return rc;
+		} else {
+			System.out.println("   Loaded: NULL");
+			return null;
+		}
+
+	}
 	/**
 	 * {@inheritDoc}
 	 */
