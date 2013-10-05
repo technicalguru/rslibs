@@ -198,4 +198,77 @@ public class Address extends AbstractBean implements Serializable {
 		firePropertyChange(COUNTRY, oldValue, country);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((city == null) ? 0 : city.hashCode());
+		result = prime * result + ((country == null) ? 0 : country.hashCode());
+		result = prime * result + ((state == null) ? 0 : state.hashCode());
+		result = prime * result + ((street1 == null) ? 0 : street1.hashCode());
+		result = prime * result + ((street2 == null) ? 0 : street2.hashCode());
+		result = prime * result + ((zipCode == null) ? 0 : zipCode.hashCode());
+		return result;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof Address)) {
+			return false;
+		}
+		Address other = (Address) obj;
+		if (city == null) {
+			if (other.city != null) {
+				return false;
+			}
+		} else if (!city.equals(other.city)) {
+			return false;
+		}
+		if (country != other.country) {
+			return false;
+		}
+		if (state == null) {
+			if (other.state != null) {
+				return false;
+			}
+		} else if (!state.equals(other.state)) {
+			return false;
+		}
+		if (street1 == null) {
+			if (other.street1 != null) {
+				return false;
+			}
+		} else if (!street1.equals(other.street1)) {
+			return false;
+		}
+		if (street2 == null) {
+			if (other.street2 != null) {
+				return false;
+			}
+		} else if (!street2.equals(other.street2)) {
+			return false;
+		}
+		if (zipCode == null) {
+			if (other.zipCode != null) {
+				return false;
+			}
+		} else if (!zipCode.equals(other.zipCode)) {
+			return false;
+		}
+		return true;
+	}
+
+	
 }
