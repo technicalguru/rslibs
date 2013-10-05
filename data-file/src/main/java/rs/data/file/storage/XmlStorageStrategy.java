@@ -57,48 +57,34 @@ public class XmlStorageStrategy extends AbstractStorageStrategy<File> {
 
 	/**
 	 * Internal helper to load a sub configuration.
+	 * <p>Descendants shall not override this but several specific helper methods.</p>
 	 * @param cfg the tag to be loaded
 	 * @return th eobject represented by this tag
 	 * @throws IOException when the value cannot be loaded
 	 * @throws ReflectiveOperationException when reflection operation fails
+	 * @see #loadBusinessObject(Class, HierarchicalConfiguration)
+	 * @see #loadCollection(Class, HierarchicalConfiguration)
+	 * @see #loadMap(Class, HierarchicalConfiguration)
+	 * @see #loadBean(Class, HierarchicalConfiguration)
+	 * @see #loadSerialized(Class, HierarchicalConfiguration)
 	 */
-	@SuppressWarnings("unchecked")
 	protected Object loadValue(HierarchicalConfiguration cfg) throws IOException, ReflectiveOperationException {
 		String className = cfg.getString("[@class]");
 		if ((className != null) && !className.isEmpty()) {
 			Class<?> clazz = Class.forName(className);
 			Object rc = null;
 			if (IGeneralBO.class.isAssignableFrom(clazz)) {
-				Serializable id = (Serializable)loadValue(cfg.configurationAt("refid(0)"));
-				IDaoFactory factory = getDaoFactory();
-				if (factory != null) {
-					rc = factory.getDaoFor((Class<? extends IGeneralBO<?>>)clazz).findById(id);
-				}
+				rc = loadBusinessObject(clazz, cfg);
 			} else if (Collection.class.isAssignableFrom(clazz)) {
-				Collection<Object> collection = (Collection<Object>)clazz.newInstance();
-				for (HierarchicalConfiguration subConfig : cfg.configurationsAt("item")) {
-					collection.add(loadValue(subConfig));
-				}
-				rc = collection;
+				rc = loadCollection(clazz, cfg);
 			} else if (Map.class.isAssignableFrom(clazz)) {
-				Map<Object,Object> map = new HashMap<Object, Object>();
-				for (HierarchicalConfiguration subConfig : cfg.configurationsAt("item")) {
-					Object key = loadValue(subConfig.configurationAt("key(0)"));
-					Object value = loadValue(subConfig.configurationAt("value(0)"));
-					map.put(key, value);
-				}
-				rc = map;
+				rc = loadMap(clazz, cfg);
 			} else if (IBean.class.isAssignableFrom(clazz)) {
-				IBean bean = (IBean)clazz.newInstance();
-				for (String name : getBeanPropertyNames(clazz)) {
-					bean.set(name, loadValue(cfg.configurationAt(name+"(0)")));
-				}
-				rc = bean;
+				rc = loadBean(clazz, cfg);
 			} else {
-				String valueString = cfg.getString(""); // ?
-				rc = unserialize(className, valueString);
+				rc = loadSerialized(clazz, cfg);
 				if (rc == null) {
-					throw new RuntimeException("Cannot unserialize property: "+className+": "+valueString);
+					throw new RuntimeException("Cannot unserialize property: "+className+": "+cfg.getString(""));
 				}
 			}
 			return rc;
@@ -107,6 +93,89 @@ public class XmlStorageStrategy extends AbstractStorageStrategy<File> {
 		}
 
 	}
+	
+	/**
+	 * Loads a {@link IGeneralBO business object} from the XML tag.
+	 * @param clazz class to be loaded
+	 * @param cfg configuration of class
+	 * @return the loaded object
+	 * @throws IOException when the object cannot be loaded
+	 * @throws ReflectiveOperationException when the reflection operations fail
+	 */
+	@SuppressWarnings("unchecked")
+	protected IGeneralBO<?> loadBusinessObject(Class<?> clazz, HierarchicalConfiguration cfg) throws IOException, ReflectiveOperationException {
+		Serializable id = (Serializable)loadValue(cfg.configurationAt("refid(0)"));
+		IDaoFactory factory = getDaoFactory();
+		if (factory != null) {
+			return factory.getDaoFor((Class<? extends IGeneralBO<?>>)clazz).findById(id);
+		}
+		return null;
+	}
+	
+	/**
+	 * Loads a collection from the XML tag.
+	 * @param clazz class to be loaded
+	 * @param cfg configuration of class
+	 * @return the loaded collection
+	 * @throws IOException when the object cannot be loaded
+	 * @throws ReflectiveOperationException when the reflection operations fail
+	 */
+	@SuppressWarnings("unchecked")
+	protected Collection<?> loadCollection(Class<?> clazz, HierarchicalConfiguration cfg) throws IOException, ReflectiveOperationException {
+		Collection<Object> collection = (Collection<Object>)clazz.newInstance();
+		for (HierarchicalConfiguration subConfig : cfg.configurationsAt("item")) {
+			collection.add(loadValue(subConfig));
+		}
+		return collection;
+	}
+	
+	/**
+	 * Loads a map from the XML tag.
+	 * @param clazz class to be loaded
+	 * @param cfg configuration of class
+	 * @return the loaded map
+	 * @throws IOException when the object cannot be loaded
+	 * @throws ReflectiveOperationException when the reflection operations fail
+	 */
+	protected Map<?,?> loadMap(Class<?> clazz, HierarchicalConfiguration cfg) throws IOException, ReflectiveOperationException {
+		Map<Object,Object> map = new HashMap<Object, Object>();
+		for (HierarchicalConfiguration subConfig : cfg.configurationsAt("item")) {
+			Object key = loadValue(subConfig.configurationAt("key(0)"));
+			Object value = loadValue(subConfig.configurationAt("value(0)"));
+			map.put(key, value);
+		}
+		return map;
+	}
+	
+	/**
+	 * Loads a {@link IBean} from the XML tag.
+	 * @param clazz class to be loaded
+	 * @param cfg configuration of class
+	 * @return the loaded bean
+	 * @throws IOException when the object cannot be loaded
+	 * @throws ReflectiveOperationException when the reflection operations fail
+	 */
+	protected IBean loadBean(Class<?> clazz, HierarchicalConfiguration cfg) throws IOException, ReflectiveOperationException {
+		IBean bean = (IBean)clazz.newInstance();
+		for (String name : getBeanPropertyNames(clazz)) {
+			bean.set(name, loadValue(cfg.configurationAt(name+"(0)")));
+		}
+		return bean;
+	}
+	
+	/**
+	 * Loads a {@link Serializable} from the XML tag.
+	 * @param clazz class to be loaded
+	 * @param cfg configuration of class
+	 * @return the loaded object
+	 * @throws IOException when the object cannot be loaded
+	 * @throws ReflectiveOperationException when the reflection operations fail
+	 */
+	protected Object loadSerialized(Class<?> clazz, HierarchicalConfiguration cfg) throws IOException, ReflectiveOperationException {
+		String valueString = cfg.getString(""); // ?
+		return unserialize(clazz.getName(), valueString);
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
