@@ -40,10 +40,11 @@ public class XmlStorageStrategy extends AbstractStorageStrategy<File> {
 		// Find all relevant property names
 		Collection<String> propertyNames = getPropertyNames(bo);
 		try {
-			XMLConfiguration cfg = new XMLConfiguration(specifier);
+			XMLConfiguration cfg = new XMLConfiguration();
+			cfg.setListDelimiter((char)0);
+			cfg.load(specifier);
 			for (String name : propertyNames) {
 				SubnodeConfiguration subConfig = cfg.configurationAt(name+"(0)");
-				System.out.println(name+":");
 				bo.set(name, loadValue(subConfig));
 			}
 		} catch (Exception e) {
@@ -86,11 +87,8 @@ public class XmlStorageStrategy extends AbstractStorageStrategy<File> {
 					throw new RuntimeException("Cannot unserialize property: "+className+": "+valueString);
 				}
 			}
-			if (rc != null) System.out.println("   Loaded: "+rc.getClass().getName()+" = "+rc.toString());
-			else System.out.println("   Loaded: NULL");
 			return rc;
 		} else {
-			System.out.println("   Loaded: NULL");
 			return null;
 		}
 

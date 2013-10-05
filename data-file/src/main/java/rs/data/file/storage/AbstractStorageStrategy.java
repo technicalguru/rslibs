@@ -78,12 +78,15 @@ public abstract class AbstractStorageStrategy<S> implements IStorageStrategy<S> 
 	 * @param value the serialized string. Values encoded in BASE64 must be prefixed with <code>"BASE64"</code>.
 	 * @return the object (or null)
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected Object unserialize(String className, String value) throws IOException, ReflectiveOperationException {
 		Class<?> clazz = Class.forName(className);
 		if (Number.class.isAssignableFrom(clazz)) {
 			return (Number)clazz.getConstructor(String.class).newInstance(value);
 		} else if (Boolean.class.isAssignableFrom(clazz) ) {
 			return Boolean.valueOf(value);
+		} else if (clazz.isEnum()) {
+			return Enum.valueOf((Class<Enum>)clazz, value);
 		} else if (String.class.isAssignableFrom(clazz)) {
 			if (value.startsWith("BASE64:")) return Base64.decodeBase64(value.substring(7));
 			return value;

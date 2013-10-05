@@ -483,6 +483,7 @@ public class LangUtils {
 		rc.append(className);
 		rc.append("[");
 		for (int i=0; i<properties.length; i+=2) {
+			if (i != 0) rc.append(';');
 			rc.append(properties[i]);
 			rc.append("=");
 			rc.append(properties[i+1]);

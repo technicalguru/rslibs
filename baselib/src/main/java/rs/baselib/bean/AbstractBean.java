@@ -418,12 +418,14 @@ public abstract class AbstractBean implements IBean {
 		List<Object> properties = new ArrayList<Object>();
 		PropertyDescriptor descriptors[] = PropertyUtils.getPropertyDescriptors(getClass());
 		for (PropertyDescriptor descriptor : descriptors) {
-			try {
-				String name = descriptor.getName();
-				Object value = PropertyUtils.getProperty(this, name);
-				properties.add(name);
-				properties.add(value);
-			} catch (Exception e) { // Ignore }
+			if (!BeanSupport.INSTANCE.isTransient(this, descriptor.getName())) {
+				try {
+					String name = descriptor.getName();
+					Object value = PropertyUtils.getProperty(this, name);
+					properties.add(name);
+					properties.add(value);
+				} catch (Exception e) { // Ignore }
+				}
 			}
 		}
 		return LangUtils.toString(getClass().getSimpleName(), properties.toArray());
