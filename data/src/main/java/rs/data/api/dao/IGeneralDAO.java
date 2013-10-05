@@ -108,6 +108,14 @@ public interface IGeneralDAO<K extends Serializable, B extends IGeneralBO<K>> {
 	public B findBy(K id);
 	
 	/**
+	 * Find the given object in model.
+	 * This method is an alternative in case you cannot specify the type of ID at compile time.
+	 * @param id id of object
+	 * @return object
+	 */
+	public B findById(Object id);
+	
+	/**
 	 * Refresh the given object.
 	 * @param object object to be refreshed
 	 */
@@ -225,7 +233,7 @@ public interface IGeneralDAO<K extends Serializable, B extends IGeneralBO<K>> {
 	 * This method assumes that the objects existed before.
 	 * @param objects objects to be deleted.
 	 */
-	public void delete(B... objects);
+	public void delete(@SuppressWarnings("unchecked") B... objects);
 	
 	/**
 	 * Deletes the objects.
@@ -239,7 +247,7 @@ public interface IGeneralDAO<K extends Serializable, B extends IGeneralBO<K>> {
 	 * This method assumes that the object existed before.
 	 * @param ids id of objects to be deleted.
 	 */
-	public void deleteByKeys(K... ids);
+	public void deleteByKeys(@SuppressWarnings("unchecked") K... ids);
 	
 	/**
 	 * Deletes the objects.

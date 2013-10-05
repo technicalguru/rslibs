@@ -37,7 +37,7 @@ public class XmlStorageStrategyTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		strategy = new XmlStorageStrategy();
+		strategy = new XmlStorageStrategy(null);
 		customer = new CustomerFileImpl();
 		customer.setName("John Doe");
 		customer.addPhone("private", "+49-69-1234567890");

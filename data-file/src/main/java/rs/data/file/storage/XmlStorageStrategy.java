@@ -6,6 +6,7 @@ package rs.data.file.storage;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Serializable;
 import java.io.Writer;
 import java.util.Collection;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;
 
 import rs.baselib.bean.IBean;
+import rs.data.api.IDaoFactory;
 import rs.data.api.bo.IGeneralBO;
 
 /**
@@ -29,7 +31,8 @@ public class XmlStorageStrategy extends AbstractStorageStrategy<File> {
 	/**
 	 * Constructor.
 	 */
-	public XmlStorageStrategy() {
+	public XmlStorageStrategy(IDaoFactory daoFactory) {
+		super(daoFactory);
 	}
 
 	/**
@@ -52,15 +55,26 @@ public class XmlStorageStrategy extends AbstractStorageStrategy<File> {
 		}
 	}
 
+	/**
+	 * Internal helper to load a sub configuration.
+	 * @param cfg the tag to be loaded
+	 * @return th eobject represented by this tag
+	 * @throws IOException when the value cannot be loaded
+	 * @throws ReflectiveOperationException when reflection operation fails
+	 */
+	@SuppressWarnings("unchecked")
 	protected Object loadValue(HierarchicalConfiguration cfg) throws IOException, ReflectiveOperationException {
 		String className = cfg.getString("[@class]");
 		if ((className != null) && !className.isEmpty()) {
 			Class<?> clazz = Class.forName(className);
 			Object rc = null;
 			if (IGeneralBO.class.isAssignableFrom(clazz)) {
-				// TODO getDao().findBy()
+				Serializable id = (Serializable)loadValue(cfg.configurationAt("refid(0)"));
+				IDaoFactory factory = getDaoFactory();
+				if (factory != null) {
+					rc = factory.getDaoFor((Class<? extends IGeneralBO<?>>)clazz).findById(id);
+				}
 			} else if (Collection.class.isAssignableFrom(clazz)) {
-				@SuppressWarnings("unchecked")
 				Collection<Object> collection = (Collection<Object>)clazz.newInstance();
 				for (HierarchicalConfiguration subConfig : cfg.configurationsAt("item")) {
 					collection.add(loadValue(subConfig));
@@ -119,16 +133,21 @@ public class XmlStorageStrategy extends AbstractStorageStrategy<File> {
 		}
 	}
 
+	/**
+	 * Internal helper to write a value to the XML stream.
+	 * @param out the stream
+	 * @param indent the indentation to be used
+	 * @param value the value to be written
+	 * @param tagName the tag name to be used
+	 * @throws IOException in case the value cannot be written
+	 * @throws ReflectiveOperationException
+	 */
 	protected void writeValue(Writer out, int indent, Object value, String tagName) throws IOException, ReflectiveOperationException {
 		String indentS = "";
 		for (int i=0; i<indent; i++) indentS += "   ";
 		
 		if (value != null) {
 			out.write(indentS+"<"+tagName+" class=\""+value.getClass().getName()+"\">");
-			//				if (IConfigurable.class.isAssignableFrom(type)) {
-			//					SubnodeConfiguration subConfig = cfg.configurationAt(desc.getName()+"(0)");
-			//					ConfigurationUtils.configure((IConfigurable)bo, subConfig);
-			//				} else
 			if (value instanceof IGeneralBO) {
 				out.write("\n");
 				writeValue(out, indent+1, ((IGeneralBO<?>) value).getId(), "refid");
