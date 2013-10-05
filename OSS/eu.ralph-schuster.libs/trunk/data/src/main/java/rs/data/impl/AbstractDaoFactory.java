@@ -37,6 +37,7 @@ import rs.data.event.DaoFactoryEvent;
 import rs.data.event.DaoFactoryEvent.Type;
 import rs.data.event.IDaoFactoryListener;
 import rs.data.event.IDaoListener;
+import rs.data.impl.dao.AbstractBasicDAO;
 import rs.data.impl.dao.AbstractDAO;
 import rs.data.impl.dto.GeneralDTO;
 import rs.data.util.IUrlTransformer;
@@ -330,7 +331,30 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 		return null;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public <K extends Serializable, B extends IGeneralBO<K>> IGeneralDAO<K, B> getDaoFor(B o) {
+		return getDaoFor(o.getClass());
+	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public <K extends Serializable, B extends IGeneralBO<K>> IGeneralDAO<K, B> getDaoFor(Class<B> clazz) {
+		for (IGeneralDAO<? extends Serializable,? extends IGeneralBO<? extends Serializable>> dao : daos.values()) {
+			if (dao instanceof AbstractBasicDAO) {
+				if (((AbstractBasicDAO<?,?>)dao).getBoInterfaceClass().equals(clazz)) {
+					return (IGeneralDAO<K, B>) dao;
+				}
+			}
+		}
+		return null;
+	}
 
 	/**
 	 * {@inheritDoc}

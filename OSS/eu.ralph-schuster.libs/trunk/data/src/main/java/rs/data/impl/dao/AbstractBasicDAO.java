@@ -97,7 +97,7 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 	 * Returns the boInterfaceClass.
 	 * @return the boInterfaceClass
 	 */
-	protected Class<C> getBoInterfaceClass() {
+	public Class<C> getBoInterfaceClass() {
 		return boInterfaceClass;
 	}
 
@@ -287,6 +287,7 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 
 	/************************* FINDING ************************/
 
+	
 	/**
 	 * {@inheritDoc}
 	 * <p>
@@ -306,6 +307,14 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 		return rc;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public C findById(Object id) {
+		return findBy((K)id);
+	}
 
 	/**
 	 * {@inheritDoc}
@@ -426,7 +435,7 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void delete(C... objects) {
+	public void delete(@SuppressWarnings("unchecked") C... objects) {
 		for (C c : objects) {
 			if (c != null) {
 
@@ -452,7 +461,7 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void deleteByKeys(K... ids) {
+	public void deleteByKeys(@SuppressWarnings("unchecked") K... ids) {
 		List<K> l = new ArrayList<K>();
 		for (K id : ids) {
 			l.add(id);

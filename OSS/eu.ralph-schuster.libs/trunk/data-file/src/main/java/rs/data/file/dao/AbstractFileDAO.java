@@ -16,9 +16,11 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.HierarchicalConfiguration;
 
 import rs.baselib.configuration.ConfigurationUtils;
+import rs.data.api.IDaoFactory;
 import rs.data.api.IDaoMaster;
 import rs.data.api.bo.IGeneralBO;
 import rs.data.file.bo.AbstractFileBO;
+import rs.data.file.storage.AbstractStorageStrategy;
 import rs.data.file.storage.IStorageStrategy;
 import rs.data.file.storage.XmlStorageStrategy;
 import rs.data.file.util.DefaultFilenameStrategy;
@@ -105,9 +107,23 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	 * @see #configure(Configuration)
 	 */
 	protected IStorageStrategy<File> createStorageStrategy() {
-		return new XmlStorageStrategy();
+		return new XmlStorageStrategy(getFactory());
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 * <p>This method also updates the storage strategy.</p>
+	 */
+	@SuppressWarnings("rawtypes")
+	@Override
+	public void setFactory(IDaoFactory factory) {
+		super.setFactory(factory);
+		IStorageStrategy<File> storageStrategy = getStorageStrategy();
+		if (storageStrategy instanceof AbstractStorageStrategy) {
+			((AbstractStorageStrategy)storageStrategy).setDaoFactory(factory);
+		}
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */

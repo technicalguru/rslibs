@@ -18,6 +18,7 @@ import org.apache.commons.collections.CollectionUtils;
 
 import rs.baselib.bean.BeanSupport;
 import rs.baselib.lang.LangUtils;
+import rs.data.api.IDaoFactory;
 
 /**
  * Abstract implementation of a storage stratey.
@@ -32,10 +33,30 @@ public abstract class AbstractStorageStrategy<S> implements IStorageStrategy<S> 
 	/** The encoding used */
 	private String encoding = Charset.defaultCharset().name();
 	
+	/** A factory reference */
+	private IDaoFactory daoFactory;
+	
 	/**
 	 * Constructor.
 	 */
-	public AbstractStorageStrategy() {
+	public AbstractStorageStrategy(IDaoFactory daoFactory) {
+		setDaoFactory(daoFactory);
+	}
+
+	/**
+	 * Returns the daoFactory.
+	 * @return the daoFactory
+	 */
+	public IDaoFactory getDaoFactory() {
+		return daoFactory;
+	}
+
+	/**
+	 * Sets the daoFactory.
+	 * @param daoFactory the daoFactory to set
+	 */
+	public void setDaoFactory(IDaoFactory daoFactory) {
+		this.daoFactory = daoFactory;
 	}
 
 	/**
