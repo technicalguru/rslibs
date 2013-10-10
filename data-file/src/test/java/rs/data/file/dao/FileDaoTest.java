@@ -110,15 +110,11 @@ public class FileDaoTest {
 	public void test06_save() {
 		Customer customer = createCustomer();
 		Long id = customer.getId();
-		File f = customerDao.getFilenameStrategy().getFile(id);
-		long beforeFile = f.lastModified();
 		long beforeChange = customer.getChangeDate().getTimeInMillis();
 		customer.setName("John Doe2");
 		customerDao.save(customer);
 		LangUtils.sleep(1000L);
-		long afterFile = f.lastModified();
 		long afterChange = customer.getChangeDate().getTimeInMillis();
-		assertTrue("File was not modified", beforeFile < afterFile);
 		assertTrue("changeDate was not modified", beforeChange < afterChange);
 		customer = customerDao.findBy(id);
 		assertEquals("Name was not saved correctly", "John Doe2", customer.getName());
