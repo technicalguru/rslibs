@@ -204,6 +204,7 @@ public class XmlStorageStrategy extends AbstractStorageStrategy<File> {
 			throw new IOException("Cannot load XML file", e);
 		} finally {
 			if (out != null) {
+				out.flush();
 				out.close();
 			}
 		}
