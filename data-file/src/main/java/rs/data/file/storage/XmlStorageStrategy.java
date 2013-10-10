@@ -49,8 +49,12 @@ public class XmlStorageStrategy extends AbstractStorageStrategy<File> {
 			cfg.setListDelimiter((char)0);
 			cfg.load(specifier);
 			for (String name : propertyNames) {
-				SubnodeConfiguration subConfig = cfg.configurationAt(name+"(0)");
-				bo.set(name, loadValue(subConfig));
+				try {
+					SubnodeConfiguration subConfig = cfg.configurationAt(name+"(0)");
+					bo.set(name, loadValue(subConfig));
+				} catch (IllegalArgumentException e) {
+					bo.set(name,  null);
+				}
 			}
 		} catch (Exception e) {
 			throw new IOException("Cannot load XML file", e);
