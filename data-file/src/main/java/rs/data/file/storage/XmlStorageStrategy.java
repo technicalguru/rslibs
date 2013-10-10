@@ -102,12 +102,11 @@ public class XmlStorageStrategy extends AbstractStorageStrategy<File> {
 	 * @throws IOException when the object cannot be loaded
 	 * @throws ReflectiveOperationException when the reflection operations fail
 	 */
-	@SuppressWarnings("unchecked")
 	protected IGeneralBO<?> loadBusinessObject(Class<?> clazz, HierarchicalConfiguration cfg) throws IOException, ReflectiveOperationException {
 		Serializable id = (Serializable)loadValue(cfg.configurationAt("refid(0)"));
 		IDaoFactory factory = getDaoFactory();
 		if (factory != null) {
-			return factory.getDaoFor((Class<? extends IGeneralBO<?>>)clazz).findById(id);
+			return factory.getDaoFor((Class<? extends IGeneralBO<? extends Serializable>>)clazz).findById(id);
 		}
 		return null;
 	}
