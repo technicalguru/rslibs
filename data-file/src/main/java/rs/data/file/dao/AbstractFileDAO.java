@@ -359,7 +359,6 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	 * @param objects objects to be deleted
 	 * @return number of objects deleted
 	 */
-	@SuppressWarnings("unchecked")
 	protected int delete(List<C> objects) {
 		int cnt = 0;
 		for (C object : objects) {

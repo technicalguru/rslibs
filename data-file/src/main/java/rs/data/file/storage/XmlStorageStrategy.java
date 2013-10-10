@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,7 +42,8 @@ public class XmlStorageStrategy extends AbstractStorageStrategy<File> {
 	@Override
 	public <T extends IGeneralBO<?>> void load(T bo, File specifier) throws IOException {
 		// Find all relevant property names
-		Collection<String> propertyNames = getPropertyNames(bo);
+		Collection<String> propertyNames = new ArrayList<String>(getPropertyNames(bo));
+		propertyNames.add("id");
 		try {
 			XMLConfiguration cfg = new XMLConfiguration();
 			cfg.setListDelimiter((char)0);
@@ -102,6 +104,7 @@ public class XmlStorageStrategy extends AbstractStorageStrategy<File> {
 	 * @throws IOException when the object cannot be loaded
 	 * @throws ReflectiveOperationException when the reflection operations fail
 	 */
+	@SuppressWarnings("unchecked")
 	protected IGeneralBO<?> loadBusinessObject(Class<?> clazz, HierarchicalConfiguration cfg) throws IOException, ReflectiveOperationException {
 		Serializable id = (Serializable)loadValue(cfg.configurationAt("refid(0)"));
 		IDaoFactory factory = getDaoFactory();
@@ -181,7 +184,8 @@ public class XmlStorageStrategy extends AbstractStorageStrategy<File> {
 	@Override
 	public <T extends IGeneralBO<?>> void save(T bo, File specifier) throws IOException {
 		// Find all relevant property names
-		Collection<String> propertyNames = getPropertyNames(bo);
+		Collection<String> propertyNames = new ArrayList<String>(getPropertyNames(bo));
+		propertyNames.add("id");
 		FileWriter out = null;
 		try {
 			out = new FileWriter(specifier);

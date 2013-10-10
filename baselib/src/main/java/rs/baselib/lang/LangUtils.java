@@ -520,5 +520,16 @@ public class LangUtils {
 		return rm.isAnnotationPresent(NoCopy.class);
 	}
 
-
+	/**
+	 * A wrapper for {@link Thread#sleep(long)} to avoid try/catch blocks.
+	 * The method throws a {@link RuntimeException} in case of exceptions.
+	 * @param milliseconds milliseconds to sleep
+	 */
+	public static void sleep(long milliseconds) {
+		try {
+			Thread.sleep(milliseconds);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 }
