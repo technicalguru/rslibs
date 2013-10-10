@@ -229,11 +229,11 @@ public interface IGeneralDAO<K extends Serializable, B extends IGeneralBO<K>> {
 	public void deleteObject(Object object);
 	
 	/**
-	 * Deletes the objects.
-	 * This method assumes that the objects existed before.
-	 * @param objects objects to be deleted.
+	 * Deletes the object.
+	 * This method assumes that the object existed before.
+	 * @param object object to be deleted.
 	 */
-	public void delete(@SuppressWarnings("unchecked") B... objects);
+	public void delete(B object);
 	
 	/**
 	 * Deletes the objects.
@@ -243,11 +243,11 @@ public interface IGeneralDAO<K extends Serializable, B extends IGeneralBO<K>> {
 	public void delete(Collection<B> objects);
 	
 	/**
-	 * Deletes the objects.
+	 * Deletes the object of given key.
 	 * This method assumes that the object existed before.
-	 * @param ids id of objects to be deleted.
+	 * @param id id of object to be deleted.
 	 */
-	public void deleteByKeys(@SuppressWarnings("unchecked") K... ids);
+	public void deleteByKey(K id);
 	
 	/**
 	 * Deletes the objects.

@@ -5,7 +5,6 @@ package rs.data.impl.dao;
 
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -435,38 +434,25 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void delete(@SuppressWarnings("unchecked") C... objects) {
-		for (C c : objects) {
-			if (c != null) {
+	public void delete(C object) {
+			if (object != null) {
 
-				beforeDelete(c);
-				_delete(c);
-				afterDelete(c);
+				beforeDelete(object);
+				_delete(object);
+				afterDelete(object);
 
-				fireObjectDeleted(c);
+				fireObjectDeleted(object);
 			}
-		}
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void delete(Collection<C> objects) {
-		delete(objects.toArray((C[])Array.newInstance(getBoInterfaceClass(), objects.size())));
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void deleteByKeys(@SuppressWarnings("unchecked") K... ids) {
-		List<K> l = new ArrayList<K>();
-		for (K id : ids) {
-			l.add(id);
+		for (C object : objects) {
+			delete(object);
 		}
-		deleteByKeys(l);
 	}
 
 	/**
@@ -475,6 +461,14 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 	@Override
 	public void deleteByKeys(Collection<K> ids) {
 		delete(findBy(ids));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void deleteByKey(K id) {
+		delete(findBy(id));
 	}
 
 	/**
