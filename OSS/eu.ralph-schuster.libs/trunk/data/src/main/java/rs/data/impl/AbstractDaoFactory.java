@@ -336,8 +336,8 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <K extends Serializable, B extends IGeneralBO<K>> IGeneralDAO<K, B> getDaoFor(B o) {
-		return getDaoFor(o.getClass());
+	public <B extends IGeneralBO<?>> IGeneralDAO<?, B> getDaoFor(B o) {
+		return (IGeneralDAO<?, B>) getDaoFor(o.getClass());
 	}
 
 	/**
@@ -345,11 +345,11 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <K extends Serializable, B extends IGeneralBO<K>> IGeneralDAO<K, B> getDaoFor(Class<B> clazz) {
+	public <B extends IGeneralBO<?>> IGeneralDAO<?,B> getDaoFor(Class<B> clazz) {
 		for (IGeneralDAO<? extends Serializable,? extends IGeneralBO<? extends Serializable>> dao : daos.values()) {
 			if (dao instanceof AbstractBasicDAO) {
 				if (((AbstractBasicDAO<?,?>)dao).getBoInterfaceClass().equals(clazz)) {
-					return (IGeneralDAO<K, B>) dao;
+					return (IGeneralDAO<?, B>) dao;
 				}
 			}
 		}
