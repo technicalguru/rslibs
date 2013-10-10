@@ -113,7 +113,6 @@ public class FileDaoTest {
 		long beforeChange = customer.getChangeDate().getTimeInMillis();
 		customer.setName("John Doe2");
 		customerDao.save(customer);
-		LangUtils.sleep(1000L);
 		long afterChange = customer.getChangeDate().getTimeInMillis();
 		assertTrue("changeDate was not modified", beforeChange < afterChange);
 		customer = customerDao.findBy(id);
