@@ -227,9 +227,6 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 			// Configure it
 			if (rc instanceof IConfigurable) ConfigurationUtils.configure((IConfigurable)rc, config);
 
-			// Add the factory as a listener
-			rc.addDaoListener(daoListener);
-
 			// Add the DAO to our list
 			registerDao(rc);
 		} catch (Exception e) {
@@ -293,6 +290,11 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 	 */
 	@Override
 	public void registerDao(IGeneralDAO<? extends Serializable,? extends IGeneralBO<? extends Serializable>> dao) {
+		dao.setFactory(this); // Just in case
+		
+		// Add the factory as a listener
+		dao.addDaoListener(daoListener);
+
 		this.daos.put(dao.getClass().getName(), dao);
 	}
 

@@ -59,7 +59,7 @@ public abstract class AbstractMapBO<K extends Serializable> extends AbstractBO<K
 	 * @param id id of object
 	 */
 	public void setId(K id) {
-		setData("id", id);
+		getTransferObject().setId(id);
 	}
 	
 	/**
