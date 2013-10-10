@@ -12,6 +12,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.util.List;
 
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -49,14 +50,14 @@ public class FileDaoTest {
 	@Before
 	public void setup() {
 		customerDao = (CustomerDAOFileImpl)factory.getCustomerDao();
-	}
-	
-	@Test
-	public void test00_deleteAll() {
-		// To make all tests repeatable
 		customerDao.deleteAll();
 		LangUtils.sleep(500L);
-		assertEquals("Could not delete all objects", 0, customerDao.getObjectCount());
+	}
+	
+	@After
+	public void cleanup() {
+		customerDao.deleteAll();
+		LangUtils.sleep(500L);
 	}
 	
 	@Test
@@ -73,12 +74,7 @@ public class FileDaoTest {
 	@Test
 	public void test03_create() {
 		Customer customer = customerDao.newInstance();
-		customer.setName("John Doe");
-		customer.addPhone("private", "+49-69-1234567890");
-		customer.addPhone("business", "+49-69-9876543210");
-		customer.setInvoiceAddress(new Address("42, 2nd Street", "Frankfurt/Main", "60549", Country.GERMANY));
-		customer.addDeliveryAddress(new Address("42, 2nd Street", "Frankfurt/Main", "60549", Country.GERMANY));
-		customer.addDeliveryAddress(new Address("1, 4th Street", "Darmstadt", "60549", Country.GERMANY));
+		setup(customer);
 		customerDao.create(customer);
 		LangUtils.sleep(500L);
 		
@@ -87,39 +83,50 @@ public class FileDaoTest {
 		assertTrue("Customer was not saved", f.exists());
 	}
 	
+	protected void setup(Customer customer) {
+		customer.setName("John Doe");
+		customer.addPhone("private", "+49-69-1234567890");
+		customer.addPhone("business", "+49-69-9876543210");
+		customer.setInvoiceAddress(new Address("42, 2nd Street", "Frankfurt/Main", "60549", Country.GERMANY));
+		customer.addDeliveryAddress(new Address("42, 2nd Street", "Frankfurt/Main", "60549", Country.GERMANY));
+		customer.addDeliveryAddress(new Address("1, 4th Street", "Darmstadt", "60549", Country.GERMANY));
+	}
+	
 	@Test
 	public void test04_findBy() {
-		Customer customer = customerDao.findBy(2L);
-		assertNotNull("Customer cannot be found", customer);
+		Customer customer = createCustomer();
+		Customer customer2 = customerDao.findBy(customer.getId()); 
+		assertNotNull("Customer cannot be found", customer2);
 	}
 	
 	@Test
 	public void test05_findAll() {
+		createCustomer();
 		List<Customer> l = customerDao.findAll();
 		assertEquals("Cannot find all customers correctly", 1, l.size());
 	}
 	
 	@Test
 	public void test06_save() {
-		Customer customer = customerDao.findBy(2L);
-		File f = customerDao.getFilenameStrategy().getFile(customer.getId());
+		Customer customer = createCustomer();
+		Long id = customer.getId();
+		File f = customerDao.getFilenameStrategy().getFile(id);
 		long beforeFile = f.lastModified();
 		long beforeChange = customer.getChangeDate().getTimeInMillis();
 		customer.setName("John Doe2");
-		LangUtils.sleep(500L);
 		customerDao.save(customer);
-		LangUtils.sleep(500L);
+		LangUtils.sleep(1000L);
 		long afterFile = f.lastModified();
 		long afterChange = customer.getChangeDate().getTimeInMillis();
 		assertTrue("File was not modified", beforeFile < afterFile);
 		assertTrue("changeDate was not modified", beforeChange < afterChange);
-		customer = customerDao.findBy(2L);
+		customer = customerDao.findBy(id);
 		assertEquals("Name was not saved correctly", "John Doe2", customer.getName());
 	}
 	
 	@Test
 	public void test07_delete() {
-		Customer customer = customerDao.findBy(2L);
+		Customer customer = createCustomer();
 		File f = customerDao.getFilenameStrategy().getFile(customer.getId());
 		customerDao.delete(customer);
 		LangUtils.sleep(500L);
@@ -128,5 +135,13 @@ public class FileDaoTest {
 		assertNull("Customer still exists in DAO", customer);
 	}
 	
+	/** Helper method */
+	protected Customer createCustomer() {
+		Customer customer = customerDao.newInstance();
+		setup(customer);
+		customerDao.create(customer);
+		LangUtils.sleep(500);
+		return customer;
+	}
 	
 }
