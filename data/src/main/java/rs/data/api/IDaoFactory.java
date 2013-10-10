@@ -95,14 +95,14 @@ public interface IDaoFactory {
 	 * @param o the object to look for
 	 * @return DAO or null if not found
 	 */
-	public <K extends Serializable, B extends IGeneralBO<K>> IGeneralDAO<K,B> getDaoFor(B o);
+	public <B extends IGeneralBO<?>> IGeneralDAO<?,B> getDaoFor(B o);
 	
 	/**
 	 * Returns the correct DAO for the given business object class.
 	 * @param o the object to look for
 	 * @return DAO or null if not found
 	 */
-	public <K extends Serializable, B extends IGeneralBO<K>> IGeneralDAO<K,B> getDaoFor(Class<B> clazz);
+	public <B extends IGeneralBO<?>> IGeneralDAO<?,B> getDaoFor(Class<B> clazz);
 	
 	/**
 	 * Registers a DAO with this factory.
