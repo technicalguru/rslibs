@@ -90,6 +90,16 @@ public abstract class AbstractHibernateBO<K extends Serializable, T extends Gene
 		return (T)getSession().get(getTransferClass(), getId());
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public K getId() {
+		// Do not initialize transfer object
+		return super.getTransferObject().getId();
+	}
+
 	/**
 	 * Initializes the DTO.
 	 */
