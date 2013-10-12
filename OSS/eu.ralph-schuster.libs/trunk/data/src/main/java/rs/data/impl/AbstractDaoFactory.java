@@ -545,6 +545,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 		 */
 		public void setDebug(boolean debug) {
 			this.debug = debug;
+			if (debug) log.info("Enabled transaction demarcation log");
 		}
 
 		/**
@@ -561,6 +562,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 		 */
 		public void setTrace(boolean trace) {
 			this.trace = trace;
+			if (isDebug() && trace) log.info("Enabled stacktrace dump for transaction demarcation");
 		}
 
 		/**
