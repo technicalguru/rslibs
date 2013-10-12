@@ -47,6 +47,6 @@ public class CommonUtilsTest {
 	public void testGetStackTrace() {
 		List<String> lines = CommonUtils.getStackTrace(0);
 		assertTrue("No stacktrace returned", lines.size() > 0);
-		assertTrue("Trace does not start with correct method", lines.get(0).startsWith("at "+getClass().getName()+".testGetStackTrace"));
+		assertTrue("Trace does not start with correct method", lines.get(0).trim().startsWith("at "+getClass().getName()+".testGetStackTrace"));
 	}
 }

@@ -397,7 +397,7 @@ public class CommonUtils {
 				continue;
 			}
 			StringBuffer s = new StringBuffer();
-			s.append("at ");
+			s.append("      at ");
 			s.append(line.getClassName());
 			s.append(".");
 			s.append(line.getMethodName());
