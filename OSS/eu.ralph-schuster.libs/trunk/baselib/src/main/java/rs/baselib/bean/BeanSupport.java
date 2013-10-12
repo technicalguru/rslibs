@@ -131,7 +131,7 @@ public class BeanSupport {
 	 * Collects the {@link NoCopy} properties (self-recursive).
 	 * @param rc collection where properties need to be collected
 	 * @param clazz class to be inspected
-	 * @see LangUtils#isForbiddenCopy(PropertyDescriptor)
+	 * @see LangUtils#isNoCopy(PropertyDescriptor)
 	 */
 	protected void collectForbiddenCopies(Set<String> rc, Class<?> clazz) {
 		PropertyDescriptor arr[] = PropertyUtils.getPropertyDescriptors(clazz);
