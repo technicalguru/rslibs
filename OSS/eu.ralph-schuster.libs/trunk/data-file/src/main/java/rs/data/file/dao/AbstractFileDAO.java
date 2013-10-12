@@ -452,8 +452,8 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 		/**
 		 * Constructor.
 		 * @param files files to iterate over
-		 * @param firstResults first index to be returned
-		 * @param maxResult max number of results
+		 * @param firstResult first index to be returned
+		 * @param maxResults max number of results
 		 */
 		public FileDaoIterator(Collection<File> files, int firstResult, int maxResults) {
 			this.files = files.iterator();

@@ -99,7 +99,7 @@ public interface IDaoFactory {
 	
 	/**
 	 * Returns the correct DAO for the given business object class.
-	 * @param o the object to look for
+	 * @param clazz the BO clazz to look for
 	 * @return DAO or null if not found
 	 */
 	public <B extends IGeneralBO<?>> IGeneralDAO<?,B> getDaoFor(Class<B> clazz);

@@ -4,8 +4,9 @@
 package rs.baselib.bean;
 
 import java.beans.PropertyChangeEvent;
-import java.beans.Transient;
 import java.util.Collection;
+
+import javax.persistence.Transient;
 
 import rs.baselib.util.IDirtyable;
 

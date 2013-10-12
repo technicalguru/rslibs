@@ -7,12 +7,13 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.beans.PropertyDescriptor;
-import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.persistence.Transient;
 
 import org.apache.commons.beanutils.PropertyUtils;
 
@@ -387,15 +388,13 @@ public abstract class AbstractBean implements IBean {
 	/**
 	 * Returns true when {@link #copyTo(Object)} is allowed to copy the given property.
 	 * <p>
-	 * This method relies on the forbidden property list managed by {@link BeanSupport}.
-	 * Descendants could easily add properties that shall not be copied by calling
-	 * {@link BeanSupport#addForbiddenCopy(Class, String)}.
+	 * This method relies on the {@link NoCopy} and {@link Transient} annotations on read methods.
 	 * </p>
 	 * @return <code>true</code> when copy is allowed
 	 * @see BeanSupport#isCopyForbidden(Class, String)
 	 */
 	protected boolean isCopyAllowed(PropertyDescriptor descriptor) {
-		return !BeanSupport.INSTANCE.isTransient(getClass(), descriptor.getName());
+		return !BeanSupport.INSTANCE.isCopyForbidden(getClass(), descriptor.getName());
 	}
 
 	/**

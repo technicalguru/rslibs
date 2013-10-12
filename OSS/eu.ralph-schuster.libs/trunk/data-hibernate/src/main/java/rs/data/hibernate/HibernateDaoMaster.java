@@ -243,6 +243,7 @@ public class HibernateDaoMaster extends AbstractDaoMaster {
 	 * @param config - Hibernate configuration
 	 * @return session factory
 	 */
+	@SuppressWarnings("deprecation")
 	public static SessionFactory createSessionFactory(org.hibernate.cfg.Configuration config) {
 		return config.buildSessionFactory();
 	}

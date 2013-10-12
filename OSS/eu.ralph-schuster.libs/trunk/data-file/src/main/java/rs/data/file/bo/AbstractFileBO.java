@@ -3,9 +3,10 @@
  */
 package rs.data.file.bo;
 
-import java.beans.Transient;
 import java.io.File;
 import java.io.Serializable;
+
+import javax.persistence.Transient;
 
 import rs.data.impl.bo.AbstractMapBO;
 import rs.data.impl.dto.MapDTO;

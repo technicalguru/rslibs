@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -66,15 +67,13 @@ public class XmlStorageStrategy extends AbstractStorageStrategy<File> {
 	 * <p>Descendants shall not override this but several specific helper methods.</p>
 	 * @param cfg the tag to be loaded
 	 * @return th eobject represented by this tag
-	 * @throws IOException when the value cannot be loaded
-	 * @throws ReflectiveOperationException when reflection operation fails
 	 * @see #loadBusinessObject(Class, HierarchicalConfiguration)
 	 * @see #loadCollection(Class, HierarchicalConfiguration)
 	 * @see #loadMap(Class, HierarchicalConfiguration)
 	 * @see #loadBean(Class, HierarchicalConfiguration)
 	 * @see #loadSerialized(Class, HierarchicalConfiguration)
 	 */
-	protected Object loadValue(HierarchicalConfiguration cfg) throws IOException, ReflectiveOperationException {
+	protected Object loadValue(HierarchicalConfiguration cfg) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		String className = cfg.getString("[@class]");
 		if ((className != null) && !className.isEmpty()) {
 			Class<?> clazz = Class.forName(className);
@@ -105,11 +104,9 @@ public class XmlStorageStrategy extends AbstractStorageStrategy<File> {
 	 * @param clazz class to be loaded
 	 * @param cfg configuration of class
 	 * @return the loaded object
-	 * @throws IOException when the object cannot be loaded
-	 * @throws ReflectiveOperationException when the reflection operations fail
 	 */
 	@SuppressWarnings("unchecked")
-	protected IGeneralBO<?> loadBusinessObject(Class<?> clazz, HierarchicalConfiguration cfg) throws IOException, ReflectiveOperationException {
+	protected IGeneralBO<?> loadBusinessObject(Class<?> clazz, HierarchicalConfiguration cfg) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		Serializable id = (Serializable)loadValue(cfg.configurationAt("refid(0)"));
 		IDaoFactory factory = getDaoFactory();
 		if (factory != null) {
@@ -123,11 +120,9 @@ public class XmlStorageStrategy extends AbstractStorageStrategy<File> {
 	 * @param clazz class to be loaded
 	 * @param cfg configuration of class
 	 * @return the loaded collection
-	 * @throws IOException when the object cannot be loaded
-	 * @throws ReflectiveOperationException when the reflection operations fail
 	 */
 	@SuppressWarnings("unchecked")
-	protected Collection<?> loadCollection(Class<?> clazz, HierarchicalConfiguration cfg) throws IOException, ReflectiveOperationException {
+	protected Collection<?> loadCollection(Class<?> clazz, HierarchicalConfiguration cfg) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		Collection<Object> collection = (Collection<Object>)clazz.newInstance();
 		for (HierarchicalConfiguration subConfig : cfg.configurationsAt("item")) {
 			collection.add(loadValue(subConfig));
@@ -140,10 +135,8 @@ public class XmlStorageStrategy extends AbstractStorageStrategy<File> {
 	 * @param clazz class to be loaded
 	 * @param cfg configuration of class
 	 * @return the loaded map
-	 * @throws IOException when the object cannot be loaded
-	 * @throws ReflectiveOperationException when the reflection operations fail
 	 */
-	protected Map<?,?> loadMap(Class<?> clazz, HierarchicalConfiguration cfg) throws IOException, ReflectiveOperationException {
+	protected Map<?,?> loadMap(Class<?> clazz, HierarchicalConfiguration cfg) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		Map<Object,Object> map = new HashMap<Object, Object>();
 		for (HierarchicalConfiguration subConfig : cfg.configurationsAt("item")) {
 			Object key = loadValue(subConfig.configurationAt("key(0)"));
@@ -158,10 +151,8 @@ public class XmlStorageStrategy extends AbstractStorageStrategy<File> {
 	 * @param clazz class to be loaded
 	 * @param cfg configuration of class
 	 * @return the loaded bean
-	 * @throws IOException when the object cannot be loaded
-	 * @throws ReflectiveOperationException when the reflection operations fail
 	 */
-	protected IBean loadBean(Class<?> clazz, HierarchicalConfiguration cfg) throws IOException, ReflectiveOperationException {
+	protected IBean loadBean(Class<?> clazz, HierarchicalConfiguration cfg) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		IBean bean = (IBean)clazz.newInstance();
 		for (String name : getBeanPropertyNames(clazz)) {
 			bean.set(name, loadValue(cfg.configurationAt(name+"(0)")));
@@ -174,10 +165,8 @@ public class XmlStorageStrategy extends AbstractStorageStrategy<File> {
 	 * @param clazz class to be loaded
 	 * @param cfg configuration of class
 	 * @return the loaded object
-	 * @throws IOException when the object cannot be loaded
-	 * @throws ReflectiveOperationException when the reflection operations fail
 	 */
-	protected Object loadSerialized(Class<?> clazz, HierarchicalConfiguration cfg) throws IOException, ReflectiveOperationException {
+	protected Object loadSerialized(Class<?> clazz, HierarchicalConfiguration cfg) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		String valueString = cfg.getString(""); // ?
 		return unserialize(clazz.getName(), valueString);
 	}
@@ -216,10 +205,8 @@ public class XmlStorageStrategy extends AbstractStorageStrategy<File> {
 	 * @param indent the indentation to be used
 	 * @param value the value to be written
 	 * @param tagName the tag name to be used
-	 * @throws IOException in case the value cannot be written
-	 * @throws ReflectiveOperationException
 	 */
-	protected void writeValue(Writer out, int indent, Object value, String tagName) throws IOException, ReflectiveOperationException {
+	protected void writeValue(Writer out, int indent, Object value, String tagName) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		String indentS = "";
 		for (int i=0; i<indent; i++) indentS += "   ";
 		

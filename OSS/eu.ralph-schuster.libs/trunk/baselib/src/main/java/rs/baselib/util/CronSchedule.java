@@ -189,8 +189,8 @@ public class CronSchedule {
 	 * @param timestamp - time in ms since Epoch time
 	 * @return true when schedule matches
 	 */
-	public boolean isHour(long timeStamp) {
-		return isHour(getCalendar(timeStamp));
+	public boolean isHour(long timestamp) {
+		return isHour(getCalendar(timestamp));
 	}
  
 	/**
@@ -209,8 +209,8 @@ public class CronSchedule {
 	 * @param timestamp - time in ms since Epoch time
 	 * @return true when schedule matches
 	 */
-	public boolean isDay(long timeStamp) {
-		return isDay(getCalendar(timeStamp));
+	public boolean isDay(long timestamp) {
+		return isDay(getCalendar(timestamp));
 	}
  
 	/**
