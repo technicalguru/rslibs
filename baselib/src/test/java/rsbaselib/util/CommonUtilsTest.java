@@ -1,6 +1,9 @@
 package rsbaselib.util;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.util.List;
 
 import org.junit.Test;
 
@@ -37,4 +40,13 @@ public class CommonUtilsTest {
 		
 	}
 
+	/**
+	 * Tests the stacktrace dump.
+	 */
+	@Test
+	public void testGetStackTrace() {
+		List<String> lines = CommonUtils.getStackTrace(0);
+		assertTrue("No stacktrace returned", lines.size() > 0);
+		assertTrue("Trace does not start with correct method", lines.get(0).startsWith("at "+getClass().getName()+".testGetStackTrace"));
+	}
 }

@@ -205,6 +205,7 @@ public class LangUtils {
 
 	/**
 	 * Converts the object to a boolean.
+	 * Values recognized a s<code>true</code> are 1, true, on, yes, y (case-insensitive).
 	 * @param o object to be converted
 	 * @return false if object is null, boolean value of object otherwise
 	 */

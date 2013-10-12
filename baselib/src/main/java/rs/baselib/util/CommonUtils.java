@@ -3,6 +3,7 @@
  */
 package rs.baselib.util;
 
+import java.io.PrintStream;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -12,6 +13,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import org.slf4j.Logger;
 
 
 
@@ -376,5 +379,103 @@ public class CommonUtils {
 	 */
 	public static <T> Iterable<T> iterable(Iterator<T> iterator) {
 		return new IterableImpl<T>(iterator);
+	}
+	
+	/**
+	 * Returns the current stacktrace.
+	 * @param ignoreLines the number of lines to be ignored at the top of the trace
+	 * @return the stacktrace
+	 */
+	public static List<String> getStackTrace(int ignoreLines) {
+		List<String> rc = new ArrayList<String>();
+		ignoreLines++;
+		Exception e = new RuntimeException();
+		StackTraceElement lines[] = e.getStackTrace();
+		for (StackTraceElement line : lines) {
+			if (ignoreLines > 0) {
+				ignoreLines--;
+				continue;
+			}
+			StringBuffer s = new StringBuffer();
+			s.append("at ");
+			s.append(line.getClassName());
+			s.append(".");
+			s.append(line.getMethodName());
+			s.append("(");
+			if (line.getFileName() != null) {
+				s.append(line.getFileName());
+				s.append(":");
+				s.append(line.getLineNumber());
+			} else {
+				s.append("unknown source");
+			}
+			s.append(")");
+			rc.add(s.toString());
+		}
+		return rc;
+	}
+	
+	/**
+	 * Dumps the stacktrace so stdout.
+	 */
+	public static void stdoutStackTrace() {
+		printStackTrace(System.out, 1);
+	}
+	
+	/**
+	 * Dumps the stacktrace so stderr.
+	 */
+	public static void stderrStackTrace() {
+		printStackTrace(System.err, 1);
+	}
+	
+	/**
+	 * Dumps the stacktrace into the print stream.
+	 * @param out the stream to be used
+	 */
+	public static void printStackTrace(PrintStream out, int ignoreLines) {
+		for (String s : getStackTrace(ignoreLines+1)) {
+			out.println(s);
+		}
+	}
+	
+	/**
+	 * Dumps the stacktrace in ERROR mode.
+	 * @param log the logger to be used
+	 */
+	public static void errorStackTrace(Logger log) {
+		for (String s : getStackTrace(2)) {
+			log.debug(s);
+		}
+	}
+
+	/**
+	 * Dumps the stacktrace in INFO mode.
+	 * @param log the logger to be used
+	 */
+	public static void infoStackTrace(Logger log) {
+		for (String s : getStackTrace(2)) {
+			log.info(s);
+		}
+	}
+
+	/**
+	 * Dumps the stacktrace in DEBUG mode.
+	 * @param log the logger to be used
+	 */
+	public static void debugStackTrace(Logger log) {
+		for (String s : getStackTrace(2)) {
+			log.debug(s);
+		}
+	}
+	
+	/**
+	 * Dumps the stacktrace in TRACE mode.
+	 * @param log the logger to be used
+	 */
+	public static void traceStackTrace(Logger log) {
+		for (String s : getStackTrace(2)) {
+			log.trace(s);
+		}
 	}
 }
