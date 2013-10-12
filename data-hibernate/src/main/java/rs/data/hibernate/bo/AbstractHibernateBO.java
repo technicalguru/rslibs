@@ -82,12 +82,15 @@ public abstract class AbstractHibernateBO<K extends Serializable, T extends Gene
 			LazyInitializer initializer = ((HibernateProxy)t).getHibernateLazyInitializer();
 			if (initializer != null) {
 				if (!initializer.getSession().isOpen()) {
-					return (T)getSession().get(getTransferClass(), getId());
+					t = (T)getSession().get(getTransferClass(), getId());
+					setTransferObject(t);
 				}
 			}
 			return t;
 		}
-		return (T)getSession().get(getTransferClass(), getId());
+		t = (T)getSession().get(getTransferClass(), getId());
+		setTransferObject(t);
+		return t;
 	}
 	
 	
