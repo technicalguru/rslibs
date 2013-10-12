@@ -512,11 +512,49 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 	}
 
 	/**
+	 * Returns whether debugging of transaction demarcations.
+	 * @return <code>true</code> when debugging shall be enabled (via SLF4J)
+	 */
+	public boolean isDebugTransaction() {
+		TransactionContext context = txContext.get();
+		if (context != null) return context.isDebug();
+		return false;
+	}
+	
+	/**
+	 * Sets debugging of transaction demarcations.
+	 * @param debug <code>true</code> when debugging shall be enabled (via SLF4J)
+	 */
+	public void setDebugTransactions(boolean debug) {
+		TransactionContext context = txContext.get();
+		if (context != null) context.setDebug(debug);
+	}
+	
+	/**
+	 * Returns whether stacktracing is enabled with {@link #isDebugTransactions() transaction demarcation debugging} option.
+	 * @return <code>true</code> when stacktrace shall be enabled (via SLF4J)
+	 */
+	public boolean isTraceTransaction() {
+		TransactionContext context = txContext.get();
+		if (context != null) return context.isTrace();
+		return false;
+	}
+	
+	/**
+	 * Sets whether stacktracing is enabled with {@link #isDebugTransactions() transaction demarcation debugging} option.
+	 * @param trace <code>true</code> when stacktrace shall be enabled (via SLF4J)
+	 */
+	public void setTraceTransactions(boolean trace) {
+		TransactionContext context = txContext.get();
+		if (context != null) context.setTrace(trace);
+	}
+	
+	/**
 	 * Keeps track of transaction creation.
 	 * @author ralph
 	 *
 	 */
-	protected class TransactionContext {
+	public class TransactionContext {
 
 		private int beginCount;
 		private boolean modelChanged;
