@@ -606,6 +606,10 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 					fireDaoFactoryEvent(new DaoFactoryEvent(AbstractDaoFactory.this, Type.TRANSACTION_STARTED));
 				} else {
 					beginCount++;
+					if (debugTransactions) {
+						log.debug("Transaction usage increased to "+beginCount+": TX-"+Thread.currentThread().getId());
+						if (traceTransactions) CommonUtils.debugStackTrace(log);
+					}
 				}
 			} catch (Exception e) {
 				throw new RuntimeException("Cannot start TX:", e);
@@ -647,6 +651,12 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 						beginCount++; // Has been decreased in rollback call
 					}
 
+				} else {
+					if (debugTransactions) {
+						log.debug("Transaction usage decreased to "+(beginCount-1)+": TX-"+Thread.currentThread().getId());
+						if (traceTransactions) CommonUtils.debugStackTrace(log);
+					}
+					
 				}
 				beginCount--;
 			} catch (Exception e) {
