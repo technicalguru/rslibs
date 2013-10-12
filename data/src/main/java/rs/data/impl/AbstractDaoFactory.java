@@ -28,6 +28,8 @@ import org.slf4j.LoggerFactory;
 import rs.baselib.configuration.ConfigurationUtils;
 import rs.baselib.configuration.IConfigurable;
 import rs.baselib.io.FileFinder;
+import rs.baselib.lang.LangUtils;
+import rs.baselib.util.CommonUtils;
 import rs.data.api.IDaoFactory;
 import rs.data.api.IDaoMaster;
 import rs.data.api.bo.IGeneralBO;
@@ -518,10 +520,47 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 
 		private int beginCount;
 		private boolean modelChanged;
-
+		private boolean debug = false;
+		private boolean trace = false;
+		private Logger log = LoggerFactory.getLogger(TransactionContext.class);
+		
 		public TransactionContext() {
 			this.beginCount = 0;
 			this.modelChanged = false;
+			setDebug(LangUtils.getBoolean(System.getProperty("transaction.debug")));
+			setTrace(LangUtils.getBoolean(System.getProperty("transaction.trace")));
+		}
+
+		/**
+		 * Returns the debug option.
+		 * @return <code>true</code> when debug is enabled (via SLF4J)
+		 */
+		public boolean isDebug() {
+			return debug;
+		}
+
+		/**
+		 * Sets the debug.
+		 * @param debug the debug to set, <code>true</code> when debug shall be enabled (via SLF4J)
+		 */
+		public void setDebug(boolean debug) {
+			this.debug = debug;
+		}
+
+		/**
+		 * Returns whether stacktracing is enabled with {@link #isDebug() debug} option.
+		 * @return <code>true</code> when stacktracing is enabled with {@link #isDebug() debug} option.
+		 */
+		public boolean isTrace() {
+			return trace;
+		}
+
+		/**
+		 * Sets whether stacktracing is enabled with {@link #isDebug() debug} option.
+		 * @param trace the trace to set, <code>true</code> when stacktrace shall be enabled (via SLF4J)
+		 */
+		public void setTrace(boolean trace) {
+			this.trace = trace;
 		}
 
 		/**
@@ -556,6 +595,10 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 					getTransactionManager().begin();
 					beginCount = 1;
 					modelChanged = false;
+					if (debug) {
+						log.debug("Transaction started: "+Thread.currentThread().getId()+" ("+seconds+"sec timeout");
+						if (trace) CommonUtils.debugStackTrace(log);
+					}
 					fireDaoFactoryEvent(new DaoFactoryEvent(AbstractDaoFactory.this, Type.TRANSACTION_STARTED));
 				} else {
 					beginCount++;
@@ -584,9 +627,19 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 						if (isModelChanged()) fireDaoFactoryEvent(new DaoFactoryEvent(AbstractDaoFactory.this, Type.MODEL_CHANGED));
 						fireDaoFactoryEvent(new DaoFactoryEvent(AbstractDaoFactory.this, Type.TRANSACTION_COMMITTING));
 						getTransaction().commit();
+						if (debug) {
+							log.debug("Transaction committed: "+Thread.currentThread().getId());
+							if (trace) CommonUtils.debugStackTrace(log);
+						}
 						fireDaoFactoryEvent(new DaoFactoryEvent(AbstractDaoFactory.this, Type.TRANSACTION_COMMITTED));
 					} else {
+						fireDaoFactoryEvent(new DaoFactoryEvent(AbstractDaoFactory.this, Type.TRANSACTION_ROLLING_BACK));
 						rollback();
+						if (debug) {
+							log.debug("Transaction rolled back: "+Thread.currentThread().getId());
+							if (trace) CommonUtils.debugStackTrace(log);
+						}
+						fireDaoFactoryEvent(new DaoFactoryEvent(AbstractDaoFactory.this, Type.TRANSACTION_ROLLED_BACK));
 						beginCount++; // Has been decreased in rollback call
 					}
 
@@ -611,9 +664,17 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 				if (beginCount == 0) {
 					fireDaoFactoryEvent(new DaoFactoryEvent(AbstractDaoFactory.this, Type.TRANSACTION_ROLLING_BACK));
 					getTransaction().rollback();
+					if (debug) {
+						log.debug("Transaction rolled back: "+Thread.currentThread().getId());
+						if (trace) CommonUtils.debugStackTrace(log);
+					}
 					fireDaoFactoryEvent(new DaoFactoryEvent(AbstractDaoFactory.this, Type.TRANSACTION_ROLLED_BACK));
 				} else if (beginCount > 0) {
 					getTransaction().setRollbackOnly();
+					if (debug) {
+						log.debug("Transaction marked as roll-back only: "+Thread.currentThread().getId());
+						if (trace) CommonUtils.debugStackTrace(log);
+					}
 				}
 			} catch (Exception e) {
 				throw new RuntimeException("Cannot rollback transaction: ", e);
