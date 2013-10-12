@@ -48,8 +48,8 @@ public class MapDTO<K extends Serializable> extends GeneralDTO<K> {
 	}
 
 	/**
-	 * Returns the {@link #properties}.
-	 * @return the properties
+	 * Returns the {@link #map}.
+	 * @return the map
 	 */
 	public Map<String, Object> getProperties() {
 		return Collections.unmodifiableMap(map);

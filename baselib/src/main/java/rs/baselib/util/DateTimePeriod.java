@@ -76,7 +76,7 @@ public class DateTimePeriod implements Serializable {
 
 	/**
 	 * Returns the time in ms of this period or -1 if infinite.
-	 * @return
+	 * @return the duration in ms
 	 */
 	public long getDuration() {
 		RsDate from = getFrom();

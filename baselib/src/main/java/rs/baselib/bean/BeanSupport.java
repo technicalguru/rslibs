@@ -97,7 +97,7 @@ public class BeanSupport {
 	
 	/**
 	 * Returns whether the given property is forbidden to be copied.
-	 * The property was either explicitly registered as forbidden or is {@link #isTransient(Object, String)}.
+	 * The property was either marked as {@link NoCopy} or is {@link #isTransient(Object, String)}.
 	 * @param beanClass the bean class
 	 * @param propertyName the name of the property
 	 * @return <code>true</code> when {@link IBean#copyTo(Object)} must not copy this property

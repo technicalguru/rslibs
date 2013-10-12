@@ -5,6 +5,7 @@ package rs.data.file.storage;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.Collections;
@@ -100,7 +101,7 @@ public abstract class AbstractStorageStrategy<S> implements IStorageStrategy<S> 
 	 * @return the object (or null)
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected Object unserialize(String className, String value) throws IOException, ReflectiveOperationException {
+	protected Object unserialize(String className, String value) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		Class<?> clazz = Class.forName(className);
 		if (Number.class.isAssignableFrom(clazz)) {
 			return (Number)clazz.getConstructor(String.class).newInstance(value);

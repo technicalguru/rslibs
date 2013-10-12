@@ -4,7 +4,6 @@
 package rs.baselib.lang;
 
 import java.beans.PropertyDescriptor;
-import java.beans.Transient;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -27,6 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import javax.persistence.Transient;
 
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
@@ -458,7 +459,7 @@ public class LangUtils {
 
 	/**
 	 * Unserializes the given value.
-	 * @param value the serialized string
+	 * @param bytes the bytes of serialized object
 	 * @return the object (or null)
 	 */
 	public static Object unserialize(byte bytes[]) throws ClassNotFoundException, IOException {
