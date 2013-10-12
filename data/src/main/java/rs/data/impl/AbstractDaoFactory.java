@@ -56,6 +56,10 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 	// TX Management	
 	private ThreadLocal<TransactionContext> txContext = new ThreadLocal<TransactionContext>();
 	private Set<IDaoFactoryListener> listeners = new HashSet<IDaoFactoryListener>();
+	private boolean debugTransactions = false;
+	private boolean traceTransactions = false;
+
+	
 	private IDaoListener daoListener = new MyDaoListener();
 	private Map<String, Object> properties = new HashMap<String, Object>();
 	private Map<String, String> params = new HashMap<String, String>();
@@ -69,6 +73,8 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 	 * Constructor.
 	 */
 	public AbstractDaoFactory() {
+		setDebugTransactions(LangUtils.getBoolean(System.getProperty("transaction.debug")));
+		setTraceTransactions(LangUtils.getBoolean(System.getProperty("transaction.trace")));
 	}
 
 	/**
@@ -515,10 +521,8 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 	 * Returns whether debugging of transaction demarcations.
 	 * @return <code>true</code> when debugging shall be enabled (via SLF4J)
 	 */
-	public boolean isDebugTransaction() {
-		TransactionContext context = txContext.get();
-		if (context != null) return context.isDebug();
-		return false;
+	public boolean isDebugTransactions() {
+		return this.debugTransactions;
 	}
 	
 	/**
@@ -526,18 +530,16 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 	 * @param debug <code>true</code> when debugging shall be enabled (via SLF4J)
 	 */
 	public void setDebugTransactions(boolean debug) {
-		TransactionContext context = txContext.get();
-		if (context != null) context.setDebug(debug);
+		this.debugTransactions = debug;
+		if (debugTransactions) log.info("Enabling transaction demarcation log");
 	}
 	
 	/**
 	 * Returns whether stacktracing is enabled with {@link #isDebugTransactions() transaction demarcation debugging} option.
 	 * @return <code>true</code> when stacktrace shall be enabled (via SLF4J)
 	 */
-	public boolean isTraceTransaction() {
-		TransactionContext context = txContext.get();
-		if (context != null) return context.isTrace();
-		return false;
+	public boolean isTraceTransactions() {
+		return this.traceTransactions;
 	}
 	
 	/**
@@ -545,8 +547,8 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 	 * @param trace <code>true</code> when stacktrace shall be enabled (via SLF4J)
 	 */
 	public void setTraceTransactions(boolean trace) {
-		TransactionContext context = txContext.get();
-		if (context != null) context.setTrace(trace);
+		this.traceTransactions = trace;
+		if (debugTransactions && traceTransactions) log.info("Enabling stacktrace for transaction demarcation");
 	}
 	
 	/**
@@ -558,49 +560,11 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 
 		private int beginCount;
 		private boolean modelChanged;
-		private boolean debug = false;
-		private boolean trace = false;
 		private Logger log = LoggerFactory.getLogger(TransactionContext.class);
 		
 		public TransactionContext() {
 			this.beginCount = 0;
 			this.modelChanged = false;
-			setDebug(LangUtils.getBoolean(System.getProperty("transaction.debug")));
-			setTrace(LangUtils.getBoolean(System.getProperty("transaction.trace")));
-		}
-
-		/**
-		 * Returns the debug option.
-		 * @return <code>true</code> when debug is enabled (via SLF4J)
-		 */
-		public boolean isDebug() {
-			return debug;
-		}
-
-		/**
-		 * Sets the debug.
-		 * @param debug the debug to set, <code>true</code> when debug shall be enabled (via SLF4J)
-		 */
-		public void setDebug(boolean debug) {
-			this.debug = debug;
-			if (debug) log.info("Enabled transaction demarcation log");
-		}
-
-		/**
-		 * Returns whether stacktracing is enabled with {@link #isDebug() debug} option.
-		 * @return <code>true</code> when stacktracing is enabled with {@link #isDebug() debug} option.
-		 */
-		public boolean isTrace() {
-			return trace;
-		}
-
-		/**
-		 * Sets whether stacktracing is enabled with {@link #isDebug() debug} option.
-		 * @param trace the trace to set, <code>true</code> when stacktrace shall be enabled (via SLF4J)
-		 */
-		public void setTrace(boolean trace) {
-			this.trace = trace;
-			if (isDebug() && trace) log.info("Enabled stacktrace dump for transaction demarcation");
 		}
 
 		/**
@@ -635,9 +599,9 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 					getTransactionManager().begin();
 					beginCount = 1;
 					modelChanged = false;
-					if (debug) {
-						log.debug("Transaction started: "+Thread.currentThread().getId()+" ("+seconds+"sec timeout");
-						if (trace) CommonUtils.debugStackTrace(log);
+					if (debugTransactions) {
+						log.debug("Transaction started: TX-"+Thread.currentThread().getId()+" ("+seconds+"sec timeout)");
+						if (traceTransactions) CommonUtils.debugStackTrace(log);
 					}
 					fireDaoFactoryEvent(new DaoFactoryEvent(AbstractDaoFactory.this, Type.TRANSACTION_STARTED));
 				} else {
@@ -667,17 +631,17 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 						if (isModelChanged()) fireDaoFactoryEvent(new DaoFactoryEvent(AbstractDaoFactory.this, Type.MODEL_CHANGED));
 						fireDaoFactoryEvent(new DaoFactoryEvent(AbstractDaoFactory.this, Type.TRANSACTION_COMMITTING));
 						getTransaction().commit();
-						if (debug) {
-							log.debug("Transaction committed: "+Thread.currentThread().getId());
-							if (trace) CommonUtils.debugStackTrace(log);
+						if (debugTransactions) {
+							log.debug("Transaction committed: TX-"+Thread.currentThread().getId());
+							if (traceTransactions) CommonUtils.debugStackTrace(log);
 						}
 						fireDaoFactoryEvent(new DaoFactoryEvent(AbstractDaoFactory.this, Type.TRANSACTION_COMMITTED));
 					} else {
 						fireDaoFactoryEvent(new DaoFactoryEvent(AbstractDaoFactory.this, Type.TRANSACTION_ROLLING_BACK));
 						rollback();
-						if (debug) {
-							log.debug("Transaction rolled back: "+Thread.currentThread().getId());
-							if (trace) CommonUtils.debugStackTrace(log);
+						if (debugTransactions) {
+							log.debug("Transaction rolled back: TX-"+Thread.currentThread().getId());
+							if (traceTransactions) CommonUtils.debugStackTrace(log);
 						}
 						fireDaoFactoryEvent(new DaoFactoryEvent(AbstractDaoFactory.this, Type.TRANSACTION_ROLLED_BACK));
 						beginCount++; // Has been decreased in rollback call
@@ -704,16 +668,16 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 				if (beginCount == 0) {
 					fireDaoFactoryEvent(new DaoFactoryEvent(AbstractDaoFactory.this, Type.TRANSACTION_ROLLING_BACK));
 					getTransaction().rollback();
-					if (debug) {
-						log.debug("Transaction rolled back: "+Thread.currentThread().getId());
-						if (trace) CommonUtils.debugStackTrace(log);
+					if (debugTransactions) {
+						log.debug("Transaction rolled back: TX-"+Thread.currentThread().getId());
+						if (traceTransactions) CommonUtils.debugStackTrace(log);
 					}
 					fireDaoFactoryEvent(new DaoFactoryEvent(AbstractDaoFactory.this, Type.TRANSACTION_ROLLED_BACK));
 				} else if (beginCount > 0) {
 					getTransaction().setRollbackOnly();
-					if (debug) {
-						log.debug("Transaction marked as roll-back only: "+Thread.currentThread().getId());
-						if (trace) CommonUtils.debugStackTrace(log);
+					if (debugTransactions) {
+						log.debug("Transaction marked as roll-back only: TX-"+Thread.currentThread().getId());
+						if (traceTransactions) CommonUtils.debugStackTrace(log);
 					}
 				}
 			} catch (Exception e) {
