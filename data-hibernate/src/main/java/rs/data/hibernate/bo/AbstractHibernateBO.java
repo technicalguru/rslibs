@@ -116,6 +116,7 @@ public abstract class AbstractHibernateBO<K extends Serializable, T extends Gene
 				if (initializer != null) {
 					if (initializer.getSession() == null || !initializer.getSession().isOpen()) {
 						t = (T)getSession().get(getTransferClass(), getId());
+						super.setTransferObject(t);
 					}
 				}
 			}
