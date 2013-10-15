@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object class="rs.data.file.impl.CustomerFileImpl">
+	<id class="java.lang.Long">1</id>
    <creationDate/>
    <changeDate/>
    <deliveryAddresses class="java.util.HashSet">

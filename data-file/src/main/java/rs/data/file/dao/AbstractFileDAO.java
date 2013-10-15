@@ -7,9 +7,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -47,12 +47,12 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 
 	/** The Key Generator */
 	private IKeyGenerator<K> keyGenerator;
-	
+
 	/** The filename strategy */
 	private IFilenameStrategy<K> filenameStrategy;
 
 	/** The storage strategy */
-	private IStorageStrategy<File> storageStrategy;
+	private IStorageStrategy<K, C, File> storageStrategy;
 
 	/**
 	 * Constructor.
@@ -76,7 +76,7 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Sets the {@link #filenameStrategy}.
 	 * The method instantiates a {@link DefaultFilenameStrategy} with properties from the DAO Master.
@@ -106,10 +106,10 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	 * @return the storage strategy.
 	 * @see #configure(Configuration)
 	 */
-	protected IStorageStrategy<File> createStorageStrategy() {
-		return new XmlStorageStrategy(getFactory());
+	protected IStorageStrategy<K, C, File> createStorageStrategy() {
+		return new XmlStorageStrategy<K, C>(getFactory());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * <p>This method also updates the storage strategy.</p>
@@ -118,7 +118,7 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	@Override
 	public void setFactory(IDaoFactory factory) {
 		super.setFactory(factory);
-		IStorageStrategy<File> storageStrategy = getStorageStrategy();
+		IStorageStrategy<K, C, File> storageStrategy = getStorageStrategy();
 		if (storageStrategy instanceof AbstractStorageStrategy) {
 			((AbstractStorageStrategy)storageStrategy).setDaoFactory(factory);
 		}
@@ -137,36 +137,20 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 		} catch (Exception e) {
 			// Ignore
 		}
-		
+
 		try {
 			Configuration subConfig = ((HierarchicalConfiguration)cfg).configurationAt("filenameStrategy(0)");
 			setFilenameStrategy((IFilenameStrategy<K>)ConfigurationUtils.load(subConfig, true));
 		} catch (Exception e) {
 			// Ignore
 		}
-		
+
 		try {
 			Configuration subConfig = ((HierarchicalConfiguration)cfg).configurationAt("storageStrategy(0)");
-			setStorageStrategy((IStorageStrategy<File>)ConfigurationUtils.load(subConfig, true));
+			setStorageStrategy((IStorageStrategy<K, C, File>)ConfigurationUtils.load(subConfig, true));
 		} catch (Exception e) {
 			// Ignore
 		}
-	}
-
-	/**
-	 * Returns all files for this object.
-	 * @return all files
-	 */
-	protected Collection<File> getAll() {
-		return getFilenameStrategy().getFiles();
-	}
-
-	/**
-	 * Returns all files that belong to the default criteria.
-	 * @return default object files
-	 */
-	protected Collection<File> getDefaultAll() {
-		return getAll();
 	}
 
 	/**
@@ -205,7 +189,7 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	 * Returns the {@link #storageStrategy}.
 	 * @return the storageStrategy
 	 */
-	public IStorageStrategy<File> getStorageStrategy() {
+	public IStorageStrategy<K, C, File> getStorageStrategy() {
 		return storageStrategy;
 	}
 
@@ -213,7 +197,7 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	 * Sets the {@link #storageStrategy}.
 	 * @param storageStrategy the storageStrategy to set
 	 */
-	public void setStorageStrategy(IStorageStrategy<File> storageStrategy) {
+	public void setStorageStrategy(IStorageStrategy<K, C, File> storageStrategy) {
 		this.storageStrategy = storageStrategy;
 	}
 
@@ -232,7 +216,11 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	 */
 	@Override
 	public int getObjectCount() {
-		return getAll().size();
+		try {
+			return getStorageStrategy().getObjectCount(getFilenameStrategy().getFiles());
+		} catch (IOException e) {
+			throw new RuntimeException("Cannot get object count", e);
+		}
 	}
 
 	/**
@@ -240,7 +228,11 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	 */
 	@Override
 	public int getDefaultObjectCount() {
-		return getDefaultAll().size();
+		try {
+			return getStorageStrategy().getDefaultObjectCount(getFilenameStrategy().getFiles());
+		} catch (IOException e) {
+			throw new RuntimeException("Cannot get default object count", e);
+		}
 	}
 
 	/**
@@ -252,7 +244,7 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 		if (rc == null) {
 			File file = getFilenameStrategy().getFile(id);
 			if (!file.canRead()) return null;
-			rc = _load(file);
+			rc = _load(id, file);
 		}
 		return (C)rc;
 	}
@@ -274,10 +266,10 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	 * @param file file to load from
 	 * @return the business object
 	 */
-	protected C _load(File file) {
+	protected C _load(K id, File file) {
 		C rc = newInstance();
 		try {
-			getStorageStrategy().load(rc, file);
+			getStorageStrategy().load(rc, id, file);
 		} catch (Exception e) {
 			throw new RuntimeException("Cannot load file", e);
 		}
@@ -290,7 +282,11 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	 */
 	@Override
 	public List<C> findAll(int firstResult, int maxResults) {
-		return load(getAll(), firstResult, maxResults);
+		try {
+			return load(getStorageStrategy().getList(getFilenameStrategy().getFiles()), firstResult, maxResults);
+		} catch (IOException e) {
+			throw new RuntimeException("Cannot load objects", e);
+		}
 	}
 
 	/**
@@ -298,7 +294,11 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	 */
 	@Override
 	public List<C> findDefaultAll(int firstResult, int maxResults) {
-		return load(getDefaultAll(), firstResult, maxResults);
+		try {
+			return load(getStorageStrategy().getDefaultList(getFilenameStrategy().getFiles()), firstResult, maxResults);
+		} catch (IOException e) {
+			throw new RuntimeException("Cannot load objects", e);
+		}
 	}
 
 	/**
@@ -308,36 +308,44 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	 * @param maxResults maximum number of results (-1 for not limited)
 	 * @return loaded objects
 	 */
-	protected List<C> load(Collection<File> files, int firstResult, int maxResults) {
+	protected List<C> load(Map<K, File> files, int firstResult, int maxResults) {
 		List<C> rc = new ArrayList<C>();
 		int i = 0;
-		for (File file : files) {
+		for (Map.Entry<K, File> entry : files.entrySet()) {
 			boolean doLoad = true;
 			if (firstResult > i) doLoad = false;
 			if (rc.size() == maxResults) doLoad = false;
 			if (doLoad) {
-				rc.add((C)_load(file));
+				rc.add((C)_load(entry.getKey(), entry.getValue()));
 			}
 		}
 		return rc;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public IDaoIterator<C> iterateAll(int firstResult, int maxResults) {
-		return iterate(getAll(), firstResult, maxResults);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
+	public IDaoIterator<C> iterateAll(int firstResult, int maxResults) {
+		try {
+			return iterate(getStorageStrategy().getList(getFilenameStrategy().getFiles()), firstResult, maxResults);
+		} catch (IOException e) {
+			throw new RuntimeException("Cannot load objects", e);
+		}
+}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public IDaoIterator<C> iterateDefaultAll(int firstResult, int maxResults) {
-		return iterate(getDefaultAll(), firstResult, maxResults);
+		try {
+			return iterate(getStorageStrategy().getDefaultList(getFilenameStrategy().getFiles()), firstResult, maxResults);
+		} catch (IOException e) {
+			throw new RuntimeException("Cannot load objects", e);
+		}
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -367,7 +375,7 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 		}
 		return cnt;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -401,7 +409,7 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 		}
 		return rc;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -431,10 +439,10 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	 * @param maxResults max number of results
 	 * @return iterator
 	 */
-	protected IDaoIterator<C> iterate(Collection<File> files, int firstResult, int maxResults) {
+	protected IDaoIterator<C> iterate(Map<K, File> files, int firstResult, int maxResults) {
 		return new FileDaoIterator(files, firstResult, maxResults);
 	}
-	
+
 	/**
 	 * DAO Iterator for file based objects.
 	 * @author ralph
@@ -443,31 +451,31 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	public class FileDaoIterator implements IDaoIterator<C> {
 
 		/** Iterator */
-		private Iterator<File> files;
+		private Iterator<Map.Entry<K, File>> files;
 		/** Maximum number of files to be returned */
 		private int maxResults;
 		/** Number of files already returned */
 		private int delivered;
-		
+
 		/**
 		 * Constructor.
 		 * @param files files to iterate over
 		 * @param firstResult first index to be returned
 		 * @param maxResults max number of results
 		 */
-		public FileDaoIterator(Collection<File> files, int firstResult, int maxResults) {
-			this.files = files.iterator();
+		public FileDaoIterator(Map<K, File> files, int firstResult, int maxResults) {
+			this.files = files.entrySet().iterator();
 			this.maxResults = maxResults;
-			
+
 			// Skip results
 			while ((firstResult > 0) && this.files.hasNext()) {
 				this.files.next();
 				firstResult--;
 			}
-			
+
 			this.delivered = 0;
 		}
-		
+
 		/**
 		 * {@inheritDoc}
 		 */
@@ -482,7 +490,10 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 		@Override
 		public C next() {
 			if (!hasNext()) throw new IllegalArgumentException("No more objects!");
-			return _load(files.next());
+			Map.Entry<K, File> entry = files.next();
+			K id = entry.getKey();
+			File file = entry.getValue();
+			return _load(id, file);
 		}
 
 		/**
@@ -500,6 +511,6 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 		public void close() {
 			// Nothing to do
 		}
-		
+
 	}
 }
