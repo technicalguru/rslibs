@@ -20,13 +20,14 @@ import org.apache.commons.collections.CollectionUtils;
 import rs.baselib.bean.BeanSupport;
 import rs.baselib.lang.LangUtils;
 import rs.data.api.IDaoFactory;
+import rs.data.api.bo.IGeneralBO;
 
 /**
  * Abstract implementation of a storage stratey.
  * @author ralph
  *
  */
-public abstract class AbstractStorageStrategy<S> implements IStorageStrategy<S> {
+public abstract class AbstractStorageStrategy<K extends Serializable, T extends IGeneralBO<K>, S> implements IStorageStrategy<K, T, S> {
 
 	/** Cache of transient properties per class */
 	private static Map<Class<?>, Set<String>> transientCache = new HashMap<Class<?>, Set<String>>();
@@ -58,6 +59,33 @@ public abstract class AbstractStorageStrategy<S> implements IStorageStrategy<S> 
 	 */
 	public void setDaoFactory(IDaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * <p>The default implementation returns the number of specifiers.</p> 
+	 */
+	@Override
+	public int getObjectCount(Collection<S> specifiers) throws IOException {
+		return specifiers.size();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * <p>The default implementation forwards to {@link #getObjectCount(Collection)}.</p> 
+	 */
+	@Override
+	public int getDefaultObjectCount(Collection<S> specifiers) throws IOException {
+		return getObjectCount(specifiers);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * <p>The default implementation forwards to {@link #getList(Collection)}.</p> 
+	 */
+	@Override
+	public Map<K, S> getDefaultList(Collection<S> specifiers) throws IOException {
+		return getList(specifiers);
 	}
 
 	/**

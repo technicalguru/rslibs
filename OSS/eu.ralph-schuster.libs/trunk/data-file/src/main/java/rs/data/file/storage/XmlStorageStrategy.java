@@ -28,7 +28,7 @@ import rs.data.api.bo.IGeneralBO;
  * @author ralph
  *
  */
-public class XmlStorageStrategy extends AbstractStorageStrategy<File> {
+public class XmlStorageStrategy<K extends Serializable, T extends IGeneralBO<K>> extends AbstractStorageStrategy<K, T, File> {
 
 	/**
 	 * Constructor.
@@ -41,7 +41,7 @@ public class XmlStorageStrategy extends AbstractStorageStrategy<File> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public <T extends IGeneralBO<?>> void load(T bo, File specifier) throws IOException {
+	public void load(T bo, K id, File specifier) throws IOException {
 		// Find all relevant property names
 		Collection<String> propertyNames = new ArrayList<String>(getPropertyNames(bo));
 		propertyNames.add("id");
@@ -175,7 +175,7 @@ public class XmlStorageStrategy extends AbstractStorageStrategy<File> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public <T extends IGeneralBO<?>> void save(T bo, File specifier) throws IOException {
+	public void save(T bo, File specifier) throws IOException {
 		// Find all relevant property names
 		Collection<String> propertyNames = new ArrayList<String>(getPropertyNames(bo));
 		propertyNames.add("id");
@@ -276,8 +276,36 @@ public class XmlStorageStrategy extends AbstractStorageStrategy<File> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public <T extends IGeneralBO<?>> void refresh(T bo, File specifier) throws IOException {
-		load(bo, specifier);
+	public void refresh(T bo, File specifier) throws IOException {
+		load(bo, bo.getId(), specifier);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<K, File> getList(Collection<File> specifiers) throws IOException {
+		Map<K, File> rc = new HashMap<K, File>();
+		// Read the ID of each file
+		for (File f : specifiers) {
+			try {
+				XMLConfiguration cfg = new XMLConfiguration();
+				cfg.setListDelimiter((char)0);
+				cfg.load(f);
+					try {
+						SubnodeConfiguration subConfig = cfg.configurationAt("id(0)");
+						K id = (K)loadValue(subConfig);
+						rc.put(id, f);
+					} catch (IllegalArgumentException e) {
+						// Ignore
+					}
+			} catch (Exception e) {
+				throw new IOException("Cannot load XML file", e);
+			}
+		}
+		
+		return rc;
 	}
 
 }

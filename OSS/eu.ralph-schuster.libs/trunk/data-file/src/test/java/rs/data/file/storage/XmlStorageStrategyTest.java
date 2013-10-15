@@ -28,7 +28,7 @@ import rs.data.file.impl.CustomerFileImpl;
 public class XmlStorageStrategyTest {
 
 	/** The strategy under test. */
-	private XmlStorageStrategy strategy;
+	private XmlStorageStrategy<Long, Customer> strategy;
 	/** A test object */
 	private Customer customer;
 	
@@ -37,7 +37,7 @@ public class XmlStorageStrategyTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		strategy = new XmlStorageStrategy(null);
+		strategy = new XmlStorageStrategy<Long,Customer>(null);
 		customer = new CustomerFileImpl();
 		customer.setName("John Doe");
 		customer.addPhone("private", "+49-69-1234567890");
@@ -58,7 +58,7 @@ public class XmlStorageStrategyTest {
 	public void testLoad() throws IOException, URISyntaxException {
 		File f = new File(FileFinder.find("xmlStorageTest1.xml").toURI());
 		Customer loaded = new CustomerFileImpl();
-		strategy.load(loaded, f);
+		strategy.load(loaded, 1L, f);
 		assertEquals("changeDate does not match", customer.getChangeDate(), loaded.getChangeDate());
 		assertEquals("creationDate does not match", customer.getCreationDate(), loaded.getCreationDate());
 		assertEquals("name does not match", customer.getName(), loaded.getName());
