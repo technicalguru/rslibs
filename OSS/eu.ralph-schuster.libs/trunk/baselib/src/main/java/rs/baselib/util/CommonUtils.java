@@ -3,6 +3,12 @@
  */
 package rs.baselib.util;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.text.DateFormat;
 import java.text.NumberFormat;
@@ -13,6 +19,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 
 import org.slf4j.Logger;
 
@@ -478,4 +485,64 @@ public class CommonUtils {
 			log.trace(s);
 		}
 	}
+	
+    /**
+     * Loads a property file.
+     * @param file the file to load
+     * @return the properties
+     */
+    public static Properties loadProperties(File file) throws IOException {
+        Properties props = new Properties();
+        loadProperties(props, file);
+        return props;
+    }
+    
+    /**
+     * Loads a property file.
+     * @param file the file to load
+     * @return the properties
+     */
+    public static Properties loadProperties(String file) throws IOException {
+        return loadProperties(new File(file));
+    }
+    
+    /**
+     * Loads a property file.
+     * @param props the properties object
+     * @param file the file to load
+     */
+    public static void loadProperties(Properties props, File file) throws IOException {
+        InputStream in = new FileInputStream(file);
+        props.load(in);
+        in.close();
+    }
+
+    /**
+     * Loads a property file.
+     * @param props the properties object
+     * @param file the file to load
+     */
+    public static void loadProperties(Properties props, String file) throws IOException {
+        loadProperties(props, new File(file));
+    }
+    
+    /**
+     * Stores a property file.
+     * @param props the properties object
+     * @param file the file to load
+     */
+    public static void storeProperties(Properties props, File file) throws IOException {
+        OutputStream out = new FileOutputStream(file);
+        props.store(out, null);
+        out.close();
+    }
+
+    /**
+     * Stores a property file.
+     * @param props the properties object
+     * @param file the file to load
+     */
+    public static void storeProperties(Properties props, String file) throws IOException {
+        storeProperties(props, new File(file));
+    }
 }
