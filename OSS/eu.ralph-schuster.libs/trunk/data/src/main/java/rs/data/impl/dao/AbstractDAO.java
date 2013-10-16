@@ -18,7 +18,7 @@ import rs.data.util.CID;
 import rs.data.util.IDaoIterator;
 
 /**
- * Abstract Implementation for Data Access Objects.
+ * Abstract Implementation for Data Access Objects that has DTOs underneath.
  * This implementation assumes that the BO derives from {@link AbstractBO} (using a {@link GeneralDTO Transfer Object}).
  * @param <K> type of primary key
  * @param <T> type of Transfer Object

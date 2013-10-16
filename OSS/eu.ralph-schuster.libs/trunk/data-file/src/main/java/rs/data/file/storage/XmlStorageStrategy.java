@@ -25,6 +25,8 @@ import rs.data.api.bo.IGeneralBO;
 
 /**
  * Storage strategy for XML files.
+ * @param <K> type of ID for Business Objects to be managed
+ * @param <T> type of Business Object the strategy manages
  * @author ralph
  *
  */
