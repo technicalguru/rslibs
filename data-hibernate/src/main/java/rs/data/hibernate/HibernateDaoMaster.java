@@ -26,6 +26,7 @@ import rs.data.hibernate.util.DataSourceConnectionProvider;
 import rs.data.impl.AbstractDaoMaster;
 
 /**
+ * The DAO Master holding information about the DB connection and Hibernate instance.
  * @author ralph
  *
  */

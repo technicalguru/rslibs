@@ -13,7 +13,9 @@ import rs.data.api.bo.IGeneralBO;
 
 /**
  * Interface for storing objects.
- * @param <S> type of specifier
+ * @param <K> type of ID for Business Objects to be managed
+ * @param <T> type of Business Object the strategy manages
+ * @param <S> type of specifier, e.g. a file
  * @author ralph
  *
  */

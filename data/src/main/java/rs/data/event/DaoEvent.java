@@ -20,11 +20,21 @@ public class DaoEvent extends EventObject {
 	 */
 	private static final long serialVersionUID = -2121712297338985716L;
 
+	/**
+	 * Type of event information.
+	 * @author ralph
+	 *
+	 */
 	public static enum Type {
+		/** An object was created by the DAO. */
 		OBJECT_CREATED,
+		/** An object was updated by the DAO. */
 		OBJECT_UPDATED,
+		/** An object was deleted by the DAO. */
 		OBJECT_DELETED,
+		/** All default objects were deleted by the DAO. */
 		ALL_DEFAULT_DELETED,
+		/** All objects were deleted by the DAO. */
 		ALL_DELETED
 	};
 	

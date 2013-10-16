@@ -8,6 +8,7 @@ import java.io.Serializable;
 
 /**
  * A key based on a file.
+ * @param <K> the type of key that is combines with the File
  * @author ralph
  *
  */

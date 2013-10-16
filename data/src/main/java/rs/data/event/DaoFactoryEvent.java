@@ -19,12 +19,19 @@ public class DaoFactoryEvent extends EventObject {
 	 */
 	private static final long serialVersionUID = -3614048885876975805L;
 
+	/** Type of factory event */
 	public static enum Type {
+		/** Transaction was started */
 		TRANSACTION_STARTED,
+		/** Transaction is committing but did not finish yet */
 		TRANSACTION_COMMITTING,
+		/** Transaction has been committed */
 		TRANSACTION_COMMITTED,
+		/** Transaction is rolling back but did not finish yet */
 		TRANSACTION_ROLLING_BACK,
+		/** Transaction has been rolled back */
 		TRANSACTION_ROLLED_BACK,
+		/** A change was made to the data model. (Details should be caught via {@link DaoEvent}). */
 		MODEL_CHANGED
 	}
 	

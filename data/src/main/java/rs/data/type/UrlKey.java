@@ -8,6 +8,7 @@ import java.net.URL;
 
 /**
  * A key based on a URL.
+ * @param <K> the type of key that is combines with the URL
  * @author ralph
  *
  */

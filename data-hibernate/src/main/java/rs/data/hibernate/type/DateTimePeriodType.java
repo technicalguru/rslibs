@@ -18,6 +18,7 @@ import rs.baselib.util.DateTimePeriod;
 import rs.baselib.util.RsDate;
 
 /**
+ * Reads {@link DateTimePeriod) objects.
  * @author ralph
  *
  */

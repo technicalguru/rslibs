@@ -4,7 +4,7 @@
 package rs.baselib.crypto;
 
 /**
- * Exception thrown from encryption process.
+ * Exception thrown from decryption process.
  * @author ralph
  *
  */

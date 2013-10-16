@@ -11,7 +11,7 @@ import rs.data.api.bo.IGeneralBO;
 import rs.data.impl.bo.AbstractGeneralBO;
 
 /**
- * Abstract Implementation for Data Access Objects.
+ * Abstract Implementation for Data Access Objects that can create BO instances.
  * This implementation assumes that the BO implementation derives from {@link AbstractGeneralBO}.
  * @param <K> type of primary key
  * @param <B> type of Business Object Implementation

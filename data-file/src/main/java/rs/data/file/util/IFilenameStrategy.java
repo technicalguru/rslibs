@@ -9,6 +9,7 @@ import java.util.Collection;
 
 /**
  * Interface that defines a filename strategy for deriving filenames from keys.
+ * @param <K> type of ID this strategy converts to file names
  * @author ralph
  *
  */

@@ -6,6 +6,7 @@ package rs.data.util;
 import java.util.Iterator;
 
 /**
+ * An iterator holding DAO resources.
  * @author ralph
  *
  */
