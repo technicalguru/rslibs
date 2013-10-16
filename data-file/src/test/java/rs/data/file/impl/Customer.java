@@ -61,7 +61,7 @@ public interface Customer extends ILongBO {
 	
 	/**
 	 * Sets the phone numbers of this customer.
-	 * @param phone new phone numbers
+	 * @param phones new phone numbers
 	 */
 	public void   setPhones(Map<String,String> phones);
 
