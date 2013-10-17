@@ -1,60 +1,229 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>eu.ralph-schuster</groupId>
-		<artifactId>pom-oss</artifactId>
-		<version>1.4.1</version>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
 	</parent>
 
-	<properties>
-		<project.home>http://techblog.ralph-schuster.eu/rs-library/</project.home>
-	</properties>
-	
 	<groupId>eu.ralph-schuster</groupId>
-	<artifactId>libs</artifactId>
-	<version>1.2.1-SNAPSHOT</version>
-	<packaging>pom</packaging>
+	<artifactId>templating</artifactId>
+	<version>1.1.0</version>
+	<packaging>jar</packaging>
+	<url>http://techblog.ralph-schuster.eu/templating-java-package/</url>
+	<name>Templating library for Typo3-alike templates</name>
 
-	<url>http://download.ralph-schuster.eu/eu.ralph-schuster.libs/${project.version}</url>
-	<name>eu.ralph-schuster.libs</name>
-	<description>A collection of utilities</description>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 
 	<scm>
-		<connection>scm:svn:https://h2031995.stratoserver.net/svn/OSS/eu.ralph-schuster.libs/trunk</connection>
-		<developerConnection>scm:svn:https://h2031995.stratoserver.net/svn/OSS/eu.ralph-schuster.libs/trunk</developerConnection>
-		<url>https://h2031995.stratoserver.net/svn/OSS/eu.ralph-schuster.libs/trunk</url>
+		<connection>scm:svn:https://h2031995.stratoserver.net/svn/Templating/tags/templating-1.1.0</connection>
+		<developerConnection>scm:svn:https://h2031995.stratoserver.net/svn/Templating/tags/templating-1.1.0</developerConnection>
+		<url>https://h2031995.stratoserver.net/svn/Templating/tags/templating-1.1.0</url>
 	</scm>
-
-	<distributionManagement>
-		<site>
-			<id>strato-server</id>
-			<url>scp://h2031995.stratoserver.net/var/www/vhosts/ralph-schuster.eu/download/eu.ralph-schuster.libs/${project.version}</url>
-		</site>
-	</distributionManagement>
 
 	<issueManagement>
 		<system>Jira</system>
-		<url>http://jira.ralph-schuster.eu/browse/RSLIBS</url>
+		<url>http://jira.ralph-schuster.eu/</url>
 	</issueManagement>
 
-	<ciManagement>
-		<system>bamboo</system>
-		<url>http://bamboo.ralph-schuster.eu/browse/RSLIB</url>
-	</ciManagement>
+	<licenses>
+		<license>
+			<name>GNU Lesser General Public License 3.0</name>
+			<url>http://www.gnu.org/licenses/lgpl-3.0.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
 
 	<developers>
 		<developer>
 			<id>ralph</id>
 			<name>Ralph Schuster</name>
+			<email>noemail@ralph-schuster.eu</email>
 		</developer>
 	</developers>
 
-	<modules>
-		<module>baselib</module>
-		<module>data</module>
-		<module>data-file</module>
-		<module>data-hibernate</module>
-		<module>templating</module>
-	</modules>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>eu.ralph-schuster</groupId>
+			<artifactId>baselib</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<resources>
+			<resource>
+				<directory>${project.basedir}/src/main/resources</directory>
+			</resource>
+			<resource>
+				<directory>${project.basedir}/src/main/filtered-resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<testResources>
+			<testResource>
+				<directory>${project.basedir}/src/test/resources</directory>
+			</testResource>
+			<testResource>
+				<directory>${project.basedir}/src/test/filtered-resources</directory>
+				<filtering>true</filtering>
+			</testResource>
+		</testResources>
+		<plugins>
+			<!-- Compile for Java 1.6 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.0.2</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<!-- Provide SVN revision information -->
+			<plugin>
+				<groupId>com.google.code.maven-svn-revision-number-plugin</groupId>
+				<artifactId>svn-revision-number-maven-plugin</artifactId>
+				<version>1.12</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>revision</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<entries>
+						<entry>
+							<prefix>svn</prefix>
+						</entry>
+					</entries>
+				</configuration>
+			</plugin>
+			<!-- Package sources -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.1.2</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- Package Javadoc -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.8.1</version>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- PGP signing artifacts -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>1.4</version>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											com.google.code.maven-svn-revision-number-plugin
+										</groupId>
+										<artifactId>
+											svn-revision-number-maven-plugin
+										</artifactId>
+										<versionRange>
+											[1.11,)
+										</versionRange>
+										<goals>
+											<goal>revision</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 
+	<profiles>
+		<profile>
+			<id>distribution</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+				<property>
+					<name>distribute</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<!-- Distribution packaging -->
+					<plugin>
+						<!-- NOTE: We don't need a groupId specification because the group 
+							is org.apache.maven.plugins ...which is assumed by default. -->
+						<artifactId>maven-assembly-plugin</artifactId>
+						<version>2.3</version>
+						<configuration>
+							<descriptors>
+								<descriptor>src/assembly/distribution.xml</descriptor>
+							</descriptors>
+						</configuration>
+						<executions>
+							<execution>
+								<id>make-assembly</id>
+								<phase>package</phase>
+								<goals>
+									<goal>single</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
