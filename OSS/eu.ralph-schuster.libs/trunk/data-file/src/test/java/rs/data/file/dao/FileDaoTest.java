@@ -122,11 +122,12 @@ public class FileDaoTest {
 	@Test
 	public void test07_delete() {
 		Customer customer = createCustomer();
-		File f = customerDao.getFilenameStrategy().getFile(customer.getId());
+		Long id = customer.getId();
+		File f = customerDao.getFilenameStrategy().getFile(id);
 		customerDao.delete(customer);
 		LangUtils.sleep(500L);
 		assertFalse("File was not deleted", f.exists());
-		customer = customerDao.findBy(2L);
+		customer = customerDao.findBy(id);
 		assertNull("Customer still exists in DAO", customer);
 	}
 	
