@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -182,6 +183,15 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 	}
 
 	/**
+	 * Add the given object to the cache.
+	 * @param object object to add
+	 */
+	protected void removeCached(C object) {
+		// It is important to have the CID held by the BO to avoid losing the cache
+		cache.remove(object.getCID());
+	}
+
+	/**
 	 * Computes the CID from the id.
 	 * @param id id
 	 * @return computed CID.
@@ -208,6 +218,15 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 		cache.clear();
 	}
 
+	/**
+	 * Returns the {@link #cache}.
+	 * @return an unmodifiable version of the cache
+	 */
+	protected Map<CID, WeakReference<C>> getCache() {
+		return Collections.unmodifiableMap(cache);
+	}
+
+	
 	/************************* CREATION ************************/
 
 	/**
@@ -440,7 +459,7 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 				beforeDelete(object);
 				_delete(object);
 				afterDelete(object);
-
+				removeCached(object);
 				fireObjectDeleted(object);
 			}
 	}
