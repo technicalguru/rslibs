@@ -5,7 +5,7 @@ package rs.baselib.util;
 
 import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
-import java.lang.ref.WeakReference;
+import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -14,22 +14,22 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * A cache implementation using a {@link HashMap} with {@link WeakReference}s.
+ * A cache implementation using a {@link HashMap} with {@link SoftReference}s.
  * @author ralph
  *
  */
-public class WeakMapCache<K,V> implements Cache<K, V> {
+public class SoftMapCache<K,V> implements Cache<K, V> {
 
 	private static int DEFAULT_CLEAR_COUNT = 10;
 	
-	private Map<K,WeakReference<V>> cache = new HashMap<K,WeakReference<V>>();
+	private Map<K,SoftReference<V>> cache = new HashMap<K,SoftReference<V>>();
 	private ReferenceQueue<V> referenceQueue = new ReferenceQueue<V>();
 	private int clearCounter = DEFAULT_CLEAR_COUNT;
 	
 	/**
 	 * Constructor.
 	 */
-	public WeakMapCache() {
+	public SoftMapCache() {
 	}
 
 	/**
@@ -62,7 +62,7 @@ public class WeakMapCache<K,V> implements Cache<K, V> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean containsValue(Object value) {
-		return cache.containsValue(new WeakReference<V>((V)value));
+		return cache.containsValue(new SoftReference<V>((V)value));
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class WeakMapCache<K,V> implements Cache<K, V> {
 	@Override
 	public V get(Object key) {
 		if (clearCounter-- <= 0) clearMap();
-		WeakReference<V> ref = cache.get(key);
+		SoftReference<V> ref = cache.get(key);
 		return ref != null ? ref.get() : null;
 	}
 
@@ -92,7 +92,7 @@ public class WeakMapCache<K,V> implements Cache<K, V> {
 	 */
 	@Override
 	public V put(K key, V value) {
-		WeakReference<V> ref = cache.put(key, new WeakReference<V>(value));
+		SoftReference<V> ref = cache.put(key, new SoftReference<V>(value));
 		return ref != null ? ref.get() : null;
 	}
 
@@ -101,7 +101,7 @@ public class WeakMapCache<K,V> implements Cache<K, V> {
 	 */
 	@Override
 	public V remove(Object key) {
-		WeakReference<V> ref = cache.remove(key);
+		SoftReference<V> ref = cache.remove(key);
 		return ref != null ? ref.get() : null;
 	}
 
@@ -127,11 +127,10 @@ public class WeakMapCache<K,V> implements Cache<K, V> {
 	@Override
 	public Collection<V> values() {
 		List<V> rc = new ArrayList<V>();
-		for (Map.Entry<K,WeakReference<V>> entry : cache.entrySet()) {
+		for (Map.Entry<K,SoftReference<V>> entry : cache.entrySet()) {
 			rc.add(entry.getValue().get());
 		}		
 		return rc;
 	}
-	
 	
 }
