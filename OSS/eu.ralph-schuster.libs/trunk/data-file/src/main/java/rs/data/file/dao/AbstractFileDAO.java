@@ -240,7 +240,7 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	 */
 	@Override
 	public C findBy(K id) {
-		C rc = getCached(new CID(getBoImplementationClass(), id));
+		C rc = getCached(new CID(getBoInterfaceClass(), id));
 		if (rc == null) {
 			File file = getFilenameStrategy().getFile(id);
 			if (!file.canRead()) return null;
