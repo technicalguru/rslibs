@@ -92,7 +92,7 @@ public abstract class AbstractBO<K extends Serializable, T extends GeneralDTO<K>
 	public void setTransferObject(T transferObject) {
 		this.transferObject = transferObject;
 		K id = transferObject.getId();
-		if (id != null) setCID(new CID(getClass(), id));
+		if (id != null) setCID(new CID(getInterfaceClass(), id));
 	}
 	
 	/**
