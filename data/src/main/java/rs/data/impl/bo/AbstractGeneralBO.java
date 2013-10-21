@@ -128,6 +128,12 @@ public abstract class AbstractGeneralBO<K extends Serializable> extends Abstract
 	}
 
 	/**
+	 * Sets the id of this object.
+	 * @param id
+	 */
+	public abstract void setId(K id);
+	
+	/**
 	 * Returns the cid.
 	 * @return the cid
 	 */
