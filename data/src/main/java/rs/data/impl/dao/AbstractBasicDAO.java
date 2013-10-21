@@ -4,15 +4,11 @@
 package rs.data.impl.dao;
 
 import java.io.Serializable;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.WeakHashMap;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -21,7 +17,9 @@ import org.slf4j.LoggerFactory;
 
 import rs.baselib.configuration.IConfigurable;
 import rs.baselib.lang.LangUtils;
+import rs.baselib.util.Cache;
 import rs.baselib.util.RsDate;
+import rs.baselib.util.WeakMapCache;
 import rs.data.api.IDaoFactory;
 import rs.data.api.IDaoMaster;
 import rs.data.api.bo.IGeneralBO;
@@ -50,7 +48,7 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 
 	private IDaoFactory factory;
 	private IDaoMaster daoMaster;
-	private Map<CID,WeakReference<C>> cache = new WeakHashMap<CID,WeakReference<C>>();
+	private Cache<CID,C> cache;
 	private Set<IDaoListener> listeners = new HashSet<IDaoListener>();
 
 	/**
@@ -67,9 +65,18 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 	protected void init() {
 		List<Class<?>> classes = LangUtils.getTypeArguments(AbstractBasicDAO.class, getClass());
 		this.keyClass = (Class<K>) classes.get(0);
-		this.boInterfaceClass = (Class<C>) classes.get(1);		
+		this.boInterfaceClass = (Class<C>) classes.get(1);	
+		this.cache = createCache();
 	}
 
+	/**
+	 * Returns a {@link WeakMapCache}.
+	 * @return the cache implementation.
+	 */
+	protected Cache<CID, C> createCache() {
+		return new WeakMapCache<CID, C>();
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -179,7 +186,7 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 	 */
 	protected void addCached(C object) {
 		// It is important to have the CID held by the BO to avoid losing the cache
-		cache.put(object.getCID(), new WeakReference<C>(object));
+		cache.put(object.getCID(), object);
 	}
 
 	/**
@@ -187,7 +194,6 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 	 * @param object object to add
 	 */
 	protected void removeCached(C object) {
-		// It is important to have the CID held by the BO to avoid losing the cache
 		cache.remove(object.getCID());
 	}
 
@@ -205,10 +211,7 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 	 * @param cid CID of object
 	 */
 	protected C getCached(CID cid) {
-		// It is important to have the CID held by the BO to avoid losing the cache
-		WeakReference<C> ref = cache.get(cid);
-		if (ref != null) return ref.get();
-		return null;
+		return cache.get(cid);
 	}
 
 	/**
@@ -220,10 +223,10 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 
 	/**
 	 * Returns the {@link #cache}.
-	 * @return an unmodifiable version of the cache
+	 * @return the cache
 	 */
-	protected Map<CID, WeakReference<C>> getCache() {
-		return Collections.unmodifiableMap(cache);
+	protected Cache<CID, C> getCache() {
+		return cache;
 	}
 
 	
