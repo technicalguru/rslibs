@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import rs.data.impl.test.basic.Customer;
 import rs.data.impl.test.basic.CustomerDaoImpl;
+import rs.data.util.CID;
 
 /**
  * Tests basic caching functions.
@@ -62,5 +63,16 @@ public class BasicDaoTest {
 		assertEquals("DAO cannot find BO", c, c2);
 	}
 
-	
+	@Test
+	public void testCacheBehaviour() {
+		Customer c = dao.newInstance();
+		dao.create(c);
+		dao._delete(c);
+		CID cid = new CID(Customer.class, c.getId());
+		System.gc();
+		assertNotNull("Cache cleared unexpectedly", dao.getCached(cid));
+		c = null;
+		System.gc();
+		assertNull("Cache was not cleared", dao.getCached(cid));
+	}
 }
