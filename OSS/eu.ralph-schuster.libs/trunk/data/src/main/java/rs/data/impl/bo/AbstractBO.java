@@ -107,6 +107,14 @@ public abstract class AbstractBO<K extends Serializable, T extends GeneralDTO<K>
 	 * {@inheritDoc}
 	 */
 	@Override
+	public void setId(K id) {
+		getTransferObject().setId(id);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public RsDate getCreationDate() {
 		return getTransferObject().getCreationDate();
 	}

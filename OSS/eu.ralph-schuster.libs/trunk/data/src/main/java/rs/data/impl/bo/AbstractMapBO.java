@@ -55,14 +55,6 @@ public abstract class AbstractMapBO<K extends Serializable> extends AbstractBO<K
 	}
 	
 	/**
-	 * Sets the id.
-	 * @param id id of object
-	 */
-	public void setId(K id) {
-		getTransferObject().setId(id);
-	}
-	
-	/**
 	 * {@inheritDoc}
 	 */
 	@Override
