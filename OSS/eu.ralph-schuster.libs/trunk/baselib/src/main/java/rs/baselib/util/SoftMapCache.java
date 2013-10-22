@@ -59,10 +59,12 @@ public class SoftMapCache<K,V> implements Cache<K, V> {
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public boolean containsValue(Object value) {
-		return cache.containsValue(new SoftReference<V>((V)value));
+		for (Map.Entry<K,SoftReference<V>> entry : cache.entrySet()) {
+			if (CommonUtils.equals(entry.getValue().get(), value)) return true; 
+		}
+		return false;
 	}
 
 	/**

@@ -59,10 +59,12 @@ public class WeakMapCache<K,V> implements Cache<K, V> {
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public boolean containsValue(Object value) {
-		return cache.containsValue(new WeakReference<V>((V)value));
+		for (Map.Entry<K,WeakReference<V>> entry : cache.entrySet()) {
+			if (CommonUtils.equals(entry.getValue().get(), value)) return true; 
+		}
+		return false;
 	}
 
 	/**
