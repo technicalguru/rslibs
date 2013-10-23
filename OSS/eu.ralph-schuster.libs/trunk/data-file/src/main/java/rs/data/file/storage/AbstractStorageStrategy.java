@@ -32,7 +32,7 @@ import rs.data.api.bo.IGeneralBO;
  */
 public abstract class AbstractStorageStrategy<K extends Serializable, T extends IGeneralBO<K>, S> implements IStorageStrategy<K, T, S> {
 
-	/** Cache of transient properties per class */
+	/** ICache of transient properties per class */
 	private static Map<Class<?>, Set<String>> transientCache = new HashMap<Class<?>, Set<String>>();
 
 	/** The encoding used */

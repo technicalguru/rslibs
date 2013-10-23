@@ -18,7 +18,7 @@ import java.util.Set;
  * @author ralph
  *
  */
-public class SoftMapCache<K,V> implements Cache<K, V> {
+public class SoftMapCache<K,V> implements ICache<K, V> {
 
 	private static int DEFAULT_CLEAR_COUNT = 10;
 	

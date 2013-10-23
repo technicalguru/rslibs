@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import rs.baselib.configuration.IConfigurable;
 import rs.baselib.lang.LangUtils;
-import rs.baselib.util.Cache;
+import rs.baselib.util.ICache;
 import rs.baselib.util.RsDate;
 import rs.baselib.util.WeakMapCache;
 import rs.data.api.IDaoFactory;
@@ -48,7 +48,7 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 
 	private IDaoFactory factory;
 	private IDaoMaster daoMaster;
-	private Cache<CID,C> cache;
+	private ICache<CID,C> cache;
 	private Set<IDaoListener> listeners = new HashSet<IDaoListener>();
 
 	/**
@@ -73,7 +73,7 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 	 * Returns a {@link WeakMapCache}.
 	 * @return the cache implementation.
 	 */
-	protected Cache<CID, C> createCache() {
+	protected ICache<CID, C> createCache() {
 		return new WeakMapCache<CID, C>();
 	}
 	
@@ -225,7 +225,7 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 	 * Returns the {@link #cache}.
 	 * @return the cache
 	 */
-	protected Cache<CID, C> getCache() {
+	protected ICache<CID, C> getCache() {
 		return cache;
 	}
 
