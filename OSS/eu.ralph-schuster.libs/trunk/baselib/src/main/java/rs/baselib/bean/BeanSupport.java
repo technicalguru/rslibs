@@ -106,7 +106,7 @@ public class BeanSupport {
 		if (propertyName.equals("class")) return false;
 		if (isTransient(beanClass, propertyName)) return true;
 
-		return getForbiddenList(beanClass, false).contains(propertyName);
+		return getForbiddenList(beanClass, true).contains(propertyName);
 	}
 
 	/**

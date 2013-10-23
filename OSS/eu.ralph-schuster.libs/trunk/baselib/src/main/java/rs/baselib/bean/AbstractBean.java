@@ -292,15 +292,17 @@ public abstract class AbstractBean implements IBean {
 		if (evt != null) {
 			if (CommonUtils.equals(newValue, evt.getOldValue())) {
 				// The change is being reverted
-				registeredChanges.remove(evt);
+				registeredChanges.remove(propertyName);
 			} else {
 				// Another value being put on
 				evt = new PropertyChangeEvent(this, propertyName, evt.getOldValue(), newValue);
 				registeredChanges.put(propertyName, evt);
 			}
 		} else {
-			evt = new PropertyChangeEvent(this, propertyName, oldValue, newValue);
-			registeredChanges.put(propertyName, evt);
+			if (!CommonUtils.equals(newValue, oldValue)) {
+				evt = new PropertyChangeEvent(this, propertyName, oldValue, newValue);
+				registeredChanges.put(propertyName, evt);
+			}
 		}
 	}
 
