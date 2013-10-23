@@ -32,7 +32,7 @@ public class BasicDaoTest {
 		Customer c = dao.newInstance();
 		dao.create(c);
 		int after = dao.getCache().size();
-		assertEquals("Cache did not increase properly", before+1, after);
+		assertEquals("ICache did not increase properly", before+1, after);
 	}
 	
 	@Test
@@ -70,9 +70,9 @@ public class BasicDaoTest {
 		dao._delete(c);
 		CID cid = new CID(Customer.class, c.getId());
 		System.gc();
-		assertNotNull("Cache cleared unexpectedly", dao.getCached(cid));
+		assertNotNull("ICache cleared unexpectedly", dao.getCached(cid));
 		c = null;
 		System.gc();
-		assertNull("Cache was not cleared", dao.getCached(cid));
+		assertNull("ICache was not cleared", dao.getCached(cid));
 	}
 }
