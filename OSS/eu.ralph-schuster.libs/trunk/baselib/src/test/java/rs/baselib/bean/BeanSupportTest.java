@@ -36,6 +36,14 @@ public class BeanSupportTest {
 	}
 
 	@Test
+	public void testisCopyForbidden() {
+		assertTrue("dirty not recognized as NoCopy", BeanSupport.INSTANCE.isCopyForbidden(TestBean.class, "dirty"));
+		assertTrue("changes not recognized as NoCopy", BeanSupport.INSTANCE.isCopyForbidden(TestBean.class, "changes"));
+		assertTrue("class not recognized as NoCopy", BeanSupport.INSTANCE.isCopyForbidden(TestBean.class, "class"));
+		assertTrue("changeDate not recognized as NoCopy", BeanSupport.INSTANCE.isCopyForbidden(TestBean.class, "changeDate"));
+	}
+
+	@Test
 	public void testGetForbiddenList() {
 		Collection<String> properties = BeanSupport.INSTANCE.getForbiddenList(TestBean.class, true);
 		assertEquals("Not enough forbidden properties recognized", 4, properties.size());

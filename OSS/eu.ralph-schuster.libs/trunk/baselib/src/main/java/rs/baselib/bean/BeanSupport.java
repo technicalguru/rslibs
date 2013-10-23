@@ -103,7 +103,7 @@ public class BeanSupport {
 	 * @return <code>true</code> when {@link IBean#copyTo(Object)} must not copy this property
 	 */
 	public boolean isCopyForbidden(Class<?> beanClass, String propertyName) {
-		if (propertyName.equals("class")) return false;
+		if (propertyName.equals("class")) return true;
 		if (isTransient(beanClass, propertyName)) return true;
 
 		return getForbiddenList(beanClass, true).contains(propertyName);
