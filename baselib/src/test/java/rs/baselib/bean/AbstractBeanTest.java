@@ -3,7 +3,10 @@
  */
 package rs.baselib.bean;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -14,7 +17,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import rs.baselib.bean.impl.TestBean;
-import rs.baselib.util.IDirtyable;
 import rs.baselib.util.RsDate;
 
 /**
