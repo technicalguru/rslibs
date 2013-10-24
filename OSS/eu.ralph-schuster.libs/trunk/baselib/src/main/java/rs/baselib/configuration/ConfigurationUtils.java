@@ -59,13 +59,14 @@ public class ConfigurationUtils {
 	 * @param configure whether the object shall be configured (if it is a {@link IConfigurable}).
 	 * @return the object
 	 */
-	public static Object load(Class<?> clazz, Configuration config, boolean configure) {
+	@SuppressWarnings("unchecked")
+	public static <T> T load(Class<T> clazz, Configuration config, boolean configure) {
 		try {
 			Object rc = clazz.newInstance();
 			if (configure && (rc instanceof IConfigurable)) {
 				configure((IConfigurable)rc, config);
 			}
-			return rc;
+			return (T)rc;
 		} catch (Exception e) {
 			throw new RuntimeException("Cannot load class from configuration", e);
 		}
