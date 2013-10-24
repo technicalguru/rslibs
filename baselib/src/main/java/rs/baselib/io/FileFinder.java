@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,20 +55,19 @@ public class FileFinder {
 		}
 		
 		// get it from classpath
-		if (rc == null) {
-			try {
-				ClassLoader loader = clazz.getClassLoader();
-				rc = loader.getResource(name);
-			} catch (Exception e) {
-				if (log.isDebugEnabled()) 
-					log.debug("No such classpath file: "+name, e);
-			}
-		}
-		
 		if ((rc == null) && (clazz != null)) {
 			try {
 				ClassLoader loader = clazz.getClassLoader();
-				rc = loader.getResource(name);
+				if (!name.startsWith("/")) {
+					String dirs[] = clazz.getPackage().getName().split("\\.");
+					for (int i=dirs.length; i>0; i--) {
+						String pkgDir = StringUtils.join(dirs, '/', 0, i);
+						rc = loader.getResource(pkgDir+"/"+name);
+						if (rc != null) break;
+					}
+				} else {
+					rc = loader.getResource(name);
+				}
 			} catch (Exception e) {
 				if (log.isDebugEnabled()) 
 					log.debug("No such classpath file: "+name, e);
