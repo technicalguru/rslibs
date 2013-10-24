@@ -4,14 +4,13 @@
 package templating;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import rs.baselib.io.FileFinder;
+import rs.baselib.util.CommonUtils;
 
 /**
  * Implements templating methods similar to typo3
@@ -98,7 +97,7 @@ public class Templating {
 	 * @throws IOException when an error occurred
 	 */
 	public static String getTemplate(String filename) throws IOException {
-		return getTemplate(new File(filename));
+		return getTemplate(filename);
 	}
 	
 	/**
@@ -108,6 +107,6 @@ public class Templating {
 	 * @throws IOException when an error occurred
 	 */
 	public static String getTemplate(File f) throws IOException {
-		return FileFinder.load(new FileInputStream(f));
+		return CommonUtils.loadContent(f);
 	}
 }

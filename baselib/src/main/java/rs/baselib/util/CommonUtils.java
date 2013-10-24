@@ -3,13 +3,17 @@
  */
 package rs.baselib.util;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.Reader;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -545,4 +549,67 @@ public class CommonUtils {
     public static void storeProperties(Properties props, String file) throws IOException {
         storeProperties(props, new File(file));
     }
+    
+    /**
+     * Loads the content of the URL as a string.
+     * @param url URL to be loaded
+     * @return the content of the URL
+     * @throws IOException when content of URL cannot be loaded
+     */
+    public static String loadContent(URL url) throws IOException {
+    	return loadContent(url.openStream());
+    }
+    
+    /**
+     * Loads the content of a file as a string.
+     * @param name name of file to be loaded
+     * @return the content of the file
+     * @throws IOException when content of file cannot be loaded
+     */
+    public static String loadContent(String name) throws IOException {
+    	return loadContent(new File(name));
+    }
+    
+    /**
+     * Loads the content of a file as a string.
+     * @param f file to be loaded
+     * @return the content of the file
+     * @throws IOException when content of file cannot be loaded
+     */
+    public static String loadContent(File f) throws IOException {
+    	return loadContent(new FileInputStream(f));    	
+    }
+      
+    /**
+     * Loads the content of a stream as a string.
+     * @param in stream to be loaded
+     * @return the content of the stream
+     * @throws IOException when content of stream cannot be loaded
+     */
+    public static String loadContent(InputStream in) throws IOException {
+    	return loadContent(new InputStreamReader(in));
+    }
+
+    /**
+     * Loads the content of a reader as a string.
+     * @param reader reader to be loaded
+     * @return the content of the reader
+     * @throws IOException when content of reader cannot be loaded
+     */
+    public static String loadContent(Reader reader) throws IOException {
+    	BufferedReader r = null;
+    	try {
+    		StringBuilder rc = new StringBuilder(1000);
+    		r = new BufferedReader(reader);
+    		String line = null;
+    		while ((line = r.readLine()) != null) {
+    			rc.append(line);
+    			rc.append('\n');
+    		}
+    		return rc.toString();
+    	} finally {
+    		if (r != null) r.close();
+    	}
+    }
+
 }
