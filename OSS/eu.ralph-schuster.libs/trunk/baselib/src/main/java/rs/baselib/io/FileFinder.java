@@ -3,17 +3,16 @@
  */
 package rs.baselib.io;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URL;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import rs.baselib.util.CommonUtils;
 
 /**
  * Utility to find a file on disk.
@@ -65,7 +64,8 @@ public class FileFinder {
 						rc = loader.getResource(pkgDir+"/"+name);
 						if (rc != null) break;
 					}
-				} else {
+				}
+				if (rc == null) {
 					rc = loader.getResource(name);
 				}
 			} catch (Exception e) {
@@ -126,32 +126,7 @@ public class FileFinder {
 	 */
 	public static String load(Class<?> clazz, String name) throws IOException {
 		InputStream in = open(clazz, name);
-		return load(in);
+		return CommonUtils.loadContent(in);
 	}
 		
-	/**
-	 * Loads a file.
-	 * @param in - file to load
-	 * @return contents of file
-	 */
-	public static String load(File in) throws IOException {
-		return load(new FileInputStream(in));
-	}
-	
-	/**
-	 * Loads a file.
-	 * @param in - input stream
-	 * @return contents of stream
-	 */
-	public static String load(InputStream in) throws IOException {
-		String rc = "";
-		if (in != null) {
-			BufferedReader r = new BufferedReader(new InputStreamReader(in));
-			while (r.ready()) {
-				rc += r.readLine()+"\n";
-			}
-			r.close();
-		}
-		return rc;
-	}
 }
