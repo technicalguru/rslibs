@@ -50,6 +50,7 @@ public class ResourceList{
 	}
 
 	private static Manifest getManifest(File file) throws IOException {
+		@SuppressWarnings("resource")
 		JarFile jarFile = new JarFile(file);
 		return jarFile.getManifest();
 	}
