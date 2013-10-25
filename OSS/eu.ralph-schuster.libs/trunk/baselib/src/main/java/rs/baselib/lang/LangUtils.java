@@ -270,7 +270,7 @@ public class LangUtils {
 	 * @param logError whether parsing error shall be logged
 	 * @return {@link RsDate} value of object, the default value otherwise
 	 */
-	private static RsDate getRsDate(Object o, DateFormat format, RsDate defaultValue, boolean logError) {
+	public static RsDate getRsDate(Object o, DateFormat format, RsDate defaultValue, boolean logError) {
 		if (o == null) return defaultValue;
 		if (o instanceof RsDate) return (RsDate)o;
 		try {

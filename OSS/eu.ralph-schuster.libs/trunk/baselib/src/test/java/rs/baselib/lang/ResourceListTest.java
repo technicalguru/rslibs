@@ -1,7 +1,7 @@
 /**
  * 
  */
-package rsbaselib.lang;
+package rs.baselib.lang;
 
 import java.net.URL;
 import java.util.Collection;
