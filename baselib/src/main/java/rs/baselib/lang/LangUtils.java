@@ -6,7 +6,6 @@ package rs.baselib.lang;
 import java.beans.PropertyDescriptor;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -16,12 +15,10 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
-import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -124,26 +121,6 @@ public class LangUtils {
 	}
 	
 	/**
-	 * Returns all elements of a Java package.
-	 * @param packageName name of java package
-	 * @return list of files that are in this package
-	 * @throws IOException when an error occurs
-	 */
-	public static File[] getPackageContent(String packageName) throws IOException {
-	    ArrayList<File> list = new ArrayList<File>();
-	    Enumeration<URL> urls = Thread.currentThread().getContextClassLoader()
-	                            .getResources(packageName);
-	    while (urls.hasMoreElements()) {
-	        URL url = urls.nextElement();
-	        File dir = new File(url.getFile());
-	        for (File f : dir.listFiles()) {
-	            list.add(f);
-	        }
-	    }
-	    return list.toArray(new File[]{});
-	}
-	
-	/**
 	 * Converts the object to a string.
 	 * @param o object to be converted
 	 * @return null if object is null, string value of object otherwise
@@ -232,7 +209,7 @@ public class LangUtils {
 	 * @param formats formats to be used
 	 * @return the date if it could be parsed or <code>null</code>
 	 */
-	public RsDate getRsDate(Object o, DateFormat formats[]) {
+	public static RsDate getRsDate(Object o, DateFormat formats[]) {
 		return getRsDate(o, formats, null);
 	}
 	
@@ -243,7 +220,7 @@ public class LangUtils {
 	 * @param defaultValue value to be returned when object cannot be transformed.
 	 * @return the date if it could be parsed, the default value otherwise
 	 */
-	public RsDate getRsDate(Object o, DateFormat formats[], RsDate defaultValue) {
+	public static RsDate getRsDate(Object o, DateFormat formats[], RsDate defaultValue) {
 		if (o == null) return defaultValue;
 		if (o instanceof RsDate) return (RsDate)o;
 		RsDate rc = null; 
@@ -312,7 +289,7 @@ public class LangUtils {
 	 * @param formats formats to be used
 	 * @return the date if it could be parsed, <code>null</code> otherwise
 	 */
-	public Date getDate(Object o, DateFormat formats[]) {
+	public static Date getDate(Object o, DateFormat formats[]) {
 		return getDate(o, formats, null);
 	}
 	
@@ -323,7 +300,7 @@ public class LangUtils {
 	 * @param defaultValue value to be returned when object cannot be transformed.
 	 * @return the date if it could be parsed, the default value otherwise
 	 */
-	public Date getDate(Object o, DateFormat formats[], Date defaultValue) {
+	public static Date getDate(Object o, DateFormat formats[], Date defaultValue) {
 		if (o == null) return defaultValue;
 		if (o instanceof Date) return (Date)o;
 		Date rc = null; 
