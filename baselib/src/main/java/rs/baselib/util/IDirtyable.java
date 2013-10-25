@@ -12,6 +12,9 @@ import javax.persistence.Transient;
  */
 public interface IDirtyable {
 
+	/** Property name */
+	public static final String DIRTY = "dirty";
+	
 	/**
 	 * Returns whether this object has changed.
 	 * @return true or false
