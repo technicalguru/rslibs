@@ -11,6 +11,7 @@ import java.net.URL;
 import java.sql.Timestamp;
 import java.util.Currency;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import org.junit.Test;
@@ -207,7 +208,7 @@ public class ConverterUtilsTest {
 	 */
 	@Test
 	public void testToCurrency() throws UnsupportedEncodingException {
-		Currency value = Currency.getAvailableCurrencies().iterator().next();
+		Currency value = Currency.getInstance(Locale.GERMANY);
 		assertEquals("Cannot convert Currency", value, ConverterUtils.toCurrency(ConverterUtils.toBytes(value)));
 	}
 
