@@ -9,7 +9,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DateFormat;
@@ -248,7 +247,7 @@ public class LangUtilsTest {
 	public void testSleep() {
 		long start = System.currentTimeMillis();
 		LangUtils.sleep(500L);
-		assertTrue("sleep is not long enough", System.currentTimeMillis() - start > 500L);
+		assertTrue("sleep is not long enough", System.currentTimeMillis() - start >= 500L);
 	}
 
 }
