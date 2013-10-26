@@ -417,7 +417,7 @@ public class CommonUtils {
 				ignoreLines--;
 				continue;
 			}
-			StringBuffer s = new StringBuffer();
+			StringBuilder s = new StringBuilder();
 			s.append("      at ");
 			s.append(line.getClassName());
 			s.append(".");
