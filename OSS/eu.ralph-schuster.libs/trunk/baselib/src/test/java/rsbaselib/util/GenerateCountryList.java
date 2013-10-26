@@ -60,7 +60,7 @@ public class GenerateCountryList {
 	}
 	
 	private String unicode(String s) {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		for (char c : s.toCharArray()) {
 			buf.append(unicode(c));
 		}

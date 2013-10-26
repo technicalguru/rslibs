@@ -138,7 +138,7 @@ public abstract class CombinedKey implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		StringBuffer rc = new StringBuffer();
+		StringBuilder rc = new StringBuilder();
 		rc.append(getClass().getSimpleName());
 		rc.append("[");
 		boolean first = true;

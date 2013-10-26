@@ -458,7 +458,7 @@ public class LangUtils {
 	 * @return a unified toString() output, .
 	 */
 	public static String toString(String className, Object... properties) {
-		StringBuffer rc = new StringBuffer();
+		StringBuilder rc = new StringBuilder();
 		rc.append(className);
 		rc.append("[");
 		for (int i=0; i<properties.length; i+=2) {
