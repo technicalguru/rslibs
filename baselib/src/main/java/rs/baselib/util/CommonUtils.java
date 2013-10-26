@@ -25,6 +25,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 
 
@@ -91,10 +92,10 @@ public class CommonUtils {
 	/**
 	 * Generates a string presentation of the given bytes.
 	 * @param b byte array
-	 * @return string representation
+	 * @return string representation (Hex)
 	 */
 	public static String toString(byte b[]) {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		for (int i=0; i<b.length; i++) {
 			buf.append(Integer.toString( ( b[i] & 0xff ) + 0x100, 16).substring( 1 ));
 		}
@@ -108,7 +109,7 @@ public class CommonUtils {
 	 */
 	public static String toString(Object o[]) {
 		if (o == null) return "null";
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		buf.append("[");
 		for (Object object : o) {
 			if (buf.length() > 1) buf.append(",");
@@ -244,18 +245,27 @@ public class CommonUtils {
 	 */
 	public static boolean isCompatibleVersion(String minVersion, String maxVersion, String version) {
 		if (version == null) return true;
-		String vParts[] = version.split("\\.");
-		String minParts[] = null;
-		String maxParts[] = null;
-		if (minVersion != null) minParts = minVersion.split("\\.");
-		if (maxVersion != null) maxParts = maxVersion.split("\\.");
 		
 		// Check minimum version
-		if ((minParts != null) && (compareVersion(minParts, vParts) > 0)) return false;
+		if ((minVersion != null) && (compareVersion(minVersion, version) > 0)) return false;
 		// Check maximum version
-		if ((maxParts != null) && (compareVersion(maxParts, vParts) < 0)) return false;
+		if ((maxVersion != null) && (compareVersion(maxVersion, version) < 0)) return false;
 		
 		return true;
+	}
+	
+	/**
+	 * Compares software versions.
+	 * @param v1 - version 1 
+	 * @param v2 - version 2 
+	 * @return -1 if v1 < v2, 1 if v1 > v2, 0 if v1 = v2
+	 */
+	public static int compareVersion(String v1, String v2) {
+		String v1Parts[] = ArrayUtils.EMPTY_STRING_ARRAY;
+		String v2Parts[] = ArrayUtils.EMPTY_STRING_ARRAY;
+		if (v1 != null) v1Parts = v1.split("\\.");
+		if (v2 != null) v2Parts = v2.split("\\.");
+		return compareVersion(v1Parts, v2Parts);
 	}
 	
 	/**
