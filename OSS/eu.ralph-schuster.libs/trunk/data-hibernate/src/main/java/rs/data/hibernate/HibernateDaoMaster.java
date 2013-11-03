@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import rs.baselib.io.FileFinder;
+import rs.baselib.lang.LangUtils;
 import rs.data.hibernate.util.DataSourceConnectionProvider;
 import rs.data.impl.AbstractDaoMaster;
 
@@ -123,7 +124,7 @@ public class HibernateDaoMaster extends AbstractDaoMaster {
 	@SuppressWarnings("unchecked")
 	protected void loadDataSource(SubnodeConfiguration dbconfig) {
 		try {
-			Class<? extends DataSource> clazz = (Class<? extends DataSource>)Class.forName(dbconfig.getString("[@class]"));
+			Class<? extends DataSource> clazz = (Class<? extends DataSource>)LangUtils.forName(dbconfig.getString("[@class]"));
 			DataSource datasource = clazz.newInstance();
 			int idx=0;
 			while (true) {

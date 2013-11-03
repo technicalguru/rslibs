@@ -133,7 +133,7 @@ public abstract class AbstractStorageStrategy<K extends Serializable, T extends 
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected Object unserialize(String className, String value) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-		Class<?> clazz = Class.forName(className);
+		Class<?> clazz = LangUtils.forName(className);
 		if (Number.class.isAssignableFrom(clazz)) {
 			return (Number)clazz.getConstructor(String.class).newInstance(value);
 		} else if (Boolean.class.isAssignableFrom(clazz) ) {

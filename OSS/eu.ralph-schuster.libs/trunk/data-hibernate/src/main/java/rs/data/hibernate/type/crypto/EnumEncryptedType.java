@@ -8,6 +8,7 @@ import java.util.Properties;
 import org.hibernate.MappingException;
 
 import rs.baselib.io.ConverterUtils;
+import rs.baselib.lang.LangUtils;
 
 /**
  * Reads enumerations.
@@ -68,7 +69,7 @@ public class EnumEncryptedType extends AbstractEncryptionType {
 		 }
 
 		 try {
-			 clazz = (Class<Enum>)Class.forName(className);
+			 clazz = (Class<Enum>)LangUtils.forName(className);
 		 } catch (ClassNotFoundException e) {
 			 throw new MappingException("Cannot find class: "+className, e);
 		 }
