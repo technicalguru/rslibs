@@ -168,7 +168,7 @@ public class EnumerationType implements UserType, ParameterizedType {
 				clazz = (Class<Enum>)loader.loadClass(className);
 			}
 			if (clazz == null) {
-				clazz = (Class<Enum>)Class.forName(className);
+				clazz = (Class<Enum>)LangUtils.forName(className);
 			}
 		} catch (ClassNotFoundException e) {
 			throw new MappingException("Cannot find class: "+className, e);

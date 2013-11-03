@@ -21,6 +21,7 @@ import org.hibernate.usertype.UserType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import rs.baselib.lang.LangUtils;
 import rs.baselib.util.CommonUtils;
 
 /**
@@ -231,7 +232,7 @@ public abstract class AbstractEncryptionType implements UserType, ParameterizedT
 		if (parameters != null) parameters.getProperty("cryptingDelegateFactoryClass");
 		if (factoryClassName == null) factoryClassName = CryptingDelegateFactory.class.getName();
 		try {
-			Class<?> factoryClass = Class.forName(factoryClassName);
+			Class<?> factoryClass = LangUtils.forName(factoryClassName);
 			Method m = factoryClass.getMethod("getInstance");
 			if ((m.getModifiers() & Modifier.STATIC) != 0) {
 				setCryptingDelegateFactory((ICryptingDelegateFactory)m.invoke(null));

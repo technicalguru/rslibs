@@ -20,6 +20,7 @@ import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;
 
 import rs.baselib.bean.IBean;
+import rs.baselib.lang.LangUtils;
 import rs.data.api.IDaoFactory;
 import rs.data.api.bo.IGeneralBO;
 
@@ -78,7 +79,7 @@ public class XmlStorageStrategy<K extends Serializable, T extends IGeneralBO<K>>
 	protected Object loadValue(HierarchicalConfiguration cfg) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		String className = cfg.getString("[@class]");
 		if ((className != null) && !className.isEmpty()) {
-			Class<?> clazz = Class.forName(className);
+			Class<?> clazz = LangUtils.forName(className);
 			Object rc = null;
 			if (IGeneralBO.class.isAssignableFrom(clazz)) {
 				rc = loadBusinessObject(clazz, cfg);
