@@ -7,6 +7,8 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.SubnodeConfiguration;
 
+import rs.baselib.lang.LangUtils;
+
 /**
  * Useful methods for configuration issues.
  * @author ralph
@@ -44,7 +46,7 @@ public class ConfigurationUtils {
 	 */
 	public static Object load(String className, Configuration config, boolean configure) {
 		try {
-			Class<?> clazz = Class.forName(className);
+			Class<?> clazz = LangUtils.forName(className);
 			return load(clazz, config, configure);
 		} catch (ClassNotFoundException e) {
 			throw new RuntimeException("Cannot load class from configuration", e);

@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import rs.baselib.configuration.ConfigurationUtils;
 import rs.baselib.io.FileFinder;
+import rs.baselib.lang.LangUtils;
 import rs.baselib.security.IPasswordCallback;
 
 /**
@@ -250,7 +251,7 @@ public class DefaultCryptingDelegateFactory implements ICryptingDelegateFactory 
 	protected synchronized void createCryptingDelegate() {
 		if (iCryptingDelegate != null) return;
 		try {
-			Class<? extends ICryptingDelegate> clazz = (Class<? extends ICryptingDelegate>)Class.forName(getDelegateClassName());
+			Class<? extends ICryptingDelegate> clazz = (Class<? extends ICryptingDelegate>)LangUtils.forName(getDelegateClassName());
 			iCryptingDelegate = clazz.newInstance();
 			iCryptingDelegate.init(this);
 		} catch (Exception e) {
