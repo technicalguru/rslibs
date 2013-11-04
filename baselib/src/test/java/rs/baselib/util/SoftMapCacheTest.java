@@ -1,4 +1,4 @@
-package rsbaselib.util;
+package rs.baselib.util;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -9,20 +9,20 @@ import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 
-import rs.baselib.util.WeakMapCache;
+import rs.baselib.util.SoftMapCache;
 
 /**
- * Tests the {@link rs.baselib.util.WeakMapCache}.
+ * Tests the {@link rs.baselib.util.SoftMapCache}.
  * @author ralph
  *
  */
-public class WeakMapCacheTest {
+public class SoftMapCacheTest {
 
-	private WeakMapCache<Long, Object> cache;
+	private SoftMapCache<Long, Object> cache;
 	
 	@Before
 	public void setUp() throws Exception {
-		cache = new WeakMapCache<Long, Object>();
+		cache = new SoftMapCache<Long, Object>();
 	}
 
 	@Test
