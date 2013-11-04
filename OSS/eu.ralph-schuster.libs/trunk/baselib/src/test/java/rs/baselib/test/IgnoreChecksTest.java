@@ -1,7 +1,7 @@
 /**
  * 
  */
-package rsbaselib.test;
+package rs.baselib.test;
 
 import static org.junit.Assert.*;
 

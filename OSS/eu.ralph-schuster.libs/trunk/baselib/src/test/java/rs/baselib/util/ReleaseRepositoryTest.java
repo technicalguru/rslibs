@@ -1,7 +1,7 @@
 /**
  * 
  */
-package rsbaselib.util;
+package rs.baselib.util;
 
 import java.util.Collection;
 
