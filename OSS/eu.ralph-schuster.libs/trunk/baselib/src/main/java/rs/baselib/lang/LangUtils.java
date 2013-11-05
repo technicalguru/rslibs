@@ -171,6 +171,7 @@ public class LangUtils {
 
 	/**
 	 * Converts the object to an int.
+	 * The method will throw an exception when the object is not null and cannot be parsed.
 	 * @param o object to be converted
 	 * @return 0 if object is null, int value of object otherwise
 	 */
@@ -185,7 +186,29 @@ public class LangUtils {
 	}
 
 	/**
+	 * Converts the object to an int.
+	 * @param o object to be converted
+	 * @param defaultValue the default value to return
+	 * @return default if object is null or cannot be parsed, int value of object otherwise
+	 */
+	public static int getInt(Object o, int defaultValue) {
+		if (o == null) return defaultValue;
+		
+		if (o instanceof Number) {
+			return ((Number)o).intValue();
+		}
+		
+		try {
+			return Integer.parseInt(o.toString());
+		} catch (Exception e) {
+			// ignore
+		}
+		return defaultValue;
+	}
+
+	/**
 	 * Converts the object to a long.
+	 * The method will throw an exception when the object is not null and cannot be parsed.
 	 * @param o object to be converted
 	 * @return 0 if object is null, long value of object otherwise
 	 */
@@ -200,7 +223,67 @@ public class LangUtils {
 	}
 
 	/**
+	 * Converts the object to a long.
+	 * @param o object to be converted
+	 * @param defaultValue the default value to return
+	 * @return default if object is null or cannot be parsed, long value of object otherwise
+	 */
+	public static long getLong(Object o, long defaultValue) {
+		if (o == null) return defaultValue;
+		
+		if (o instanceof Number) {
+			return ((Number)o).longValue();
+		}
+		
+		try {
+			return Long.parseLong(o.toString());
+		} catch (Exception e) {
+			// ignore
+		}
+		return defaultValue;
+	}
+
+	/**
+	 * Converts the object to a float.
+	 * The method will throw an exception when the object is not null and cannot be parsed.
+	 * @param o object to be converted
+	 * @return 0 if object is null, float value of object otherwise
+	 */
+	public static float getFloat(Object o) {
+		if (o == null) return 0;
+		
+		if (o instanceof Number) {
+			return ((Number)o).floatValue();
+		}
+		
+		return Float.parseFloat(o.toString());
+	}
+
+	/**
+	 * Converts the object to a float.
+	 * @param o object to be converted
+	 * @param defaultValue the default value to return
+	 * @return default if object is null or cannot be parsed, float value of object otherwise
+	 */
+	public static float getFloat(Object o, float defaultValue) {
+		if (o == null) return defaultValue;
+		
+		if (o instanceof Number) {
+			return ((Number)o).floatValue();
+		}
+		
+		try {
+			return Float.parseFloat(o.toString());
+		} catch (Exception e) {
+			// ignore
+		}
+		return defaultValue;
+	}
+
+
+	/**
 	 * Converts the object to a double.
+	 * The method will throw an exception when the object is not null and cannot be parsed.
 	 * @param o object to be converted
 	 * @return 0 if object is null, double value of object otherwise
 	 */
@@ -212,6 +295,27 @@ public class LangUtils {
 		}
 		
 		return Double.parseDouble(o.toString());
+	}
+
+	/**
+	 * Converts the object to a double.
+	 * @param o object to be converted
+	 * @param defaultValue the default value to return
+	 * @return default if object is null or cannot be parsed, double value of object otherwise
+	 */
+	public static double getDouble(Object o, double defaultValue) {
+		if (o == null) return defaultValue;
+		
+		if (o instanceof Number) {
+			return ((Number)o).doubleValue();
+		}
+		
+		try {
+			return Double.parseDouble(o.toString());
+		} catch (Exception e) {
+			// ignore
+		}
+		return defaultValue;
 	}
 
 	/**
