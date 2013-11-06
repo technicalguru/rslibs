@@ -3,22 +3,27 @@
  */
 package rs.baselib.configuration;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
 import java.util.prefs.BackingStoreException;
 
 import org.apache.commons.codec.binary.Base64;
 
-import rs.baselib.bean.AbstractBean;
+import rs.baselib.bean.IPropertyChangeProvider;
 import rs.baselib.lang.LangUtils;
 import rs.baselib.util.CommonUtils;
 
 /**
  * Abstract implementation of a preference node.
+ * All modifications are performed synchronously.
  * @author ralph
  *
  */
-public abstract class AbstractPreferences extends AbstractBean implements IPreferences {
+public abstract class AbstractPreferences implements IPreferences, IPropertyChangeProvider {
 
 	/** The parent node */
 	private AbstractPreferences parent;
@@ -30,6 +35,13 @@ public abstract class AbstractPreferences extends AbstractBean implements IPrefe
 	private Map<String, String> values;
 	/** cache of absolute path */
 	private String absolutePath = null;
+	/** PropertyChangeSupport */
+	private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
+	/** Our responsible read lock object */
+	private Lock readLock;
+	/** Our responsible read lock object */
+	private Lock writeLock;
+
 	/**
 	 * Constructor.
 	 * Creates a root node.
@@ -47,8 +59,71 @@ public abstract class AbstractPreferences extends AbstractBean implements IPrefe
 		this.name = name;
 		children = new HashMap<String, AbstractPreferences>();
 		values = new HashMap<String, String>();
+		readLock = createReadLock();
+		writeLock = createWriteLock();
 	}
 
+	/**
+	 * Creates the appropriate read lock object.
+	 * @return the read lock object
+	 */
+	protected abstract Lock createReadLock();
+
+	/**
+	 * Creates the appropriate write lock object.
+	 * @return the write lock object
+	 */
+	protected abstract Lock createWriteLock();
+
+	/**
+	 * Returns the readLock.
+	 * @return the readLock
+	 */
+	public Lock getReadLock() {
+		return readLock;
+	}
+
+	/**
+	 * Aquires a read lock.
+	 */
+	protected void readLock() {
+		Lock l = getReadLock();
+		if (l != null) l.lock();
+	}
+	
+	/**
+	 * Releases a read lock.
+	 */
+	protected void readUnlock() {
+		Lock l = getReadLock();
+		if (l != null) l.unlock();
+	}
+	
+	/**
+	 * Returns the writeLock.
+	 * @return the writeLock
+	 */
+	public Lock getWriteLock() {
+		return writeLock;
+	}
+
+	/**
+	 * Aquires a write lock.
+	 */
+	protected void writeLock() {
+		Lock l = getWriteLock();
+		if (l != null) l.lock();
+	}
+	
+	/**
+	 * Releases a write lock.
+	 */
+	protected void writeUnlock() {
+		Lock l = getWriteLock();
+		if (l != null) l.unlock();
+		// TODO schedule flush
+	}
+	
 	/**
 	 * Subclasses must implement this to return a new child node.
 	 * @param parent the parent to be used
@@ -65,7 +140,15 @@ public abstract class AbstractPreferences extends AbstractBean implements IPrefe
 	 * @param child child to be added
 	 */
 	protected void addNode(AbstractPreferences child) {
-		schedule(new NodeAdder(child));
+		try {
+			writeLock();
+			String n = child.name();
+			if (n == null) n = "";
+			children.put(n, child);
+		} finally {
+			writeUnlock();
+		}
+		firePropertyChange(CHILD_ADDED, null, child);
 	}
 
 	/**
@@ -75,7 +158,13 @@ public abstract class AbstractPreferences extends AbstractBean implements IPrefe
 	 * @param child child to be removed
 	 */
 	protected void removeNode(AbstractPreferences child) {
-		schedule(new NodeRemover(child));
+		try {
+			writeLock();
+			children.remove(child.name());
+		} finally {
+			writeUnlock();
+		}
+		firePropertyChange(CHILD_REMOVED, child, null);
 	}
 
 	/**
@@ -83,7 +172,14 @@ public abstract class AbstractPreferences extends AbstractBean implements IPrefe
 	 */
 	@Override
 	public void put(String key, String value) {
-		schedule(new ValueAdder(key, value));
+		String oldValue = null;
+		try {
+			writeLock();
+			oldValue = values.put(key, value);
+		} finally {
+			writeUnlock();
+		}
+		firePropertyChange(key, oldValue, value);
 	}
 
 	/**
@@ -91,8 +187,13 @@ public abstract class AbstractPreferences extends AbstractBean implements IPrefe
 	 */
 	@Override
 	public String get(String key, String def) {
-		String rc = values.get(key);
-		return rc != null ? rc : def;
+		try {
+			readLock();
+			String rc = values.get(key);
+			return rc != null ? rc : def;
+		} finally {
+			readUnlock();
+		}
 	}
 
 	/**
@@ -100,7 +201,15 @@ public abstract class AbstractPreferences extends AbstractBean implements IPrefe
 	 */
 	@Override
 	public void remove(String key) {
-		schedule(new ValueRemover(key));
+		String oldValue = null;
+		try {
+			writeLock();
+			oldValue = values.remove(key);
+		} finally {
+			writeUnlock();
+		}
+
+		firePropertyChange(key, oldValue, null);
 	}
 
 	/**
@@ -108,7 +217,13 @@ public abstract class AbstractPreferences extends AbstractBean implements IPrefe
 	 */
 	@Override
 	public void clear() throws BackingStoreException {
-		schedule(new Clearer());
+		try {
+			writeLock();
+			values.clear();
+		} finally {
+			writeUnlock();
+		}
+		firePropertyChange(VALUES_CLEARED, null, AbstractPreferences.this);
 	}
 
 	/**
@@ -116,7 +231,7 @@ public abstract class AbstractPreferences extends AbstractBean implements IPrefe
 	 */
 	@Override
 	public void putInt(String key, int value) {
-		schedule(new ValueAdder(key, Integer.toString(value)));
+		put(key, Integer.toString(value));
 	}
 
 	/**
@@ -124,7 +239,7 @@ public abstract class AbstractPreferences extends AbstractBean implements IPrefe
 	 */
 	@Override
 	public int getInt(String key, int def) {
-		return LangUtils.getInt(values.get(key), def);
+		return LangUtils.getInt(get(key, null), def);
 	}
 
 	/**
@@ -132,7 +247,7 @@ public abstract class AbstractPreferences extends AbstractBean implements IPrefe
 	 */
 	@Override
 	public void putLong(String key, long value) {
-		schedule(new ValueAdder(key, Long.toString(value)));
+		put(key, Long.toString(value));
 	}
 
 	/**
@@ -140,7 +255,7 @@ public abstract class AbstractPreferences extends AbstractBean implements IPrefe
 	 */
 	@Override
 	public long getLong(String key, long def) {
-		return LangUtils.getLong(values.get(key), def);
+		return LangUtils.getLong(get(key, null), def);
 	}
 
 	/**
@@ -148,7 +263,7 @@ public abstract class AbstractPreferences extends AbstractBean implements IPrefe
 	 */
 	@Override
 	public void putBoolean(String key, boolean value) {
-		schedule(new ValueAdder(key, Boolean.toString(value)));
+		put(key, Boolean.toString(value));
 	}
 
 	/**
@@ -166,7 +281,7 @@ public abstract class AbstractPreferences extends AbstractBean implements IPrefe
 	 */
 	@Override
 	public void putFloat(String key, float value) {
-		schedule(new ValueAdder(key, Float.toString(value)));
+		put(key, Float.toString(value));
 	}
 
 	/**
@@ -174,7 +289,7 @@ public abstract class AbstractPreferences extends AbstractBean implements IPrefe
 	 */
 	@Override
 	public float getFloat(String key, float def) {
-		return LangUtils.getFloat(values.get(key), def);
+		return LangUtils.getFloat(get(key, null), def);
 	}
 
 	/**
@@ -182,7 +297,7 @@ public abstract class AbstractPreferences extends AbstractBean implements IPrefe
 	 */
 	@Override
 	public void putDouble(String key, double value) {
-		schedule(new ValueAdder(key, Double.toString(value)));
+		put(key, Double.toString(value));
 	}
 
 	/**
@@ -190,7 +305,7 @@ public abstract class AbstractPreferences extends AbstractBean implements IPrefe
 	 */
 	@Override
 	public double getDouble(String key, double def) {
-		return LangUtils.getDouble(values.get(key), def);
+		return LangUtils.getDouble(get(key, null), def);
 	}
 
 	/**
@@ -198,7 +313,7 @@ public abstract class AbstractPreferences extends AbstractBean implements IPrefe
 	 */
 	@Override
 	public void putByteArray(String key, byte[] value) {
-		schedule(new ValueAdder(key, Base64.encodeBase64String(value)));
+		put(key, Base64.encodeBase64String(value));
 	}
 
 	/**
@@ -216,7 +331,13 @@ public abstract class AbstractPreferences extends AbstractBean implements IPrefe
 	 */
 	@Override
 	public String[] keys() throws BackingStoreException {
-		return values.keySet().toArray(new String[values.size()]);
+		Lock lock = PreferencesService.INSTANCE.getReadLock(this);
+		try {
+			if (lock != null) lock.lock();
+			return values.keySet().toArray(new String[values.size()]);
+		} finally {
+			if (lock != null) lock.unlock();
+		}
 	}
 
 	/**
@@ -224,7 +345,12 @@ public abstract class AbstractPreferences extends AbstractBean implements IPrefe
 	 */
 	@Override
 	public String[] childrenNames() throws BackingStoreException {
-		return children.keySet().toArray(new String[values.size()]);
+		try {
+			readLock();
+			return children.keySet().toArray(new String[children.size()]);
+		} finally {
+			readUnlock();
+		}
 	}
 
 	/**
@@ -290,10 +416,32 @@ public abstract class AbstractPreferences extends AbstractBean implements IPrefe
 				}
 			}
 			String names[] = pathName.split("\\/");
-			AbstractPreferences child = children.get(names[0]);
-			if (child == null) {
-				child = createNode(this, names[0]);
-				addNode(child);
+			AbstractPreferences child = null;
+			try {
+				readLock();
+				child = children.get(names[0]);
+				if (child == null) {
+					// We need to release read lock before write lock can get aquired
+					readUnlock();
+					
+					// Get write lock
+					try {
+						writeLock();
+						// We must recheck existence of child as another thread might have interrupted
+						child = children.get(names[0]);
+						if (child == null) {
+							child = createNode(this, names[0]);
+							addNode(child);
+						}
+					} finally {
+						writeUnlock();
+					}
+					
+					// Read lock again for finally {} clause 
+					readLock();
+				}
+			} finally {
+				readUnlock();
 			}
 			if (names.length > 1) {
 				pathName = CommonUtils.join("/", names, 1);
@@ -323,9 +471,16 @@ public abstract class AbstractPreferences extends AbstractBean implements IPrefe
 				}
 			}
 			String names[] = pathName.split("\\/");
-			AbstractPreferences child = children.get(names[0]);
-			if (child == null) {
-				return false;
+			Lock lock = PreferencesService.INSTANCE.getReadLock(this);
+			AbstractPreferences child = null;
+			try {
+				if (lock != null) lock.lock();
+				child = children.get(names[0]);
+				if (child == null) {
+					return false;
+				}
+			} finally {
+				if (lock != null) lock.unlock();
 			}
 			if (names.length > 1) {
 				pathName = CommonUtils.join("/", names, 1);
@@ -381,17 +536,6 @@ public abstract class AbstractPreferences extends AbstractBean implements IPrefe
 	protected abstract IPreferencesService getPreferencesService();
 
 	/**
-	 * Schedules the task for execution.
-	 * @param task
-	 */
-	protected void schedule(Runnable task) {
-		IPreferencesService svc = getPreferencesService();
-		if (svc != null) {
-			svc.schedule(this, task);
-		}
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -414,148 +558,55 @@ public abstract class AbstractPreferences extends AbstractBean implements IPrefe
 	}
 
 	/**
-	 * The runnable to be executed for adding a new node.
-	 * @author ralph
-	 *
+	 * {@inheritDoc}
 	 */
-	protected class NodeAdder implements Runnable {
-
-		private AbstractPreferences child;
-
-		/**
-		 * Constructor.
-		 * @param child child to be registered
-		 */
-		public NodeAdder(AbstractPreferences child) {
-			this.child = child;
-		}
-
-		/**
-		 * {@inheritDoc}
-		 */
-		@Override
-		public void run() {
-			String n = child.name();
-			if (n == null) n = "";
-			children.put(n, child);
-			firePropertyChange(CHILD_ADDED, null, child);
-		}
-
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		changeSupport.addPropertyChangeListener(listener);
 	}
 
 	/**
-	 * The runnable to be executed for adding a new value.
-	 * @author ralph
-	 *
+	 * {@inheritDoc}
 	 */
-	protected class ValueAdder implements Runnable {
-
-		private String key;
-		private String value;
-
-		/**
-		 * Constructor.
-		 * @param key key to be registered
-		 * @param value value to be registered
-		 */
-		public ValueAdder(String key, String value) {
-			this.key   = key;
-			this.value = value;
-		}
-
-		/**
-		 * {@inheritDoc}
-		 */
-		@Override
-		public void run() {
-			String oldValue = values.put(key, value);
-			firePropertyChange(key, oldValue, value);
-		}
-
+	public void removePropertyChangeListener(PropertyChangeListener listener) {
+		changeSupport.removePropertyChangeListener(listener);
 	}
 
 	/**
-	 * The runnable to be executed for removing a value.
-	 * @author ralph
-	 *
+	 * {@inheritDoc}
 	 */
-	protected class ValueRemover implements Runnable {
-
-		private String key;
-
-		/**
-		 * Constructor.
-		 * @param key key to be removed
-		 */
-		public ValueRemover(String key) {
-			this.key   = key;
-		}
-
-		/**
-		 * {@inheritDoc}
-		 */
-		@Override
-		public void run() {
-			String oldValue = values.remove(key);
-			firePropertyChange(key, oldValue, null);
-		}
-
+	public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+		changeSupport.addPropertyChangeListener(propertyName, listener);
 	}
 
 	/**
-	 * The runnable to be executed for removing a node.
-	 * @author ralph
-	 *
+	 * {@inheritDoc}
 	 */
-	protected class NodeRemover implements Runnable {
-
-		private AbstractPreferences child;
-
-		/**
-		 * Constructor.
-		 * @param key key to be removed
-		 */
-		public NodeRemover(AbstractPreferences child) {
-			this.child = child;
-		}
-
-		/**
-		 * {@inheritDoc}
-		 */
-		@Override
-		public void run() {
-			if (parent() != null) {
-				children.remove(child.name());
-				firePropertyChange(CHILD_REMOVED, child, null);
-			}
-		}
-
+	public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+		changeSupport.removePropertyChangeListener(propertyName, listener);
 	}
 
 	/**
-	 * The runnable to be executed for removing all key-value pairs.
-	 * @author ralph
-	 *
+	 * Fires an event if property changed.
+	 * @param propertyName name of property
+	 * @param oldValue old value
+	 * @param newValue new value
+	 * @return <code>true</code> when the event was fired (because values were not equal)
 	 */
-	protected class Clearer implements Runnable {
-
-		/**
-		 * Constructor.
-		 * @param key key to be removed
-		 */
-		public Clearer() {
-		}
-
-		/**
-		 * {@inheritDoc}
-		 */
-		@Override
-		public void run() {
-			values.clear();
-			firePropertyChange(VALUES_CLEARED, null, this);
-		}
-
+	protected boolean firePropertyChange(String propertyName, Object oldValue, Object newValue) {
+		return firePropertyChange(new PropertyChangeEvent(this, propertyName, oldValue, newValue));
 	}
 
+	/**
+	 * Fires a change event.
+	 * @param event event to be fired
+	 * @return <code>true</code> when the event was fired (because values were not equal)
+	 */
+	protected boolean firePropertyChange(PropertyChangeEvent event) {
+		if (!CommonUtils.equals(event.getOldValue(), event.getNewValue())) {
+			changeSupport.firePropertyChange(event);
+			return true;
+		}
+		return false;
+	}
 
 }

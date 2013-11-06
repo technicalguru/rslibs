@@ -3,6 +3,8 @@
  */
 package rs.baselib.configuration;
 
+import java.util.concurrent.locks.Lock;
+
 /**
  * Default implementation of preferences.
  * @author ralph
@@ -33,4 +35,21 @@ public class Preferences extends AbstractPreferences {
 		return PreferencesService.INSTANCE;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected Lock createReadLock() {
+		return PreferencesService.INSTANCE.getReadLock(this);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected Lock createWriteLock() {
+		return PreferencesService.INSTANCE.getWriteLock(this);
+	}
+
+	
 }

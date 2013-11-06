@@ -3,6 +3,7 @@
  */
 package rs.baselib.configuration;
 
+import java.util.concurrent.locks.Lock;
 import java.util.prefs.BackingStoreException;
 
 /**
@@ -28,13 +29,6 @@ public interface IPreferencesService {
 	public IPreferences getSystemPreferences(String applicationName) throws BackingStoreException;
 	
 	/**
-	 * Schedules a modification task for execution.
-	 * @param node the client node
-	 * @param modificationTask the task to be executed
-	 */
-	public void schedule(IPreferences node, Runnable modificationTask);
-	
-	/**
 	 * Flushes any changes made in this node.
 	 * The method does not return before the flush has been completed.
 	 * @param node the node to be flushed
@@ -49,4 +43,19 @@ public interface IPreferencesService {
 	 * @throws BackingStoreException when there has been a communication problem with the backing store.
 	 */
 	public void sync(IPreferences node) throws BackingStoreException;
+	
+	/**
+	 * Returns the read lock object for the given node.
+	 * @param node the node that requires a read lock
+	 * @return the responsible {@link Lock} object
+	 */
+	public Lock getReadLock(IPreferences node);
+	
+	/**
+	 * Returns the write lock object for the given node.
+	 * @param node the node that requires a write lock
+	 * @return the responsible {@link Lock} object
+	 */
+	public Lock getWriteLock(IPreferences node);
+
 }

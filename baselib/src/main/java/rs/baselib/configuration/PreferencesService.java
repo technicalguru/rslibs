@@ -41,5 +41,21 @@ public class PreferencesService extends AbstractPreferencesService {
 		// TODO Auto-generated method stub
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected void flushUserPreferences(IPreferences node, String applicationName) throws BackingStoreException {
+		// TODO Auto-generated method stub
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected void flushSystemPreferences(IPreferences node, String applicationName) throws BackingStoreException {
+		// TODO Auto-generated method stub
+	}
+
 
 }
