@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
  * <pre>
  *    /@application1/@USER   - user preferences of application 1
  *    /@application1/@SYSTEM - system preferences of application 1
- *    /@application2/@USER   - user preferences of application 1
+ *    /@application2/@USER   - user preferences of application 2
  *    /@application2/@SYSTEM - system preferences of application 2
  * </pre>
  * @author ralph
