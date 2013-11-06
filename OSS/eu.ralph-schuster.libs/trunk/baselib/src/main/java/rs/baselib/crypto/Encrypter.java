@@ -26,8 +26,6 @@ import org.apache.commons.codec.binary.Base64;
  */
 public class Encrypter {
 
-	private static Base64 base64 = new Base64();
-	
 	private Cipher ecipher;
 	private AlgorithmParameterSpec algorithmParameterSpec;
 	
@@ -216,7 +214,7 @@ public class Encrypter {
             byte[] enc = ecipher.doFinal(utf8);
 
             // Encode bytes to base64 to get a string
-            return new String(base64.encode(enc)).trim();
+            return Base64.encodeBase64String(enc).trim();
 
         } catch (Throwable t) {
         	throw new EncryptionException("Cannot encrypt string: "+t.getMessage(), t);

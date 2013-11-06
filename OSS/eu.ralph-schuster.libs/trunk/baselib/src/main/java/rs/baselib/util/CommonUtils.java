@@ -305,10 +305,35 @@ public class CommonUtils {
 	 * @return the joined string
 	 */
 	public static String join(String separator, String parts[]) {
-		String s = "";
-		for (int i=0; i<parts.length; i++) s += separator + parts[i];
-		if (s.length() > 0) s = s.substring(separator.length());
-		return s;
+		return join(separator, parts, 0, parts.length+1);
+	}
+	
+	/**
+	 * Makes a join of a string array.
+	 * @param separator - the string to be used inbetween parts
+	 * @param parts - the parts to join
+	 * @param startIndex - starting index (negative values not allowed)
+	 * @return the joined string
+	 */
+	public static String join(String separator, String parts[], int startIndex) {
+		return join(separator, parts, 0, parts.length+1);
+	}
+	
+	/**
+	 * Makes a join of a string array.
+	 * @param separator - the string to be used inbetween parts
+	 * @param parts - the parts to join
+	 * @param startIndex - starting index (negative values not allowed)
+	 * @param endIndex - endIndex (bigger values than number or array elements have no effect)
+	 * @return the joined string
+	 */
+	public static String join(String separator, String parts[], int startIndex, int endIndex) {
+		StringBuilder s = new StringBuilder();
+		for (int i=startIndex; i<parts.length && i<=endIndex; i++) {
+			if (i != startIndex) s.append(separator);
+			s.append(parts[i]);
+		}
+		return s.toString();
 	}
 	
 	/**
