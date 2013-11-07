@@ -31,8 +31,8 @@ public class Preferences extends AbstractPreferences {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected IPreferencesService getPreferencesService() {
-		return PreferencesService.INSTANCE;
+	protected AbstractPreferencesService getPreferencesService() {
+		return (PreferencesService)PreferencesService.INSTANCE;
 	}
 
 	/**

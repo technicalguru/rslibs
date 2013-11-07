@@ -4,12 +4,18 @@
 package rs.baselib.configuration;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.prefs.BackingStoreException;
 import java.util.regex.Pattern;
+
+import org.slf4j.LoggerFactory;
+
+import rs.baselib.lang.LangUtils;
 
 /**
  * Common functionality of a preferences service.
@@ -32,6 +38,9 @@ public abstract class AbstractPreferencesService implements IPreferencesService 
 	private IPreferences rootNode;
 	private Object SYNCH_OBJECT = new Object();
 	private Map<IPreferences,ReadWriteLock> locks = new HashMap<IPreferences, ReadWriteLock>();
+	private volatile Set<IPreferences> flushableNodes = new HashSet<IPreferences>();
+	private volatile long lastModificationTime = 0L;
+	private volatile Thread flushingThread = null;
 
 	/**
 	 * Constructor.
@@ -174,6 +183,23 @@ public abstract class AbstractPreferencesService implements IPreferencesService 
 	}
 
 	/**
+	 * A node changed.
+	 * Schedules a flush.
+	 * @param node the node that changed
+	 */
+	public void nodeChanged(IPreferences node) {
+		node = getLockNode(node);
+		synchronized (SYNCH_OBJECT) {
+			flushableNodes.add(node);
+			lastModificationTime = System.currentTimeMillis();
+			if (flushingThread == null) {
+				flushingThread = new FlushingThread();
+				flushingThread.start();
+			}
+		}
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -217,13 +243,66 @@ public abstract class AbstractPreferencesService implements IPreferencesService 
 		}
 		return null;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void sync(IPreferences node) throws BackingStoreException {
-		// Just flush
-		flush(node);
+		// Simply check if there is a flushing thread active
+		boolean isRunning = true;
+		while (isRunning) {
+			synchronized (SYNCH_OBJECT) {
+				isRunning = flushingThread != null;
+			}
+		}
 	}
 
+	/**
+	 * A thread running all flushs.
+	 * @author ralph
+	 *
+	 */
+	protected class FlushingThread extends Thread {
+
+		public void run() {
+			int toBeFlushed;
+			long timeDiff = 0L;
+			do {
+				// Sleep before start
+				LangUtils.sleep(1000L);
+
+				// Check the last modification time
+				Set<IPreferences> flushingNodes = null;
+				synchronized (SYNCH_OBJECT) {
+					timeDiff = System.currentTimeMillis() - lastModificationTime;
+					// Get the nodes to be flushed in case we have to do something
+					toBeFlushed = flushableNodes.size();
+					if ((timeDiff > 1500L) && (toBeFlushed > 0)) {
+						flushingNodes = flushableNodes;
+						flushableNodes = new HashSet<IPreferences>();
+					}
+				}
+
+				// Only flush if required
+				if (flushingNodes != null) {
+					for (IPreferences node : flushingNodes) {
+						try {
+							flush(node);
+						} catch (BackingStoreException e) {
+							LoggerFactory.getLogger(AbstractPreferencesService.this.getClass()).error("Cannot flush node", e);
+						}
+					}
+
+					// Recheck if there have been new flushable nodes added
+					synchronized (SYNCH_OBJECT) {
+						toBeFlushed = flushableNodes.size();
+						// End this thread if nothing to do
+						if (toBeFlushed == 0) flushingThread = null;
+					}
+				}
+
+			} while (toBeFlushed > 0);
+		}
+	}
 }

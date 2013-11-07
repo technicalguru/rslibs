@@ -121,7 +121,8 @@ public abstract class AbstractPreferences implements IPreferences, IPropertyChan
 	protected void writeUnlock() {
 		Lock l = getWriteLock();
 		if (l != null) l.unlock();
-		// TODO schedule flush
+		// schedule flush
+		getPreferencesService().nodeChanged(this);
 	}
 	
 	/**
@@ -533,7 +534,7 @@ public abstract class AbstractPreferences implements IPreferences, IPropertyChan
 	 * Returns the preferences service.
 	 * @return the preferences service
 	 */
-	protected abstract IPreferencesService getPreferencesService();
+	protected abstract AbstractPreferencesService getPreferencesService();
 
 	/**
 	 * {@inheritDoc}
