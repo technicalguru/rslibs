@@ -151,6 +151,16 @@ public class CommonUtilsTest {
 	}
 
 	@Test
+	public void testJoin2() {
+		assertEquals("join(char,String[]) does not work correctly", "b-c", CommonUtils.join("-", new String[]{ "a", "b", "c" }, 1)); 
+	}
+
+	@Test
+	public void testJoin3() {
+		assertEquals("join(char,String[]) does not work correctly", "b-c-d", CommonUtils.join("-", new String[]{ "a", "b", "c", "d", "e" }, 1, 3)); 
+	}
+
+	@Test
 	public void testGetUnixTimestampLong() {
 		assertEquals("getUnixTimestame(long) does not work correctly", 1, CommonUtils.getUnixTimestamp(1000L));
 		assertEquals("getUnixTimestame(long) does not work correctly", 1, CommonUtils.getUnixTimestamp(1200L));

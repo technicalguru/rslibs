@@ -319,7 +319,7 @@ public class CommonUtils {
 	 * @return the joined string
 	 */
 	public static String join(String separator, String parts[], int startIndex) {
-		return join(separator, parts, 0, parts.length+1);
+		return join(separator, parts, startIndex, parts.length+1);
 	}
 	
 	/**
