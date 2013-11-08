@@ -98,8 +98,8 @@ public abstract class AbstractPreferencesService implements IPreferencesService 
 					loadingApplications.remove(applicationName);
 				}
 			}
-
-
+		} else {
+			rc = getRootNode().node("@"+applicationName);
 		}
 		return rc;
 	}

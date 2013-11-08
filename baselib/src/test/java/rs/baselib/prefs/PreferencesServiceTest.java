@@ -16,8 +16,11 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.prefs.BackingStoreException;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import rs.baselib.util.CommonUtils;
 
 /**
  * Tests the {@link PreferencesService}.
@@ -42,6 +45,22 @@ public class PreferencesServiceTest {
 	@BeforeClass
 	public static void setupClass() {
 		service = (PreferencesService)PreferencesService.INSTANCE;
+	}
+	
+	@AfterClass
+	public static void cleanupClass() {
+		File f = service.getUserPreferencesFile("aTestProject");
+		if (f.exists()) {
+			File parent = f.getParentFile();
+			f.delete();
+			parent.delete();
+		}
+		f = service.getSystemPreferencesFile("aTestProject");
+		if (f.exists()) {
+			File parent = f.getParentFile();
+			f.delete();
+			parent.delete();
+		}
 	}
 	
 	/**
@@ -89,8 +108,16 @@ public class PreferencesServiceTest {
 		service.load(prefs, in);
 		ByteArrayOutputStream out = new ByteArrayOutputStream(EXAMPLE_CONFIG.getBytes().length);
 		service.save(prefs, out);
+		testOutput(out.toString());
+	}
+
+	/**
+	 * Tests that the output is correct.
+	 * @param output produced output
+	 */
+	protected void testOutput(String output) {
 		String cmp[] = EXAMPLE_CONFIG.split("\\n");
-		String l[]   = out.toString().split("\\n");
+		String l[]   = output.split("\\n");
 		Arrays.sort(cmp);
 		Arrays.sort(l);
 		assertEquals("Produced output has incorrect number of lines", cmp.length, l.length);
@@ -98,7 +125,7 @@ public class PreferencesServiceTest {
 			assertEquals("Produced output differs in line "+(i+1), cmp[i].trim(), l[i].trim());
 		}
 	}
-
+	
 	/**
 	 * Test method for {@link PreferencesService#getUserPreferencesFile(String)}.
 	 */
@@ -117,11 +144,61 @@ public class PreferencesServiceTest {
 	@Test
 	public void testGetSystemPreferencesFile() {
 		Path path = service.getSystemPreferencesFile("aTestProject").toPath();
-		System.out.println(path.toFile().getAbsolutePath());
 		int cnt = path.getNameCount();
 		assertEquals("Not the correct user preferences filename", "system.prefs", path.getName(cnt-1).toFile().getName());
 		assertEquals("Not the correct user preferences application directory", "aTestProject", path.getName(cnt-2).toFile().getName());
 	}
 
+	/**
+	 * Test method for read and writes (high level tests)
+	 */
+	@Test
+	public void testUserPreferences() throws BackingStoreException, IOException {
+		IPreferences prefs = service.getUserPreferences("aTestProject");
+		File testFile = service.getUserPreferencesFile("aTestProject");
+		testReadWrite(prefs, testFile);
+	}
+
+	/**
+	 * Test method for read and writes (high level tests)
+	 */
+	@Test
+	public void testSystemPreferences() throws BackingStoreException, IOException {
+		IPreferences prefs = service.getSystemPreferences("aTestProject");
+		File testFile = service.getSystemPreferencesFile("aTestProject");
+		testReadWrite(prefs, testFile);
+	}
 	
+	protected void testReadWrite(IPreferences node, File f) throws BackingStoreException, IOException {
+		// Create some nodes and keys
+		node.put("key1", "value1");
+		node.put("key2", "value2");
+		IPreferences n = node.node("node1");
+		n.put("key3", "value3");
+		n.put("key4", "value4");
+		n.put("key5", "value5");
+		n = node.node("node2");
+		n.put("key6", "value6");
+		n = node.node("node1/node3");
+		n.put("key7", "value7");
+		n.put("key8", "value8");
+		n = node.node("node1/node4");
+		n.put("key9", "value9");
+		
+		// Test that all have been added correctly
+		testNode(node, new int[]{ 1, 2 }, new int[]{ 1, 2 } );
+		testNode(node.node("node1"), new int[]{ 3, 4 }, new int[]{ 3, 4, 5 } );
+		testNode(node.node("node2"), new int[]{ }, new int[]{ 6 } );
+		testNode(node.node("node1/node3"), new int[]{ }, new int[]{ 7, 8 } );
+		testNode(node.node("node1/node4"), new int[]{ }, new int[]{ 9 } );
+		
+		// Wait for flush
+		node.sync();
+		
+		// Check that file was produced
+		assertTrue("File was not produced", f.exists());
+		
+		// Check that file contains correct values
+		testOutput(CommonUtils.loadContent(f));
+	}
 }

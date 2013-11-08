@@ -15,6 +15,9 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.prefs.BackingStoreException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import rs.baselib.util.CommonUtils;
 
 
@@ -27,6 +30,8 @@ import rs.baselib.util.CommonUtils;
  */
 public class PreferencesService extends AbstractPreferencesService {
 
+	private static final Logger log = LoggerFactory.getLogger(PreferencesService.class);
+	
 	/** The default global preference service */
 	public static final IPreferencesService INSTANCE = new PreferencesService();
 
@@ -52,7 +57,9 @@ public class PreferencesService extends AbstractPreferencesService {
 	 */
 	@Override
 	protected void loadUserPreferences(IPreferences node, String applicationName) throws BackingStoreException {
-		load(node, getInputStream(getUserPreferencesFile(applicationName)));
+		File f = getUserPreferencesFile(applicationName);
+		if (log.isDebugEnabled()) log.debug("Loading user preferences: "+f.getAbsolutePath());
+		load(node, getInputStream(f));
 	}
 
 	/**
@@ -60,7 +67,9 @@ public class PreferencesService extends AbstractPreferencesService {
 	 */
 	@Override
 	protected void loadSystemPreferences(IPreferences node, String applicationName) throws BackingStoreException {
-		load(node, getInputStream(getSystemPreferencesFile(applicationName)));
+		File f = getSystemPreferencesFile(applicationName);
+		if (log.isDebugEnabled()) log.debug("Loading system preferences: "+f.getAbsolutePath());
+		load(node, getInputStream(f));
 	}
 
 	/**
