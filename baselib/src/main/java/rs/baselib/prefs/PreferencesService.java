@@ -237,7 +237,14 @@ public class PreferencesService extends AbstractPreferencesService {
 				systemHome = new File("/var");
 			} else if (CommonUtils.isUnix()) {
 				systemHome = new File("/var");
-			} else {
+			}
+			
+			if ((systemHome == null) || !systemHome.canWrite()) {
+				if (systemHome == null) {
+					log.info("Cannot determine OS type from \""+CommonUtils.getOS()+"\" - using user home directory for system preferences");
+				} else {
+					log.info("Cannot write to "+systemHome.getAbsolutePath()+" - using user home directory for system preferences");
+				}
 				systemHome = getUserHome();
 			}
 		} 
