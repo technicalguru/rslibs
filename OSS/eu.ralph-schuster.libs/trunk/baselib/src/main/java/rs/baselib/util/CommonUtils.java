@@ -50,6 +50,9 @@ public class CommonUtils {
 	public static final NumberFormat SIMPLE_NUMBER_FORMATTER = NumberFormat.getNumberInstance(Locale.getDefault());
 	public static final NumberFormat SIMPLE_INT_FORMATTER = NumberFormat.getIntegerInstance(Locale.getDefault());
 	
+	/** The OS name */
+	private static String OS = System.getProperty("os.name").toLowerCase();
+	
 	/**
 	 * Formats the string for display.
 	 * @param o the category
@@ -646,5 +649,37 @@ public class CommonUtils {
     		if (r != null) r.close();
     	}
     }
+
+    /**
+     * Tells whether runtime is a Windows system. 
+     * @return <code>true</code> when OS is a Windows system
+     */
+	public static boolean isWindows() {
+		return OS.indexOf("win") >= 0;
+	}
+ 
+    /**
+     * Tells whether runtime is a Mac system. 
+     * @return <code>true</code> when OS is a Mac system
+     */
+	public static boolean isMac() {
+		return OS.indexOf("mac") >= 0;
+	}
+ 
+    /**
+     * Tells whether runtime is a Unix system. 
+     * @return <code>true</code> when OS is a Unix system
+     */
+	public static boolean isUnix() {
+		return (OS.indexOf("nix") >= 0) || (OS.indexOf("nux") >= 0) || (OS.indexOf("aix") > 0) || (OS.indexOf("sunos") >= 0);
+	}
+ 
+    /**
+     * Tells whether runtime is a Windows system. 
+     * @return <code>true</code> when OS is a Windows system
+     */
+	public static boolean isSolaris() {
+		return OS.indexOf("sunos") >= 0;
+	}
 
 }
