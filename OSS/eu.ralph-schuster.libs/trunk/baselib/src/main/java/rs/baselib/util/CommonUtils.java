@@ -682,4 +682,11 @@ public class CommonUtils {
 		return OS.indexOf("sunos") >= 0;
 	}
 
+	/**
+	 * Returns the OS name.
+	 * @return the OS name as returned by <code>System.getProperty("os.name")</code>
+	 */
+	public static String getOS() {
+		return OS;
+	}
 }
