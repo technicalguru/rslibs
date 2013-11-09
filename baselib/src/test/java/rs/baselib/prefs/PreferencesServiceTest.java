@@ -10,9 +10,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.prefs.BackingStoreException;
 
@@ -131,11 +128,10 @@ public class PreferencesServiceTest {
 	 */
 	@Test
 	public void testGetUserPreferencesFile() throws IOException, BackingStoreException {
-		Path path = service.getUserPreferencesFile("aTestProject").toPath();
-		int cnt = path.getNameCount();
-		assertEquals("Not the correct user preferences filename", "user.prefs", path.getName(cnt-1).toFile().getName());
-		assertEquals("Not the correct user preferences application directory", ".aTestProject", path.getName(cnt-2).toFile().getName());
-		assertEquals("Not the correct user preferences home directory", new File(System.getProperty("user.home")), path.getParent().getParent().toFile());
+		File file = service.getUserPreferencesFile("aTestProject");
+		assertEquals("Not the correct user preferences filename", "user.prefs", file.getName());
+		assertEquals("Not the correct user preferences application directory", ".aTestProject", file.getParentFile().getName());
+		assertEquals("Not the correct user preferences home directory", new File(System.getProperty("user.home")), file.getParentFile().getParentFile());
 	}
 
 	/**
@@ -143,10 +139,9 @@ public class PreferencesServiceTest {
 	 */
 	@Test
 	public void testGetSystemPreferencesFile() {
-		Path path = service.getSystemPreferencesFile("aTestProject").toPath();
-		int cnt = path.getNameCount();
-		assertEquals("Not the correct user preferences filename", "system.prefs", path.getName(cnt-1).toFile().getName());
-		assertEquals("Not the correct user preferences application directory", "aTestProject", path.getName(cnt-2).toFile().getName());
+		File file = service.getSystemPreferencesFile("aTestProject");
+		assertEquals("Not the correct user preferences filename", "system.prefs", file.getName());
+		assertTrue("Not the correct user preferences application directory", file.getParentFile().getName().endsWith("aTestProject"));
 	}
 
 	/**

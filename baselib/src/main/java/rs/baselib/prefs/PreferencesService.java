@@ -13,6 +13,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.prefs.BackingStoreException;
 
 import org.slf4j.Logger;
@@ -31,17 +33,21 @@ import rs.baselib.util.CommonUtils;
 public class PreferencesService extends AbstractPreferencesService {
 
 	private static final Logger log = LoggerFactory.getLogger(PreferencesService.class);
-	
+
 	/** The default global preference service */
 	public static final IPreferencesService INSTANCE = new PreferencesService();
 
 	private File userHome = null;
 	private File systemHome = null;
+	private Map<String, File> userHomes;
+	private Map<String, File> systemHomes;
 
 	/**
 	 * Constructor.
 	 */
 	private PreferencesService() {
+		userHomes = new HashMap<String, File>();
+		systemHomes = new HashMap<String, File>();
 	}
 
 	/**
@@ -153,7 +159,7 @@ public class PreferencesService extends AbstractPreferencesService {
 	 */
 	protected void put(IPreferences node, String key, String value) {
 		if (key.length() == 0) return;
-		
+
 		// split off any node name
 		String l[] = key.split("\\/");
 		if (l.length > 1) {
@@ -161,7 +167,7 @@ public class PreferencesService extends AbstractPreferencesService {
 		}
 		node.put(l[l.length-1], value);
 	}
-	
+
 	/**
 	 * Saves the node information into the stream
 	 * @param node node to be saved
@@ -213,16 +219,42 @@ public class PreferencesService extends AbstractPreferencesService {
 	 * Returns the application's preferences file of the user.
 	 * @return the preferences file
 	 */
-	protected File getUserPreferencesFile(String applicationName) {
-		return new File(new File(getUserHome(), "."+applicationName), "user.prefs");
+	protected synchronized File getUserPreferencesFile(String applicationName) {
+		File rc = userHomes.get(applicationName);
+		if (rc == null) {
+			rc = new File(new File(getUserHome(), "."+applicationName), "user.prefs");
+			userHomes.put(applicationName, rc);
+		}
+		return rc;
 	}
 
 	/**
 	 * Returns the application's preferences file of the system.
 	 * @return the preferences file
 	 */
-	protected File getSystemPreferencesFile(String applicationName) {
-		return new File(new File(getSystemHome(), applicationName), "system.prefs");
+	protected synchronized File getSystemPreferencesFile(String applicationName) {
+		File rc = systemHomes.get(applicationName);
+		if (rc == null) {
+			File home = getSystemHome();
+			File parentDir = new File(home, applicationName);
+			rc = new File(parentDir, "system.prefs");
+			if (!parentDir.exists() && !home.canWrite()) {
+				log.info("Cannot write to "+home.getAbsolutePath()+" - using user home directory for system preferences");
+				home = getUserHome();
+				parentDir = new File(home, "."+applicationName);
+			} else if (parentDir.exists() && !rc.exists() && !parentDir.canWrite()) {
+				log.info("Cannot write to "+parentDir.getAbsolutePath()+" - using user home directory for system preferences");
+				home = getUserHome();
+				parentDir = new File(home, "."+applicationName);
+			} else if (rc.exists() && !rc.canWrite()) {
+				log.info("Cannot write to "+rc.getAbsolutePath()+" - using user home directory for system preferences");
+				home = getUserHome();
+				parentDir = new File(home, "."+applicationName);
+			}
+			rc = new File(parentDir, "system.prefs");
+			systemHomes.put(applicationName, rc);
+		}
+		return rc;
 	}
 
 	/**
@@ -238,13 +270,9 @@ public class PreferencesService extends AbstractPreferencesService {
 			} else if (CommonUtils.isUnix()) {
 				systemHome = new File("/var");
 			}
-			
-			if ((systemHome == null) || !systemHome.canWrite()) {
-				if (systemHome == null) {
-					log.info("Cannot determine OS type from \""+CommonUtils.getOS()+"\" - using user home directory for system preferences");
-				} else {
-					log.info("Cannot write to "+systemHome.getAbsolutePath()+" - using user home directory for system preferences");
-				}
+
+			if (systemHome == null) {
+				log.info("Cannot determine OS type from \""+CommonUtils.getOS()+"\" - using user home directory for system preferences");
 				systemHome = getUserHome();
 			}
 		} 

@@ -31,10 +31,11 @@ import rs.baselib.lang.LangUtils;
  */
 public abstract class AbstractPreferencesService implements IPreferencesService {
 
-	private static Pattern PATTERN          = Pattern.compile("[-A-Za-z._@]+");
-	private static String  USER_NODE_NAME   = "@USER";
-	private static String  SYSTEM_NODE_NAME = "@SYSTEM";
-
+	private static final Pattern PATTERN          = Pattern.compile("[-A-Za-z._@]+");
+	private static final String  USER_NODE_NAME   = "@USER";
+	private static final String  SYSTEM_NODE_NAME = "@SYSTEM";
+	private static final long FLUSH_DELAY = 500L;
+	
 	private IPreferences rootNode;
 	private Object SYNCH_OBJECT = new Object();
 	private Map<IPreferences,ReadWriteLock> locks = new HashMap<IPreferences, ReadWriteLock>();
@@ -302,7 +303,7 @@ public abstract class AbstractPreferencesService implements IPreferencesService 
 			long timeDiff = 0L;
 			do {
 				// Sleep before start
-				LangUtils.sleep(1000L);
+				LangUtils.sleep(120L);
 
 				// Check the last modification time
 				Set<IPreferences> flushingNodes = null;
@@ -310,7 +311,7 @@ public abstract class AbstractPreferencesService implements IPreferencesService 
 					timeDiff = System.currentTimeMillis() - lastModificationTime;
 					// Get the nodes to be flushed in case we have to do something
 					toBeFlushed = flushableNodes.size();
-					if ((timeDiff > 1500L) && (toBeFlushed > 0)) {
+					if ((timeDiff > FLUSH_DELAY) && (toBeFlushed > 0)) {
 						flushingNodes = flushableNodes;
 						flushableNodes = new HashSet<IPreferences>();
 					}
