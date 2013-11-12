@@ -28,6 +28,8 @@ import java.util.Properties;
 import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 
+import rs.baselib.bean.NamedObject;
+
 
 
 
@@ -688,5 +690,26 @@ public class CommonUtils {
 	 */
 	public static String getOS() {
 		return OS;
+	}
+	
+	public static String getDisplay(Object o) {
+		return getDisplay(o, Locale.getDefault());
+	}
+	
+	/**
+	 * Returns the display string of an object.
+	 * The method detects {@link IDisplayable}, {@link IDisplayProvider} and {@link NamedObject}.
+	 * @param o
+	 * @param locale Locale to be used for {@link IDisplayable}
+	 * @return a displayable string
+	 */
+	public static String getDisplay(Object o, Locale locale) {
+		if (o == null) return "";
+		String rc = o.toString();
+		
+		if (o instanceof IDisplayable) rc = ((IDisplayable)o).toString(locale);
+		else if (o instanceof IDisplayProvider) rc = ((IDisplayProvider)o).getDisplay();
+		else if (o instanceof NamedObject) rc = ((NamedObject)o).getName();
+		return rc;
 	}
 }
