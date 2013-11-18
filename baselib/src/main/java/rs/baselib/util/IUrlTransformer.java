@@ -1,0 +1,23 @@
+/**
+ * 
+ */
+package rs.baselib.util;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+
+/**
+ * Converts names to URLs.
+ * @author ralph
+ *
+ */
+public interface IUrlTransformer {
+
+	/**
+	 * Converts the given string to a URL.
+	 * @param url url
+	 * @return URL
+	 */
+	public URL toURL(String url) throws MalformedURLException;
+	
+}

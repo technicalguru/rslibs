@@ -3,21 +3,13 @@
  */
 package rs.data.util;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 
 /**
  * Converts names to URLs.
  * @author ralph
- *
+ * @deprecated use {@link rs.baselib.util.IUrlTransformer} instead
  */
-public interface IUrlTransformer {
+@Deprecated
+public interface IUrlTransformer extends rs.baselib.util.IUrlTransformer {
 
-	/**
-	 * Converts the given string to a URL.
-	 * @param url url
-	 * @return URL
-	 */
-	public URL toURL(String url) throws MalformedURLException;
-	
 }
