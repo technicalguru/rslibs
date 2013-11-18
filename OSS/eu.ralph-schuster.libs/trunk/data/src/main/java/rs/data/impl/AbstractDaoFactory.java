@@ -42,7 +42,7 @@ import rs.data.event.IDaoListener;
 import rs.data.impl.dao.AbstractBasicDAO;
 import rs.data.impl.dao.AbstractDAO;
 import rs.data.impl.dto.GeneralDTO;
-import rs.data.util.IUrlTransformer;
+import rs.baselib.util.IUrlTransformer;
 
 /**
  * The basic implementation of a DAO factory.

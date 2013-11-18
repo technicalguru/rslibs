@@ -13,9 +13,14 @@ import org.apache.commons.configuration.ConfigurationException;
 
 import rs.baselib.configuration.IConfigurable;
 import rs.baselib.io.FileFinder;
+import rs.baselib.lang.LangUtils;
+import rs.baselib.util.IUriProvider;
+import rs.baselib.util.IUrlProvider;
+import rs.baselib.util.UriProviderWrapper;
+import rs.baselib.util.UrlProviderWrapper;
 import rs.data.api.IDaoFactory;
 import rs.data.api.IDaoMaster;
-import rs.data.util.IUrlTransformer;
+import rs.baselib.util.IUrlTransformer;
 
 /**
  * Abstract implementation for DAO masters.
@@ -87,7 +92,22 @@ public abstract class AbstractDaoMaster implements IDaoMaster, IConfigurable {
 	public URL getPropertyUrl(String key) throws MalformedURLException {
 		String value = getProperty(key);
 		if (value == null) return null;
-		IUrlTransformer transformer = getFactory().getUrlTransformer();
+		IUrlTransformer transformer = null;
+		if (value.startsWith("class:")) {
+			try {
+				Object obj = LangUtils.forName(value.substring(6));
+				if (obj instanceof IUrlTransformer) {
+					transformer = (IUrlTransformer)obj;
+				} else if (obj instanceof IUrlProvider) {
+					transformer = new UrlProviderWrapper((IUrlProvider)obj);
+				} else if (obj instanceof IUriProvider) {
+					transformer = new UriProviderWrapper((IUriProvider)obj);
+				}
+			} catch (Exception e) {
+				
+			}
+		}
+		if (transformer == null) getFactory().getUrlTransformer();
 		if (transformer != null) return transformer.toURL(value);
 		return FileFinder.find(value);
 	}
