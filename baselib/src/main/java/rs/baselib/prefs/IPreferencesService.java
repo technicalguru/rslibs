@@ -3,6 +3,7 @@
  */
 package rs.baselib.prefs;
 
+import java.io.File;
 import java.util.concurrent.locks.Lock;
 import java.util.prefs.BackingStoreException;
 
@@ -58,4 +59,19 @@ public interface IPreferencesService {
 	 */
 	public Lock getWriteLock(IPreferences node);
 
+	/**
+	 * Returns the home directory for user preferences of the given application.
+	 * @param applicationName name of application
+	 * @return user preferences home
+	 */
+	public File getUserPreferencesHome(String applicationName);
+	
+	/**
+	 * Returns the home directory for system preferences of the given application.
+	 * @param applicationName name of application
+	 * @return system preferences home
+	 */
+	public File getSystemPreferencesHome(String applicationName);
+	
+	
 }
