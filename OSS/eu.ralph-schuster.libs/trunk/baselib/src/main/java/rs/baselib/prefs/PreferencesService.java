@@ -205,6 +205,14 @@ public class PreferencesService extends AbstractPreferencesService {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public File getUserPreferencesHome(String applicationName) {
+		return new File(getUserHome(), "."+applicationName);
+	}
+	
+	/**
 	 * Returns the home directory of the user.
 	 * @return the user home dir
 	 */
@@ -222,12 +230,29 @@ public class PreferencesService extends AbstractPreferencesService {
 	protected synchronized File getUserPreferencesFile(String applicationName) {
 		File rc = userHomes.get(applicationName);
 		if (rc == null) {
-			rc = new File(new File(getUserHome(), "."+applicationName), "user.prefs");
+			rc = new File(getUserPreferencesHome(applicationName), "user.prefs");
 			userHomes.put(applicationName, rc);
 		}
 		return rc;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public File getSystemPreferencesHome(String applicationName) {
+		File home = getSystemHome();
+		File parentDir = new File(home, applicationName);
+		if (!parentDir.exists() && !home.canWrite()) {
+			log.info("Cannot write to "+home.getAbsolutePath()+" - using user home directory for system preferences");
+			parentDir = getUserPreferencesHome(applicationName);
+		} else if (parentDir.exists() && !parentDir.canWrite()) {
+			log.info("Cannot write to "+parentDir.getAbsolutePath()+" - using user home directory for system preferences");
+			parentDir = getUserPreferencesHome(applicationName);
+		}
+		return parentDir;
+	}
+	
 	/**
 	 * Returns the application's preferences file of the system.
 	 * @return the preferences file
@@ -235,21 +260,11 @@ public class PreferencesService extends AbstractPreferencesService {
 	protected synchronized File getSystemPreferencesFile(String applicationName) {
 		File rc = systemHomes.get(applicationName);
 		if (rc == null) {
-			File home = getSystemHome();
-			File parentDir = new File(home, applicationName);
+			File parentDir = getSystemPreferencesHome(applicationName);
 			rc = new File(parentDir, "system.prefs");
-			if (!parentDir.exists() && !home.canWrite()) {
-				log.info("Cannot write to "+home.getAbsolutePath()+" - using user home directory for system preferences");
-				home = getUserHome();
-				parentDir = new File(home, "."+applicationName);
-			} else if (parentDir.exists() && !rc.exists() && !parentDir.canWrite()) {
-				log.info("Cannot write to "+parentDir.getAbsolutePath()+" - using user home directory for system preferences");
-				home = getUserHome();
-				parentDir = new File(home, "."+applicationName);
-			} else if (rc.exists() && !rc.canWrite()) {
+			if (rc.exists() && !rc.canWrite()) {
 				log.info("Cannot write to "+rc.getAbsolutePath()+" - using user home directory for system preferences");
-				home = getUserHome();
-				parentDir = new File(home, "."+applicationName);
+				parentDir = getUserPreferencesHome(applicationName);
 			}
 			rc = new File(parentDir, "system.prefs");
 			systemHomes.put(applicationName, rc);
