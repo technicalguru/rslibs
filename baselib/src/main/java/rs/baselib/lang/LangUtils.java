@@ -80,6 +80,34 @@ public class LangUtils {
 	}
 	
 	/**
+	 * Instantiates a class object from class name.
+	 * This is a shortcut method for <code>{@link #forName(String)}.newInstance()</code>.
+	 * @param className the name of class
+	 * @param classLoader the class loader to be used - if null the thread's class loader will be  used first
+	 * @return an instance of the named class
+	 * @throws ClassNotFoundException when class cannot be found
+	 * @throws IllegalAccessException when constructor cannot be called
+	 * @throws InstantiationException when constructor throws errors
+	 */
+	public static Object newInstance(String className) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+		return newInstance(className, null);
+	}
+	
+	/**
+	 * Instantiates a class object from class name.
+	 * This is a shortcut method for <code>{@link #forName(String,ClassLoader)}.newInstance()</code>.
+	 * @param className the name of class
+	 * @return an instance of the named class
+	 * @throws ClassNotFoundException when class cannot be found
+	 * @throws IllegalAccessException when constructor cannot be called
+	 * @throws InstantiationException when constructor throws errors
+	 */
+	public static Object newInstance(String className, ClassLoader classLoader) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+		Class<?> clazz = forName(className, classLoader);
+		return clazz.newInstance();
+	}
+	
+	/**
 	 * Get the underlying class for a type, or null if the type is a variable type.
 	 * @param type the type
 	 * @return the underlying class
