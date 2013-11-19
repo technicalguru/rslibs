@@ -95,7 +95,7 @@ public abstract class AbstractDaoMaster implements IDaoMaster, IConfigurable {
 		IUrlTransformer transformer = null;
 		if (value.startsWith("class:")) {
 			try {
-				Object obj = LangUtils.forName(value.substring(6));
+				Object obj = LangUtils.newInstance(value.substring(6));
 				if (obj instanceof IUrlTransformer) {
 					transformer = (IUrlTransformer)obj;
 				} else if (obj instanceof IUrlProvider) {
