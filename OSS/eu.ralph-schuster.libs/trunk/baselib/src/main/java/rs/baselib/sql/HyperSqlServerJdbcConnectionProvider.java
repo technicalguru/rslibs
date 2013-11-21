@@ -21,6 +21,8 @@ public class HyperSqlServerJdbcConnectionProvider extends AbstractJdbcConnection
 	public static final String DEFAULT_PORT = "9001";
 	/** The XA Data Source */
 	public static final String XA_DATA_SOURCE_NAME = "org.hsqldb.jdbc.pool.JDBCXADataSource";
+	/** The Hibernate dialect */
+	public static final String HIBERNATE_DIALECT = "org.hibernate.dialect.HSQLDialect";
 	
 	/**
 	 * Constructor.
@@ -28,6 +30,7 @@ public class HyperSqlServerJdbcConnectionProvider extends AbstractJdbcConnection
 	public HyperSqlServerJdbcConnectionProvider() {
 		super(DISPLAY, DB_DRIVER_CLASS_NAME, URL_TEMPLATE);
 		setXaDataSource(XA_DATA_SOURCE_NAME);
+		setHibernateDialect(HIBERNATE_DIALECT);
 		
 		setHost(true, "localhost");
 		setPort(true, DEFAULT_PORT);
