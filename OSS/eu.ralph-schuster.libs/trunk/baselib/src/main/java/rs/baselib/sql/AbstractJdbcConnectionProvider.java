@@ -220,18 +220,10 @@ public abstract class AbstractJdbcConnectionProvider implements IJdbcConnectionP
 	}
 
 	/**
-	 * Returns the host argument to be used for URL construction.
-	 * Descendants can override this method when they have more sophisticated algorithms
-	 * to determine the host argument. This implementation returns the default host
-	 * when the passed string is either empty or host argument was disabled.
-	 * @param s the string containing an actual host argument
-	 * @return the argument to be used in URL construction
-	 * @see #isHostEnabled()
-	 * @see #setHostEnabled(boolean)
-	 * @see #getDefaultHost()
-	 * @see #setDefaultHost(String)
+	 * {@inheritDoc}
 	 */
-	protected String getHost(String s) {
+	@Override
+	public String getHost(String s) {
 		if (!isHostEnabled() || CommonUtils.isEmpty(s)) return getDefaultHost();
 		return s.trim();
 	}
@@ -278,18 +270,10 @@ public abstract class AbstractJdbcConnectionProvider implements IJdbcConnectionP
 	}
 	
 	/**
-	 * Returns the port argument to be used for URL construction.
-	 * Descendants can override this method when they have more sophisticated algorithms
-	 * to determine the port argument. This implementation returns the default port
-	 * when the passed string is either empty or port argument was disabled.
-	 * @param s the string containing an actual port argument
-	 * @return the argument to be used in URL construction
-	 * @see #isPortEnabled()
-	 * @see #setPortEnabled(boolean)
-	 * @see #getDefaultPort()
-	 * @see #setDefaultPort(String)
+	 * {@inheritDoc}
 	 */
-	protected String getPort(String s) {
+	@Override
+	public String getPort(String s) {
 		if (!isPortEnabled() || CommonUtils.isEmpty(s)) return getDefaultPort();
 		return s.trim();
 	}
@@ -336,18 +320,10 @@ public abstract class AbstractJdbcConnectionProvider implements IJdbcConnectionP
 	}
 	
 	/**
-	 * Returns the DB name argument to be used for URL construction.
-	 * Descendants can override this method when they have more sophisticated algorithms
-	 * to determine the DB name argument. This implementation returns the default DB name
-	 * when the passed string is either empty or DB name argument was disabled.
-	 * @param s the string containing an actual DB name argument
-	 * @return the argument to be used in URL construction
-	 * @see #isDbNameEnabled()
-	 * @see #setDbNameEnabled(boolean)
-	 * @see #getDefaultDbName()
-	 * @see #setDefaultDbName(String)
+	 * {@inheritDoc}
 	 */
-	protected String getDbName(String s) {
+	@Override
+	public String getDbName(String s) {
 		if (!isDbNameEnabled() || CommonUtils.isEmpty(s)) return getDefaultDbName();
 		return s.trim();
 	}
@@ -394,18 +370,10 @@ public abstract class AbstractJdbcConnectionProvider implements IJdbcConnectionP
 	}
 	
 	/**
-	 * Returns the DB login argument to be used for URL construction.
-	 * Descendants can override this method when they have more sophisticated algorithms
-	 * to determine the DB login argument. This implementation returns the default DB login
-	 * when the passed string is either empty or DB login argument was disabled.
-	 * @param s the string containing an actual DB login argument
-	 * @return the argument to be used in URL construction
-	 * @see #isDbLoginEnabled()
-	 * @see #setDbLoginEnabled(boolean)
-	 * @see #getDefaultDbLogin()
-	 * @see #setDefaultDbLogin(String)
+	 * {@inheritDoc}
 	 */
-	protected String getDbLogin(String s) {
+	@Override
+	public String getDbLogin(String s) {
 		if (!isDbLoginEnabled() || CommonUtils.isEmpty(s)) return getDefaultDbLogin();
 		return s.trim();
 	}
@@ -452,18 +420,10 @@ public abstract class AbstractJdbcConnectionProvider implements IJdbcConnectionP
 	}
 	
 	/**
-	 * Returns the DB password argument to be used for URL construction.
-	 * Descendants can override this method when they have more sophisticated algorithms
-	 * to determine the DB password argument. This implementation returns the default DB password
-	 * when the passed string is either empty or DB password argument was disabled.
-	 * @param s the string containing an actual DB password argument
-	 * @return the argument to be used in URL construction
-	 * @see #isDbPasswordEnabled()
-	 * @see #setDbPasswordEnabled(boolean)
-	 * @see #getDefaultDbPassword()
-	 * @see #setDefaultDbPassword(String)
+	 * {@inheritDoc}
 	 */
-	protected String getDbPassword(String s) {
+	@Override
+	public String getDbPassword(String s) {
 		if (!isDbPasswordEnabled() || CommonUtils.isEmpty(s)) return getDefaultDbPassword();
 		return s.trim();
 	}
@@ -510,19 +470,10 @@ public abstract class AbstractJdbcConnectionProvider implements IJdbcConnectionP
 	}
 
 	/**
-	 * Returns the additional argument to be used for URL construction.
-	 * Descendants can override this method when they have more sophisticated algorithms
-	 * to determine the additional argument. This implementation returns the default additional
-	 * argument when the passed string is either empty or the additional argument was disabled.
-	 * @param index index of additional argument
-	 * @param s the string containing an actual additional argument
-	 * @return the argument to be used in URL construction
-	 * @see #isAdditionalArgumentEnabled(int)
-	 * @see #setAdditionalArgumentEnabled(int, boolean)
-	 * @see #getDefaultAdditionalArgument(int)
-	 * @see #setDefaultAdditionalArgument(int, String)
+	 * {@inheritDoc}
 	 */
-	protected String getAdditionalArgument(int index, String s) {
+	@Override
+	public String getAdditionalArgument(int index, String s) {
 		if (!isAdditionalArgumentEnabled(index) || CommonUtils.isEmpty(s)) return getDefaultAdditionalArgument(index);
 		return s.trim();
 	}

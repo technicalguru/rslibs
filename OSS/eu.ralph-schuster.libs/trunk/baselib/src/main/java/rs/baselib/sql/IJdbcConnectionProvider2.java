@@ -13,6 +13,20 @@ package rs.baselib.sql;
 public interface IJdbcConnectionProvider2 extends IJdbcConnectionProvider {
 
 	/**
+	 * Returns the host argument to be used for URL construction.
+	 * Descendants can override this method when they have more sophisticated algorithms
+	 * to determine the host argument. This implementation returns the default host
+	 * when the passed string is either empty or host argument was disabled.
+	 * @param s the string containing an actual host argument
+	 * @return the argument to be used in URL construction
+	 * @see #isHostEnabled()
+	 * @see #setHostEnabled(boolean)
+	 * @see #getDefaultHost()
+	 * @see #setDefaultHost(String)
+	 */
+	public String getHost(String s);
+	
+	/**
 	 * Returns whether host argument is enabled.
 	 * The information can be used for UI developers to control the input flow.
 	 * @return <code>true</code> when <code>host</code> argument can be passed to {@link #getConnection(String, String, String, String, String, String...)}
@@ -44,6 +58,20 @@ public interface IJdbcConnectionProvider2 extends IJdbcConnectionProvider {
 	 * @param s default value
 	 */
 	public void setDefaultHost(String s);
+	
+	/**
+	 * Returns the port argument to be used for URL construction.
+	 * Descendants can override this method when they have more sophisticated algorithms
+	 * to determine the port argument. This implementation returns the default port
+	 * when the passed string is either empty or port argument was disabled.
+	 * @param s the string containing an actual port argument
+	 * @return the argument to be used in URL construction
+	 * @see #isPortEnabled()
+	 * @see #setPortEnabled(boolean)
+	 * @see #getDefaultPort()
+	 * @see #setDefaultPort(String)
+	 */
+	public String getPort(String s);
 	
 	/**
 	 * Returns whether port argument is enabled.
@@ -79,6 +107,20 @@ public interface IJdbcConnectionProvider2 extends IJdbcConnectionProvider {
 	public void setDefaultPort(String s);
 	
 	/**
+	 * Returns the DB name argument to be used for URL construction.
+	 * Descendants can override this method when they have more sophisticated algorithms
+	 * to determine the DB name argument. This implementation returns the default DB name
+	 * when the passed string is either empty or DB name argument was disabled.
+	 * @param s the string containing an actual DB name argument
+	 * @return the argument to be used in URL construction
+	 * @see #isDbNameEnabled()
+	 * @see #setDbNameEnabled(boolean)
+	 * @see #getDefaultDbName()
+	 * @see #setDefaultDbName(String)
+	 */
+	public String getDbName(String s);
+	
+	/**
 	 * Returns whether DB name argument is enabled.
 	 * The information can be used for UI developers to control the input flow.
 	 * @return <code>true</code> when <code>dbName</code> argument can be passed to {@link #getConnection(String, String, String, String, String, String...)}
@@ -110,6 +152,20 @@ public interface IJdbcConnectionProvider2 extends IJdbcConnectionProvider {
 	 * @param s default value
 	 */
 	public void setDefaultDbName(String s);
+	
+	/**
+	 * Returns the DB login argument to be used for URL construction.
+	 * Descendants can override this method when they have more sophisticated algorithms
+	 * to determine the DB login argument. This implementation returns the default DB login
+	 * when the passed string is either empty or DB login argument was disabled.
+	 * @param s the string containing an actual DB login argument
+	 * @return the argument to be used in URL construction
+	 * @see #isDbLoginEnabled()
+	 * @see #setDbLoginEnabled(boolean)
+	 * @see #getDefaultDbLogin()
+	 * @see #setDefaultDbLogin(String)
+	 */
+	public String getDbLogin(String s);
 	
 	/**
 	 * Returns whether DB login argument is enabled.
@@ -145,6 +201,20 @@ public interface IJdbcConnectionProvider2 extends IJdbcConnectionProvider {
 	public void setDefaultDbLogin(String s);
 	
 	/**
+	 * Returns the DB password argument to be used for URL construction.
+	 * Descendants can override this method when they have more sophisticated algorithms
+	 * to determine the DB password argument. This implementation returns the default DB password
+	 * when the passed string is either empty or DB password argument was disabled.
+	 * @param s the string containing an actual DB password argument
+	 * @return the argument to be used in URL construction
+	 * @see #isDbPasswordEnabled()
+	 * @see #setDbPasswordEnabled(boolean)
+	 * @see #getDefaultDbPassword()
+	 * @see #setDefaultDbPassword(String)
+	 */
+	public String getDbPassword(String s);
+	
+	/**
 	 * Returns whether DB password argument is enabled.
 	 * The information can be used for UI developers to control the input flow.
 	 * @return <code>true</code> when <code>dbPassword</code> argument can be passed to {@link #getConnection(String, String, String, String, String, String...)}
@@ -177,6 +247,21 @@ public interface IJdbcConnectionProvider2 extends IJdbcConnectionProvider {
 	 */
 	public void setDefaultDbPassword(String s);
 
+	/**
+	 * Returns the additional argument to be used for URL construction.
+	 * Descendants can override this method when they have more sophisticated algorithms
+	 * to determine the additional argument. This implementation returns the default additional
+	 * argument when the passed string is either empty or the additional argument was disabled.
+	 * @param index index of additional argument
+	 * @param s the string containing an actual additional argument
+	 * @return the argument to be used in URL construction
+	 * @see #isAdditionalArgumentEnabled(int)
+	 * @see #setAdditionalArgumentEnabled(int, boolean)
+	 * @see #getDefaultAdditionalArgument(int)
+	 * @see #setDefaultAdditionalArgument(int, String)
+	 */
+	public String getAdditionalArgument(int index, String s);
+	
 	/**
 	 * Returns whether additional argument is enabled.
 	 * The information can be used for UI developers to control the input flow.
