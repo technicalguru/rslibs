@@ -20,7 +20,7 @@ public class MySql5JdbcConnectionProvider extends AbstractJdbcConnectionProvider
 	/** The default port */
 	public static final String DEFAULT_PORT = "3306";
 	/** The XA Data Source */
-	public static final String XA_DATA_SOURCE_NAME = "com.mysql.jdbc.jdbc2.optional.MysqlXADataSource";
+	public static final String DATA_SOURCE_NAME = "com.mysql.jdbc.jdbc2.optional.MysqlXADataSource";
 	/** The Hibernate dialect */
 	public static final String HIBERNATE_DIALECT = "org.hibernate.dialect.MySQLDialect";
 	
@@ -29,7 +29,7 @@ public class MySql5JdbcConnectionProvider extends AbstractJdbcConnectionProvider
 	 */
 	public MySql5JdbcConnectionProvider() {
 		super(DISPLAY, DB_DRIVER_CLASS_NAME, URL_TEMPLATE);
-		setXaDataSource(XA_DATA_SOURCE_NAME);
+		setDataSource(DATA_SOURCE_NAME);
 		setHibernateDialect(HIBERNATE_DIALECT);
 		setHost(true, "localhost");
 		setPort(true, DEFAULT_PORT);

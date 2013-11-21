@@ -18,8 +18,8 @@ public class HyperSqlFileJdbcConnectionProvider extends AbstractJdbcConnectionPr
 	public static final String DISPLAY = "HyperSQL (File Mode)";
 	/** The URL Template */
 	public static final String URL_TEMPLATE = "jdbc:hsqldb:file:{5};shutdown=true";
-	/** The XA Data Source */
-	public static final String XA_DATA_SOURCE_NAME = "org.hsqldb.jdbc.pool.JDBCXADataSource";
+	/** The Data Source */
+	public static final String DATA_SOURCE_NAME = "org.hsqldb.jdbc.JDBCDataSource";
 	/** The Hibernate dialect */
 	public static final String HIBERNATE_DIALECT = "org.hibernate.dialect.HSQLDialect";
 	
@@ -28,7 +28,7 @@ public class HyperSqlFileJdbcConnectionProvider extends AbstractJdbcConnectionPr
 	 */
 	public HyperSqlFileJdbcConnectionProvider() {
 		super(DISPLAY, DB_DRIVER_CLASS_NAME, URL_TEMPLATE);
-		setXaDataSource(XA_DATA_SOURCE_NAME);
+		setDataSource(DATA_SOURCE_NAME);
 		setHibernateDialect(HIBERNATE_DIALECT);
 		
 		setHost(false, null);
