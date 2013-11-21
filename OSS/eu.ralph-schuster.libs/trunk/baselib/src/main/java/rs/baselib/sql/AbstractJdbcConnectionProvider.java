@@ -44,7 +44,7 @@ import rs.baselib.util.IDisplayProvider;
  * @author ralph
  *
  */
-public abstract class AbstractJdbcConnectionProvider implements IJdbcConnectionProvider2, IDisplayProvider, IXADataSourceProvider, IHibernateDialectProvider {
+public abstract class AbstractJdbcConnectionProvider implements IJdbcConnectionProvider2, IDisplayProvider, IDataSourceProvider, IHibernateDialectProvider {
 
 	/** driver class name */
 	private String dbDriverClassName;
@@ -54,8 +54,8 @@ public abstract class AbstractJdbcConnectionProvider implements IJdbcConnectionP
 	private String display;
 	/** The dialect class */
 	private String hibernateDialect;
-	/** The XA Data Source name */
-	private String xaDataSource;
+	/** The Data Source name */
+	private String dataSource;
 	/** Whether a host customization is possible */
 	private boolean hostEnabled = true;
 	/** The default host when given host is empty or host customization is not allowed */
@@ -134,7 +134,7 @@ public abstract class AbstractJdbcConnectionProvider implements IJdbcConnectionP
 		// Construct the URL
 		String url = null;
 		try {
-			url = getDriverUrl(host, port, dbName, dbLogin, dbPassword);
+			url = getDriverUrl(host, port, dbName, dbLogin, dbPassword, addOnArgs);
 		} catch (Throwable t) {
 			throw new SQLException("Cannot construct driver URL: "+t.getLocalizedMessage(), t);
 		}
@@ -177,13 +177,13 @@ public abstract class AbstractJdbcConnectionProvider implements IJdbcConnectionP
 		if (urlTemplate == null) return null;
 		if (CommonUtils.isEmpty(port, true)) port = getDefaultPort();
 		// Construct the arguments array
-		Object args[] = new Object[addOnArgs.length+5];
+		Object args[] = new Object[maxAdditionalArgumentIndex+6];
 		args[0] = getHost(host);
 		args[1] = getPort(port);
 		args[2] = getDbName(dbName);
 		args[3] = getDbLogin(dbLogin);
 		args[4] = getDbPassword(dbPassword);
-		for (int i=0; i<addOnArgs.length; i++) args[i+5] = getAdditionalArgument(i, addOnArgs[i]);
+		for (int i=0; i<=maxAdditionalArgumentIndex; i++) args[i+5] = getAdditionalArgument(i, i<addOnArgs.length ? addOnArgs[i] : null);
 		return MessageFormat.format(getUrlTemplate(), args);
 	}
 
@@ -191,16 +191,16 @@ public abstract class AbstractJdbcConnectionProvider implements IJdbcConnectionP
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String getXADataSource() {
-		return xaDataSource;
+	public String getDataSource() {
+		return dataSource;
 	}
 
 	/**
-	 * Sets the {@link #xaDataSource}.
-	 * @param xaDataSource the xaDataSource to set
+	 * Sets the {@link #dataSource}.
+	 * @param dataSource the dataSource to set
 	 */
-	protected void setXaDataSource(String xaDataSource) {
-		this.xaDataSource = xaDataSource;
+	protected void setDataSource(String dataSource) {
+		this.dataSource = dataSource;
 	}
 	
 	/**
