@@ -44,7 +44,7 @@ import rs.baselib.util.IDisplayProvider;
  * @author ralph
  *
  */
-public abstract class AbstractJdbcConnectionProvider implements IJdbcConnectionProvider2, IDisplayProvider, IXADataSourceProvider {
+public abstract class AbstractJdbcConnectionProvider implements IJdbcConnectionProvider2, IDisplayProvider, IXADataSourceProvider, IHibernateDialectProvider {
 
 	/** driver class name */
 	private String dbDriverClassName;
@@ -52,6 +52,8 @@ public abstract class AbstractJdbcConnectionProvider implements IJdbcConnectionP
 	private String urlTemplate;
 	/** readable name of this driver */
 	private String display;
+	/** The dialect class */
+	private String hibernateDialect;
 	/** The XA Data Source name */
 	private String xaDataSource;
 	/** Whether a host customization is possible */
@@ -208,6 +210,22 @@ public abstract class AbstractJdbcConnectionProvider implements IJdbcConnectionP
 		this.xaDataSource = xaDataSource;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getHibernateDialect() {
+		return hibernateDialect;
+	}
+
+	/**
+	 * Sets the {@link #hibernateDialect}.
+	 * @param hibernateDialect the hibernateDialect to set
+	 */
+	public void setHibernateDialect(String hibernateDialect) {
+		this.hibernateDialect = hibernateDialect;
+	}
+
 	/**
 	 * Returns the host argument to be used for URL construction.
 	 * Descendants can override this method when they have more sophisticated algorithms
