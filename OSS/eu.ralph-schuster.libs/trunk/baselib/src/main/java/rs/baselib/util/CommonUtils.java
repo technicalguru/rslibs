@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Reader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.NumberFormat;
@@ -27,6 +28,7 @@ import java.util.Properties;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import rs.baselib.bean.NamedObject;
 
@@ -711,5 +713,25 @@ public class CommonUtils {
 		else if (o instanceof IDisplayProvider) rc = ((IDisplayProvider)o).getDisplay();
 		else if (o instanceof NamedObject) rc = ((NamedObject)o).getName();
 		return rc;
+	}
+	
+	/**
+	 * Set the anchor id for at the given URL.
+	 * @param url url to be modified
+	 * @param anchor new anchor to be set
+	 * @return the modified URL but other components are kept
+	 */
+	public static URL setAnchor(URL url, String anchor) {
+		try {
+			String paths[] = url.getPath().split("#", 2);
+			if (isEmpty(anchor)) {
+				return new URL(url.getProtocol(), url.getHost(), url.getPort(), paths[0]);
+			} else {
+				return new URL(url.getProtocol(), url.getHost(), url.getPort(), paths[0]+"#"+anchor);
+			}
+		} catch (MalformedURLException e) {
+			LoggerFactory.getLogger(CommonUtils.class).error("Cannot append anchor", e);
+		}
+		return url;
 	}
 }
