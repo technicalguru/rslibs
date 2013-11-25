@@ -42,4 +42,10 @@ public interface ICryptingDelegateFactory {
 	 * @return passphrase
 	 */
 	public char[] getPassphrase();
+	
+	/**
+	 * Provide a salt for encryption usage.
+	 * @return salt
+	 */
+	public byte[] getSalt();
 }

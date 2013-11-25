@@ -161,10 +161,15 @@ public class OsgiModelServiceImpl implements IOsgiModelService {
 					if (s == null) s = DEFAULT_NAME;
 
 					// Create the DAO factory
-					IDaoFactory factory = (IDaoFactory)ConfigurationUtils.load(subConfig, true);
-					factory.setTransactionManager(txManager);
-					registerFactory(s, factory);
-
+					try {
+						IDaoFactory factory = (IDaoFactory)ConfigurationUtils.load(subConfig, true);
+						factory.setTransactionManager(txManager);
+						registerFactory(s, factory);
+					} catch (RuntimeException e) {
+						if (ClassNotFoundException.class.equals(e.getCause())) {
+							log.error("Cannot load class: "+s, e);
+						}
+					}
 					i++;
 				}
 			} catch (Exception e) {
@@ -173,7 +178,7 @@ public class OsgiModelServiceImpl implements IOsgiModelService {
 			factoriesLoaded = true;
 		}
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */

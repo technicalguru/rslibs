@@ -34,16 +34,16 @@ import rs.baselib.security.IPasswordCallback;
 public class DefaultCryptingDelegateFactory implements ICryptingDelegateFactory {
 
 	private static Logger log = LoggerFactory.getLogger(DefaultCryptingDelegateFactory.class);
-	
+
 	public static final DefaultCryptingDelegateFactory INSTANCE = new DefaultCryptingDelegateFactory();
-	
-	private ICryptingDelegate iCryptingDelegate = null;
-	private KeyPair keyPair;
+
+	private ICryptingDelegate cryptingDelegate = null;
+	private KeyPair keyPair = null;
 	private String algorithm;
 	private AlgorithmParameterSpec paramSpec;
 	private XMLConfiguration config;
 	private Map<String, IPasswordCallback> passwordCallbacks;
-	
+
 	/**
 	 * Returns the crypting delegate factory.
 	 * @return the factory
@@ -51,7 +51,7 @@ public class DefaultCryptingDelegateFactory implements ICryptingDelegateFactory 
 	public static ICryptingDelegateFactory getInstance() {
 		return INSTANCE;
 	}
-	
+
 	/**
 	 * Constructor.
 	 */
@@ -66,7 +66,7 @@ public class DefaultCryptingDelegateFactory implements ICryptingDelegateFactory 
 		try {
 			// Some init
 			passwordCallbacks = new HashMap<String, IPasswordCallback>();
-			
+
 			// Load the configuration
 			String configLocation = System.getProperty("encryption.config");
 			if (configLocation == null) configLocation = "encryption-config.xml";
@@ -74,21 +74,12 @@ public class DefaultCryptingDelegateFactory implements ICryptingDelegateFactory 
 			log.info("Encryption configuration defined as: "+configLocation);
 			log.info("Encryption configuration found at: "+configURL);
 			config = new XMLConfiguration(configURL);
-			
-			// Load the key pair from the key store
-			KeyStore ks = getKeyStore();
-			String keyAlias = getKeyAlias();
-			char keyPassword[] = getKeyPassword();
-			if ((keyAlias != null) && (keyPassword != null)) {
-				PrivateKey privKey = (PrivateKey)ks.getKey(getKeyAlias(), getKeyPassword());
-				PublicKey pubKey = ks.getCertificate(getKeyAlias()).getPublicKey();
-				setKeyPair(new KeyPair(pubKey, privKey));
-			}
+
 		} catch (Exception e) {
 			throw new RuntimeException("Cannot load keys", e);
 		}
 	};
-	
+
 	/**
 	 * Returns the configuration.
 	 * @return the configuration
@@ -96,18 +87,18 @@ public class DefaultCryptingDelegateFactory implements ICryptingDelegateFactory 
 	protected XMLConfiguration getConfiguration() {
 		return config;
 	}
-	
+
 	/**
 	 * Returns the name of the delegate class.
 	 * @return the name of delegate class
 	 */
 	protected String getDelegateClassName() {
-		String className = config.getString("iCryptingDelegate(0)[@class]");
-		if (className == null) className = "rsbudget.data.encrypt.DefaultCryptingDelegate";
+		String className = config.getString("cryptingDelegate(0)[@class]");
+		if (className == null) className = DefaultCryptingDelegate.class.getName();
 		return className;
 
 	}
-	
+
 	/**
 	 * Returns a callback for the given type.
 	 * @param type type of password callback
@@ -126,7 +117,7 @@ public class DefaultCryptingDelegateFactory implements ICryptingDelegateFactory 
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Returns the configuration for the password callback.
 	 * @param type type of callback
@@ -143,7 +134,7 @@ public class DefaultCryptingDelegateFactory implements ICryptingDelegateFactory 
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Asks the respective callback to deliver a password.
 	 * @param type type of callback
@@ -156,7 +147,16 @@ public class DefaultCryptingDelegateFactory implements ICryptingDelegateFactory 
 		else rc = callback.getPassword();
 		return rc;
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public byte[] getSalt() {
+		String s = new String(getPassword("salt"));
+		return EncryptionUtils.decodeBase64(s);
+	}
+
 	/**
 	 * Returns the configuration for the keystore.
 	 * @return classname
@@ -169,7 +169,7 @@ public class DefaultCryptingDelegateFactory implements ICryptingDelegateFactory 
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Returns the key store.
 	 * @return the key store
@@ -184,7 +184,7 @@ public class DefaultCryptingDelegateFactory implements ICryptingDelegateFactory 
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Returns the key store path.
 	 * @return key store path
@@ -194,7 +194,7 @@ public class DefaultCryptingDelegateFactory implements ICryptingDelegateFactory 
 		if (rc == null) rc = KeyStore.getDefaultType();
 		return rc;
 	}
-	
+
 	/**
 	 * Returns the key store path.
 	 * @return key store path
@@ -202,7 +202,7 @@ public class DefaultCryptingDelegateFactory implements ICryptingDelegateFactory 
 	protected String getKeyStorePath() {
 		return ConfigurationUtils.getParam(getKeyStoreConfig(), "location");
 	}
-	
+
 	/**
 	 * Return the key store password
 	 * @return key store password
@@ -210,7 +210,7 @@ public class DefaultCryptingDelegateFactory implements ICryptingDelegateFactory 
 	protected char[] getKeyStorePassword() {
 		return getPassword("keystore");
 	}
-	
+
 	/**
 	 * Returns the public key alias in key store.
 	 * @return key alias
@@ -218,7 +218,7 @@ public class DefaultCryptingDelegateFactory implements ICryptingDelegateFactory 
 	protected String getKeyAlias() {
 		return ConfigurationUtils.getParam(getKeyStoreConfig(), "key.alias");
 	}
-	
+
 	/**
 	 * Return the public key password
 	 * @return key password
@@ -226,7 +226,7 @@ public class DefaultCryptingDelegateFactory implements ICryptingDelegateFactory 
 	protected char[] getKeyPassword() {
 		return getPassword("key");
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -240,20 +240,20 @@ public class DefaultCryptingDelegateFactory implements ICryptingDelegateFactory 
 	 * {@inheritDoc}
 	 */
 	public ICryptingDelegate getCryptingDelegate() {
-		if (iCryptingDelegate == null) createCryptingDelegate();
-		return iCryptingDelegate;
+		if (cryptingDelegate == null) createCryptingDelegate();
+		return cryptingDelegate;
 	}
-	
+
 	/**
 	 * Creates and initializes the crypting delegate.
 	 */
 	@SuppressWarnings({ "unchecked" })
 	protected synchronized void createCryptingDelegate() {
-		if (iCryptingDelegate != null) return;
+		if (cryptingDelegate != null) return;
 		try {
 			Class<? extends ICryptingDelegate> clazz = (Class<? extends ICryptingDelegate>)LangUtils.forName(getDelegateClassName());
-			iCryptingDelegate = clazz.newInstance();
-			iCryptingDelegate.init(this);
+			cryptingDelegate = clazz.newInstance();
+			cryptingDelegate.init(this);
 		} catch (Exception e) {
 			throw new RuntimeException("Cannot create crypting delegate", e);
 		}
@@ -264,6 +264,21 @@ public class DefaultCryptingDelegateFactory implements ICryptingDelegateFactory 
 	 * @return the keyPair
 	 */
 	public KeyPair getKeyPair() {
+		if (keyPair == null) {
+			try {
+				// Load the key pair from the key store
+				KeyStore ks = getKeyStore();
+				String keyAlias = getKeyAlias();
+				char keyPassword[] = getKeyPassword();
+				if ((keyAlias != null) && (keyPassword != null)) {
+					PrivateKey privKey = (PrivateKey)ks.getKey(getKeyAlias(), getKeyPassword());
+					PublicKey pubKey = ks.getCertificate(getKeyAlias()).getPublicKey();
+					setKeyPair(new KeyPair(pubKey, privKey));
+				}
+			} catch (Exception e) {
+				throw new RuntimeException("Cannot create key pair:", e);
+			}
+		}
 		return keyPair;
 	}
 
@@ -306,6 +321,6 @@ public class DefaultCryptingDelegateFactory implements ICryptingDelegateFactory 
 	public void setParamSpec(AlgorithmParameterSpec paramSpec) {
 		this.paramSpec = paramSpec;
 	}
-	
-	
+
+
 }

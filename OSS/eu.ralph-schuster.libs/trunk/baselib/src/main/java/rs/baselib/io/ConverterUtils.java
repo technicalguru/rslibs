@@ -12,6 +12,11 @@ import java.util.Currency;
 import java.util.Date;
 import java.util.TimeZone;
 
+import rs.baselib.util.RsDate;
+import rs.baselib.util.RsDay;
+import rs.baselib.util.RsMonth;
+import rs.baselib.util.RsYear;
+
 /**
  * Provides simple methods vor converting bytes into objects and back.
  * @author ralph
@@ -391,6 +396,46 @@ public class ConverterUtils {
 	}
 	
 	/**
+	 * Converts the given parameter to its byte representation.
+	 * @param param parameter
+	 * @return byte reresentation
+	 */
+	public static byte[] toBytes(RsDate param) {
+		if (param == null) return null;
+		return toBytes(param.getTime());
+	}
+	
+	/**
+	 * Converts the given parameter to its byte representation.
+	 * @param param parameter
+	 * @return byte reresentation
+	 */
+	public static byte[] toBytes(RsMonth param) {
+		if (param == null) return null;
+		return toBytes(param.getTime());
+	}
+	
+	/**
+	 * Converts the given parameter to its byte representation.
+	 * @param param parameter
+	 * @return byte reresentation
+	 */
+	public static byte[] toBytes(RsYear param) {
+		if (param == null) return null;
+		return toBytes(param.getTime());
+	}
+	
+	/**
+	 * Converts the given parameter to its byte representation.
+	 * @param param parameter
+	 * @return byte reresentation
+	 */
+	public static byte[] toBytes(RsDay param) {
+		if (param == null) return null;
+		return toBytes(param.getTime());
+	}
+	
+	/**
 	 * Converts the given bytes to Date.
 	 * @param bytes bytes
 	 * @return Date value
@@ -398,6 +443,46 @@ public class ConverterUtils {
 	public static Date toDate(byte bytes[]) {
 		if (bytes == null) return null;
 		return new Date(toLong(bytes));
+	}
+
+	/**
+	 * Converts the given bytes to Day.
+	 * @param bytes bytes
+	 * @return Day value
+	 */
+	public static RsDate toRsDay(byte bytes[]) {
+		if (bytes == null) return null;
+		return new RsDay(toLong(bytes));
+	}
+
+	/**
+	 * Converts the given bytes to Date.
+	 * @param bytes bytes
+	 * @return Date value
+	 */
+	public static RsDate toRsDate(byte bytes[]) {
+		if (bytes == null) return null;
+		return new RsDate(toLong(bytes));
+	}
+
+	/**
+	 * Converts the given bytes to Month.
+	 * @param bytes bytes
+	 * @return Month value
+	 */
+	public static RsMonth toRsMonth(byte bytes[]) {
+		if (bytes == null) return null;
+		return new RsMonth(toLong(bytes));
+	}
+
+	/**
+	 * Converts the given bytes to Month.
+	 * @param bytes bytes
+	 * @return Month value
+	 */
+	public static RsYear toRsYear(byte bytes[]) {
+		if (bytes == null) return null;
+		return new RsYear(toLong(bytes));
 	}
 
 	/**
