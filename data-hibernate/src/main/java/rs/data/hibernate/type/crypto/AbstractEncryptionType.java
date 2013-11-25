@@ -21,6 +21,9 @@ import org.hibernate.usertype.UserType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import rs.baselib.crypto.DefaultCryptingDelegateFactory;
+import rs.baselib.crypto.ICryptingDelegate;
+import rs.baselib.crypto.ICryptingDelegateFactory;
 import rs.baselib.lang.LangUtils;
 import rs.baselib.util.CommonUtils;
 
@@ -230,14 +233,14 @@ public abstract class AbstractEncryptionType implements UserType, ParameterizedT
 	public void setParameterValues(Properties parameters) {
 		String factoryClassName = null;
 		if (parameters != null) parameters.getProperty("cryptingDelegateFactoryClass");
-		if (factoryClassName == null) factoryClassName = CryptingDelegateFactory.class.getName();
+		if (factoryClassName == null) factoryClassName = DefaultCryptingDelegateFactory.class.getName();
 		try {
 			Class<?> factoryClass = LangUtils.forName(factoryClassName);
 			Method m = factoryClass.getMethod("getInstance");
 			if ((m.getModifiers() & Modifier.STATIC) != 0) {
 				setCryptingDelegateFactory((ICryptingDelegateFactory)m.invoke(null));
 			} else {
-				setCryptingDelegateFactory(CryptingDelegateFactory.INSTANCE);
+				setCryptingDelegateFactory(DefaultCryptingDelegateFactory.INSTANCE);
 			}
 		} catch (Exception e) {
 			throw new HibernateException("Cannot instantiate crypting delegate factory: "+factoryClassName, e);
