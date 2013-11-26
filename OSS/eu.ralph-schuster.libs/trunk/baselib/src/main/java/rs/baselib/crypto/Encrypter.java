@@ -6,6 +6,7 @@ package rs.baselib.crypto;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
+import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.InvalidKeySpecException;
@@ -31,6 +32,14 @@ public class Encrypter {
 	
 	/**
 	 * Constructor from secret key.
+	 * @param eCipher the cipher to be used
+	 */
+	public Encrypter(Cipher eCipher) {
+		this.ecipher = eCipher;
+	}
+
+	/**
+	 * Constructor from secret key.
 	 * @param key the secret key to be used
 	 * @param algorithm algorithm (key's algorithm will be used if NULL)
 	 * @throws NoSuchPaddingException when encrypting algorithm cannot be generated
@@ -38,7 +47,7 @@ public class Encrypter {
 	 * @throws InvalidKeyException when encrypting algorithm cannot be generated
 	 * @throws InvalidAlgorithmParameterException when encrypting algorithm cannot be generated
 	 */
-	public Encrypter(SecretKey key, String algorithm) throws EncryptionException {
+	public Encrypter(Key key, String algorithm) throws EncryptionException {
 		this(key, algorithm, null);
 	}
 
@@ -52,7 +61,7 @@ public class Encrypter {
 	 * @throws InvalidKeyException when encrypting algorithm cannot be generated
 	 * @throws InvalidAlgorithmParameterException when encrypting algorithm cannot be generated
 	 */
-	public Encrypter(SecretKey key, String algorithm, AlgorithmParameterSpec paramSpec) throws EncryptionException {
+	public Encrypter(Key key, String algorithm, AlgorithmParameterSpec paramSpec) throws EncryptionException {
 		init(key, algorithm, paramSpec);
 	}
 
@@ -67,7 +76,7 @@ public class Encrypter {
 	 * @throws InvalidKeyException when encrypting algorithm cannot be generated
 	 * @throws InvalidAlgorithmParameterException when encrypting algorithm cannot be generated
 	 */
-	public Encrypter(SecretKey key, String algorithm, byte salt[], int iterationCount) throws EncryptionException {
+	public Encrypter(Key key, String algorithm, byte salt[], int iterationCount) throws EncryptionException {
         AlgorithmParameterSpec paramSpec = EncryptionUtils.generateParamSpec(salt, iterationCount);
 		init(key, algorithm, paramSpec);
 	}
@@ -164,12 +173,16 @@ public class Encrypter {
 	 * @throws InvalidKeyException when encrypting algorithm cannot be generated
 	 * @throws InvalidAlgorithmParameterException when encrypting algorithm cannot be generated
 	 */
-	private void init(SecretKey key, String algorithm, AlgorithmParameterSpec paramSpec) throws EncryptionException {
+	private void init(Key key, String algorithm, AlgorithmParameterSpec paramSpec) throws EncryptionException {
 		try {
 			if (algorithm == null) algorithm = key.getAlgorithm();
-			if (paramSpec == null) paramSpec = EncryptionUtils.generateParamSpec();
+			//if (paramSpec == null) paramSpec = EncryptionUtils.generateParamSpec();
 			ecipher = Cipher.getInstance(algorithm);
-			ecipher.init(Cipher.ENCRYPT_MODE, key, paramSpec);
+			if (paramSpec != null) {
+				ecipher.init(Cipher.ENCRYPT_MODE, key, paramSpec);
+			} else {
+				ecipher.init(Cipher.ENCRYPT_MODE, key);
+			}
 		} catch (NoSuchPaddingException e) {
 			throw new EncryptionException("No such padding: "+e.getMessage(), e);
 		} catch (NoSuchAlgorithmException e) {

@@ -3,6 +3,7 @@
  */
 package rs.baselib.crypto;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
@@ -125,7 +126,16 @@ public class DataSigner {
      * @param reader stream to be signed
      * @return signature of the provided stream
      */
-	protected String sign(Reader reader) throws SigningException {
+	public String sign(Reader reader) throws SigningException {
+		return Base64.encodeBase64String(getByteSignature(reader)).trim();
+	}
+	
+	/**
+     * Creates a signature for the given stream.
+     * @param reader stream to be signed
+     * @return signature of the provided stream
+     */
+	public byte[] getByteSignature(Reader reader) throws SigningException {
 		try {
 			Signature dsa = Signature.getInstance("SHA1withDSA");
 
@@ -134,8 +144,7 @@ public class DataSigner {
 			
 			update(dsa, reader);
 			
-			byte[] sig = dsa.sign();
-			return Base64.encodeBase64String(sig).trim();
+			return dsa.sign();
 		} catch (SigningException e) {
 			throw e;
 		} catch (Throwable t) {
@@ -148,7 +157,16 @@ public class DataSigner {
      * @param in stream to be signed
      * @return signature of the provided stream
      */
-	protected String sign(InputStream in) throws SigningException {
+	public String sign(InputStream in) throws SigningException {
+		return Base64.encodeBase64String(getByteSignature(in)).trim();
+	}
+
+	/**
+     * Creates a signature for the given stream.
+     * @param in stream to be signed
+     * @return signature of the provided stream
+     */
+	public byte[] getByteSignature(InputStream in) throws SigningException {
 		try {
 			Signature dsa = Signature.getInstance("SHA1withDSA");
 
@@ -157,8 +175,7 @@ public class DataSigner {
 			
 			update(dsa, in);
 			
-			byte[] sig = dsa.sign();
-			return Base64.encodeBase64String(sig).trim();
+			return dsa.sign();
 		} catch (SigningException e) {
 			throw e;
 		} catch (Throwable t) {
@@ -213,8 +230,38 @@ public class DataSigner {
      * @return signature of the provided String
 	 * @throws SigningException when the stream cannot be signed
      */
-	protected String sign(String str) throws SigningException {
+	public String sign(String str) throws SigningException {
 		return sign(new StringReader(str));
+    }
+
+	/**
+     * Creates a signature for the given string.
+     * @param str string to be signed
+     * @return signature of the provided String
+	 * @throws SigningException when the stream cannot be signed
+     */
+	public byte[] getByteSignature(String str) throws SigningException {
+		return getByteSignature(new StringReader(str));
+    }
+
+	/**
+     * Creates a signature for the given string.
+     * @param str string to be signed
+     * @return signature of the provided String
+	 * @throws SigningException when the stream cannot be signed
+     */
+	public String sign(byte bytes[]) throws SigningException {
+		return sign(new ByteArrayInputStream(bytes));
+    }
+
+	/**
+     * Creates a signature for the given string.
+     * @param str string to be signed
+     * @return signature of the provided String
+	 * @throws SigningException when the stream cannot be signed
+     */
+	public byte[] getByteSignature(byte bytes[]) throws SigningException {
+		return getByteSignature(new ByteArrayInputStream(bytes));
     }
 
 	/**
@@ -224,16 +271,27 @@ public class DataSigner {
 	 * @return true if the signature confirms stream integrity
 	 * @throws SigningException when the signature cannot be verified
 	 */
-	protected boolean verify(String signature, InputStream in) throws SigningException {
+	public boolean verify(String signature, InputStream in) throws SigningException {
+		return verify(EncryptionUtils.decodeBase64(signature), in);
+    }
+
+	/**
+	 * Verifies the signature on the given stream.
+	 * @param signature signature
+	 * @param in stream to be verified
+	 * @return true if the signature confirms stream integrity
+	 * @throws SigningException when the signature cannot be verified
+	 */
+	public boolean verify(byte signature[], InputStream in) throws SigningException {
         try {
             Signature dsa = Signature.getInstance("SHA1withDSA");
             /* Initializing the object with the public key */
             dsa.initVerify(getPublicKey());
-
+            
             /* Update and verify the data */
 			update(dsa, in);
 			
-            return dsa.verify(EncryptionUtils.decodeBase64(signature));
+            return dsa.verify(signature);
 		} catch (SigningException e) {
 			throw e;
         } catch (Throwable t) {
@@ -249,7 +307,18 @@ public class DataSigner {
 	 * @return true if the signature confirms stream integrity
 	 * @throws SigningException when the signature cannot be verified
 	 */
-	protected boolean verify(String signature, Reader in) throws SigningException {
+	public boolean verify(String signature, Reader in) throws SigningException {
+        return verify(EncryptionUtils.decodeBase64(signature), in);
+    }
+    
+	/**
+	 * Verifies the signature on the given stream.
+	 * @param signature signature
+	 * @param in stream to be verified
+	 * @return true if the signature confirms stream integrity
+	 * @throws SigningException when the signature cannot be verified
+	 */
+	public boolean verify(byte signature[], Reader in) throws SigningException {
         try {
             Signature dsa = Signature.getInstance("SHA1withDSA");
             /* Initializing the object with the public key */
@@ -258,7 +327,7 @@ public class DataSigner {
             /* Update and verify the data */
 			update(dsa, in);
 			
-            return dsa.verify(EncryptionUtils.decodeBase64(signature));
+            return dsa.verify(signature);
 		} catch (SigningException e) {
 			throw e;
         } catch (Throwable t) {
@@ -274,8 +343,19 @@ public class DataSigner {
 	 * @return true if the signature confirms string integrity
 	 * @throws SigningException when the signature cannot be verified
 	 */
-    protected boolean verify(String signature, String str) throws SigningException {
+    public boolean verify(String signature, String str) throws SigningException {
     	return verify(signature, new StringReader(str));
+    }
+    
+	/**
+	 * Verifies the signature on the given string.
+	 * @param signature signature
+	 * @param str string to be verified
+	 * @return true if the signature confirms string integrity
+	 * @throws SigningException when the signature cannot be verified
+	 */
+    public boolean verify(byte signature[], byte data[]) throws SigningException {
+    	return verify(signature, new ByteArrayInputStream(data));
     }
     
     

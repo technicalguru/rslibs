@@ -48,8 +48,7 @@ public class DefaultCryptingDelegate implements ICryptingDelegate {
 				if (algorithm == null) algorithm = keyPair.getPrivate().getAlgorithm();
 				log.debug("Key uses algorithm: "+algorithm);
 				AlgorithmParameterSpec spec = factory.getParamSpec();
-				algorithm = EncryptionUtils.DEFAULT_SECRET_KEY_TYPE;
-				spec = EncryptionUtils.generateParamSpec();
+				if (algorithm == null) algorithm = EncryptionUtils.DEFAULT_SECRET_KEY_TYPE;
 				dCipher = Cipher.getInstance(algorithm);
 				eCipher = Cipher.getInstance(algorithm);
 				SecureRandom random = new SecureRandom();
@@ -57,7 +56,6 @@ public class DefaultCryptingDelegate implements ICryptingDelegate {
 					dCipher.init(Cipher.DECRYPT_MODE, keyPair.getPrivate(), random);
 					eCipher.init(Cipher.ENCRYPT_MODE, keyPair.getPublic(), random);
 				} else {
-					spec.getClass().getName();
 					dCipher.init(Cipher.DECRYPT_MODE, keyPair.getPrivate(), spec, random);
 					eCipher.init(Cipher.ENCRYPT_MODE, keyPair.getPublic(), spec, random);
 				}
@@ -66,20 +64,25 @@ public class DefaultCryptingDelegate implements ICryptingDelegate {
 				// Use passphrase algorithm
 				char passphrase[] = factory.getPassphrase();
 				int iterationCount = EncryptionUtils.DEFAULT_ITERATIONS;
-				byte salt[] = EncryptionUtils.generateSalt(0);
+				byte salt[] = factory.getSalt();
 				KeySpec keySpec = new PBEKeySpec(passphrase, salt, iterationCount);
 				SecretKey key = SecretKeyFactory.getInstance(EncryptionUtils.DEFAULT_SECRET_KEY_TYPE).generateSecret(keySpec);
-				AlgorithmParameterSpec paramSpec = EncryptionUtils.generateParamSpec(salt, iterationCount);
-				algorithm = key.getAlgorithm();
-				if (paramSpec == null) paramSpec = EncryptionUtils.generateParamSpec();
+				AlgorithmParameterSpec paramSpec = factory.getParamSpec();
+				algorithm = factory.getAlgorithm();
+				if (algorithm == null) algorithm = key.getAlgorithm();
 				eCipher = Cipher.getInstance(algorithm);
-				eCipher.init(Cipher.ENCRYPT_MODE, key, paramSpec);
 				dCipher = Cipher.getInstance(algorithm);
-				dCipher.init(Cipher.DECRYPT_MODE, key, paramSpec);
+				if (paramSpec != null) {
+					eCipher.init(Cipher.ENCRYPT_MODE, key, paramSpec);
+					dCipher.init(Cipher.DECRYPT_MODE, key, paramSpec);
+				} else {
+					eCipher.init(Cipher.ENCRYPT_MODE, key);
+					dCipher.init(Cipher.DECRYPT_MODE, key);
+				}
 				blockBased = false;
 			}
-			log.trace("Cipher block length (encrypt) = "+eCipher.getBlockSize());
-			log.trace("Cipher block length (decrypt) = "+dCipher.getBlockSize());
+			log.debug("Cipher block length (encrypt) = "+eCipher.getBlockSize());
+			log.debug("Cipher block length (decrypt) = "+dCipher.getBlockSize());
 		} catch (Exception e) {
 			throw new RuntimeException("Canot create ciphers", e);
 		}
