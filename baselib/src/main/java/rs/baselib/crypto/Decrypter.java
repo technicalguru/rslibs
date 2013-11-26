@@ -6,6 +6,7 @@ package rs.baselib.crypto;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
+import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.InvalidKeySpecException;
@@ -29,6 +30,14 @@ public class Decrypter {
 	
 	/**
 	 * Constructor from secret key.
+	 * @param dCipher the cipher to be used
+	 */
+	public Decrypter(Cipher dCipher) {
+		this.dcipher = dCipher;
+	}
+
+	/**
+	 * Constructor from secret key.
 	 * @param key the secret key to be used
 	 * @param algorithm algorithm (key's algorithm will be used if NULL)
 	 * @throws NoSuchPaddingException when decrypting algorithm cannot be generated
@@ -36,7 +45,7 @@ public class Decrypter {
 	 * @throws InvalidKeyException when decrypting algorithm cannot be generated
 	 * @throws InvalidAlgorithmParameterException when decrypting algorithm cannot be generated
 	 */
-	public Decrypter(SecretKey key, String algorithm) throws DecryptionException {
+	public Decrypter(Key key, String algorithm) throws DecryptionException {
 		this(key, algorithm, null);
 	}
 
@@ -50,7 +59,7 @@ public class Decrypter {
 	 * @throws InvalidKeyException when decrypting algorithm cannot be generated
 	 * @throws InvalidAlgorithmParameterException when decrypting algorithm cannot be generated
 	 */
-	public Decrypter(SecretKey key, String algorithm, AlgorithmParameterSpec paramSpec) throws DecryptionException {
+	public Decrypter(Key key, String algorithm, AlgorithmParameterSpec paramSpec) throws DecryptionException {
 		init(key, algorithm, paramSpec);
 	}
 
@@ -65,7 +74,7 @@ public class Decrypter {
 	 * @throws InvalidKeyException when decrypting algorithm cannot be generated
 	 * @throws InvalidAlgorithmParameterException when decrypting algorithm cannot be generated
 	 */
-	public Decrypter(SecretKey key, String algorithm, byte salt[], int iterationCount) throws DecryptionException {
+	public Decrypter(Key key, String algorithm, byte salt[], int iterationCount) throws DecryptionException {
         AlgorithmParameterSpec paramSpec = EncryptionUtils.generateParamSpec(salt, iterationCount);
 		init(key, algorithm, paramSpec);
 	}
@@ -171,12 +180,15 @@ public class Decrypter {
 	 * @throws InvalidKeyException when decrypting algorithm cannot be generated
 	 * @throws InvalidAlgorithmParameterException when decrypting algorithm cannot be generated
 	 */
-	private void init(SecretKey key, String algorithm, AlgorithmParameterSpec paramSpec) throws DecryptionException {
+	private void init(Key key, String algorithm, AlgorithmParameterSpec paramSpec) throws DecryptionException {
 		try {
 			if (algorithm == null) algorithm = key.getAlgorithm();
-			if (paramSpec == null) paramSpec = EncryptionUtils.generateParamSpec();
 			dcipher = Cipher.getInstance(algorithm);
-			dcipher.init(Cipher.DECRYPT_MODE, key, paramSpec);
+			if (paramSpec != null) {
+				dcipher.init(Cipher.DECRYPT_MODE, key, paramSpec);
+			} else {
+				dcipher.init(Cipher.DECRYPT_MODE, key);
+			}
 		} catch (NoSuchPaddingException e) {
 			throw new DecryptionException("No such padding: "+e.getMessage(), e);
 		} catch (NoSuchAlgorithmException e) {
@@ -232,12 +244,12 @@ public class Decrypter {
      * @param bytes bytes to be decrypted
      * @return <code>byte</code> decrypted version of the provided array
      */
-    public byte[] decrypt(byte bytes[]) throws EncryptionException {
+    public byte[] decrypt(byte bytes[]) throws DecryptionException {
         try {
             // Encrypt
             return dcipher.doFinal(bytes);
         } catch (Throwable t) {
-        	throw new EncryptionException("Cannot decrypt: "+t.getMessage(), t);
+        	throw new DecryptionException("Cannot decrypt: "+t.getMessage(), t);
         }
     }
 }

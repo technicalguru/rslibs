@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.GeneralSecurityException;
+import java.security.Key;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -17,8 +18,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
+import java.security.Provider;
 import java.security.PublicKey;
 import java.security.SecureRandom;
+import java.security.Security;
 import java.security.cert.CertificateException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
@@ -59,6 +62,15 @@ public class EncryptionUtils {
 	 * The default number of iterations to be executed when creating the encrypting algorithm.
 	 */
 	public static final String PASSWORD_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!\"&/()=?;*+'#;,:._-<>";
+
+	/**
+	 * Creates a key specification.
+	 * @return the PBE param spec
+	 */
+	public static KeySpec getKeySpec(Key key) throws InvalidKeySpecException, NoSuchAlgorithmException {
+		KeyFactory fact = KeyFactory.getInstance(key.getAlgorithm());
+		return fact.getKeySpec(key, KeySpec.class);
+	}
 
 	/**
 	 * Creates a PBE Parameter specification randomly.
@@ -200,6 +212,46 @@ public class EncryptionUtils {
 		return pair;
 	}
 
+	/**
+	 * Generates a 512 byte RSA key pair.
+	 * @return the key pair
+	 * @throws NoSuchAlgorithmException
+	 */
+	public static KeyPair generateKey() throws NoSuchAlgorithmException {
+		return generateKey("RSA", 512);
+	}
+	
+	/**
+	 * Generates a RSA key pair of given size 
+	 * @param keySize the key size
+	 * @return the key pair
+	 * @throws NoSuchAlgorithmException
+	 */
+	public static KeyPair generateKey(int keySize) throws NoSuchAlgorithmException {
+		return generateKey("RSA", keySize);
+	}
+	
+	/**
+	 * Generates a key pair.
+	 * @param algorithm algorithm, e.g. "RSA"
+	 * @param keySize teh key size
+	 * @return the key pair
+	 * @throws NoSuchAlgorithmException
+	 */
+	public static KeyPair generateKey(String algorithm, int keySize) throws NoSuchAlgorithmException {
+		KeyPairGenerator keyGen = KeyPairGenerator.getInstance(algorithm);
+        keyGen.initialize(keySize);
+        return keyGen.genKeyPair();
+	}
+	
+	/**
+	 * Returns all security providers.
+	 * @return all security providers
+	 */
+	public static Provider[] getKeyPairGenerators() {
+		return Security.getProviders();
+	}
+	
 	/**
 	 * Encodes the public key into BASE64 representation.
 	 * @param key public key

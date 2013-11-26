@@ -13,6 +13,7 @@ import java.security.spec.AlgorithmParameterSpec;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.slf4j.Logger;
@@ -43,6 +44,7 @@ public class DefaultCryptingDelegateFactory implements ICryptingDelegateFactory 
 	private AlgorithmParameterSpec paramSpec;
 	private XMLConfiguration config;
 	private Map<String, IPasswordCallback> passwordCallbacks;
+	private boolean specLoaded = false;
 
 	/**
 	 * Returns the crypting delegate factory.
@@ -74,11 +76,24 @@ public class DefaultCryptingDelegateFactory implements ICryptingDelegateFactory 
 			log.info("Encryption configuration defined as: "+configLocation);
 			log.info("Encryption configuration found at: "+configURL);
 			config = new XMLConfiguration(configURL);
-
+			
+			// Attention! Do not load here due to bootstrap issues
+			// Apply lazy load through loadSpec() method
 		} catch (Exception e) {
 			throw new RuntimeException("Cannot load keys", e);
 		}
 	};
+
+	/**
+	 * Loads the spec params (lazily).
+	 */
+	protected synchronized void loadSpec() {
+		if (!specLoaded) {
+			if (algorithm == null) algorithm = loadAlgorithm(config);
+			if (paramSpec == null) paramSpec = loadParamSpec(config);
+			specLoaded = true;
+		}
+	}
 
 	/**
 	 * Returns the configuration.
@@ -126,7 +141,12 @@ public class DefaultCryptingDelegateFactory implements ICryptingDelegateFactory 
 	protected SubnodeConfiguration getPasswordCallbackConfig(String type) {
 		int index = 0;
 		while (true) {
-			SubnodeConfiguration rc = config.configurationAt("passwordCallback("+index+")");
+			SubnodeConfiguration rc = null;
+			try {
+				rc = config.configurationAt("passwordCallback("+index+")");
+			} catch (IllegalArgumentException e) {
+				break;
+			}
 			if (rc == null) break;
 			String t = rc.getString("[@type]");
 			if (type.equals(t)) return rc;
@@ -149,12 +169,33 @@ public class DefaultCryptingDelegateFactory implements ICryptingDelegateFactory 
 	}
 
 	/**
+	 * Return the public key salt.
+	 * @return key salt
+	 */
+	protected byte[] getKeySalt() {
+		return getSalt("key");
+	}
+
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public byte[] getSalt() {
-		String s = new String(getPassword("salt"));
-		return EncryptionUtils.decodeBase64(s);
+		return getKeySalt();
+	}
+
+	/**
+	 * Asks the respective callback to deliver a salt.
+	 * @param type type of callback
+	 * @return salt or null if no callback exists.
+	 */
+	protected byte[] getSalt(String type) {
+		byte rc[] = null;
+		IPasswordCallback callback = getPasswordCallback(type);
+		if (callback == null) rc = null;
+		else rc = callback.getSalt();
+		return rc;
 	}
 
 	/**
@@ -295,6 +336,7 @@ public class DefaultCryptingDelegateFactory implements ICryptingDelegateFactory 
 	 * @return the algorithm
 	 */
 	public String getAlgorithm() {
+		if (!specLoaded)  loadSpec();
 		return algorithm;
 	}
 
@@ -307,10 +349,25 @@ public class DefaultCryptingDelegateFactory implements ICryptingDelegateFactory 
 	}
 
 	/**
+	 * Returns the algorithm definition from the config
+	 * @param config the config
+	 * @return the algorithm 
+	 */
+	protected String loadAlgorithm(Configuration config) {
+		try {
+			return config.getString("algorithm("+0+")");
+		} catch (IllegalArgumentException e) {
+			// No such definition
+		}
+		return null;
+	}
+
+	/**
 	 * Returns the paramSpec.
 	 * @return the paramSpec
 	 */
 	public AlgorithmParameterSpec getParamSpec() {
+		if (!specLoaded)  loadSpec();
 		return paramSpec;
 	}
 
@@ -322,5 +379,12 @@ public class DefaultCryptingDelegateFactory implements ICryptingDelegateFactory 
 		this.paramSpec = paramSpec;
 	}
 
-
+	/**
+	 * Currently only default PBE spec.
+	 * @param config configuration to load from
+	 * @return the param spec
+	 */
+	protected AlgorithmParameterSpec loadParamSpec(Configuration config) {
+		return EncryptionUtils.generateParamSpec(getSalt(), EncryptionUtils.DEFAULT_ITERATIONS);
+	}
 }

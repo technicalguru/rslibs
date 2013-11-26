@@ -46,6 +46,10 @@ public class CommonUtils {
 	 * The formatter for dates (see {@link DateFormat#SHORT}.
 	 */
 	public static final DateFormat DATE_FORMATTER = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
+	/**
+	 * The formatter for dates incl. times (see {@link DateFormat#SHORT}.
+	 */
+	public static final DateFormat DATE_TIME_FORMATTER = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault());
 	
 
 	/**
