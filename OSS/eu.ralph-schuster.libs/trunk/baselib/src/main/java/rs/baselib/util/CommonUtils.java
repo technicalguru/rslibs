@@ -18,6 +18,7 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -25,6 +26,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.TimeZone;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
@@ -43,11 +45,11 @@ import rs.baselib.bean.NamedObject;
 public class CommonUtils {
 
 	/**
-	 * The formatter for dates (see {@link DateFormat#SHORT}.
+	 * The formatter for dates (see {@link DateFormat#SHORT}).
 	 */
 	public static final DateFormat DATE_FORMATTER = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
 	/**
-	 * The formatter for dates incl. times (see {@link DateFormat#SHORT}.
+	 * The formatter for dates incl. times (see {@link DateFormat#SHORT}).
 	 */
 	public static final DateFormat DATE_TIME_FORMATTER = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault());
 	
@@ -83,11 +85,31 @@ public class CommonUtils {
 	/**
 	 * Formats the given date.
 	 * @param date date to format
-	 * @return the formatted string (see {@link #DATE_FORMATTER})
+	 * @return the formatted string (see {@link #DATE_TIME_FORMATTER})
 	 */
 	public static String toString(RsDate date) {
 		if ((date == null) || (date.getTimeInMillis() == 0)) return "";
-		return DATE_FORMATTER.format(date.getTime());
+		return DATE_TIME_FORMATTER.format(date.getTime());
+	}
+	
+	/**
+	 * Formats the given day.
+	 * @param day day to format
+	 * @return the formatted string (see {@link #DATE_FORMATTER})
+	 */
+	public static String toString(RsDay day) {
+		if ((day == null) || (day.getTimeInMillis() == -TimeZone.getDefault().getOffset(day.getTimeInMillis()))) return "";
+		return DATE_FORMATTER.format(day.getTime());
+	}
+	
+	/**
+	 * Formats the given year.
+	 * @param year year to format
+	 * @return the formatted string
+	 */
+	public static String toString(RsYear year) {
+		if ((year == null) || (year.get(Calendar.YEAR) == 1)) return "";
+		return year.getKey();
 	}
 	
 	/**
