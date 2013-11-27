@@ -14,7 +14,8 @@
  * is determined by the size of the license holder string. The general rule is that
  * 5 character (to be precise: bytes!) form an 8-character block in the license. The first
  * block is reserved for meta-data (product ID and validity date).</p> 
- * <p>This package is experimental yet</p>
+ * <p>This package is experimental yet. Usage is described on 
+ * <a href="http://techblog.ralph-schuster.eu/rs-library/baselib/class-usage/#licensing">Class Usage Page</a></p>
  * @author ralph
  *
  */

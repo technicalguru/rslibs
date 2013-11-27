@@ -10,6 +10,7 @@ import org.apache.commons.codec.binary.Base32;
 import rs.baselib.crypto.DataSigner;
 import rs.baselib.crypto.DecryptionException;
 import rs.baselib.io.ConverterUtils;
+import rs.baselib.util.CommonUtils;
 
 /**
  * The Key Manager, responsible to verify licenses.
@@ -39,6 +40,11 @@ public class LicenseManager {
 		try {
 			byte bytes[] = base32.decode(ungroup(licenseKey));
 			
+			// XOR the first 4 byte with the second four bytes to remove variance for unlimited
+			for (int i=0; i<4; i++) {
+				bytes[i] = (byte) (bytes[i] ^ bytes[4+i]);
+			}
+
 			// expiration
 			byte b[] = new byte[4];
 			System.arraycopy(bytes, 0, b, 0, 4);
@@ -54,6 +60,10 @@ public class LicenseManager {
 				throw new LicenseException("Invalid license: "+licenseKey);
 			}
 			
+			// Expiration
+			if (license.isExpired()) {
+				throw new LicenseException("License expired (valid until "+CommonUtils.DATE_TIME_FORMATTER.format(license.getExpiryDate())+": "+licenseKey);
+			}
 		} catch (LicenseException e) {
 			throw e;
 		} catch (Throwable t) {
