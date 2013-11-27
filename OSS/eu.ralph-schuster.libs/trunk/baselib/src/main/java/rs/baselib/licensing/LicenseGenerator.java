@@ -3,6 +3,7 @@
  */
 package rs.baselib.licensing;
 
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.util.Date;
@@ -81,20 +82,38 @@ public class LicenseGenerator {
 		}
 	}
 
+	/**
+	 * Signes the given byte array.
+	 * @param bytes the bytes to be signed
+	 * @return the signature
+	 * @throws SigningException
+	 * @throws NoSuchAlgorithmException
+	 */
 	protected byte[] sign(byte bytes[]) throws SigningException, NoSuchAlgorithmException {
 		return signer.getByteSignature(bytes);
 	}
 	
+	/**
+	 * Builds the combined license key (raw bytes).
+	 * @param prefix the integer prefix basically containing the expiry time in seconds since epoch time
+	 * @param signature teh signature
+	 * @return the combined byte array
+	 * @throws IOException
+	 */
 	protected byte[] combine(int prefix, byte signature[]) {
 		int len = signature.length+4;
 		byte rc[] = new byte[len];
 		System.arraycopy(ConverterUtils.toBytes(prefix), 0, rc, 0, 4);
 		System.arraycopy(signature, 0, rc, 4, signature.length);
+		// XOR the first 4 byte with the second four bytes to allow more variance for unlimited
+		for (int i=0; i<4; i++) {
+			rc[i] = (byte) (rc[i] ^ rc[4+i]);
+		}
 		return rc;
 	}
 	
 	/**
-	 * Groups a string into 8-caharacter blocks.
+	 * Groups a string into 8-character blocks.
 	 * @param s the string to be grouped
 	 * @return the grouped string
 	 */
@@ -109,6 +128,8 @@ public class LicenseGenerator {
 			b.append(c);
 			count++;
 		}
+		// Remove trailing =
+		while (b.charAt(b.length()-1) == '=') b.deleteCharAt(b.length()-1);
 		return b.toString();
 	}
 
