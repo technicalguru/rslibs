@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -677,6 +678,50 @@ public class CommonUtils {
     		return rc.toString();
     	} finally {
     		if (r != null) r.close();
+    	}
+    }
+
+    /**
+     * Writes the string to a file.
+     * @param name name of file to be written to
+     * @param content the content to be written
+     * @throws IOException when content cannot be written
+     */
+    public static void writeContent(String name, String content) throws IOException {
+    	writeContent(new File(name), content);
+    }
+    
+    /**
+     * Writes the string to a file.
+     * @param f file to be written to
+     * @param content the content to be written
+     * @throws IOException when content cannot be written
+     */
+    public static void writeContent(File f, String content) throws IOException {
+    	writeContent(new FileOutputStream(f), content);    	
+    }
+      
+    /**
+     * Writes the string to a stream.
+     * @param out stream to be written to
+     * @param content the content to be written
+     * @throws IOException when content cannot be written
+     */
+    public static void writeContent(OutputStream out, String content) throws IOException {
+    	writeContent(new PrintWriter(out), content);
+    }
+
+    /**
+     * Writes the string to a writer.
+     * @param out writer to be written to
+     * @param content the content to be written
+     * @throws IOException when content cannot be written
+     */
+    public static void writeContent(PrintWriter writer, String content) throws IOException {
+    	try {
+    		writer.print(content);
+    	} finally {
+    		if (writer != null) writer.close();
     	}
     }
 
