@@ -3,14 +3,6 @@
  */
 package rs.baselib.licensing;
 
-import java.io.File;
-import java.security.KeyFactory;
-import java.security.PublicKey;
-import java.security.spec.X509EncodedKeySpec;
-
-import org.apache.commons.codec.binary.Base64;
-
-import rs.baselib.util.CommonUtils;
 
 /**
  * The Key Manager, responsible to verify licenses.
@@ -24,16 +16,15 @@ public class LicenseManager {
 	/**
 	 * Constructor.
 	 */
-	public LicenseManager(PublicKey publicKey) {
-		this(publicKey, null);
+	public LicenseManager() {
+		this((ILicensingScheme)null);
 	}
 
 	/**
 	 * Constructor.
 	 */
-	public LicenseManager(PublicKey publicKey, ILicensingScheme scheme) {
-		this(scheme != null ? scheme.getLicenseVerifier() : LicensingScheme.FULL_LICENSE.getLicenseVerifier());
-		getLicenseVerifier().setKey(publicKey);
+	public LicenseManager(ILicensingScheme scheme) {
+		this(scheme != null ? scheme.getLicenseVerifier() : LicensingScheme.RSA_LICENSE.getLicenseVerifier());
 	}
 
 	/**
@@ -58,9 +49,9 @@ public class LicenseManager {
 	 * @param licenseHolder the license holder that must match
 	 * @throws LicenseException when the license is invalid
 	 */
-	public License verify(String licenseKey, int productId, String licenseHolder) {
+	public ILicense verify(String licenseKey, ILicenseContext context) {
 		try {
-			return getLicenseVerifier().verify(licenseKey, productId, licenseHolder);
+			return getLicenseVerifier().verify(licenseKey, context);
 		} catch (LicenseException e) {
 			throw e;
 		} catch (Throwable t) {
@@ -76,9 +67,9 @@ public class LicenseManager {
 	 * @return the manager
 	 * @throws LicenseException when the manager cannot be instantiated
 	 */
-	public static LicenseManager generateFrom(File f, String algorithm) {
-		return generateFrom(f, algorithm, LicensingScheme.FULL_LICENSE);
-	}
+//	public static LicenseManager generateFrom(File f, String algorithm) {
+//		return generateFrom(f, algorithm, LicensingScheme.RSA_LICENSE);
+//	}
 	
 	/**
 	 * Instantiates a {@link LicenseManager} from given file with public key.
@@ -88,17 +79,17 @@ public class LicenseManager {
 	 * @return the manager
 	 * @throws LicenseException when the manager cannot be instantiated
 	 */
-	public static LicenseManager generateFrom(File f, String algorithm, ILicensingScheme scheme) {
-		try {
-			byte[] encodedPublicKey = Base64.decodeBase64(CommonUtils.loadContent(f));
-			KeyFactory keyFactory = KeyFactory.getInstance(algorithm);
-			X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(encodedPublicKey);
-			PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
-			return new LicenseManager(publicKey, scheme);
-		} catch (LicenseException e) {
-			throw e;
-		} catch (Throwable t) {
-			throw new LicenseException("Cannot create LicenseManager", t);
-		}
-	}
+//	public static LicenseManager generateFrom(File f, String algorithm, ILicensingScheme scheme) {
+//		try {
+//			byte[] encodedPublicKey = Base64.decodeBase64(CommonUtils.loadContent(f));
+//			KeyFactory keyFactory = KeyFactory.getInstance(algorithm);
+//			X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(encodedPublicKey);
+//			PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
+//			return new LicenseManager(publicKey, scheme);
+//		} catch (LicenseException e) {
+//			throw e;
+//		} catch (Throwable t) {
+//			throw new LicenseException("Cannot create LicenseManager", t);
+//		}
+//	}
 }

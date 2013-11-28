@@ -3,9 +3,9 @@
  */
 package rs.baselib.licensing;
 
+import java.security.Key;
 import java.security.KeyPair;
 
-import org.apache.commons.codec.binary.Hex;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +19,7 @@ import rs.baselib.crypto.EncryptionUtils;
  *
  */
 @RunWith(Parameterized.class)
-public class FullLicenseTest extends AbstractLicenseTest {
+public class RsaLicenseTest extends AbstractLicenseTest {
 
 	private static KeyPair keyPair;
 	private static LicenseGenerator generator;
@@ -31,20 +31,39 @@ public class FullLicenseTest extends AbstractLicenseTest {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		keyPair = EncryptionUtils.generateKey("RSA", 2048);
-		generator = new LicenseGenerator(keyPair.getPrivate(), LicensingScheme.FULL_LICENSE);
-		manager = new LicenseManager(keyPair.getPublic(), LicensingScheme.FULL_LICENSE);
-		
-		System.out.println("private="+Hex.encodeHexString(keyPair.getPrivate().getEncoded()));
-		System.out.println("public ="+Hex.encodeHexString(keyPair.getPublic().getEncoded()));
+		generator = new LicenseGenerator(LicensingScheme.RSA_LICENSE);
+		manager = new LicenseManager(LicensingScheme.RSA_LICENSE);		
 	}
 
 	
-	public FullLicenseTest(int productId, long expiryTime, String licenseHolder) {
-		super(productId, expiryTime, licenseHolder);
+	public RsaLicenseTest(String product, long expiryTime, String licenseHolder) {
+		super(product, expiryTime, licenseHolder);
 	}
 	
 	@Test
 	public void test() throws Exception {
 		test(generator, manager);
 	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected void initCreateContext(ILicenseContext context) {
+		super.initCreateContext(context);
+		context.set(Key.class, keyPair.getPrivate());
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected void initVerifyContext(ILicenseContext context) {
+		super.initVerifyContext(context);
+		context.set(Key.class, keyPair.getPublic());
+	}
+	
+	
 }

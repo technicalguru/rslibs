@@ -424,11 +424,9 @@ public class EncryptionUtils {
 
 			ByteArrayOutputStream out = new ByteArrayOutputStream(outputLen);
 			for (int i=0; i<firstBlockCount; i++) {
-				log.debug("crypt.doFinal("+(i*blockSize)+", "+blockSize+")");
 				out.write(cipher.doFinal(bytes, i*blockSize, blockSize));
 			}
 			if (lastBlockSize > 0) {
-				log.debug("crypt.doFinal("+(firstBlockCount*blockSize*blockSize)+", "+lastBlockSize+")");
 				out.write(cipher.doFinal(bytes, firstBlockCount*blockSize, lastBlockSize));
 			}
 			byte rc[] = out.toByteArray();
