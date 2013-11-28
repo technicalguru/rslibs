@@ -3,10 +3,8 @@
  */
 package rs.baselib.licensing;
 
-import rs.baselib.licensing.internal.FullLicenseCreator;
-import rs.baselib.licensing.internal.FullLicenseVerifier;
-import rs.baselib.licensing.internal.OctetLicenseCreator;
-import rs.baselib.licensing.internal.OctetLicenseVerifier;
+import rs.baselib.licensing.internal.RsaLicenseCreator;
+import rs.baselib.licensing.internal.RsaLicenseVerifier;
 
 /**
  * Describes the alternative ways to produce a license key.
@@ -15,15 +13,10 @@ import rs.baselib.licensing.internal.OctetLicenseVerifier;
  */
 public enum LicensingScheme implements ILicensingScheme {
 
-	/** A minimum scheme where the key consists of octets of characters, e.g. 12345678-ABCDEF23-78AB45ZG.
-	 * <p>This scheme requires DSA keys.</p>
-	 */
-	OCTETS(OctetLicenseCreator.class, OctetLicenseVerifier.class),
-	
 	/** A full blown scheme where the license consists of an encrypted message containing all data.
 	 *  This scheme requires RSA keys.
 	 */
-	FULL_LICENSE(FullLicenseCreator.class, FullLicenseVerifier.class);
+	RSA_LICENSE(RsaLicenseCreator.class, RsaLicenseVerifier.class);
 	
 	private Class<? extends ILicenseCreator> creatorClass;
 	private Class<? extends ILicenseVerifier> verifierClass;

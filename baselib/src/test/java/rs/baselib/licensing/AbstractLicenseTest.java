@@ -20,58 +20,79 @@ public abstract class AbstractLicenseTest {
 	@Parameters
 	public static Collection<Object[]> data() throws Exception {
 		Collection<Object[]> data = new ArrayList<Object[]>();
-		data.add(new Object[] { 1, 0L, "aLicenseHolder" });
-		data.add(new Object[] { 1, System.currentTimeMillis()+2000L, "aLicenseHolder" });
-		data.add(new Object[] { 1, System.currentTimeMillis()+2000L, "a2ndLicenseHolder" });
-		data.add(new Object[] { 2, System.currentTimeMillis()+2000L, "a2ndLicenseHolder" });
+		data.add(new Object[] { "product1", 0L, "aLicenseHolder" });
+		data.add(new Object[] { "product1", System.currentTimeMillis()+2000L, "aLicenseHolder" });
+		data.add(new Object[] { "product1", System.currentTimeMillis()+2000L, "a2ndLicenseHolder" });
+		data.add(new Object[] { "product2", System.currentTimeMillis()+2000L, "a2ndLicenseHolder" });
 		return data;
 	}
 	
-	protected int productId;
+	protected String product;
 	protected long expiryTime;
 	protected String licenseHolder;
 	
-	public AbstractLicenseTest(int productId, long expiryTime, String licenseHolder) {
-		this.productId = productId;
+	public AbstractLicenseTest(String product, long expiryTime, String licenseHolder) {
+		this.product = product;
 		this.expiryTime = expiryTime;
 		this.licenseHolder = licenseHolder;
 	}
 	
 	public void test(LicenseGenerator generator, LicenseManager manager) throws Exception {
 		// Generate the license
-		String s = generator.createLicenseKey(productId, expiryTime, licenseHolder);
-		System.out.println("Testing license: "+s);
-		boolean timeShallFail = expiryTime > 0 ? expiryTime < System.currentTimeMillis() : false;
+		ILicenseContext createContext = new DefaultLicenseContext();
+		initCreateContext(createContext);
+		String s = generator.createLicenseKey(DefaultLicense.class, createContext);
+		
+		long t = System.currentTimeMillis();
+		boolean shallFail = expiryTime > 0 ? expiryTime < t : false;
+		ILicenseContext verifyContext = new DefaultLicenseContext();
+		initVerifyContext(verifyContext);
+		verifyContext.set(DefaultLicense.EXPIRATION_DATE_KEY, t);
 		
 		try {
-			manager.verify(s, productId, licenseHolder);
-			if (timeShallFail) {
-				fail("Verification should have failed with timestamp");
+			manager.verify(s, verifyContext);
+			if (shallFail) {
+				fail("Verification should have failed");
 			}
 		} catch (LicenseException e) {
 			// This should not have failed
-			if (!timeShallFail) {
-				fail("Verification failed with timestamp");
+			if (!shallFail) {
+				fail("Verification failed: "+e.getMessage());
 			}
 		}
 				
 		// Test other productId
 		try {
-			manager.verify(s, productId+1, licenseHolder);
+			verifyContext.set(DefaultLicense.PRODUCT_KEY, product+"x");
+			manager.verify(s, verifyContext);
 			// we need to fail
 			fail("Verification succeeded with other product ID");
 		} catch (LicenseException e) {
 			// Success
 		}		
+		verifyContext.set(DefaultLicense.PRODUCT_KEY, product);
 		
 		// Test other license holder
 		try {
-			manager.verify(s, productId, licenseHolder+"x");
+			verifyContext.set(DefaultLicense.OWNER_KEY, licenseHolder+"x");
+			manager.verify(s, verifyContext);
 			// we need to fail
 			fail("Verification succeeded with other licenseHolder");
 		} catch (LicenseException e) {
 			// Success
 		}		
+		verifyContext.set(DefaultLicense.PRODUCT_KEY, licenseHolder);
 	}
 
+	protected void initCreateContext(ILicenseContext context) {
+		context.set(DefaultLicense.PRODUCT_KEY, product);
+		context.set(DefaultLicense.EXPIRATION_DATE_KEY, expiryTime);
+		context.set(DefaultLicense.OWNER_KEY, licenseHolder);
+	}
+	
+	protected void initVerifyContext(ILicenseContext context) {
+		context.set(DefaultLicense.PRODUCT_KEY, product);
+		context.set(DefaultLicense.EXPIRATION_DATE_KEY, expiryTime);
+		context.set(DefaultLicense.OWNER_KEY, licenseHolder);
+	}
 }

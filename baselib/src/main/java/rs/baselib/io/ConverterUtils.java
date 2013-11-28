@@ -3,6 +3,12 @@
  */
 package rs.baselib.io;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -23,7 +29,7 @@ import rs.baselib.util.RsYear;
  *
  */
 public class ConverterUtils {
-	
+
 	/**
 	 * Converts the given parameter to its byte representation.
 	 * @param param parameter
@@ -34,7 +40,7 @@ public class ConverterUtils {
 		b.putShort(param);
 		return b.array();		
 	}
-	
+
 	/**
 	 * Converts the given parameter to its byte representation.
 	 * @param param parameter
@@ -44,7 +50,7 @@ public class ConverterUtils {
 		if (param == null) return null;
 		return toBytes(param.shortValue());
 	}
-	
+
 	/**
 	 * Converts the given bytes to short.
 	 * @param bytes bytes
@@ -54,7 +60,7 @@ public class ConverterUtils {
 		ByteBuffer buf = ByteBuffer.wrap(bytes);
 		return buf.getShort();
 	}
-	
+
 	/**
 	 * Converts the given bytes to Short.
 	 * @param bytes bytes
@@ -64,7 +70,7 @@ public class ConverterUtils {
 		if (bytes == null) return null;
 		return Short.valueOf(toShort(bytes));
 	}
-	
+
 	/**
 	 * Converts the given parameter to its byte representation.
 	 * @param param parameter
@@ -75,7 +81,7 @@ public class ConverterUtils {
 		b.putInt(param);
 		return b.array();
 	}
-	
+
 	/**
 	 * Converts the given parameter to its byte representation.
 	 * @param param parameter
@@ -85,7 +91,7 @@ public class ConverterUtils {
 		if (param == null) return null;
 		return toBytes(param.intValue());
 	}
-	
+
 	/**
 	 * Converts the given bytes to int.
 	 * @param bytes bytes
@@ -95,7 +101,7 @@ public class ConverterUtils {
 		ByteBuffer buf = ByteBuffer.wrap(bytes);
 		return buf.getInt();
 	}
-	
+
 	/**
 	 * Converts the given bytes to Integer.
 	 * @param bytes bytes
@@ -116,7 +122,7 @@ public class ConverterUtils {
 		b.putLong(param);
 		return b.array();
 	}
-	
+
 	/**
 	 * Converts the given parameter to its byte representation.
 	 * @param param parameter
@@ -126,7 +132,7 @@ public class ConverterUtils {
 		if (param == null) return null;
 		return toBytes(param.longValue());
 	}
-	
+
 	/**
 	 * Converts the given bytes to long.
 	 * @param bytes bytes
@@ -136,7 +142,7 @@ public class ConverterUtils {
 		ByteBuffer buf = ByteBuffer.wrap(bytes);
 		return buf.getLong();
 	}
-	
+
 	/**
 	 * Converts the given bytes to Integer.
 	 * @param bytes bytes
@@ -157,7 +163,7 @@ public class ConverterUtils {
 		b.putFloat(param);
 		return b.array();
 	}
-	
+
 	/**
 	 * Converts the given parameter to its byte representation.
 	 * @param param parameter
@@ -167,7 +173,7 @@ public class ConverterUtils {
 		if (param == null) return null;
 		return toBytes(param.floatValue());
 	}
-	
+
 	/**
 	 * Converts the given bytes to float.
 	 * @param bytes bytes
@@ -177,7 +183,7 @@ public class ConverterUtils {
 		ByteBuffer buf = ByteBuffer.wrap(bytes);
 		return buf.getFloat();
 	}
-	
+
 	/**
 	 * Converts the given bytes to Float.
 	 * @param bytes bytes
@@ -198,7 +204,7 @@ public class ConverterUtils {
 		b.putDouble(param);
 		return b.array();
 	}
-	
+
 	/**
 	 * Converts the given parameter to its byte representation.
 	 * @param param parameter
@@ -208,7 +214,7 @@ public class ConverterUtils {
 		if (param == null) return null;
 		return toBytes(param.doubleValue());
 	}
-	
+
 	/**
 	 * Converts the given bytes to double.
 	 * @param bytes bytes
@@ -218,7 +224,7 @@ public class ConverterUtils {
 		ByteBuffer buf = ByteBuffer.wrap(bytes);
 		return buf.getDouble();
 	}
-	
+
 	/**
 	 * Converts the given bytes to Double.
 	 * @param bytes bytes
@@ -228,7 +234,7 @@ public class ConverterUtils {
 		if (bytes == null) return null;
 		return Double.valueOf(toDouble(bytes));
 	}
-	
+
 	/**
 	 * Converts the given parameter to its byte representation.
 	 * @param param parameter
@@ -239,7 +245,7 @@ public class ConverterUtils {
 		b.putChar(param);
 		return b.array();
 	}
-	
+
 	/**
 	 * Converts the given parameter to its byte representation.
 	 * @param param parameter
@@ -249,7 +255,7 @@ public class ConverterUtils {
 		if (param == null) return null;
 		return toBytes(param.charValue());
 	}
-	
+
 	/**
 	 * Converts the given bytes to char.
 	 * @param bytes bytes
@@ -259,7 +265,7 @@ public class ConverterUtils {
 		ByteBuffer b = ByteBuffer.wrap(bytes);
 		return b.getChar();
 	}
-	
+
 	/**
 	 * Converts the given bytes to Character.
 	 * @param bytes bytes
@@ -270,7 +276,7 @@ public class ConverterUtils {
 		return Character.valueOf(toChar(bytes));
 	}
 
-	
+
 	/**
 	 * Converts the given parameter to its byte representation.
 	 * @param param parameter
@@ -279,7 +285,7 @@ public class ConverterUtils {
 	public static byte[] toBytes(char param[]) throws UnsupportedEncodingException {
 		return toBytes(new String(param));
 	}
-	
+
 	/**
 	 * Converts the given bytes to float.
 	 * @param bytes bytes
@@ -288,7 +294,7 @@ public class ConverterUtils {
 	public static char[] toCharArray(byte bytes[]) throws UnsupportedEncodingException {
 		return toString(bytes).toCharArray();
 	}
-	
+
 	/**
 	 * Converts the given parameter to its byte representation.
 	 * @param param parameter
@@ -297,7 +303,7 @@ public class ConverterUtils {
 	public static byte[] toBytes(byte param) {
 		return new byte[] { param };
 	}
-	
+
 	/**
 	 * Converts the given parameter to its byte representation.
 	 * @param param parameter
@@ -307,7 +313,7 @@ public class ConverterUtils {
 		if (param == null) return null;
 		return toBytes(param.byteValue());
 	}
-	
+
 	/**
 	 * Converts the given bytes to byte.
 	 * @param bytes bytes
@@ -316,7 +322,7 @@ public class ConverterUtils {
 	public static byte toByte(byte bytes[]) {
 		return bytes[0];
 	}
-	
+
 	/**
 	 * Converts the given bytes to Byte.
 	 * @param bytes bytes
@@ -335,7 +341,7 @@ public class ConverterUtils {
 	public static byte[] toBytes(boolean param) {
 		return new byte[] { param ? (byte)1 : (byte)0 };
 	}
-	
+
 	/**
 	 * Converts the given parameter to its byte representation.
 	 * @param param parameter
@@ -345,7 +351,7 @@ public class ConverterUtils {
 		if (param == null) return null;
 		return toBytes(param.booleanValue());
 	}
-	
+
 	/**
 	 * Converts the given bytes to boolean.
 	 * @param bytes bytes
@@ -355,7 +361,7 @@ public class ConverterUtils {
 		if ((bytes == null) || (bytes.length == 0)) return false;
 		return bytes[0] > 0;
 	}
-	
+
 	/**
 	 * Converts the given bytes to Boolean.
 	 * @param bytes bytes
@@ -375,7 +381,7 @@ public class ConverterUtils {
 		if (param == null) return null;
 		return param.getBytes("UTF8");
 	}
-	
+
 	/**
 	 * Converts the given bytes to string (UTF8).
 	 * @param bytes bytes
@@ -384,7 +390,7 @@ public class ConverterUtils {
 	public static String toString(byte bytes[]) throws UnsupportedEncodingException {
 		return new String(bytes, "UTF8");
 	}
-	
+
 	/**
 	 * Converts the given parameter to its byte representation.
 	 * @param param parameter
@@ -394,7 +400,7 @@ public class ConverterUtils {
 		if (param == null) return null;
 		return toBytes(param.getTime());
 	}
-	
+
 	/**
 	 * Converts the given parameter to its byte representation.
 	 * @param param parameter
@@ -404,7 +410,7 @@ public class ConverterUtils {
 		if (param == null) return null;
 		return toBytes(param.getTime());
 	}
-	
+
 	/**
 	 * Converts the given parameter to its byte representation.
 	 * @param param parameter
@@ -414,7 +420,7 @@ public class ConverterUtils {
 		if (param == null) return null;
 		return toBytes(param.getTime());
 	}
-	
+
 	/**
 	 * Converts the given parameter to its byte representation.
 	 * @param param parameter
@@ -424,7 +430,7 @@ public class ConverterUtils {
 		if (param == null) return null;
 		return toBytes(param.getTime());
 	}
-	
+
 	/**
 	 * Converts the given parameter to its byte representation.
 	 * @param param parameter
@@ -434,7 +440,7 @@ public class ConverterUtils {
 		if (param == null) return null;
 		return toBytes(param.getTime());
 	}
-	
+
 	/**
 	 * Converts the given bytes to Date.
 	 * @param bytes bytes
@@ -494,7 +500,7 @@ public class ConverterUtils {
 		if (param == null) return null;
 		return toBytes(param.getTime());
 	}
-	
+
 	/**
 	 * Converts the given bytes to Date.
 	 * @param bytes bytes
@@ -514,7 +520,7 @@ public class ConverterUtils {
 		if (param == null) return null;
 		return toBytes(param.getCurrencyCode());
 	}
-	
+
 	/**
 	 * Converts the given bytes to Currency.
 	 * @param bytes bytes
@@ -534,7 +540,7 @@ public class ConverterUtils {
 		if (param == null) return null;
 		return toBytes(param.toLanguageTag());
 	}
-	
+
 	/**
 	 * Converts the given bytes to Locale.
 	 * @param bytes bytes
@@ -544,8 +550,8 @@ public class ConverterUtils {
 		if (bytes == null) return null;
 		return Locale.forLanguageTag(toString(bytes));
 	}
-	*/
-	
+	 */
+
 	/**
 	 * Converts the given parameter to its byte representation.
 	 * @param param parameter
@@ -555,7 +561,7 @@ public class ConverterUtils {
 		if (param == null) return null;
 		return toBytes(param.getID());
 	}
-	
+
 	/**
 	 * Converts the given bytes to TimeZone.
 	 * @param bytes bytes
@@ -575,7 +581,7 @@ public class ConverterUtils {
 		if (param == null) return null;
 		return toBytes(param.toExternalForm());
 	}
-	
+
 	/**
 	 * Converts the given bytes to URL.
 	 * @param bytes bytes
@@ -586,4 +592,34 @@ public class ConverterUtils {
 		return new URL(toString(bytes));
 	}
 
+	/**
+	 * Converts the given Serializable to its byte representation.
+	 * @param param parameter
+	 * @return byte reresentation
+	 */
+	public static byte[] toBytes(Serializable o) throws IOException {
+		if (o == null) return null;
+		ByteArrayOutputStream bOut = new ByteArrayOutputStream(1000);
+		ObjectOutputStream out = new ObjectOutputStream(bOut);
+		out.writeObject(o);
+		out.close();
+		return bOut.toByteArray();
+	}
+
+	/**
+	 * Converts a byte array to a {@link Serializable}.
+	 * @param bytes the bytes from a serializable
+	 * @return the {@link Serializable}
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
+	public static Object toObject(byte bytes[]) throws ClassNotFoundException, IOException {
+		ByteArrayInputStream bIn = new ByteArrayInputStream(bytes);
+
+		// Read object using ObjectInputStream
+		ObjectInputStream in =  new ObjectInputStream (bIn);
+
+		// Read an object
+		return  in.readObject();
+	}
 }
