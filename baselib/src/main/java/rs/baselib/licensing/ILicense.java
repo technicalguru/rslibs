@@ -12,6 +12,21 @@ import java.io.Serializable;
  */
 public interface ILicense extends Serializable {
 
+	/** A key for the product (Usage is optional). */
+	public static String PRODUCT_KEY = "product";
+	/** Key for expiration date (Usage is optional). */
+	public static String EXPIRATION_DATE_KEY = "expirationDate";
+	/** Key for owner (Usage is optional). */
+	public static String OWNER_KEY = "owner";
+	/** Key for minimum version (Usage is optional). */
+	public static String MINIMUM_VERSION_KEY = "minVersion";
+	/** Key for inclusion of minimum version (Usage is optional). */
+	public static String MINIMUM_VERSION_INCLUDED_KEY = "minVersionIncluded";
+	/** Key for maximum version (Usage is optional). */
+	public static String MAXIMUM_VERSION_KEY = "maxVersion";
+	/** Key for inclusion of maximum version (Usage is optional). */
+	public static String MAXIMUM_VERSION_INCLUDED_KEY = "maxVersionIncluded";
+
 	/**
 	 * Initialize the license using the given context.
 	 * @param context context containing parameters.

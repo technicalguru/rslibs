@@ -4,9 +4,14 @@
 package rs.baselib.crypto;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.Reader;
+import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.security.Key;
 import java.security.KeyFactory;
@@ -39,6 +44,8 @@ import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import rs.baselib.util.CommonUtils;
+
 /**
  * Basic function for helping in encryption.
  * @author ralph
@@ -63,6 +70,9 @@ public class EncryptionUtils {
 	 */
 	public static final String PASSWORD_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!\"&/()=?;*+'#;,:._-<>";
 
+	/** Encoder for line limiting encoding */
+	private static Base64 base64 = new Base64(80);
+	
 	/**
 	 * Creates a key specification.
 	 * @return the PBE param spec
@@ -263,6 +273,16 @@ public class EncryptionUtils {
 	}
 
 	/**
+	 * Encodes the public key into BASE64 X.509 representation.
+	 * @param key public key
+	 * @return BASE64 representation of key
+	 */
+	public static String encodeBase64X509(PublicKey key) {
+		X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(key.getEncoded());
+		return base64.encodeToString(x509EncodedKeySpec.getEncoded());
+	}
+
+	/**
 	 * Encodes the private key into BASE64 representation.
 	 * @param key private key
 	 * @return BASE64 representation of key
@@ -273,16 +293,24 @@ public class EncryptionUtils {
 	}
 
 	/**
-	 * Decodes a public key from the BASE64 representation.
+	 * Encodes the private key into BASE64 PKCS8 representation.
+	 * @param key private key
+	 * @return BASE64 representation of key
+	 */
+	public static String encodeBase64Pkcs8(PrivateKey key) {
+		PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(key.getEncoded());
+		return base64.encodeToString(pkcs8EncodedKeySpec.getEncoded());
+	}
+
+	/**
+	 * Decodes a public key (DSA) from the BASE64 representation.
 	 * @param s BASE64 representation
-	 * @return public key
+	 * @return public DSA key
 	 * @throws InvalidKeySpecException
 	 * @throws NoSuchAlgorithmException
 	 */
 	public static PublicKey decodeBase64PublicKey(String s) throws InvalidKeySpecException, NoSuchAlgorithmException {
-		X509EncodedKeySpec keySpec = new X509EncodedKeySpec(decodeBase64(s));
-		KeyFactory keyFactory = KeyFactory.getInstance("DSA");
-		return keyFactory.generatePublic(keySpec);
+		return decodeBase64PublicKey(s, "DSA");
 	}
 
 	/**
@@ -292,9 +320,33 @@ public class EncryptionUtils {
 	 * @throws InvalidKeySpecException
 	 * @throws NoSuchAlgorithmException
 	 */
+	public static PublicKey decodeBase64PublicKey(String s, String algorithm) throws InvalidKeySpecException, NoSuchAlgorithmException {
+		X509EncodedKeySpec keySpec = new X509EncodedKeySpec(decodeBase64(s));
+		KeyFactory keyFactory = KeyFactory.getInstance(algorithm);
+		return keyFactory.generatePublic(keySpec);
+	}
+
+	/**
+	 * Decodes a private DSA key from the BASE64 representation.
+	 * @param s BASE64 representation
+	 * @return public key
+	 * @throws InvalidKeySpecException
+	 * @throws NoSuchAlgorithmException
+	 */
 	public static PrivateKey decodeBase64PrivateKey(String s) throws InvalidKeySpecException, NoSuchAlgorithmException {
+		return decodeBase64PrivateKey(s, "DSA");
+	}
+
+	/**
+	 * Decodes a private key from the BASE64 representation.
+	 * @param s BASE64 representation
+	 * @return public key
+	 * @throws InvalidKeySpecException
+	 * @throws NoSuchAlgorithmException
+	 */
+	public static PrivateKey decodeBase64PrivateKey(String s, String algorithm) throws InvalidKeySpecException, NoSuchAlgorithmException {
 		PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(decodeBase64(s));
-		KeyFactory keyFactory = KeyFactory.getInstance("DSA");
+		KeyFactory keyFactory = KeyFactory.getInstance(algorithm);
 		return keyFactory.generatePrivate(privateKeySpec);
 	}
 
@@ -463,4 +515,185 @@ public class EncryptionUtils {
 			throw new RuntimeException("Cannot hash string", t);
 		}
 	}
+	
+	/**
+	 * Instantiates a {@link PrivateKey} from given file.
+	 * @param file file where private key is stored in BASE64 PKCS8 encoding 
+	 * @param algorithm algorithm that the key used
+	 * @return the private key
+	 */
+	public static PrivateKey loadPrivateKey(File file, String algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
+		return decodeBase64PrivateKey(CommonUtils.loadContent(file), algorithm);
+	}
+	
+	/**
+	 * Instantiates a {@link PrivateKey} from given file.
+	 * @param filename file where private key is stored in BASE64 PKCS8 encoding 
+	 * @param algorithm algorithm that the key used
+	 * @return the private key
+	 */
+	public static PrivateKey loadPrivateKey(String filename, String algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
+		return decodeBase64PrivateKey(CommonUtils.loadContent(filename), algorithm);
+	}
+	
+	/**
+	 * Instantiates a {@link PrivateKey} from given URL.
+	 * @param url URL where private key is stored in BASE64 PKCS8 encoding 
+	 * @param algorithm algorithm that the key used
+	 * @return the private key
+	 */
+	public static PrivateKey loadPrivateKey(URL url, String algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
+		return decodeBase64PrivateKey(CommonUtils.loadContent(url), algorithm);
+	}
+	
+	/**
+	 * Instantiates a {@link PrivateKey} from given stream.
+	 * @param in stream where private key is stored in BASE64 PKCS8 encoding 
+	 * @param algorithm algorithm that the key used
+	 * @return the private key
+	 */
+	public static PrivateKey loadPrivateKey(InputStream in, String algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
+		return decodeBase64PrivateKey(CommonUtils.loadContent(in), algorithm);
+	}
+	
+	/**
+	 * Instantiates a {@link PrivateKey} from given reader.
+	 * @param in reader where private key is stored in BASE64 PKCS8 encoding 
+	 * @param algorithm algorithm that the key used
+	 * @return the private key
+	 */
+	public static PrivateKey loadPrivateKey(Reader in, String algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
+		return decodeBase64PrivateKey(CommonUtils.loadContent(in), algorithm);
+	}
+	
+	/**
+	 * Instantiates a {@link PublicKey} from given file.
+	 * @param file file where private key is stored in BASE64 X.509 encoding 
+	 * @param algorithm algorithm that the key used
+	 * @return the public key
+	 */
+	public static PublicKey loadPublicKey(File file, String algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
+		return decodeBase64PublicKey(CommonUtils.loadContent(file), algorithm);
+	}
+	
+	/**
+	 * Instantiates a {@link PublicKey} from given file.
+	 * @param filename name of file where private key is stored in BASE64 X.509 encoding 
+	 * @param algorithm algorithm that the key used
+	 * @return the public key
+	 */
+	public static PublicKey loadPublicKey(String filename, String algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
+		return decodeBase64PublicKey(CommonUtils.loadContent(filename), algorithm);
+	}
+	
+	/**
+	 * Instantiates a {@link PublicKey} from given URL.
+	 * @param URL url where private key is stored in BASE64 X.509 encoding 
+	 * @param algorithm algorithm that the key used
+	 * @return the public key
+	 */
+	public static PublicKey loadPublicKey(URL url, String algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
+		return decodeBase64PublicKey(CommonUtils.loadContent(url), algorithm);
+	}
+	
+	/**
+	 * Instantiates a {@link PublicKey} from given stream.
+	 * @param in stream where private key is stored in BASE64 X.509 encoding 
+	 * @param algorithm algorithm that the key used
+	 * @return the public key
+	 */
+	public static PublicKey loadPublicKey(InputStream in, String algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
+		return decodeBase64PublicKey(CommonUtils.loadContent(in), algorithm);
+	}
+	
+	/**
+	 * Instantiates a {@link PublicKey} from given reader.
+	 * @param in reader where private key is stored in BASE64 X.509 encoding 
+	 * @param algorithm algorithm that the key used
+	 * @return the public key
+	 */
+	public static PublicKey loadPublicKey(Reader in, String algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
+		return decodeBase64PublicKey(CommonUtils.loadContent(in), algorithm);
+	}
+	
+	/**
+	 * Saves a {@link PrivateKey} into given file.
+	 * @param file file where private key will be stored in BASE64 PKCS8 encoding 
+	 * @param key key to be stored
+	 * @throws IOException when key cannot be stored
+	 */
+	public static void save(File file, PrivateKey key) throws IOException {
+		CommonUtils.writeContent(file, encodeBase64Pkcs8(key));
+	}
+
+	/**
+	 * Saves a {@link PrivateKey} into given file.
+	 * @param filename name of file where private key will be stored in BASE64 PKCS8 encoding 
+	 * @param key key to be stored
+	 * @throws IOException when key cannot be stored
+	 */
+	public static void save(String filename, PrivateKey key) throws IOException {
+		CommonUtils.writeContent(filename, encodeBase64Pkcs8(key));
+	}
+
+	/**
+	 * Saves a {@link PrivateKey} into given stream.
+	 * @param out stream where private key will be stored in BASE64 PKCS8 encoding 
+	 * @param key key to be stored
+	 * @throws IOException when key cannot be stored
+	 */
+	public static void save(OutputStream out, PrivateKey key) throws IOException {
+		CommonUtils.writeContent(out, encodeBase64Pkcs8(key));
+	}
+
+	/**
+	 * Saves a {@link PrivateKey} into given writer.
+	 * @param out writer where private key will be stored in BASE64 PKCS8 encoding 
+	 * @param key key to be stored
+	 * @throws IOException when key cannot be stored
+	 */
+	public static void save(PrintWriter out, PrivateKey key) throws IOException {
+		CommonUtils.writeContent(out, encodeBase64Pkcs8(key));
+	}
+
+	/**
+	 * Saves a {@link PublicKey} into given file.
+	 * @param file file where private key will be stored in BASE64 X.509 encoding 
+	 * @param key key to be stored
+	 * @throws IOException when key cannot be stored
+	 */
+	public static void save(File file, PublicKey key) throws IOException {
+		CommonUtils.writeContent(file, encodeBase64X509(key));
+	}
+
+	/**
+	 * Saves a {@link PublicKey} into given file.
+	 * @param filename name of file where private key will be stored in BASE64 X.509 encoding 
+	 * @param key key to be stored
+	 * @throws IOException when key cannot be stored
+	 */
+	public static void save(String filename, PublicKey key) throws IOException {
+		CommonUtils.writeContent(filename, encodeBase64X509(key));
+	}
+
+	/**
+	 * Saves a {@link PublicKey} into given stream.
+	 * @param out stream where private key will be stored in BASE64 X.509 encoding 
+	 * @param key key to be stored
+	 * @throws IOException when key cannot be stored
+	 */
+	public static void save(OutputStream out, PublicKey key) throws IOException {
+		CommonUtils.writeContent(out, encodeBase64X509(key));
+	}
+
+	/**
+	 * Saves a {@link PublicKey} into given writer.
+	 * @param out writer where private key will be stored in BASE64 X.509 encoding 
+	 * @param key key to be stored
+	 * @throws IOException when key cannot be stored
+	 */
+	public static void save(PrintWriter out, PublicKey key) throws IOException {
+		CommonUtils.writeContent(out, encodeBase64X509(key));
+	}
+
 }

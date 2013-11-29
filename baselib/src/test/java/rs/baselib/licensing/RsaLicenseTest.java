@@ -35,7 +35,6 @@ public class RsaLicenseTest extends AbstractLicenseTest {
 		manager = new LicenseManager(LicensingScheme.RSA_LICENSE);		
 	}
 
-	
 	public RsaLicenseTest(String product, long expiryTime, String licenseHolder) {
 		super(product, expiryTime, licenseHolder);
 	}

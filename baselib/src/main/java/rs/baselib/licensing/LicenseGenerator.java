@@ -45,9 +45,18 @@ public class LicenseGenerator {
 	}
 
 	/**
-	 * Generates a key from the given license (does not expire).
-	 * @param productId the product id to be encoded
-	 * @param licenseHolder the license holder string
+	 * Generates a key using the given context.
+	 * @param context containing all properties for the license
+	 * @return the license key generated
+	 */
+	public String createLicenseKey(ILicenseContext context) {
+		return createLicenseKey(DefaultLicense.class, context);
+	}
+	
+	/**
+	 * Generates a license key using the given license class and context.
+	 * @param licenseClass the class to be used for generating the license
+	 * @param context containing all properties for the license
 	 * @return the license key generated
 	 */
 	public String createLicenseKey(Class<? extends ILicense> licenseClass, ILicenseContext context) {
@@ -64,7 +73,8 @@ public class LicenseGenerator {
 
 	/**
 	 * Generates a key from the given license.
-	 * @param license the license to be created.
+	 * @param context the licnesing context
+	 * @param license the license to be created
 	 * @return the license key
 	 */
 	public String createLicenseKey(ILicenseContext context, ILicense license) {
