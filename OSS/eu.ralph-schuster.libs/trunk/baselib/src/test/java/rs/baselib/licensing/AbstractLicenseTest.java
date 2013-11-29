@@ -41,14 +41,15 @@ public abstract class AbstractLicenseTest {
 		// Generate the license
 		ILicenseContext createContext = new DefaultLicenseContext();
 		initCreateContext(createContext);
-		String s = generator.createLicenseKey(DefaultLicense.class, createContext);
+		String s = generator.createLicenseKey(getLicenseClass(), createContext);
 		
 		long t = System.currentTimeMillis();
 		boolean shallFail = expiryTime > 0 ? expiryTime < t : false;
 		ILicenseContext verifyContext = new DefaultLicenseContext();
 		initVerifyContext(verifyContext);
-		verifyContext.set(DefaultLicense.EXPIRATION_DATE_KEY, t);
+		verifyContext.set(ILicense.EXPIRATION_DATE_KEY, t);
 		
+		// Initial test
 		try {
 			manager.verify(s, verifyContext);
 			if (shallFail) {
@@ -61,29 +62,32 @@ public abstract class AbstractLicenseTest {
 			}
 		}
 				
-		// Test other productId
+		// Perform additional tests
 		try {
-			verifyContext.set(DefaultLicense.PRODUCT_KEY, product+"x");
-			manager.verify(s, verifyContext);
-			// we need to fail
-			fail("Verification succeeded with other product ID");
-		} catch (LicenseException e) {
-			// Success
+			int index = 0;
+			while (true) {
+				boolean shallSucceed = modifyVerificationContext(index, verifyContext);
+				try {
+					manager.verify(s, verifyContext);
+					if (!shallSucceed) {
+						fail("Verification should have failed for test "+index);
+					}
+				} catch (LicenseException e) {
+					if (shallSucceed) {
+						fail("Verification did not fail for test "+index);
+					}
+				}
+				index++;
+			}
+		} catch (IndexOutOfBoundsException e) {
+			// No more additional tests
 		}		
-		verifyContext.set(DefaultLicense.PRODUCT_KEY, product);
-		
-		// Test other license holder
-		try {
-			verifyContext.set(DefaultLicense.OWNER_KEY, licenseHolder+"x");
-			manager.verify(s, verifyContext);
-			// we need to fail
-			fail("Verification succeeded with other licenseHolder");
-		} catch (LicenseException e) {
-			// Success
-		}		
-		verifyContext.set(DefaultLicense.PRODUCT_KEY, licenseHolder);
 	}
 
+	protected Class<? extends ILicense> getLicenseClass() {
+		return DefaultLicense.class;
+	}
+	
 	protected void initCreateContext(ILicenseContext context) {
 		context.set(DefaultLicense.PRODUCT_KEY, product);
 		context.set(DefaultLicense.EXPIRATION_DATE_KEY, expiryTime);
@@ -94,5 +98,26 @@ public abstract class AbstractLicenseTest {
 		context.set(DefaultLicense.PRODUCT_KEY, product);
 		context.set(DefaultLicense.EXPIRATION_DATE_KEY, expiryTime);
 		context.set(DefaultLicense.OWNER_KEY, licenseHolder);
+	}
+	
+	/**
+	 * Modify the verification context for another test.
+	 * <p>The method must also ensure that previous modifications are reverted.</p>
+	 * @param index index of test
+	 * @param context the context to be modified
+	 * @return whether the verification shall succeed with his context
+	 * @throw {@link IndexOutOfBoundsException} when there is no more test
+	 */
+	protected boolean modifyVerificationContext(int index, ILicenseContext context) throws IndexOutOfBoundsException {
+		switch (index) {
+		case 0:
+			context.set(ILicense.PRODUCT_KEY, product+"x");
+			return false;
+		case 1:
+			context.set(ILicense.PRODUCT_KEY, product);
+			context.set(ILicense.OWNER_KEY, licenseHolder+"x");
+			return false;
+		}
+		throw new IndexOutOfBoundsException("No more tests");
 	}
 }

@@ -3,6 +3,8 @@
  */
 package rs.baselib.licensing;
 
+import rs.baselib.licensing.internal.OctetLicenseCreator;
+import rs.baselib.licensing.internal.OctetLicenseVerifier;
 import rs.baselib.licensing.internal.RsaLicenseCreator;
 import rs.baselib.licensing.internal.RsaLicenseVerifier;
 
@@ -12,6 +14,11 @@ import rs.baselib.licensing.internal.RsaLicenseVerifier;
  *
  */
 public enum LicensingScheme implements ILicensingScheme {
+
+	/** A minimum scheme where the key consists of octets of characters, e.g. 12345678-ABCDEF23-78AB45ZG.
+	 * <p>This scheme requires DSA keys.</p>
+	 */
+	OCTET_LICENSE(OctetLicenseCreator.class, OctetLicenseVerifier.class),
 
 	/** A full blown scheme where the license consists of an encrypted message containing all data.
 	 *  This scheme requires RSA keys.
