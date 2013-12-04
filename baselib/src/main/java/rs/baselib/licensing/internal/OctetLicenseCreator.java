@@ -3,7 +3,6 @@
  */
 package rs.baselib.licensing.internal;
 
-import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 
