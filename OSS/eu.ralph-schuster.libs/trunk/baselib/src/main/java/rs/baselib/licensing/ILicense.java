@@ -26,6 +26,8 @@ public interface ILicense extends Serializable {
 	public static String MAXIMUM_VERSION_KEY = "maxVersion";
 	/** Key for inclusion of maximum version (Usage is optional). */
 	public static String MAXIMUM_VERSION_INCLUDED_KEY = "maxVersionIncluded";
+	/** Key for version (Usage is optional). */
+	public static String VERSION_KEY = "version";
 
 	/**
 	 * Initialize the license using the given context.

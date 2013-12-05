@@ -7,6 +7,7 @@ import java.util.Date;
 
 import rs.baselib.lang.LangUtils;
 import rs.baselib.util.CommonUtils;
+import rs.baselib.util.RsDate;
 
 /**
  * Default implementation of a license.
@@ -37,7 +38,7 @@ public class DefaultLicense extends AbstractLicense {
 		initProperty(MINIMUM_VERSION_KEY, context);
 		initProperty(MINIMUM_VERSION_INCLUDED_KEY, context);
 		initProperty(MAXIMUM_VERSION_KEY, context);
-		initProperty(MAXIMUM_VERSION_KEY, context);
+		initProperty(MAXIMUM_VERSION_INCLUDED_KEY, context);
 	}
 
 	/**
@@ -71,7 +72,7 @@ public class DefaultLicense extends AbstractLicense {
 	 * @return the date or <code>0</code> if not set
 	 */
 	private long getExpiration() {
-		return LangUtils.getLong(getProperty(EXPIRATION_DATE_KEY), 0);
+		return getDate(getProperty(EXPIRATION_DATE_KEY));
 	}
 
 	/**
@@ -164,6 +165,20 @@ public class DefaultLicense extends AbstractLicense {
 	}
 
 	/**
+	 * Returns the time in millis for the given object.
+	 * @param o an object (a date or long value)
+	 * @return the time in milliseconds
+	 */
+	protected long getDate(Object o) {
+		if (o instanceof Date) {
+			return ((Date)o).getTime();
+		} else if (o instanceof RsDate) {
+			return ((RsDate)o).getTimeInMillis();
+		}
+		return LangUtils.getLong(o, 0);
+	}
+	
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -175,23 +190,28 @@ public class DefaultLicense extends AbstractLicense {
 		}
 		Date d = getExpirationDate();
 		if (d != null) {
-			long l = LangUtils.getLong(context.get(EXPIRATION_DATE_KEY), 0);
+			long l = getDate(context.get(EXPIRATION_DATE_KEY));
 			if (d.getTime() < l) {
 				throw new LicenseException("License expired on "+d.toString());
 			}
 		}
-		if (hasProperty(MINIMUM_VERSION_KEY)) {
-			if (isMinVersionIncluded()) {
-				verifyEqualLessThan(MINIMUM_VERSION_KEY, context, false);
-			} else {
-				verifyLessThan(MINIMUM_VERSION_KEY, context, false);
+		String version = (String)context.get(VERSION_KEY);
+		if (version != null) {
+			if (hasProperty(MINIMUM_VERSION_KEY)) {
+				int cmp = CommonUtils.compareVersion(getMinVersion(), version);
+				if (isMinVersionIncluded() && (cmp > 0)) {
+					throw new LicenseException("License is not valid for this version ("+version+"). "+toString());
+				} else if (!isMinVersionIncluded() && (cmp >= 0)) {
+					throw new LicenseException("License is not valid for this version ("+version+"). "+toString());
+				}
 			}
-		}
-		if (hasProperty(MAXIMUM_VERSION_KEY)) {
-			if (isMaxVersionIncluded()) {
-				verifyEqualGreaterThan(MAXIMUM_VERSION_KEY, context, false);
-			} else {
-				verifyGreaterThan(MAXIMUM_VERSION_KEY, context, false);
+			if (hasProperty(MAXIMUM_VERSION_KEY)) {
+				int cmp = CommonUtils.compareVersion(getMaxVersion(), version);
+				if (isMaxVersionIncluded() && (cmp < 0)) {
+					throw new LicenseException("License is not valid for this version ("+version+"). "+toString());
+				} else if (!isMaxVersionIncluded() && (cmp <= 0)) {
+					throw new LicenseException("License is not valid for this version ("+version+"). "+toString());
+				}
 			}
 		}
 	}
@@ -218,7 +238,7 @@ public class DefaultLicense extends AbstractLicense {
 				buf.append(')');
 			}
 		}
-		
+
 		Date d = getExpirationDate();
 		if (d != null) {
 			buf.append(" until ");
@@ -226,7 +246,7 @@ public class DefaultLicense extends AbstractLicense {
 		} else {
 			buf.append(" (unlimited)");
 		}
-		buf.append(". Licensed to \""+getOwner()+"\"");
+		buf.append(". Licensed to \""+getOwner()+"\".");
 		return buf.toString();
 	}
 }
