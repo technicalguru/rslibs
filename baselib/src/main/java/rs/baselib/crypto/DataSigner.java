@@ -245,20 +245,20 @@ public class DataSigner {
     }
 
 	/**
-     * Creates a signature for the given string.
-     * @param str string to be signed
-     * @return signature of the provided String
-	 * @throws SigningException when the stream cannot be signed
+     * Creates a signature for the given bytes.
+     * @param bytes bytes to be signed
+     * @return signature of the provided bytes
+	 * @throws SigningException when the bytes cannot be signed
      */
 	public String sign(byte bytes[]) throws SigningException {
 		return sign(new ByteArrayInputStream(bytes));
     }
 
 	/**
-     * Creates a signature for the given string.
-     * @param str string to be signed
-     * @return signature of the provided String
-	 * @throws SigningException when the stream cannot be signed
+     * Creates a signature for the given bytes.
+     * @param bytes bytes to be signed
+     * @return signature of the provided bytes
+	 * @throws SigningException when the bytes cannot be signed
      */
 	public byte[] getByteSignature(byte bytes[]) throws SigningException {
 		return getByteSignature(new ByteArrayInputStream(bytes));
@@ -348,10 +348,10 @@ public class DataSigner {
     }
     
 	/**
-	 * Verifies the signature on the given string.
+	 * Verifies the signature on the given bytes.
 	 * @param signature signature
-	 * @param str string to be verified
-	 * @return true if the signature confirms string integrity
+	 * @param data bytes to be verified
+	 * @return true if the signature confirms data integrity
 	 * @throws SigningException when the signature cannot be verified
 	 */
     public boolean verify(byte signature[], byte data[]) throws SigningException {

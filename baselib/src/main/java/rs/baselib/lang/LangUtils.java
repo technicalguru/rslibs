@@ -83,7 +83,6 @@ public class LangUtils {
 	 * Instantiates a class object from class name.
 	 * This is a shortcut method for <code>{@link #forName(String)}.newInstance()</code>.
 	 * @param className the name of class
-	 * @param classLoader the class loader to be used - if null the thread's class loader will be  used first
 	 * @return an instance of the named class
 	 * @throws ClassNotFoundException when class cannot be found
 	 * @throws IllegalAccessException when constructor cannot be called
@@ -97,6 +96,7 @@ public class LangUtils {
 	 * Instantiates a class object from class name.
 	 * This is a shortcut method for <code>{@link #forName(String,ClassLoader)}.newInstance()</code>.
 	 * @param className the name of class
+	 * @param classLoader the class loader to be used - if null the thread's class loader will be  used first
 	 * @return an instance of the named class
 	 * @throws ClassNotFoundException when class cannot be found
 	 * @throws IllegalAccessException when constructor cannot be called

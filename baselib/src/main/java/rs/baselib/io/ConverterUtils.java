@@ -594,7 +594,7 @@ public class ConverterUtils {
 
 	/**
 	 * Converts the given Serializable to its byte representation.
-	 * @param param parameter
+	 * @param o serializable
 	 * @return byte reresentation
 	 */
 	public static byte[] toBytes(Serializable o) throws IOException {
