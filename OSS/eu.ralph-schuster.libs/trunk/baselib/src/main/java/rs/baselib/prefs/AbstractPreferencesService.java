@@ -53,7 +53,7 @@ public abstract class AbstractPreferencesService implements IPreferencesService 
 	/**
 	 * Creates the root node on request.
 	 * Bootstrap sequence requires a lazy setup.
-	 * @return
+	 * @return the root node of the this service
 	 */
 	private IPreferences getRootNode() {
 		if (rootNode == null) {

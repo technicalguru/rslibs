@@ -713,7 +713,7 @@ public class CommonUtils {
 
     /**
      * Writes the string to a writer.
-     * @param out writer to be written to
+     * @param writer writer to be written to
      * @param content the content to be written
      * @throws IOException when content cannot be written
      */

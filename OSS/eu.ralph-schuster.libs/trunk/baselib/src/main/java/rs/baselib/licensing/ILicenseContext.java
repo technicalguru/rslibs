@@ -71,7 +71,7 @@ public interface ILicenseContext {
 	
 	/**
 	 * Returns the property keys.
-	 * @return
+	 * @return an iterable of all property keys
 	 */
 	public Iterable<String> getKeys();
 }

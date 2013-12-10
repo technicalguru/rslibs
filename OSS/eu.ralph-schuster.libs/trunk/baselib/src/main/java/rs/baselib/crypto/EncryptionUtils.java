@@ -588,7 +588,7 @@ public class EncryptionUtils {
 	
 	/**
 	 * Instantiates a {@link PublicKey} from given URL.
-	 * @param URL url where private key is stored in BASE64 X.509 encoding 
+	 * @param url URL where private key is stored in BASE64 X.509 encoding 
 	 * @param algorithm algorithm that the key used
 	 * @return the public key
 	 */
