@@ -53,25 +53,22 @@ public class FileFinder {
 				log.debug("No such local file: "+name, e);
 		}
 		
-		// get it from classpath
+		// Create dirs
+		String dirs[] = null;
+		if (!name.startsWith("/")) {
+			dirs = clazz.getPackage().getName().split("\\.");
+		}
+
+		// get it from class' class loader
 		if ((rc == null) && (clazz != null)) {
-			try {
 				ClassLoader loader = clazz.getClassLoader();
-				if (!name.startsWith("/")) {
-					String dirs[] = clazz.getPackage().getName().split("\\.");
-					for (int i=dirs.length; i>0; i--) {
-						String pkgDir = StringUtils.join(dirs, '/', 0, i);
-						rc = loader.getResource(pkgDir+"/"+name);
-						if (rc != null) break;
-					}
-				}
-				if (rc == null) {
-					rc = loader.getResource(name);
-				}
-			} catch (Exception e) {
-				if (log.isDebugEnabled()) 
-					log.debug("No such classpath file: "+name, e);
-			}
+				rc = find(loader, dirs, name);
+		}
+		
+		// Not yet found? Use the threads class loader
+		if (rc == null) {
+			ClassLoader loader = Thread.currentThread().getContextClassLoader();
+			if (loader != null) rc = find(loader, dirs, name);
 		}
 		
 		if (log.isDebugEnabled()) {
@@ -82,6 +79,35 @@ public class FileFinder {
 			if (!name.startsWith("/") && !name.startsWith(".")) {
 				rc = find(clazz, "/"+name);
 			}
+		}
+		return rc;
+	}
+	
+	/**
+	 * Find the resource suing the given class loader.
+	 * @param classLoader the loader to be used
+	 * @param dirs the directory parts (e.g. from package name)
+	 * @param name the name of the resource
+	 * @return the URL of the resource if found
+	 */
+	private static URL find(ClassLoader classLoader, String dirs[], String name) {
+		URL rc = null;
+		if (dirs != null) {
+			try {
+				if (!name.startsWith("/")) {
+					for (int i=dirs.length; i>0; i--) {
+						String pkgDir = StringUtils.join(dirs, '/', 0, i);
+						rc = classLoader.getResource(pkgDir+"/"+name);
+						if (rc != null) break;
+					}
+				}
+			} catch (Exception e) {
+				if (log.isDebugEnabled()) 
+					log.debug("No such classpath file: "+name, e);
+			}
+		}
+		if (rc == null) {
+			rc = classLoader.getResource(name);
 		}
 		return rc;
 	}
