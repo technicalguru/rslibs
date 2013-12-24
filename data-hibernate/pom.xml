@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>eu.ralph-schuster</groupId>
@@ -10,12 +11,12 @@
 	<properties>
 		<project.home>http://techblog.ralph-schuster.eu/rs-library/data-hibernate/</project.home>
 	</properties>
-	
+
 	<artifactId>data-hibernate</artifactId>
 	<packaging>bundle</packaging>
 	<name>${project.groupId}.${project.artifactId}</name>
 	<description>Hibernate extension for Data Access classes</description>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
@@ -79,4 +80,22 @@
 		</plugins>
 	</reporting>
 
+	<repositories>
+		<repository>
+			<id>ow2</id>
+			<name>ObjectWeb Repository</name>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+				<checksumPolicy>warn</checksumPolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+				<checksumPolicy>fail</checksumPolicy>
+			</snapshots>
+			<url>http://repository.ow2.org/nexus/content/groups/public</url>
+			<layout>default</layout>
+		</repository>
+	</repositories>
 </project>
