@@ -139,8 +139,12 @@ public class PreferencesService extends AbstractPreferencesService {
 		try {
 			String s = null;
 			while ((s = r.readLine()) != null) {
-				String l[] = s.split("=", 2);
-				put(node, l[0].trim(), l[1].trim());
+				if (!CommonUtils.isEmpty(s) && !s.startsWith("#")) {
+					String l[] = s.split("=", 2);
+					if (l.length > 1) {
+						put(node, l[0].trim(), l[1].trim());
+					}
+				}
 			}
 		} catch (IOException e) {
 			throw new BackingStoreException(e);
@@ -211,7 +215,7 @@ public class PreferencesService extends AbstractPreferencesService {
 	public File getUserPreferencesHome(String applicationName) {
 		return new File(getUserHome(), "."+applicationName);
 	}
-	
+
 	/**
 	 * Returns the home directory of the user.
 	 * @return the user home dir
@@ -252,7 +256,7 @@ public class PreferencesService extends AbstractPreferencesService {
 		}
 		return parentDir;
 	}
-	
+
 	/**
 	 * Returns the application's preferences file of the system.
 	 * @return the preferences file

@@ -39,6 +39,20 @@ public class PreferencesServiceTest {
 			"node1/node3/key8=value8\n"+
 			"node1/node4/key9=value9\n";
 	
+	private static final String EXAMPLE_CONFIG2 = 
+			"key1=value1\n"+
+			"key2=value2\n"+
+			"node1/key3=value3\n"+
+			"node1/key4=value4\n"+
+			"node1/key5=value5\n"+
+			"node2/key6=value6\n"+
+			"node1/node3/key7=value7\n"+
+			"node1/node3/key8=value8\n"+
+			"node1/node4/key9=value9\n"+
+			"nodex\n"+ // Ignored because no = sign
+			"#node5=something\n"+ // Ignored because leading #
+			"   \n"; // Ignored because empty line
+	
 	@BeforeClass
 	public static void setupClass() {
 		service = (PreferencesService)PreferencesService.INSTANCE;
@@ -66,6 +80,21 @@ public class PreferencesServiceTest {
 	@Test
 	public void testLoad() throws BackingStoreException {
 		ByteArrayInputStream in = new ByteArrayInputStream(EXAMPLE_CONFIG.getBytes());
+		IPreferences prefs = new Preferences(null, null);
+		service.load(prefs, in);
+		testNode(prefs, new int[]{ 1, 2 }, new int[]{ 1, 2 } );
+		testNode(prefs.node("node1"), new int[]{ 3, 4 }, new int[]{ 3, 4, 5 } );
+		testNode(prefs.node("node2"), new int[]{ }, new int[]{ 6 } );
+		testNode(prefs.node("node1/node3"), new int[]{ }, new int[]{ 7, 8 } );
+		testNode(prefs.node("node1/node4"), new int[]{ }, new int[]{ 9 } );
+	}
+
+	/**
+	 * Test method for {@link PreferencesService#load(IPreferences, InputStream)}.
+	 */
+	@Test
+	public void testLoadIgnored() throws BackingStoreException {
+		ByteArrayInputStream in = new ByteArrayInputStream(EXAMPLE_CONFIG2.getBytes());
 		IPreferences prefs = new Preferences(null, null);
 		service.load(prefs, in);
 		testNode(prefs, new int[]{ 1, 2 }, new int[]{ 1, 2 } );
