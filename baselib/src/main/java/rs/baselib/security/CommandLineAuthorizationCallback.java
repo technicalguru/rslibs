@@ -32,7 +32,7 @@ import rs.baselib.configuration.IConfigurable;
  * Configuration:
  * </p>
  * <pre>
- * &lt;AuthorizationCallback class="b4j.core.session.CommandLineAuthorizationCallback"&gt;
+ * &lt;AuthorizationCallback class="rs.baselib.security.CommandLineAuthorizationCallback"&gt;
  * 
  *    &lt;!-- The default user name (optional). --&gt;
  *    &lt;login&gt;default-user-name&lt;/login&gt;

@@ -29,7 +29,7 @@ import org.apache.commons.configuration.XMLConfiguration;
  * Configuration:
  * </p>
  * <pre>
- * &lt;AuthorizationCallback class="b4j.core.session.XmlFileAuthorizationCallback"&gt;
+ * &lt;AuthorizationCallback class="rs.baselib.security.XmlFileAuthorizationCallback"&gt;
  * 
  *    &lt;!-- The XML file name. --&gt;
  *    &lt;File&gt;/path/to/file.xml&lt;/File&gt;

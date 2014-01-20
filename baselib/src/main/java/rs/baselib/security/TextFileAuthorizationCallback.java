@@ -32,7 +32,7 @@ import rs.baselib.configuration.IConfigurable;
  * Configuration:
  * </p>
  * <pre>
- * &lt;AuthorizationCallback class="b4j.core.session.TextFileAuthorizationCallback"&gt;
+ * &lt;AuthorizationCallback class="rs.baselib.security.TextFileAuthorizationCallback"&gt;
  * 
  *    &lt;!-- The text file name. --&gt;
  *    &lt;File&gt;/path/to/file.txt&lt;/File&gt;
