@@ -30,7 +30,7 @@ import rs.baselib.configuration.IConfigurable;
  * Configuration:
  * </p>
  * <pre>
- * &lt;AuthorizationCallback class="b4j.core.session.DefaultAuthorizationCallback"&gt;
+ * &lt;AuthorizationCallback class="rs.baselib.security.DefaultAuthorizationCallback"&gt;
  *    &lt;login&gt;my-user-name&lt;/login&gt;
  *    &lt;password&gt;my-password&lt;/password&gt;
  * &lt;/AuthorizationCallback&gt;

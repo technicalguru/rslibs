@@ -29,7 +29,7 @@ import org.apache.commons.configuration.PropertiesConfiguration;
  * Configuration:
  * </p>
  * <pre>
- * &lt;AuthorizationCallback class="b4j.core.session.PropertiesFileAuthorizationCallback"&gt;
+ * &lt;AuthorizationCallback class="rs.baselib.security.PropertiesFileAuthorizationCallback"&gt;
  * 
  *    &lt;!-- The properties file name. --&gt;
  *    &lt;File&gt;/path/to/file.properties&lt;/File&gt;
