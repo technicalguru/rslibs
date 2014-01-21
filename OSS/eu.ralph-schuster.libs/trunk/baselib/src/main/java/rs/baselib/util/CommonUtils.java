@@ -385,11 +385,35 @@ public class CommonUtils {
 	}
 	
 	/**
+	 * Recursively debugs objects.
+	 * @param o object to debug
+	 * @return the debug string
+	 * @since 1.2.3
+	 */
+	public static String debugObject(Object o) {
+		StringBuilder b = new StringBuilder();
+		debugObject(b, o);
+		return b.toString();
+	}
+	
+	/**
 	 * Recursively debugs objects and adds this in the string buffer.
 	 * @param s string buffer to enhance
 	 * @param o object to debug
 	 */
 	public static void debugObject(StringBuffer s, Object o) {
+		StringBuilder b = new StringBuilder();
+		debugObject(b, o);
+		s.append(b);
+	}
+	
+	/**
+	 * Recursively debugs objects and adds this in the string builder.
+	 * @param s string builder to enhance
+	 * @param o object to debug
+	 * @since 1.2.3
+	 */
+	public static void debugObject(StringBuilder s, Object o) {
 		if (o == null) {
 			s.append("NULL");
 		} else if (o instanceof Collection<?>) {
