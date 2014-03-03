@@ -19,14 +19,14 @@ package rs.baselib.sql;
 
 
 /**
- * Returns the name of an {@link DataSource}.
+ * Returns the name of a {@link javax.sql.DataSource}.
  * @author ralph
  *
  */
 public interface IDataSourceProvider {
 
 	/**
-	 * Returns the name of the {@link DataSource}.
+	 * Returns the name of the {@link javax.sql.DataSource}.
 	 * @return the source
 	 */
 	public String getDataSource();
