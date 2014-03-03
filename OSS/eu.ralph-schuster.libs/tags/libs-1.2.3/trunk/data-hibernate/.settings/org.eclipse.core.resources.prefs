@@ -1,0 +1,12 @@
+eclipse.preferences.version=1
+encoding//src/main/filtered-resources=UTF-8
+encoding//src/main/java=UTF-8
+encoding//src/main/resources=UTF-8
+encoding//src/test/java=UTF-8
+encoding//src/test/java/csv/impl/CSVWriterReaderTest.java=UTF-8
+encoding//src/test/java/csv/impl/ExcelWriterReaderTest.java=UTF-8
+encoding//src/test/java/csv/impl/FilterTest.java=UTF-8
+encoding//src/test/java/csv/impl/XmlWriterReaderTest.java=UTF-8
+encoding//src/test/java/csv/util/BeanWriterReaderTest.java=UTF-8
+encoding//src/test/resources=UTF-8
+encoding/<project>=UTF-8
