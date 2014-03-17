@@ -169,6 +169,7 @@ public class OsgiModelServiceImpl implements IOsgiModelService {
 			if (factoriesLoaded) return;
 			int i=0;
 			try {
+				HierarchicalConfiguration daoConfig = getConfiguration();
 				while (true) {
 					HierarchicalConfiguration subConfig = daoConfig.configurationAt("DaoFactory("+i+")");
 					String s = subConfig.getString("[@name]");
