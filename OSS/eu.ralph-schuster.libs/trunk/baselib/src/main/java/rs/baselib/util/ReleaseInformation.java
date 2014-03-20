@@ -396,4 +396,16 @@ public class ReleaseInformation {
 	public boolean isValid() {
 		return (getGroupId() != null) && (getArtifactId() != null) && (getVersion() != null);
 	}
+	
+	/**
+	 * Returns whether this is a Snapshot version.
+	 * <p>The method returns <code>true</code> when the version is either <code>null</code> or
+	 * the version ends with "-SNAPSHOT".</p>
+	 * @return <code>true</code> when this is a snapshot version
+	 * @since 1.2.4
+	 */
+	public boolean isSnapshot() {
+		String version = getVersion();
+		return (version == null) || version.endsWith("-SNAPSHOT"); 
+	}
 }
