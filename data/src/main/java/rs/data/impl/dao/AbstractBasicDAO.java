@@ -90,7 +90,7 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 	protected ICache<CID, C> createCache() {
 		return new WeakMapCache<CID, C>();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -156,7 +156,7 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 
 	/************************* INSTANTIATION ************************/
 
-	
+
 	/**
 	 * Returns the CID for this object.
 	 * @param object object
@@ -165,7 +165,7 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 	protected CID getCID(C object) {
 		return new CID(getBoInterfaceClass(), object.getId());
 	}
-	
+
 	/**
 	 * {@inheritDoc}.
 	 * <p>This implementation forwards the call to {@link #_newInstance()} which must
@@ -175,7 +175,7 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 	public C newInstance() {
 		C rc = _newInstance();
 		rc.set("dao", this);
-		afterNewInstance(rc);
+		afterNewInstance(rc, false);
 		return rc;
 	}
 
@@ -184,14 +184,19 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 	 * @return a new instance
 	 */
 	protected abstract C _newInstance();
-	
+
 	/**
 	 * Called after a new instance was created.
+	 * <p>This method sets {@link IGeneralBO#getCreationDate() creationDate} and {@link IGeneralBO#getChangeDate() changeDate}
+	 * when the object was not created from a a persisted object.</p>
 	 * @param object object being created
+	 * @param existing <code>true</code> when the object was created from a persisted object
 	 */
-	protected void afterNewInstance(C object) {	
-		object.setCreationDate(new RsDate());
-		object.setChangeDate(new RsDate());
+	protected void afterNewInstance(C object, boolean persisted) {
+		if (!persisted) {
+			object.setCreationDate(new RsDate());
+			object.setChangeDate(new RsDate());
+		}
 	}
 
 	/**
@@ -243,7 +248,7 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 		return cache;
 	}
 
-	
+
 	/************************* CREATION ************************/
 
 	/**
@@ -322,7 +327,7 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 
 	/************************* FINDING ************************/
 
-	
+
 	/**
 	 * {@inheritDoc}
 	 * <p>
@@ -471,14 +476,14 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 	 */
 	@Override
 	public void delete(C object) {
-			if (object != null) {
+		if (object != null) {
 
-				beforeDelete(object);
-				_delete(object);
-				afterDelete(object);
-				removeCached(object);
-				fireObjectDeleted(object);
-			}
+			beforeDelete(object);
+			_delete(object);
+			afterDelete(object);
+			removeCached(object);
+			fireObjectDeleted(object);
+		}
 	}
 
 	/**

@@ -92,7 +92,7 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	protected C newInstance(T transferObject) {
 		C rc = _newInstance(transferObject);
 		rc.set("dao", this);
-		afterNewInstance(rc);
+		afterNewInstance(rc, true);
 		return rc;
 	}
 
