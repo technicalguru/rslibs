@@ -23,6 +23,7 @@ import org.junit.Test;
 
 import rs.baselib.util.ReleaseInformation;
 import rs.baselib.util.ReleaseRepository;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNotNull;
 
@@ -43,8 +44,17 @@ public class ReleaseRepositoryTest {
 		if (infos.size() == 0) infos = ReleaseRepository.INSTANCE.getVersionInfos(ReleaseRepository.BASELIB_GROUP_ID, ReleaseRepository.BUNDLE_ARTIFACT_ID);
 		assertTrue("No release information for baselib", infos.size() > 0);
 		for (ReleaseInformation info : infos) {
-			assertTrue("Wrong SVN Repository", info.getSvnRepository().indexOf("h2031995.stratoserver.net") > 0 || info.getSvnPath().contains("eu.ralph-schuster.baselib"));
+			assertTrue("Wrong SVN Repository", info.isSnapshot() || info.getSvnRepository().indexOf("h2031995.stratoserver.net") > 0 || info.getSvnPath().contains("eu.ralph-schuster.baselib"));
 		}
 	}
 
+	/**
+	 * Tests whether a MANIFEST info was loaded.
+	 */
+	@Test
+	public void testManifestInfo() {
+		Collection<ReleaseInformation> infos = ReleaseRepository.INSTANCE.getVersionInfos("javax.persistence", "Sun Java System Application Server");
+		assertNotNull("No versions found", infos);
+		assertEquals("No version found", 1, infos.size());
+	}
 }
