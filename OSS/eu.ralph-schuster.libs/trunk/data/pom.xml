@@ -25,7 +25,7 @@
 		<dependency>
 			<groupId>org.ow2.jotm</groupId>
 			<artifactId>jotm-core</artifactId>
-			<version>2.2.1</version>
+			<version>2.2.3</version>
 		</dependency>
 	</dependencies>
 	
@@ -64,5 +64,25 @@
 			</plugin>
 		</plugins>
 	</reporting>
+
+
+	<repositories>
+		<repository>
+			<id>ow2</id>
+			<name>ObjectWeb Repository</name>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+				<checksumPolicy>warn</checksumPolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+				<checksumPolicy>fail</checksumPolicy>
+			</snapshots>
+			<url>http://repository.ow2.org/nexus/content/groups/public</url>
+			<layout>default</layout>
+		</repository>
+	</repositories>
 
 </project>
