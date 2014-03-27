@@ -169,7 +169,7 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 	/**
 	 * {@inheritDoc}.
 	 * <p>This implementation forwards the call to {@link #_newInstance()} which must
-	 * be implemented by subclasses. It then calls {@link #afterNewInstance(IGeneralBO)}.</p>
+	 * be implemented by subclasses. It then calls {@link #afterNewInstance(IGeneralBO, boolean)}.</p>
 	 */
 	@Override
 	public C newInstance() {
@@ -190,7 +190,7 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 	 * <p>This method sets {@link IGeneralBO#getCreationDate() creationDate} and {@link IGeneralBO#getChangeDate() changeDate}
 	 * when the object was not created from a a persisted object.</p>
 	 * @param object object being created
-	 * @param existing <code>true</code> when the object was created from a persisted object
+	 * @param persisted <code>true</code> when the object was created from a persisted object
 	 */
 	protected void afterNewInstance(C object, boolean persisted) {
 		if (!persisted) {

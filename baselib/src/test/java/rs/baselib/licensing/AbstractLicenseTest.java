@@ -120,7 +120,7 @@ public abstract class AbstractLicenseTest {
 	 * @param index index of test
 	 * @param context the context to be modified
 	 * @return whether the verification shall succeed with his context
-	 * @throw {@link IndexOutOfBoundsException} when there is no more test
+	 * @throws {@link IndexOutOfBoundsException} when there is no more test
 	 */
 	protected boolean modifyVerificationContext(int index, ILicenseContext context) throws IndexOutOfBoundsException {
 		switch (index) {
