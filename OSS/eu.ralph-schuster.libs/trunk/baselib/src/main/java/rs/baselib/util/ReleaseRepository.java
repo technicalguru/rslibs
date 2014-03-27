@@ -25,13 +25,17 @@ import java.net.URL;
 import java.text.ParseException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.jar.Attributes;
+import java.util.jar.JarEntry;
 import java.util.jar.Manifest;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +50,11 @@ import rs.baselib.lang.ResourceList;
  */
 public class ReleaseRepository {
 
+	private static Logger log = LoggerFactory.getLogger(ReleaseRepository.class);
+	
+	/** A matcher for the pom.properties file */
+	private static Pattern POM_PROPERTIES_PATTERN = Pattern.compile("META-INF\\/maven\\/([^\\/]+)\\/([^\\/]+)\\/pom\\.properties");
+
 	/** The instance of the repository */
 	public static ReleaseRepository INSTANCE = new ReleaseRepository();
 
@@ -53,11 +62,10 @@ public class ReleaseRepository {
 	public static final String BASELIB_ARTIFACT_ID = "baselib";
 	public static final String BUNDLE_ARTIFACT_ID = "lib-bundle";
 
-	private static Logger log = LoggerFactory.getLogger(ReleaseRepository.class);
 
 	private Properties properties = new Properties();
 	private Map<String, Map<String, Map<String, ReleaseInformation>>> releaseInformation = new HashMap<String, Map<String,Map<String,ReleaseInformation>>>();
-
+	
 	/**
 	 * Constructor.
 	 */
@@ -77,20 +85,44 @@ public class ReleaseRepository {
 	 * @param manifest
 	 */
 	private void addJar(JarDescriptor desc) throws IOException {
+		log.debug("Parsing "+desc.getUrlPrefix());
 		Manifest manifest = desc.getManifest();
 		boolean added = false;
+		// Load properties from a defined file
 		if (manifest != null) {
 			Attributes attr = manifest.getAttributes("eu.ralph-schuster.baselib");
 			if (attr != null) {
 				String file = attr.getValue("Package-File");
-				if (file != null) added = addProperties(new URL(desc.getUrlPrefix()+file));
+				if (file != null) added = addBuildProperties(new URL(desc.getUrlPrefix()+file));
 			}
 		}
 		
+		// Load properties from standard build.properties file
 		if (!added) try {
 			// Try to add build.properties
-			addProperties(new URL(desc.getUrlPrefix()+"build.properties"));
+			added = addBuildProperties(new URL(desc.getUrlPrefix()+"build.properties"));
 		} catch (IOException e) {
+			// Ignore: no such info
+		}
+		
+		// Load properties from pom.properties
+		if (!added) try {
+			Enumeration<JarEntry> e = desc.getJarFile().entries();
+			while (e.hasMoreElements()) {
+				JarEntry entry = e.nextElement();
+				Matcher m = POM_PROPERTIES_PATTERN.matcher(entry.getName());
+				if (m.matches()) {
+					added = addPomProperties(new URL(desc.getUrlPrefix()+entry.getName()));
+				}
+			}
+		} catch (Exception e) {
+			// Ignore: no such info
+		}
+		
+		// Load properties from MANIFEST.MF
+		if (!added) try {
+			
+		} catch (Exception e) {
 			// Ignore: no such info
 		}
 	}
@@ -103,10 +135,11 @@ public class ReleaseRepository {
 	 * @throws IOException when the stream cannot be read. 
 	 */
 	public boolean addProperties(File file) throws IOException {
+		log.debug("Parsing "+file.toString());
 		boolean rc = false;
 		if (file.exists() && file.canRead()) {
 			InputStream in = new FileInputStream(file);
-			rc = addProperties(in);
+			rc = addBuildProperties(in);
 			in.close();
 		}
 		return rc;
@@ -119,10 +152,10 @@ public class ReleaseRepository {
 	 * @return true when the information could be added
 	 * @throws IOException when the stream cannot be read. 
 	 */
-	public boolean addProperties(URL url) throws IOException {
+	public boolean addBuildProperties(URL url) throws IOException {
 		if (url == null) return false;
 		InputStream in = url.openStream();
-		boolean rc = addProperties(in);
+		boolean rc = addBuildProperties(in);
 		in.close();
 		return rc;
 	}
@@ -134,10 +167,47 @@ public class ReleaseRepository {
 	 * @return true when the information could be added
 	 * @throws IOException when the stream cannot be read. 
 	 */
-	public boolean addProperties(InputStream in) throws IOException {
+	public boolean addBuildProperties(InputStream in) throws IOException {
 		Properties newProps = new Properties();
 		newProps.load(in);
 		ReleaseInformation rc = addReleaseInformation(newProps);
+		return rc != null;
+	}
+
+	/**
+	 * Add properties from given URL and parse
+	 * release information with given prefix.
+	 * @param url url to load from
+	 * @return true when the information could be added
+	 * @throws IOException when the stream cannot be read. 
+	 */
+	public boolean addPomProperties(URL url) throws IOException {
+		if (url == null) return false;
+		InputStream in = url.openStream();
+		boolean rc = addPomProperties(in);
+		in.close();
+		return rc;
+	}
+
+	/**
+	 * Add properties from given stream and parse
+	 * release information with given prefix.
+	 * @param in stream
+	 * @return true when the information could be added
+	 * @throws IOException when the stream cannot be read. 
+	 */
+	public boolean addPomProperties(InputStream in) throws IOException {
+		Properties newProps = new Properties();
+		newProps.load(in);
+		String groupId = newProps.getProperty("groupId");
+		String artifactId = newProps.getProperty("artifactId");
+		String version = newProps.getProperty("version");
+		Properties buildProps = new Properties();
+		buildProps.setProperty(groupId+"."+artifactId+".groupId", groupId);
+		buildProps.setProperty(groupId+"."+artifactId+".artifactId", artifactId);
+		buildProps.setProperty(groupId+"."+artifactId+".version", version);
+		buildProps.setProperty(groupId+"."+artifactId+".name", groupId+":"+artifactId);
+		ReleaseInformation rc = addReleaseInformation(buildProps);
 		return rc != null;
 	}
 
@@ -173,7 +243,7 @@ public class ReleaseRepository {
 	 */
 	public boolean addReleaseInformation(ReleaseInformation info) {
 		if (!info.isValid()) return false;
-		
+		log.info("Added: "+info.getGroupId()+":"+info.getArtifactId()+":"+info.getVersion()+":"+info.getName());
 		Map<String, Map<String, ReleaseInformation>> groupInfo = releaseInformation.get(info.getGroupId());
 		if (groupInfo == null) {
 			groupInfo = new HashMap<String, Map<String,ReleaseInformation>>();
