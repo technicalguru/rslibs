@@ -78,23 +78,4 @@
 			</plugin>
 		</plugins>
 	</reporting>
-
-	<repositories>
-		<repository>
-			<id>ow2</id>
-			<name>ObjectWeb Repository</name>
-			<releases>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-				<checksumPolicy>warn</checksumPolicy>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>never</updatePolicy>
-				<checksumPolicy>fail</checksumPolicy>
-			</snapshots>
-			<url>http://repository.ow2.org/nexus/content/groups/public</url>
-			<layout>default</layout>
-		</repository>
-	</repositories>
 </project>
