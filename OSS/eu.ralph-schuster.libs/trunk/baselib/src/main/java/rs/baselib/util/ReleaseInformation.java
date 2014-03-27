@@ -408,4 +408,14 @@ public class ReleaseInformation {
 		String version = getVersion();
 		return (version == null) || version.endsWith("-SNAPSHOT"); 
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return getName()+"["+getGroupId()+":"+getArtifactId()+"] - V"+getVersion();
+	}
+	
+	
 }

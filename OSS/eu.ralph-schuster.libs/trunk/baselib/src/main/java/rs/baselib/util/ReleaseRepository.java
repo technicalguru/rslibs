@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Writer;
 import java.net.URL;
 import java.text.ParseException;
 import java.util.Collection;
@@ -54,6 +55,8 @@ public class ReleaseRepository {
 	
 	/** A matcher for the pom.properties file */
 	private static Pattern POM_PROPERTIES_PATTERN = Pattern.compile("META-INF\\/maven\\/([^\\/]+)\\/([^\\/]+)\\/pom\\.properties");
+	/** A matcher for the JAR file */
+	private static Pattern JAR_FILE_PATTERN = Pattern.compile("(.+)-([\\.\\d]+)\\.jar");
 
 	/** The instance of the repository */
 	public static ReleaseRepository INSTANCE = new ReleaseRepository();
@@ -85,7 +88,6 @@ public class ReleaseRepository {
 	 * @param manifest
 	 */
 	private void addJar(JarDescriptor desc) throws IOException {
-		log.debug("Parsing "+desc.getUrlPrefix());
 		Manifest manifest = desc.getManifest();
 		boolean added = false;
 		// Load properties from a defined file
@@ -120,11 +122,32 @@ public class ReleaseRepository {
 		}
 		
 		// Load properties from MANIFEST.MF
-		if (!added) try {
-			
+		if (!added && (manifest != null)) try {
+			Attributes attr = manifest.getMainAttributes();
+			if (attr != null) {
+				String groupId = attr.getValue("Implementation-Vendor-Id");
+				String artifactId = attr.getValue("Implementation-Title");
+				String version = attr.getValue("Implementation-Version");
+				added = addReleaseInformation(groupId, artifactId, version, groupId+":"+artifactId) != null;
+			}
 		} catch (Exception e) {
 			// Ignore: no such info
 		}
+		
+		// Last chance: detect from JAR file name
+		if (!added) try {
+			String name = desc.getFile().getName();
+			Matcher m = JAR_FILE_PATTERN.matcher(name);
+			if (m.matches()) {
+				String groupId = m.group(1);
+				String artifactId = m.group(1);
+				String version = m.group(2);
+				addReleaseInformation(groupId, artifactId, version, groupId+":"+artifactId);
+			}
+		} catch (Exception e) {
+			// Ignore: no such info
+		}
+		
 	}
 
 	/**
@@ -135,7 +158,6 @@ public class ReleaseRepository {
 	 * @throws IOException when the stream cannot be read. 
 	 */
 	public boolean addProperties(File file) throws IOException {
-		log.debug("Parsing "+file.toString());
 		boolean rc = false;
 		if (file.exists() && file.canRead()) {
 			InputStream in = new FileInputStream(file);
@@ -212,6 +234,26 @@ public class ReleaseRepository {
 	}
 
 	/**
+	 * Add release information in repository using the given properties.
+	 * @param groupId group ID of release
+	 * @param artifactId artifact ID of release
+	 * @param version version of release
+	 * @param name name of release
+	 * @return the information created or null (if any property is null)
+	 */
+	public ReleaseInformation addReleaseInformation(String groupId, String artifactId, String version, String name) {
+		if ((groupId != null) && (artifactId != null) && (version != null) && (name != null)) {
+			Properties buildProps = new Properties();
+			buildProps.setProperty(groupId+"."+artifactId+".groupId", groupId);
+			buildProps.setProperty(groupId+"."+artifactId+".artifactId", artifactId);
+			buildProps.setProperty(groupId+"."+artifactId+".version", version);
+			buildProps.setProperty(groupId+"."+artifactId+".name", name);
+			return addReleaseInformation(buildProps);
+		}
+		return null;
+	}
+	
+	/**
 	 * Parse release information in repository using the given properties.
 	 * @param props the properties to be parsed
 	 * @return the information found or null
@@ -243,7 +285,6 @@ public class ReleaseRepository {
 	 */
 	public boolean addReleaseInformation(ReleaseInformation info) {
 		if (!info.isValid()) return false;
-		log.info("Added: "+info.getGroupId()+":"+info.getArtifactId()+":"+info.getVersion()+":"+info.getName());
 		Map<String, Map<String, ReleaseInformation>> groupInfo = releaseInformation.get(info.getGroupId());
 		if (groupInfo == null) {
 			groupInfo = new HashMap<String, Map<String,ReleaseInformation>>();
@@ -351,4 +392,69 @@ public class ReleaseRepository {
 		if (artifactInfo == null) return Collections.emptySet();
 		return artifactInfo.keySet();
 	}
+	
+	/**
+	 * Dumps all release information own log in INFO level.
+	 * @since 1.2.4
+	 */
+	public void dumpArtifacts() {
+		dumpArtifacts(LogLevel.INFO);
+	}
+	
+	/**
+	 * Dumps all release information to own log.
+	 * @param logLevel the log level to be used
+	 * @since 1.2.4
+	 */
+	public void dumpArtifacts(LogLevel logLevel) {
+		dumpArtifacts(log, logLevel);
+	}
+	
+	/**
+	 * Dumps all release information to a log.
+	 * @param log the logger to be used
+	 * @param logLevel the log level to be used
+	 * @since 1.2.4
+	 */
+	public void dumpArtifacts(Logger log, LogLevel logLevel) {
+		for (ReleaseInformation info : getAllInfos()) {
+			String s = info.toString();
+			switch (logLevel) {
+			case DEBUG:
+				log.debug(s);
+				break;
+			case ERROR:
+				log.error(s);
+				break;
+			case INFO:
+				log.info(s);
+				break;
+			case TRACE:
+				log.trace(s);
+				break;
+			case WARN:
+				log.warn(s);
+				break;
+			default:
+				log.info(s);
+				break;
+			
+			}
+		}
+	}
+	
+	/**
+	 * Dumps all release information into the writer.
+	 * @param writer the writer where to dump to
+	 * @throws IOException if I/O exception occurs
+	 * @since 1.2.4
+	 */
+	public void dumpArtifacts(Writer writer) throws IOException {
+		for (ReleaseInformation info : getAllInfos()) {
+			writer.append(info.toString());
+			writer.append("\n");
+		}
+	}
+	
+	
 }
