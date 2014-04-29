@@ -153,7 +153,8 @@ public class CommandLineAuthorizationCallback extends AbstractAuthorizationCallb
 		System.out.flush();
 		Console con = System.console();
 		if (con != null) {
-			s = new String(con.readPassword());
+			char pwd[] = con.readPassword();
+			s = pwd != null ? new String(pwd) : "";
 			super.setPassword(s);
 			return s;
 		}
