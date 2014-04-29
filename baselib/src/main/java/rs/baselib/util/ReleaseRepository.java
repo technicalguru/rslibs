@@ -161,8 +161,11 @@ public class ReleaseRepository {
 		boolean rc = false;
 		if (file.exists() && file.canRead()) {
 			InputStream in = new FileInputStream(file);
-			rc = addBuildProperties(in);
-			in.close();
+			try {
+				rc = addBuildProperties(in);
+			} finally {
+				in.close();
+			}
 		}
 		return rc;
 	}
