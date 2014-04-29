@@ -37,6 +37,7 @@ import rs.baselib.bean.IBean;
 import rs.baselib.lang.LangUtils;
 import rs.data.api.IDaoFactory;
 import rs.data.api.bo.IGeneralBO;
+import rs.data.api.dao.IGeneralDAO;
 
 /**
  * Storage strategy for XML files.
@@ -127,7 +128,8 @@ public class XmlStorageStrategy<K extends Serializable, T extends IGeneralBO<K>>
 		Serializable id = (Serializable)loadValue(cfg.configurationAt("refid(0)"));
 		IDaoFactory factory = getDaoFactory();
 		if (factory != null) {
-			return factory.getDaoFor((Class<? extends IGeneralBO<? extends Serializable>>)clazz).findById(id);
+			IGeneralDAO<?, ? extends IGeneralBO<? extends Serializable>> dao = factory.getDaoFor((Class<? extends IGeneralBO<? extends Serializable>>)clazz);
+			if (dao != null) return dao.findById(id);
 		}
 		return null;
 	}
