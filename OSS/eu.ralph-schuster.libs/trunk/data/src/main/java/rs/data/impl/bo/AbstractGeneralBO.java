@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import rs.baselib.bean.AbstractBean;
+import rs.baselib.lang.HashCodeUtil;
 import rs.baselib.lang.LangUtils;
 import rs.data.api.IDaoFactory;
 import rs.data.api.bo.IGeneralBO;
@@ -289,10 +290,7 @@ public abstract class AbstractGeneralBO<K extends Serializable> extends Abstract
 	 */
 	@Override
 	public int hashCode() {
-		K id = getId();
-		int rc = 31 * getClass().hashCode();
-		if (id != null) rc += ( id.hashCode() >>> 32);
-		return rc;
+		return HashCodeUtil.hash(HashCodeUtil.SEED, getId());
 	}
 
 	/**
