@@ -624,8 +624,11 @@ public class CommonUtils {
      */
     public static void loadProperties(Properties props, File file) throws IOException {
         InputStream in = new FileInputStream(file);
-        props.load(in);
-        in.close();
+        try {
+        	props.load(in);
+        } finally {
+        	in.close();
+        }
     }
 
     /**
