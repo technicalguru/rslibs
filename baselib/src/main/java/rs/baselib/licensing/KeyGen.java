@@ -107,20 +107,19 @@ public class KeyGen implements Runnable {
 			
 			File f = new File(getFile()+".public");
 			if (f.exists() && !isOverwrite()) {
-				System.out.println("   "+f.getAbsolutePath()+" already exists");
-				System.exit(-1);
+				throw new RuntimeException("   "+f.getAbsolutePath()+" already exists");
 			}
 			EncryptionUtils.save(f, publicKey);
 			System.out.println("    Public Key: "+f.getAbsolutePath());
 			
 			f = new File(getFile()+".private");
 			if (f.exists() && !isOverwrite()) {
-				System.out.println("   "+f.getAbsolutePath()+" already exists");
-				System.exit(-1);
+				throw new RuntimeException("   "+f.getAbsolutePath()+" already exists");
 			}
 			EncryptionUtils.save(f, privateKey);
 			System.out.println("   Private Key: "+f.getAbsolutePath());
 		} catch (Throwable t) {
+			if (t instanceof RuntimeException) throw (RuntimeException)t;
 			throw new RuntimeException(t);
 		}
 	}
