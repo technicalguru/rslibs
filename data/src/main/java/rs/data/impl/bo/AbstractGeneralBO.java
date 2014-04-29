@@ -290,7 +290,10 @@ public abstract class AbstractGeneralBO<K extends Serializable> extends Abstract
 	 */
 	@Override
 	public int hashCode() {
-		return HashCodeUtil.hash(HashCodeUtil.SEED, getId());
+		int rc = HashCodeUtil.SEED;
+		rc = HashCodeUtil.hash(rc, getClass());
+		rc = HashCodeUtil.hash(rc, getId());
+		return rc;
 	}
 
 	/**
