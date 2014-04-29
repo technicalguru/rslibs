@@ -181,9 +181,7 @@ public class OsgiModelServiceImpl implements IOsgiModelService {
 						factory.setTransactionManager(txManager);
 						registerFactory(s, factory);
 					} catch (RuntimeException e) {
-						Throwable cause = e.getCause();
-						Class<? extends Throwable> c = cause != null ? cause.getClass() : null;
-						if (ClassNotFoundException.class.equals(c)) {
+						if (e.getCause() instanceof ClassNotFoundException) {
 							log.error("Cannot load class: "+s, e);
 						}
 					}
