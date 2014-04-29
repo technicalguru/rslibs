@@ -111,7 +111,7 @@ public class Templating {
 	 * @throws IOException when an error occurred
 	 */
 	public static String getTemplate(String filename) throws IOException {
-		return getTemplate(filename);
+		return getTemplate(new File(filename));
 	}
 	
 	/**
