@@ -19,6 +19,8 @@ package rs.data.util;
 
 import java.io.Serializable;
 
+import rs.baselib.lang.HashCodeUtil;
+
 /**
  * The Class ID for caching mechanism.
  * @author ralph
@@ -48,8 +50,9 @@ public class CID implements Serializable {
 	 */
 	@Override
 	public int hashCode() {
-		int rc = 31 * clazz.hashCode();
-		if (id != null) rc += (id.hashCode() >>> 32);
+		int rc = HashCodeUtil.SEED;
+		rc = HashCodeUtil.hash(rc, clazz);
+		rc = HashCodeUtil.hash(rc, id);
 		return rc;
 	}
 	
