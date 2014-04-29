@@ -644,8 +644,11 @@ public class CommonUtils {
      */
     public static void storeProperties(Properties props, File file) throws IOException {
         OutputStream out = new FileOutputStream(file);
-        props.store(out, null);
-        out.close();
+        try {
+        	props.store(out, null);
+        } finally {
+        	out.close();
+        }
     }
 
     /**
