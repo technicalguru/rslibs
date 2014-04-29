@@ -136,8 +136,7 @@ public class LangUtils {
 			Class<?> componentClass = getClass(componentType);
 			if (componentClass != null ) {
 				return Array.newInstance(componentClass, 0).getClass();
-			}
-			else {
+			} else {
 				return null;
 			}
 		} else {
@@ -157,7 +156,8 @@ public class LangUtils {
 		Type type = childClass;
 		
 		// start walking up the inheritance hierarchy until we hit baseClass
-		while (! getClass(type).equals(baseClass)) {
+		Class<?> typeClass = getClass(type);
+		while ((typeClass != null) && !typeClass.equals(baseClass)) {
 			if (type instanceof Class) {
 				// there is no useful information for us in raw types, so just keep going.
 				type = ((Class<?>) type).getGenericSuperclass();
@@ -175,6 +175,7 @@ public class LangUtils {
 					type = rawType.getGenericSuperclass();
 				}
 			}
+			typeClass = getClass(type);
 		}
 
 		// finally, for each actual type argument provided to baseClass, determine (if possible)
