@@ -445,9 +445,7 @@ public class EncryptionUtils {
 	public static KeyStore getKeyStore(String type, InputStream in, char password[]) throws IOException {
 		try {
 			KeyStore ks = KeyStore.getInstance(type);
-
 			ks.load(in, password);
-			in.close();
 			return ks;
 		} catch (KeyStoreException e) {
 			throw new RuntimeException("Cannot load key store", e);
@@ -455,6 +453,8 @@ public class EncryptionUtils {
 			throw new RuntimeException("Cannot load key store", e);
 		} catch (NoSuchAlgorithmException e) {
 			throw new RuntimeException("Cannot load key store", e);
+		} finally {
+			in.close();
 		}
 	}
 
