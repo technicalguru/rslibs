@@ -722,6 +722,7 @@ public class CommonUtils {
     		return rc.toString();
     	} finally {
     		if (r != null) r.close();
+    		else reader.close();
     	}
     }
 
