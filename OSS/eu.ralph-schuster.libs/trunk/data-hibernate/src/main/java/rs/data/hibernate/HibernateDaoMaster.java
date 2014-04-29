@@ -76,6 +76,8 @@ public class HibernateDaoMaster extends AbstractDaoMaster {
 		// Where is the config?
 		URL configFile = toURL("hbmconfig-file");
 		URL dbconfigFile = toURL("dbconfig-file");
+		if (configFile == null) throw new ConfigurationException("hbmconfig-file must not be NULL");
+		if (dbconfigFile == null) throw new ConfigurationException("dbconfig-file must not be NULL");
 		log.info("Database Configuration: "+dbconfigFile.toString());
 
 		// Load all properties for hibernate now
