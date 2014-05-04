@@ -18,8 +18,9 @@
 package rs.data.file.storage;
 
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.Serializable;
 import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
@@ -32,6 +33,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;
+import org.apache.commons.io.Charsets;
 
 import rs.baselib.bean.IBean;
 import rs.baselib.lang.LangUtils;
@@ -198,9 +200,9 @@ public class XmlStorageStrategy<K extends Serializable, T extends IGeneralBO<K>>
 		// Find all relevant property names
 		Collection<String> propertyNames = new ArrayList<String>(getPropertyNames(bo));
 		propertyNames.add("id");
-		FileWriter out = null;
+		Writer out = null;
 		try {
-			out = new FileWriter(specifier);
+			out = new OutputStreamWriter(new FileOutputStream(specifier), Charsets.toCharset(getEncoding()));
 			out.write("<?xml version=\"1.0\" encoding=\""+getEncoding()+"\"?>\n");
 			out.write("<object class=\""+bo.getClass().getName()+"\">\n");
 			for (String name : propertyNames) {
