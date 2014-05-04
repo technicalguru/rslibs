@@ -24,6 +24,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.prefs.BackingStoreException;
 
@@ -143,13 +144,13 @@ public class PreferencesServiceTest {
 	 * Test method for {@link PreferencesService#save(IPreferences, OutputStream)}.
 	 */
 	@Test
-	public void testSaveIPreferencesOutputStream() throws BackingStoreException {
-		ByteArrayInputStream in = new ByteArrayInputStream(EXAMPLE_CONFIG.getBytes());
+	public void testSaveIPreferencesOutputStream() throws BackingStoreException, UnsupportedEncodingException {
+		ByteArrayInputStream in = new ByteArrayInputStream(EXAMPLE_CONFIG.getBytes(Charsets.UTF_8));
 		IPreferences prefs = new Preferences(null, null);
 		service.load(prefs, in);
-		ByteArrayOutputStream out = new ByteArrayOutputStream(EXAMPLE_CONFIG.getBytes().length);
+		ByteArrayOutputStream out = new ByteArrayOutputStream(EXAMPLE_CONFIG.getBytes(Charsets.UTF_8).length);
 		service.save(prefs, out);
-		testOutput(out.toString());
+		testOutput(out.toString(Charsets.UTF_8.name()));
 	}
 
 	/**
