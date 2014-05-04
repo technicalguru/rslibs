@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.prefs.BackingStoreException;
 
+import org.apache.commons.io.Charsets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -155,7 +156,7 @@ public class PreferencesService extends AbstractPreferencesService {
 	protected void load(IPreferences node, InputStream in) throws BackingStoreException {
 		BufferedReader r = null;
 		try {
-			r = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+			r = new BufferedReader(new InputStreamReader(in, Charsets.UTF_8));
 			String s = null;
 			while ((s = r.readLine()) != null) {
 				if (!CommonUtils.isEmpty(s) && !s.startsWith("#")) {
