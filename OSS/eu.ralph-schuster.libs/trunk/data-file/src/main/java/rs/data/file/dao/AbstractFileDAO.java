@@ -443,7 +443,9 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	@Override
 	protected void _delete(C object) {
 		File file = getFile(object.getId());
-		file.delete();
+		if (file.exists() && !file.delete()) {
+			throw new RuntimeException("Cannot delete file: "+file.getAbsolutePath());
+		}
 	}
 
 	/**
