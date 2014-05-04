@@ -24,6 +24,7 @@ import java.util.Properties;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
+import org.slf4j.LoggerFactory;
 
 import rs.baselib.configuration.IConfigurable;
 import rs.baselib.io.FileFinder;
@@ -118,7 +119,7 @@ public abstract class AbstractDaoMaster implements IDaoMaster, IConfigurable {
 					transformer = new UriProviderWrapper((IUriProvider)obj);
 				}
 			} catch (Exception e) {
-				
+				LoggerFactory.getLogger(getClass()).error("Cannot create UrlTransformer from "+value, e);
 			}
 		}
 		if (transformer == null) getFactory().getUrlTransformer();
