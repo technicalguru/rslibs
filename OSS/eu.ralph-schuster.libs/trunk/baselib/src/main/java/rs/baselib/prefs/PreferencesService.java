@@ -27,6 +27,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.prefs.BackingStoreException;
@@ -152,8 +153,9 @@ public class PreferencesService extends AbstractPreferencesService {
 	 * @throws BackingStoreException when the stream contains errors
 	 */
 	protected void load(IPreferences node, InputStream in) throws BackingStoreException {
-		BufferedReader r = new BufferedReader(new InputStreamReader(in));
+		BufferedReader r = null;
 		try {
+			r = new BufferedReader(new InputStreamReader(in, "UTF-8"));
 			String s = null;
 			while ((s = r.readLine()) != null) {
 				if (!CommonUtils.isEmpty(s) && !s.startsWith("#")) {
@@ -163,11 +165,13 @@ public class PreferencesService extends AbstractPreferencesService {
 					}
 				}
 			}
+		} catch (UnsupportedEncodingException e) {
+			throw new BackingStoreException(e);
 		} catch (IOException e) {
 			throw new BackingStoreException(e);
 		} finally {
 			try {
-				r.close();
+				if (r != null) r.close();
 			} catch (IOException e) { } // Ignore 
 		}
 	}
