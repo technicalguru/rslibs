@@ -134,7 +134,10 @@ public class PreferencesService extends AbstractPreferencesService {
 	protected OutputStream getOutputStream(File f) throws BackingStoreException {
 		try {
 			if (!f.exists()) {
-				f.getParentFile().mkdirs();
+				File parent = f.getParentFile();
+				if (!parent.exists() && !parent.mkdirs()) {
+					throw new BackingStoreException("Cannot create parent directory: "+f.getParent());
+				}
 			}
 			return new FileOutputStream(f);
 		} catch (IOException e) {
