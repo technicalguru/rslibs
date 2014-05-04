@@ -262,7 +262,7 @@ public class AbstractBeanTest {
 	 * @author ralph
 	 *
 	 */
-	protected class TestPropertyChangeListener implements PropertyChangeListener {
+	protected static class TestPropertyChangeListener implements PropertyChangeListener {
 		PropertyChangeEvent received;
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
