@@ -217,7 +217,20 @@ public class EncryptionUtils {
 	 * @throws NoSuchAlgorithmException
 	 */
 	public static KeyPair generateKey(String seed) throws NoSuchProviderException, NoSuchAlgorithmException {
-		return generateKey(seed.getBytes());
+		return generateKey(seed, null);
+	}
+
+	/**
+	 * Generates a public/private key pair.
+	 * @param seed seed to be used.
+	 * @param charset the charset to be used for string encoding (<code>null</code> for {@link Charset#defaultCharset() default charset})
+	 * @return key pair
+	 * @throws NoSuchProviderException
+	 * @throws NoSuchAlgorithmException
+	 */
+	public static KeyPair generateKey(String seed, Charset charset) throws NoSuchProviderException, NoSuchAlgorithmException {
+		if (charset == null) charset = Charset.defaultCharset();
+		return generateKey(seed.getBytes(charset));
 	}
 
 	/**
