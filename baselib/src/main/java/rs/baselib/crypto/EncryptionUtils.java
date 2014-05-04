@@ -227,6 +227,7 @@ public class EncryptionUtils {
 	 * @return key pair
 	 * @throws NoSuchProviderException
 	 * @throws NoSuchAlgorithmException
+	 * @since 1.2.5
 	 */
 	public static KeyPair generateKey(String seed, Charset charset) throws NoSuchProviderException, NoSuchAlgorithmException {
 		if (charset == null) charset = Charset.defaultCharset();
