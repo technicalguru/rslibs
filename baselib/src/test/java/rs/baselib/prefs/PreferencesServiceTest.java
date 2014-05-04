@@ -109,7 +109,7 @@ public class PreferencesServiceTest {
 	 */
 	@Test
 	public void testLoadIgnored() throws BackingStoreException {
-		ByteArrayInputStream in = new ByteArrayInputStream(EXAMPLE_CONFIG2.getBytes());
+		ByteArrayInputStream in = new ByteArrayInputStream(EXAMPLE_CONFIG2.getBytes(Charsets.UTF_8));
 		IPreferences prefs = new Preferences(null, null);
 		service.load(prefs, in);
 		testNode(prefs, new int[]{ 1, 2 }, new int[]{ 1, 2 } );
