@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.prefs.BackingStoreException;
 
+import org.apache.commons.io.Charsets;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -93,7 +94,7 @@ public class PreferencesServiceTest {
 	 */
 	@Test
 	public void testLoad() throws BackingStoreException {
-		ByteArrayInputStream in = new ByteArrayInputStream(EXAMPLE_CONFIG.getBytes());
+		ByteArrayInputStream in = new ByteArrayInputStream(EXAMPLE_CONFIG.getBytes(Charsets.UTF_8));
 		IPreferences prefs = new Preferences(null, null);
 		service.load(prefs, in);
 		testNode(prefs, new int[]{ 1, 2 }, new int[]{ 1, 2 } );
