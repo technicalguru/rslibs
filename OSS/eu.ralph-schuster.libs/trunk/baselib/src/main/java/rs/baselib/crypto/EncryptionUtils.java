@@ -26,6 +26,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 import java.security.Key;
 import java.security.KeyFactory;
@@ -392,7 +393,21 @@ public class EncryptionUtils {
 	 * @return BASE64 representation
 	 */
 	public static String encodeBase64(String s) {
-		return encodeBase64(s.getBytes());
+		return encodeBase64(s, null);
+	}
+
+	/**
+	 * Encodes a string into its BASE64 representation.
+	 * The string is actually split into its bytes and then
+	 * BASE64 encoded.
+	 * @param s string to encode
+	 * @param charset the charset to be used for string encoding (<code>null</code> for {@link Charset#defaultCharset() default charset})
+	 * @return BASE64 representation
+	 * @since 1.2.5
+	 */
+	public static String encodeBase64(String s, Charset charset) {
+		if (charset == null) charset = Charset.defaultCharset();
+		return encodeBase64(s.getBytes(charset));
 	}
 
 	/**
