@@ -18,6 +18,7 @@
 package rs.data.file.util;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collection;
 
@@ -39,7 +40,7 @@ public interface IFilenameStrategy<K extends Serializable> {
 	 * @param key key
 	 * @return filename for key
 	 */
-	public File getFile(K key);
+	public File getFile(K key) throws IOException;
 	
 	/**
 	 * Returns all existing files that the strategy knows about.

@@ -24,6 +24,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.junit.After;
@@ -87,7 +88,7 @@ public class FileDaoTest {
 	}
 	
 	@Test
-	public void test03_create() {
+	public void test03_create() throws IOException {
 		Customer customer = customerDao.newInstance();
 		setup(customer);
 		customerDao.create(customer);
@@ -135,7 +136,7 @@ public class FileDaoTest {
 	}
 	
 	@Test
-	public void test07_delete() {
+	public void test07_delete() throws IOException {
 		Customer customer = createCustomer();
 		Long id = customer.getId();
 		File f = customerDao.getFilenameStrategy().getFile(id);
