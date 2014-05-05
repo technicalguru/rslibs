@@ -89,8 +89,7 @@ public class Decrypter {
 	 * @throws InvalidAlgorithmParameterException when decrypting algorithm cannot be generated
 	 */
 	public Decrypter(Key key, String algorithm, byte salt[], int iterationCount) throws DecryptionException {
-        AlgorithmParameterSpec paramSpec = EncryptionUtils.generateParamSpec(salt, iterationCount);
-		init(key, algorithm, paramSpec);
+		init(key, algorithm, EncryptionUtils.generateParamSpec(salt, iterationCount));
 	}
 
 	/**
@@ -111,8 +110,7 @@ public class Decrypter {
 			if (salt == null) salt = EncryptionUtils.generateSalt(0);
 			KeySpec keySpec = new PBEKeySpec(new String(bytephrase, "UTF8").toCharArray(), salt, iterationCount);
 			SecretKey key = SecretKeyFactory.getInstance(EncryptionUtils.DEFAULT_SECRET_KEY_TYPE).generateSecret(keySpec);
-			AlgorithmParameterSpec paramSpec = EncryptionUtils.generateParamSpec(salt, iterationCount);
-			init(key, EncryptionUtils.DEFAULT_SECRET_KEY_TYPE, paramSpec);
+			init(key, EncryptionUtils.DEFAULT_SECRET_KEY_TYPE, EncryptionUtils.generateParamSpec(salt, iterationCount));
 		} catch (UnsupportedEncodingException e) {
         	throw new DecryptionException("Unsupported encoding: "+e.getMessage(), e);
 		} catch (InvalidKeySpecException e) {
@@ -175,8 +173,7 @@ public class Decrypter {
 			if (salt == null) salt = EncryptionUtils.generateSalt(0);
 			KeySpec keySpec = new PBEKeySpec(passPhrase.toCharArray(), salt, iterationCount);
 			SecretKey key = SecretKeyFactory.getInstance(EncryptionUtils.DEFAULT_SECRET_KEY_TYPE).generateSecret(keySpec);
-			AlgorithmParameterSpec paramSpec = EncryptionUtils.generateParamSpec(salt, iterationCount);
-			init(key, EncryptionUtils.DEFAULT_SECRET_KEY_TYPE, paramSpec);
+			init(key, EncryptionUtils.DEFAULT_SECRET_KEY_TYPE, EncryptionUtils.generateParamSpec(salt, iterationCount));
 		} catch (InvalidKeySpecException e) {
         	throw new DecryptionException("Invalid key specification: "+e.getMessage(), e);
 		} catch (NoSuchAlgorithmException e) {
@@ -196,6 +193,7 @@ public class Decrypter {
 	 */
 	private void init(Key key, String algorithm, AlgorithmParameterSpec paramSpec) throws DecryptionException {
 		try {
+			algorithmParameterSpec = paramSpec;
 			if (algorithm == null) algorithm = key.getAlgorithm();
 			dcipher = Cipher.getInstance(algorithm);
 			if (paramSpec != null) {
