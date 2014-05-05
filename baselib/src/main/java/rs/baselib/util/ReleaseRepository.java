@@ -117,6 +117,8 @@ public class ReleaseRepository {
 					added = addPomProperties(new URL(desc.getUrlPrefix()+entry.getName()));
 				}
 			}
+		} catch (RuntimeException e) {
+			throw e;
 		} catch (Exception e) {
 			// Ignore: no such info
 		}
