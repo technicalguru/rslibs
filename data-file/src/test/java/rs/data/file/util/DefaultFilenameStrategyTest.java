@@ -21,6 +21,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -71,7 +72,7 @@ public class DefaultFilenameStrategyTest {
 	 * Test method for {@link rs.data.file.util.DefaultFilenameStrategy#getParentDir()}.
 	 */
 	@Test
-	public void testGetParentDir() {
+	public void testGetParentDir() throws IOException {
 		assertEquals("default data dir not set correctly", IFilenameStrategy.DEFAULT_DATA_DIR, strategy.getParentDir().getName());
 		assertEquals("Data dir not set correctly", IFilenameStrategy.DEFAULT_DATA_DIR, strategy.getFile(1L).getParentFile().getName());
 	}
@@ -80,7 +81,7 @@ public class DefaultFilenameStrategyTest {
 	 * Test method for {@link rs.data.file.util.DefaultFilenameStrategy#setParentDir(java.io.File)}.
 	 */
 	@Test
-	public void testSetParentDir() {
+	public void testSetParentDir() throws IOException {
 		strategy.setParentDir(new File(System.getProperty("user.dir"), "dataDir"));
 		assertEquals("Data dir not set correctly", "dataDir", strategy.getParentDir().getName());
 		assertEquals("Data dir not set correctly", "dataDir", strategy.getFile(1L).getParentFile().getName());
@@ -91,7 +92,7 @@ public class DefaultFilenameStrategyTest {
 	 * Test method for {@link rs.data.file.util.DefaultFilenameStrategy#setPrefix(java.lang.String)}.
 	 */
 	@Test
-	public void testSetPrefix() {
+	public void testSetPrefix() throws IOException {
 		strategy.setPrefix("aPrefix");
 		assertEquals("Prefix not set correctly", "aPrefix", strategy.getPrefix());
 		assertTrue("Prefix not set correctly", strategy.getFile(1L).getName().startsWith("aPrefix"));
@@ -101,7 +102,7 @@ public class DefaultFilenameStrategyTest {
 	 * Test method for {@link rs.data.file.util.DefaultFilenameStrategy#setSuffix(java.lang.String)}.
 	 */
 	@Test
-	public void testSetSuffix() {
+	public void testSetSuffix() throws IOException {
 		strategy.setSuffix("aSuffix");
 		assertEquals("Suffix not set correctly", "aSuffix", strategy.getSuffix());
 		assertTrue("Suffix not set correctly", strategy.getFile(1L).getName().endsWith("aSuffix"));
@@ -133,7 +134,7 @@ public class DefaultFilenameStrategyTest {
 	 * Test method for {@link rs.data.file.util.DefaultFilenameStrategy#getFiles()}.
 	 */
 	@Test
-	public void testGetFiles() {
+	public void testGetFiles() throws IOException {
 		Collection<File> files = strategy.getFiles();
 		for (long l=1; l<11; l++) {
 			File f = strategy.getFile(l);

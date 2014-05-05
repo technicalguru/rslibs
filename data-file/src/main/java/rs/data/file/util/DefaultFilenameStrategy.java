@@ -18,6 +18,7 @@
 package rs.data.file.util;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -114,10 +115,12 @@ public class DefaultFilenameStrategy<K extends Serializable> implements IFilenam
 	 * {@inheritDoc}
 	 */
 	@Override
-	public File getFile(K key) {
+	public File getFile(K key) throws IOException {
 		File parentDir = getParentDir();
 		if (!parentDir.exists()) {
-			createParent(parentDir);
+			if (!createParent(parentDir)) {
+				throw new IOException("Cannot create parent directory: "+parentDir.getAbsolutePath());
+			}
 		}
 		String filename = "";
 		String prefix = getPrefix();
@@ -132,9 +135,11 @@ public class DefaultFilenameStrategy<K extends Serializable> implements IFilenam
 	 * Called when a new file is required to be created.
 	 * Creates the parent dir.
 	 * @param dir the directory to be created
+	 * @return <code>true</code> when the parent was created or exists
 	 */
-	protected void createParent(File dir) {
-		dir.mkdirs();
+	protected boolean createParent(File dir) {
+		if (!dir.exists()) return dir.mkdirs();
+		return true;
 	}
 
 	/**

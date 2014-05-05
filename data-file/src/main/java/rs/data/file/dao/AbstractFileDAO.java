@@ -220,7 +220,7 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	 * @param key key of business object
 	 * @return the file for this object
 	 */
-	protected File getFile(K key) {
+	protected File getFile(K key) throws IOException {
 		// Forward to filename strategy
 		return getFilenameStrategy().getFile(key);
 	}
@@ -255,10 +255,12 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	@Override
 	public C findBy(K id) {
 		C rc = getCached(new CID(getBoInterfaceClass(), id));
-		if (rc == null) {
+		if (rc == null) try {
 			File file = getFilenameStrategy().getFile(id);
 			if (!file.canRead()) return null;
 			rc = _load(id, file);
+		} catch (IOException e) {
+			return null;
 		}
 		return (C)rc;
 	}
@@ -346,7 +348,7 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 		} catch (IOException e) {
 			throw new RuntimeException("Cannot load objects", e);
 		}
-}
+	}
 
 	/**
 	 * {@inheritDoc}
@@ -416,9 +418,13 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 		IFilenameStrategy<K> nameStrategy = getFilenameStrategy();
 		while (rc == null) {
 			rc = generator.getNewId();
-			File f = nameStrategy.getFile(rc);
-			if (f.exists()) {
-				rc = null;
+			try {
+				File f = nameStrategy.getFile(rc);
+				if (f.exists()) {
+					rc = null;
+				}
+			} catch (IOException e) {
+				throw new RuntimeException("Cannot generate new key", e);
 			}
 		}
 		return rc;
@@ -442,9 +448,13 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	 */
 	@Override
 	protected void _delete(C object) {
-		File file = getFile(object.getId());
-		if (file.exists() && !file.delete()) {
-			throw new RuntimeException("Cannot delete file: "+file.getAbsolutePath());
+		try {
+			File file = getFile(object.getId());
+			if (file.exists() && !file.delete()) {
+				throw new RuntimeException("Cannot delete file: "+file.getAbsolutePath());
+			}
+		} catch (IOException e) {
+			throw new RuntimeException("Cannot delete object: "+object.getId(), e);
 		}
 	}
 
