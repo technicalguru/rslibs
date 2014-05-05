@@ -30,6 +30,7 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -681,7 +682,18 @@ public class CommonUtils {
      * @throws IOException when content of URL cannot be loaded
      */
     public static String loadContent(URL url) throws IOException {
-    	return loadContent(url.openStream());
+    	return loadContent(url, null);
+    }
+    
+    /**
+     * Loads the content of the URL as a string.
+     * @param url URL to be loaded
+     * @param charset the charset of the content (<code>null</code> for {@link Charset#defaultCharset() default charset})
+     * @return the content of the URL
+     * @throws IOException when content of URL cannot be loaded
+     */
+    public static String loadContent(URL url, Charset charset) throws IOException {
+    	return loadContent(url.openStream(), charset);
     }
     
     /**
@@ -691,7 +703,18 @@ public class CommonUtils {
      * @throws IOException when content of file cannot be loaded
      */
     public static String loadContent(String name) throws IOException {
-    	return loadContent(new File(name));
+    	return loadContent(name, null);
+    }
+    
+    /**
+     * Loads the content of a file as a string.
+     * @param name name of file to be loaded
+     * @param charset the charset of the content (<code>null</code> for {@link Charset#defaultCharset() default charset})
+     * @return the content of the file
+     * @throws IOException when content of file cannot be loaded
+     */
+    public static String loadContent(String name, Charset charset) throws IOException {
+    	return loadContent(new File(name), charset);
     }
     
     /**
@@ -701,7 +724,18 @@ public class CommonUtils {
      * @throws IOException when content of file cannot be loaded
      */
     public static String loadContent(File f) throws IOException {
-    	return loadContent(new FileInputStream(f));    	
+    	return loadContent(f, null);    	
+    }
+      
+    /**
+     * Loads the content of a file as a string.
+     * @param f file to be loaded
+     * @param charset the charset of the content (<code>null</code> for {@link Charset#defaultCharset() default charset})
+     * @return the content of the file
+     * @throws IOException when content of file cannot be loaded
+     */
+    public static String loadContent(File f, Charset charset) throws IOException {
+    	return loadContent(new FileInputStream(f), charset);    	
     }
       
     /**
@@ -711,7 +745,19 @@ public class CommonUtils {
      * @throws IOException when content of stream cannot be loaded
      */
     public static String loadContent(InputStream in) throws IOException {
-    	return loadContent(new InputStreamReader(in));
+    	return loadContent(in, null);
+    }
+
+    /**
+     * Loads the content of a stream as a string.
+     * @param in stream to be loaded
+     * @param charset the charset of the content (<code>null</code> for {@link Charset#defaultCharset() default charset})
+     * @return the content of the stream
+     * @throws IOException when content of stream cannot be loaded
+     */
+    public static String loadContent(InputStream in, Charset charset) throws IOException {
+    	if (charset == null) charset = Charset.defaultCharset();
+    	return loadContent(new InputStreamReader(in, charset));
     }
 
     /**
