@@ -91,8 +91,7 @@ public class Encrypter {
 	 * @throws InvalidAlgorithmParameterException when encrypting algorithm cannot be generated
 	 */
 	public Encrypter(Key key, String algorithm, byte salt[], int iterationCount) throws EncryptionException {
-        AlgorithmParameterSpec paramSpec = EncryptionUtils.generateParamSpec(salt, iterationCount);
-		init(key, algorithm, paramSpec);
+		init(key, algorithm, EncryptionUtils.generateParamSpec(salt, iterationCount));
 	}
 
 	/**
@@ -108,8 +107,7 @@ public class Encrypter {
 			if (salt == null) salt = EncryptionUtils.generateSalt(0);
 			KeySpec keySpec = new PBEKeySpec(new String(bytephrase, "UTF8").toCharArray(), salt, iterationCount);
 			SecretKey key = SecretKeyFactory.getInstance(EncryptionUtils.DEFAULT_SECRET_KEY_TYPE).generateSecret(keySpec);
-			AlgorithmParameterSpec paramSpec = EncryptionUtils.generateParamSpec(salt, iterationCount);
-			init(key, EncryptionUtils.DEFAULT_SECRET_KEY_TYPE, paramSpec);
+			init(key, EncryptionUtils.DEFAULT_SECRET_KEY_TYPE, EncryptionUtils.generateParamSpec(salt, iterationCount));
 		} catch (UnsupportedEncodingException e) {
         	throw new EncryptionException("Unsupported encoding: "+e.getMessage(), e);
 		} catch (InvalidKeySpecException e) {
@@ -168,8 +166,7 @@ public class Encrypter {
 			if (salt == null) salt = EncryptionUtils.generateSalt(0);
 			KeySpec keySpec = new PBEKeySpec(passPhrase.toCharArray(), salt, iterationCount);
 			SecretKey key = SecretKeyFactory.getInstance(EncryptionUtils.DEFAULT_SECRET_KEY_TYPE).generateSecret(keySpec);
-			AlgorithmParameterSpec paramSpec = EncryptionUtils.generateParamSpec(salt, iterationCount);
-			init(key, null, paramSpec);
+			init(key, null, EncryptionUtils.generateParamSpec(salt, iterationCount));
 		} catch (InvalidKeySpecException e) {
         	throw new EncryptionException("Invalid key specification: "+e.getMessage(), e);
 		} catch (NoSuchAlgorithmException e) {
@@ -189,6 +186,7 @@ public class Encrypter {
 	 */
 	private void init(Key key, String algorithm, AlgorithmParameterSpec paramSpec) throws EncryptionException {
 		try {
+			algorithmParameterSpec = paramSpec;
 			if (algorithm == null) algorithm = key.getAlgorithm();
 			//if (paramSpec == null) paramSpec = EncryptionUtils.generateParamSpec();
 			ecipher = Cipher.getInstance(algorithm);
