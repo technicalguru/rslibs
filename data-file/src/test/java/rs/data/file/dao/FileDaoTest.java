@@ -64,6 +64,7 @@ public class FileDaoTest {
 	@Before
 	public void setup() {
 		customerDao = (CustomerDAOFileImpl)factory.getCustomerDao();
+		assertNotNull("No customerDAO configured", customerDao);
 		customerDao.deleteAll();
 		LangUtils.sleep(500L);
 	}
