@@ -228,8 +228,9 @@ public class XmlStorageStrategy<K extends Serializable, T extends IGeneralBO<K>>
 	 * @param tagName the tag name to be used
 	 */
 	protected void writeValue(Writer out, int indent, Object value, String tagName) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-		String indentS = "";
-		for (int i=0; i<indent; i++) indentS += "   ";
+		StringBuilder foo = new StringBuilder();
+		for (int i=0; i<indent; i++) foo.append("   ");
+		String indentS = foo.toString();
 		
 		if (value != null) {
 			out.write(indentS+"<"+tagName+" class=\""+value.getClass().getName()+"\">");
