@@ -39,15 +39,8 @@ public class ConfigurationUtils {
 	 * @return the object
 	 */
 	public static Object load(Configuration config, boolean configure) {
-		try {
-			String className = config.getString("[@class]");
-			return load(className, config, configure);
-		} catch (Exception e) {
-			if (e instanceof RuntimeException) {
-				throw (RuntimeException)e;
-			}
-			throw new RuntimeException("Cannot load class from configuration", e);
-		}
+		String className = config.getString("[@class]");
+		return load(className, config, configure);
 	}
 
 	/**
