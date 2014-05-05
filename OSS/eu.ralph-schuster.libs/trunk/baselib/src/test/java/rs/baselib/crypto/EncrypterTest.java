@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.Charsets;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -47,7 +48,7 @@ public class EncrypterTest {
 	@Parameters
 	public static Collection<Object[]> data() throws Exception {
 		Collection<Object[]> data = new ArrayList<Object[]>();
-		BufferedReader in = new BufferedReader(new InputStreamReader(FileFinder.open(EncrypterTest.class, "tests.csv")));
+		BufferedReader in = new BufferedReader(new InputStreamReader(FileFinder.open(EncrypterTest.class, "tests.csv"), Charsets.UTF_8));
 		int lineNo = 0;
 		while (in.ready()) {
 			String line = in.readLine();
