@@ -191,14 +191,14 @@ public class EncryptionUtils {
 
 		Random random = new Random(randomInit);
 
-		String rc = "";
+		StringBuilder rc = new StringBuilder(length);
 		while (rc.length() < length) {
 			int n = random.nextInt(allowedChars.length());
 			char c = allowedChars.charAt(n);
-			if (!Character.isWhitespace(c)) rc += c;
+			if (!Character.isWhitespace(c)) rc.append(c);
 		}
 
-		return rc;
+		return rc.toString();
 	}
 
 	public static SecretKey getSecretKey(int iterationCount, String passPhrase, byte salt[]) throws NoSuchAlgorithmException, InvalidKeySpecException {
