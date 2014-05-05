@@ -25,9 +25,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintStream;
-import java.io.PrintWriter;
 import java.io.Reader;
+import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -790,7 +791,18 @@ public class CommonUtils {
      * @throws IOException when content cannot be written
      */
     public static void writeContent(String name, String content) throws IOException {
-    	writeContent(new File(name), content);
+    	writeContent(name, content, null);
+    }
+    
+    /**
+     * Writes the string to a file.
+     * @param name name of file to be written to
+     * @param content the content to be written
+     * @param charset the charset of the content (<code>null</code> for {@link Charset#defaultCharset() default charset})
+     * @throws IOException when content cannot be written
+     */
+    public static void writeContent(String name, String content, Charset charset) throws IOException {
+    	writeContent(new File(name), content, charset);
     }
     
     /**
@@ -800,9 +812,20 @@ public class CommonUtils {
      * @throws IOException when content cannot be written
      */
     public static void writeContent(File f, String content) throws IOException {
-    	writeContent(new FileOutputStream(f), content);    	
+    	writeContent(f, content, null);    	
     }
-      
+
+    /**
+     * Writes the string to a file.
+     * @param f file to be written to
+     * @param content the content to be written
+     * @param charset the charset of the content (<code>null</code> for {@link Charset#defaultCharset() default charset})
+     * @throws IOException when content cannot be written
+     */
+    public static void writeContent(File f, String content, Charset charset) throws IOException {
+    	writeContent(new FileOutputStream(f), content, charset);    	
+    }
+
     /**
      * Writes the string to a stream.
      * @param out stream to be written to
@@ -810,7 +833,19 @@ public class CommonUtils {
      * @throws IOException when content cannot be written
      */
     public static void writeContent(OutputStream out, String content) throws IOException {
-    	writeContent(new PrintWriter(out), content);
+    	writeContent(out, content, null);
+    }
+    
+    /**
+     * Writes the string to a stream.
+     * @param out stream to be written to
+     * @param content the content to be written
+     * @param charset the charset of the content (<code>null</code> for {@link Charset#defaultCharset() default charset})
+     * @throws IOException when content cannot be written
+     */
+    public static void writeContent(OutputStream out, String content, Charset charset) throws IOException {
+    	if (charset == null) charset = Charset.defaultCharset();
+    	writeContent(new OutputStreamWriter(out, charset), content);
     }
 
     /**
@@ -819,9 +854,9 @@ public class CommonUtils {
      * @param content the content to be written
      * @throws IOException when content cannot be written
      */
-    public static void writeContent(PrintWriter writer, String content) throws IOException {
+    public static void writeContent(Writer writer, String content) throws IOException {
     	try {
-    		writer.print(content);
+    		writer.write(content);
     	} finally {
     		if (writer != null) writer.close();
     	}
