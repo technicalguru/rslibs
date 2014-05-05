@@ -50,8 +50,9 @@ public class DefaultFilenameStrategyTest {
 		// Create 10 files
 		for (long l=1; l<11; l++) {
 			File f = strategy.getFile(l);
-			f.createNewFile();
-			testFiles.add(f);
+			if (f.exists() || f.createNewFile()) {
+				testFiles.add(f);
+			}
 		}
 	}
 
