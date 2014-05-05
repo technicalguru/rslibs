@@ -131,7 +131,7 @@ public abstract class AbstractEncryptionType implements UserType, ParameterizedT
 		} catch (HibernateException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new HibernateException("Cannot read: "+names, e);
+			throw new HibernateException("Cannot read: "+CommonUtils.join(", ", names), e);
 		}
 	}
 
