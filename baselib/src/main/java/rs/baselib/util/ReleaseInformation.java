@@ -56,9 +56,6 @@ public class ReleaseInformation {
 	/** The build date, e.g. 2012-12-19 11:17:24 +0100 */
 	public static final String KEY_BUILD_DATE = "buildDate"; 
 
-	/** The date formatter */
-	public static final DateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
-	
 	private String groupId;
 	private String artifactId;
 	private String version;
@@ -364,6 +361,8 @@ public class ReleaseInformation {
 	public void set(String key, String value) throws ParseException {
 		if ((value != null) && value.startsWith("${")) value = null;
 		if (value == null) return;
+		DateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
+		
 		if (isKey(key, KEY_GROUP_ID))                    setGroupId(value);
 		else if (isKey(key, KEY_ARTIFACT_ID))            setArtifactId(value);
 		else if (isKey(key, KEY_VERSION))                setVersion(value);
