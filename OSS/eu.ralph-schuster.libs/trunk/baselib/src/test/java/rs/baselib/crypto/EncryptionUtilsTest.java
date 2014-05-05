@@ -102,7 +102,7 @@ public class EncryptionUtilsTest {
 			// Create the key first
 			String seed = EncryptionUtils.generatePassword(8);
 			assertNotNull("No seed", seed);
-			KeyPair keyPair = EncryptionUtils.generateKey(seed.getBytes());
+			KeyPair keyPair = EncryptionUtils.generateKey(seed.getBytes(Charsets.UTF_8));
 			assertNotNull(keyPair);
 			PrivateKey privateKey = keyPair.getPrivate();
 			PublicKey publicKey   = keyPair.getPublic();
