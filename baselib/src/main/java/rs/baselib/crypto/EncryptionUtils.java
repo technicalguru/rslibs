@@ -387,7 +387,21 @@ public class EncryptionUtils {
 	 * @see #encodeBase64(String)
 	 */
 	public static String decodeBase64ToString(String s) {
-		return new String(decodeBase64(s));
+		return decodeBase64ToString(s, null);
+	}
+
+	/**
+	 * Decodes a BASE64 string and generates the original
+	 * string from the result.
+	 * @param s BASE64 encoded string
+	 * @param charset the chracter set to be used for constructing the string (can be <code>null</code> for default charset)
+	 * @return original string
+	 * @see #encodeBase64(String)
+	 * @since 1.2.5
+	 */
+	public static String decodeBase64ToString(String s, Charset charset) {
+		if (charset == null) charset = Charset.defaultCharset();
+		return new String(decodeBase64(s), charset);
 	}
 
 	/**
