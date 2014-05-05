@@ -214,6 +214,7 @@ public abstract class AbstractPreferencesService implements IPreferencesService 
 	@Override
 	public IPreferences getSystemPreferences(String applicationName) throws BackingStoreException {
 		IPreferences rc = getApplicationPreferences(applicationName); 
+		if (rc == null) throw new BackingStoreException("Cannot load application preferences for "+applicationName);
 		return rc.node(SYSTEM_NODE_NAME);
 	}
 
