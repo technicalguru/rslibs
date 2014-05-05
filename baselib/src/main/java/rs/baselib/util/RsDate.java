@@ -32,7 +32,7 @@ public class RsDate extends GregorianCalendar {
 	/**
 	 * Serial UID.
 	 */
-	private static final long serialVersionUID = -4325303811108690168L;
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Constructor.

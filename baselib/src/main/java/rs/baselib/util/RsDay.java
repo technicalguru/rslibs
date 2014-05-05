@@ -31,9 +31,11 @@ public class RsDay extends RsDate {
 	/**
 	 * Serial UID.
 	 */
-	private static final long serialVersionUID = -6154891935288280677L;
+	private static final long serialVersionUID = 1L;
 
-	private static final SimpleDateFormat KEY_FORMATTER = new SimpleDateFormat("yyyyMMdd");
+	private static SimpleDateFormat KEY_FORMATTER() {
+		return new SimpleDateFormat("yyyyMMdd");
+	}
 	
 	/**
 	 * Constructor.
@@ -93,7 +95,7 @@ public class RsDay extends RsDate {
 	 * @return the key of this day.
 	 */
 	public String getKey() {
-		return KEY_FORMATTER.format(getTime());
+		return KEY_FORMATTER().format(getTime());
 	}
 	
 	/**
@@ -178,7 +180,7 @@ public class RsDay extends RsDate {
 	 */
 	public static RsDay getDay(String key) {
 		try {
-			return new RsDay(KEY_FORMATTER.parse(key));
+			return new RsDay(KEY_FORMATTER().parse(key));
 		} catch (Exception e) {
 			throw new RuntimeException("Cannot parse day: "+key, e);
 		}

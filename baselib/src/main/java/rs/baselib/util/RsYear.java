@@ -31,9 +31,11 @@ public class RsYear extends RsDate {
 	/**
 	 * Serial UID.
 	 */
-	private static final long serialVersionUID = -3729645212443197126L;
+	private static final long serialVersionUID = 1L;
 	
-	private static final SimpleDateFormat KEY_FORMATTER = new SimpleDateFormat("yyyy");
+	private static SimpleDateFormat KEY_FORMATTER() {
+		return new SimpleDateFormat("yyyy");
+	}
 	
 	/**
 	 * Constructor.
@@ -93,7 +95,7 @@ public class RsYear extends RsDate {
 	 * @return the key
 	 */
 	public String getKey() {
-		return KEY_FORMATTER.format(getTime());
+		return KEY_FORMATTER().format(getTime());
 	}
 	
 	/**
@@ -190,7 +192,7 @@ public class RsYear extends RsDate {
 	 */
 	public static RsYear getYear(String key) {
 		try {
-			return new RsYear(KEY_FORMATTER.parse(key));
+			return new RsYear(KEY_FORMATTER().parse(key));
 		} catch (Exception e) {
 			throw new RuntimeException("Cannot parse month: "+key, e);
 		}
