@@ -140,8 +140,11 @@ public class CronSchedule {
 	 */
 	public String get(int type) {
 		AbstractTimeValue values[] = getValues(type);
-		String rc = "";
-		for (int i=0; i<values .length; i++) rc += ","+values[i].toString();
+		StringBuilder rc = new StringBuilder(values.length);
+		for (int i=0; i<values .length; i++) {
+			rc.append(",");
+			rc.append(values[i].toString());
+		}
 		return rc.substring(1);
 	}
  
