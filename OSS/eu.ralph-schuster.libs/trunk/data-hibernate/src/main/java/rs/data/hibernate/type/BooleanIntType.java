@@ -106,13 +106,13 @@ public class BooleanIntType implements UserType, ParameterizedType {
 	 */
 	@Override
 	public Object nullSafeGet(ResultSet rs, String names[], SessionImplementor session, Object owner) throws HibernateException, SQLException {
-		Integer i = rs.getInt(names[0]);
-		if (i == null) {
+		if (rs.getObject(names[0]) == null) {
 			if (logger2.isTraceEnabled()) logger2.trace("found [null] as column ["+names[0]+"]");
 			return null;
 		}
+		int i = rs.getInt(names[0]);
 		if (logger2.isTraceEnabled()) logger2.trace("found ["+i+"] as column ["+names[0]+"]");
-		return i.intValue() != 0 ? Boolean.TRUE : Boolean.FALSE;
+		return i != 0 ? Boolean.TRUE : Boolean.FALSE;
 	}
 
 	/**
