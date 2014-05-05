@@ -19,7 +19,6 @@ package templating;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -68,10 +67,9 @@ public class Templating {
 		// Necessary due to unpredictable iterating order
 		while (true) {
 			String pre = template;
-			Iterator<String> i = markers.keySet().iterator();
-			while (i.hasNext()) {
-				String marker = (String)i.next();
-				Object value  = markers.get(marker);
+			for (Map.Entry<String, Object> entry : markers.entrySet()) {
+				String marker = entry.getKey();
+				Object value  = entry.getValue();
 				if (value == null) value = "";
 				// value needs to be adjusted
 				String v = value.toString();
