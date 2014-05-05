@@ -92,7 +92,7 @@ public class CommonUtilsTest {
 		assertEquals("toString(RsDate) does not work correct", "", CommonUtils.toString((RsDate)null));
 		assertEquals("toString(RsDate) does not work correct", "", CommonUtils.toString(new RsDate(0)));
 		RsDate d = new RsDate();
-		assertEquals("toString(RsDate) does not work correct", CommonUtils.DATE_TIME_FORMATTER.format(d.getTime()), CommonUtils.toString(d));
+		assertEquals("toString(RsDate) does not work correct", CommonUtils.DATE_TIME_FORMATTER().format(d.getTime()), CommonUtils.toString(d));
 	}
 
 	@Test
@@ -100,7 +100,7 @@ public class CommonUtilsTest {
 		assertEquals("toString(RsDay) does not work correct", "", CommonUtils.toString((RsDay)null));
 		assertEquals("toString(RsDay) does not work correct", "", CommonUtils.toString(new RsDay(0)));
 		RsDay d = new RsDay();
-		assertEquals("toString(RsDay) does not work correct", CommonUtils.DATE_FORMATTER.format(d.getBegin().getTime()), CommonUtils.toString(d));
+		assertEquals("toString(RsDay) does not work correct", CommonUtils.DATE_FORMATTER().format(d.getBegin().getTime()), CommonUtils.toString(d));
 	}
 
 	@Test
@@ -108,7 +108,7 @@ public class CommonUtilsTest {
 		assertEquals("toString(RsMonth) does not work correct", "", CommonUtils.toString((RsDate)null));
 		assertEquals("toString(RsMonth) does not work correct", "", CommonUtils.toString(new RsDate(0)));
 		RsMonth d = new RsMonth();
-		assertEquals("toString(RsMonth) does not work correct", CommonUtils.DATE_FORMATTER.format(d.getBegin().getTime()), CommonUtils.toString(d));
+		assertEquals("toString(RsMonth) does not work correct", CommonUtils.DATE_FORMATTER().format(d.getBegin().getTime()), CommonUtils.toString(d));
 	}
 
 	@Test

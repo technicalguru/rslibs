@@ -71,7 +71,7 @@ public class LicGen implements Runnable {
 		try {
 			System.out.print("Generating \""+product+"\" license (");
 			if (expirationTime > 0) {
-				System.out.print("expires "+CommonUtils.DATE_FORMATTER.format(new Date(expirationTime)));
+				System.out.print("expires "+CommonUtils.DATE_FORMATTER().format(new Date(expirationTime)));
 			} else {
 				System.out.print("unlimited");
 			}
@@ -163,7 +163,7 @@ public class LicGen implements Runnable {
 	protected static long parseTime(String s) {
 		if (s == null) return 0L;
 		try {
-			return CommonUtils.DATE_FORMATTER.parse(s).getTime();
+			return CommonUtils.DATE_FORMATTER().parse(s).getTime();
 		} catch (java.text.ParseException e) {
 			
 		}

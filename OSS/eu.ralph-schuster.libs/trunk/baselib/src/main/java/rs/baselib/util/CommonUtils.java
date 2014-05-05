@@ -62,18 +62,29 @@ public class CommonUtils {
 	/**
 	 * The formatter for dates (see {@link DateFormat#SHORT}).
 	 */
-	public static final DateFormat DATE_FORMATTER = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
+	public static DateFormat DATE_FORMATTER() {
+		return DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
+	}
+	
 	/**
 	 * The formatter for dates incl. times (see {@link DateFormat#SHORT}).
 	 */
-	public static final DateFormat DATE_TIME_FORMATTER = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault());
+	public static DateFormat DATE_TIME_FORMATTER() {
+		return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault());
+	}
 	
 
 	/**
-	 * Formatters for numbers.
+	 * Formatter for real numbers.
 	 */
-	public static final NumberFormat SIMPLE_NUMBER_FORMATTER = NumberFormat.getNumberInstance(Locale.getDefault());
-	public static final NumberFormat SIMPLE_INT_FORMATTER = NumberFormat.getIntegerInstance(Locale.getDefault());
+	public static NumberFormat SIMPLE_NUMBER_FORMATTER() {
+		return NumberFormat.getNumberInstance(Locale.getDefault());
+	}
+	
+	/** Formatter for integers. */
+	public static NumberFormat SIMPLE_INT_FORMATTER() {
+		return NumberFormat.getIntegerInstance(Locale.getDefault());
+	}
 	
 	/** The OS name */
 	private static String OS = System.getProperty("os.name").toLowerCase();
@@ -94,7 +105,7 @@ public class CommonUtils {
 	 * @return formatted string
 	 */
 	public static String toString(float amount) {
-		return SIMPLE_NUMBER_FORMATTER.format(amount);
+		return SIMPLE_NUMBER_FORMATTER().format(amount);
 	}
 	
 	/**
@@ -104,7 +115,7 @@ public class CommonUtils {
 	 */
 	public static String toString(RsDate date) {
 		if ((date == null) || (date.getTimeInMillis() == 0)) return "";
-		return DATE_TIME_FORMATTER.format(date.getTime());
+		return DATE_TIME_FORMATTER().format(date.getTime());
 	}
 	
 	/**
@@ -114,7 +125,7 @@ public class CommonUtils {
 	 */
 	public static String toString(RsDay day) {
 		if ((day == null) || (day.getTimeInMillis() == -TimeZone.getDefault().getOffset(day.getTimeInMillis()))) return "";
-		return DATE_FORMATTER.format(day.getTime());
+		return DATE_FORMATTER().format(day.getTime());
 	}
 	
 	/**
@@ -134,7 +145,7 @@ public class CommonUtils {
 	 */
 	public static String toString(RsMonth month) {
 		if ((month == null) || (month.getTimeInMillis() == 0)) return "";
-		return DATE_FORMATTER.format(month.getBegin().getTime());
+		return DATE_FORMATTER().format(month.getBegin().getTime());
 	}
 	
 	/**

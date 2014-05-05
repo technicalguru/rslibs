@@ -256,7 +256,7 @@ public class DefaultLicense extends AbstractLicense {
 		Date d = getExpirationDate();
 		if (d != null) {
 			buf.append(" until ");
-			buf.append(CommonUtils.DATE_TIME_FORMATTER.format(d));
+			buf.append(CommonUtils.DATE_TIME_FORMATTER().format(d));
 		} else {
 			buf.append(" (unlimited)");
 		}
