@@ -152,11 +152,12 @@ public class CronSchedule {
 	 * Returns the cron-like definition of the schedule.
 	 */
 	public String toString() {
-		String rc = "";
+		StringBuilder rc = new StringBuilder();
 		for (int i=0; i<TYPES.length; i++) {
-			rc += " "+get(getType(i));
+			rc.append(" ");
+			rc.append(get(getType(i)));
 		}
-		return rc.trim();
+		return rc.toString().trim();
 	}
  
 	/**
