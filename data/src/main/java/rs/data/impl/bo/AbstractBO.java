@@ -26,6 +26,9 @@ import rs.baselib.bean.NamedObject;
 import rs.baselib.bean.NoCopy;
 import rs.baselib.lang.LangUtils;
 import rs.baselib.util.RsDate;
+import rs.data.api.bo.IGeneralBO;
+import rs.data.api.dao.IGeneralDAO;
+import rs.data.impl.dao.AbstractDAO;
 import rs.data.impl.dto.GeneralDTO;
 import rs.data.util.CID;
 
@@ -180,4 +183,28 @@ public abstract class AbstractBO<K extends Serializable, T extends GeneralDTO<K>
 		firePropertyChange(NamedObject.PROPERTY_NAME, oldValue, name);
 	}
 	
+	/**
+	 * Fetches the BO from the DAO factory.
+	 * @param dto the DTO
+	 * @return the BO
+	 */
+	@SuppressWarnings("unchecked")
+	protected <X extends Serializable, Y extends GeneralDTO<X>, Z extends IGeneralBO<X>> Z getBusinessObject(Y dto) {
+		if (dto == null) return null;
+		IGeneralDAO<X, Z> dao = (IGeneralDAO<X, Z>)getFactory().getDaoFor(dto);
+		if ((dao == null) || !(dao instanceof AbstractDAO)) throw new RuntimeException("Cannot find DAO for: "+dto);
+		return ((AbstractDAO<X, Y, ?, Z>)dao).getBusinessObject(dto);
+	}
+	
+	/**
+	 * Returns the DTO from that BO (or null).
+	 * @param o the BO
+	 * @return the DTO underneath
+	 */
+	public <X extends Serializable, Y extends GeneralDTO<X>> Y getTransferObject(AbstractBO<X,Y> o) {
+		if (o == null) return null;
+		return o.getTransferObject();
+	}
+	
+
 }
