@@ -47,13 +47,11 @@ public final class HashCodeUtil {
 
 	/** booleans.  */
 	public static int hash(int aSeed, boolean aBoolean) {
-		log("boolean...");
 		return firstTerm( aSeed ) + (aBoolean ? 1 : 0);
 	}
 
 	/*** chars.  */
 	public static int hash(int aSeed, char aChar) {
-		log("char...");
 		return firstTerm(aSeed) + (int)aChar;
 	}
 
@@ -64,13 +62,11 @@ public final class HashCodeUtil {
 		 * Note that byte and short are handled by this method, through
 		 * implicit conversion.
 		 */
-		log("int...");
 		return firstTerm(aSeed) + aInt;
 	}
 
 	/** longs.  */
 	public static int hash(int aSeed , long aLong) {
-		log("long...");
 		return firstTerm(aSeed)  + (int)(aLong ^ (aLong >>> 32));
 	}
 
@@ -122,7 +118,4 @@ public final class HashCodeUtil {
 		return aObject.getClass().isArray();
 	}
 
-	private static void log(String aMessage){
-		System.out.println(aMessage);
-	}
 } 
