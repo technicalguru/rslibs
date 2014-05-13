@@ -67,14 +67,14 @@ public class CommonUtils {
 	public static DateFormat DATE_FORMATTER() {
 		return DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
 	}
-	
+
 	/**
 	 * The formatter for dates incl. times (see {@link DateFormat#SHORT}).
 	 */
 	public static DateFormat DATE_TIME_FORMATTER() {
 		return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault());
 	}
-	
+
 
 	/**
 	 * Formatter for real numbers.
@@ -82,15 +82,15 @@ public class CommonUtils {
 	public static NumberFormat SIMPLE_NUMBER_FORMATTER() {
 		return NumberFormat.getNumberInstance(Locale.getDefault());
 	}
-	
+
 	/** Formatter for integers. */
 	public static NumberFormat SIMPLE_INT_FORMATTER() {
 		return NumberFormat.getIntegerInstance(Locale.getDefault());
 	}
-	
+
 	/** The OS name */
 	private static String OS = System.getProperty("os.name").toLowerCase();
-	
+
 	/**
 	 * Formats the string for display.
 	 * @param o the category
@@ -100,7 +100,7 @@ public class CommonUtils {
 		if (o == null) return "";
 		return o;
 	}
-	
+
 	/**
 	 * Formats the money value.
 	 * @param amount amount to be formatted
@@ -109,7 +109,7 @@ public class CommonUtils {
 	public static String toString(float amount) {
 		return SIMPLE_NUMBER_FORMATTER().format(amount);
 	}
-	
+
 	/**
 	 * Formats the given date.
 	 * @param date date to format
@@ -119,7 +119,7 @@ public class CommonUtils {
 		if ((date == null) || (date.getTimeInMillis() == 0)) return "";
 		return DATE_TIME_FORMATTER().format(date.getTime());
 	}
-	
+
 	/**
 	 * Formats the given day.
 	 * @param day day to format
@@ -129,7 +129,7 @@ public class CommonUtils {
 		if ((day == null) || (day.getTimeInMillis() == -TimeZone.getDefault().getOffset(day.getTimeInMillis()))) return "";
 		return DATE_FORMATTER().format(day.getTime());
 	}
-	
+
 	/**
 	 * Formats the given year.
 	 * @param year year to format
@@ -139,7 +139,7 @@ public class CommonUtils {
 		if ((year == null) || (year.get(Calendar.YEAR) == 1)) return "";
 		return year.getKey();
 	}
-	
+
 	/**
 	 * Formats the given month (1st day of month).
 	 * @param month date to format
@@ -149,7 +149,7 @@ public class CommonUtils {
 		if ((month == null) || (month.getTimeInMillis() == 0)) return "";
 		return DATE_FORMATTER().format(month.getBegin().getTime());
 	}
-	
+
 	/**
 	 * Generates a string presentation of the given bytes.
 	 * @param b byte array
@@ -180,7 +180,7 @@ public class CommonUtils {
 		buf.append("]");
 		return buf.toString();
 	}
-	
+
 	/**
 	 * Checks for equality null-safe
 	 * @param o1 object 1
@@ -192,7 +192,7 @@ public class CommonUtils {
 		if ((o1 != null) && (o2 != null)) return o1.equals(o2);
 		return false;
 	}
-	
+
 	/**
 	 * Returns true when the given string is null or - when trimmed - empty. 
 	 * @param s the string to be checked
@@ -201,7 +201,7 @@ public class CommonUtils {
 	public static boolean isEmpty(String s) {
 		return isEmpty(s, true);
 	}
-	
+
 	/**
 	 * Returns true when the given string is null empty. 
 	 * @param s the string to be checked
@@ -213,7 +213,7 @@ public class CommonUtils {
 		if (trim) s = s.trim();
 		return s.length() == 0;
 	}
-	
+
 	/**
 	 * Returns a list of options for display in default locale.
 	 * @param clazz enum class
@@ -222,7 +222,7 @@ public class CommonUtils {
 	public static String[] getOptions(Class<? extends Enum<?>> clazz) {
 		return getOptions(clazz, Locale.getDefault());
 	}
-	
+
 	/**
 	 * Returns a list of options for display in given locale.
 	 * @param clazz enum class
@@ -231,13 +231,16 @@ public class CommonUtils {
 	 */
 	public static String[] getOptions(Class<? extends Enum<?>> clazz, Locale locale) {
 		Enum<?> enums[] = clazz.getEnumConstants();
-		String rc[] = new String[enums.length];
-		for (int i=0; i<enums.length; i++) {
-			rc[i] = getDisplay(enums[i], locale);
+		if (enums != null) {
+			String rc[] = new String[enums.length];
+			for (int i=0; i<enums.length; i++) {
+				rc[i] = getDisplay(enums[i], locale);
+			}
+			return rc;
 		}
-		return rc;
+		return new String[0];
 	}
-	
+
 	/**
 	 * Returns a list of options from an enumeration class.
 	 * @param clazz enum class
@@ -246,10 +249,10 @@ public class CommonUtils {
 	public static List<Enum<?>> getOptionList(Class<? extends Enum<?>> clazz) {
 		Enum<?> arr[] = clazz.getEnumConstants();
 		List<Enum<?>> rc = new ArrayList<Enum<?>>();
-		for (Enum<?> s: arr) rc.add(s);
+		if (arr != null) for (Enum<?> s: arr) rc.add(s);
 		return rc;
 	}
-	
+
 	/**
 	 * Returns the display string for the default locale.
 	 * @param e enum value
@@ -258,7 +261,7 @@ public class CommonUtils {
 	public static String getDisplay(Enum<?> e) {
 		return getDisplay(e, Locale.getDefault());
 	}
-	
+
 	/**
 	 * Returns the display string for the given locale.
 	 * @param e enum value
@@ -281,7 +284,7 @@ public class CommonUtils {
 	public static Enum<?> getEnum(Class<? extends Enum<?>> clazz, String display) {
 		return getEnum(clazz, display, Locale.getDefault());
 	}
-	
+
 	/**
 	 * Returns the enum constant for given display in given locale.
 	 * @param clazz enum class
@@ -290,8 +293,11 @@ public class CommonUtils {
 	 * @return enum constant
 	 */
 	public static Enum<?> getEnum(Class<? extends Enum<?>> clazz, String display, Locale locale) {
-		for (Enum<?> e : clazz.getEnumConstants()) {
-			if (display.equals(getDisplay(e, locale))) return e;
+		Enum<?> arr[] = clazz.getEnumConstants();
+		if (arr != null) {
+			for (Enum<?> e : arr) {
+				if (display.equals(getDisplay(e, locale))) return e;
+			}
 		}
 		return null;
 	}
@@ -306,15 +312,15 @@ public class CommonUtils {
 	 */
 	public static boolean isCompatibleVersion(String minVersion, String maxVersion, String version) {
 		if (version == null) return true;
-		
+
 		// Check minimum version
 		if ((minVersion != null) && (compareVersion(minVersion, version) > 0)) return false;
 		// Check maximum version
 		if ((maxVersion != null) && (compareVersion(maxVersion, version) < 0)) return false;
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Compares software versions.
 	 * @param v1 - version 1 
@@ -328,7 +334,7 @@ public class CommonUtils {
 		if (v2 != null) v2Parts = v2.split("\\.");
 		return compareVersion(v1Parts, v2Parts);
 	}
-	
+
 	/**
 	 * Compares versions.
 	 * @param v1 - version 1 divided into separate parts
@@ -350,15 +356,15 @@ public class CommonUtils {
 				if (rc != 0) return rc;
 			}
 		}
-		
+
 		// Usually equal here, but check remaining minor versions
 		if (v1.length > v2.length) return 1;
 		if (v1.length < v2.length) return -1;
-		
+
 		// Equal now
 		return 0;
 	}
-	
+
 	/**
 	 * Makes a join of a string array.
 	 * @param separator - the string to be used inbetween parts
@@ -368,7 +374,7 @@ public class CommonUtils {
 	public static String join(String separator, String parts[]) {
 		return join(separator, parts, 0, parts.length+1);
 	}
-	
+
 	/**
 	 * Makes a join of a string array.
 	 * @param separator - the string to be used inbetween parts
@@ -379,7 +385,7 @@ public class CommonUtils {
 	public static String join(String separator, String parts[], int startIndex) {
 		return join(separator, parts, startIndex, parts.length+1);
 	}
-	
+
 	/**
 	 * Makes a join of a string array.
 	 * @param separator - the string to be used inbetween parts
@@ -396,7 +402,7 @@ public class CommonUtils {
 		}
 		return s.toString();
 	}
-	
+
 	/**
 	 * Recursively debugs objects.
 	 * @param o object to debug
@@ -408,7 +414,7 @@ public class CommonUtils {
 		debugObject(b, o);
 		return b.toString();
 	}
-	
+
 	/**
 	 * Recursively debugs objects and adds this in the string buffer.
 	 * @param s string buffer to enhance
@@ -419,7 +425,7 @@ public class CommonUtils {
 		debugObject(b, o);
 		s.append(b);
 	}
-	
+
 	/**
 	 * Recursively debugs objects and adds this in the string builder.
 	 * @param s string builder to enhance
@@ -467,7 +473,7 @@ public class CommonUtils {
 			s.append('}');
 		}
 	}
-	
+
 	/**
 	 * Returns the current time as UNIX timestamp.
 	 * @return time in seconds since January 1st, 1970, 00:00:00 UTC.
@@ -475,7 +481,7 @@ public class CommonUtils {
 	public static long getUnixTimestamp() {
 		return getUnixTimestamp(System.currentTimeMillis());
 	}
-	
+
 	/**
 	 * Returns the given date as UNIX timestamp.
 	 * @param date date object.
@@ -484,7 +490,7 @@ public class CommonUtils {
 	public static long getUnixTimestamp(Date date) {
 		return getUnixTimestamp(date.getTime());
 	}
-	
+
 	/**
 	 * Returns the given date as UNIX timestamp.
 	 * @param date date object.
@@ -493,7 +499,7 @@ public class CommonUtils {
 	public static long getUnixTimestamp(RsDate date) {
 		return getUnixTimestamp(date.getTimeInMillis());
 	}
-	
+
 	/**
 	 * Returns the given Java time as UNIX timestamp.
 	 * @param time Java timestamp
@@ -502,7 +508,7 @@ public class CommonUtils {
 	public static long getUnixTimestamp(long time) {
 		return time / 1000;
 	}
-	
+
 	/**
 	 * Returns an iterable for the given iterator.
 	 * @param iterator the iterator to be wrapped
@@ -511,7 +517,7 @@ public class CommonUtils {
 	public static <T> Iterable<T> iterable(Iterator<T> iterator) {
 		return new IterableImpl<T>(iterator);
 	}
-	
+
 	/**
 	 * Returns the current stacktrace.
 	 * @param ignoreLines the number of lines to be ignored at the top of the trace
@@ -545,21 +551,21 @@ public class CommonUtils {
 		}
 		return rc;
 	}
-	
+
 	/**
 	 * Dumps the stacktrace so stdout.
 	 */
 	public static void stdoutStackTrace() {
 		printStackTrace(System.out, 1);
 	}
-	
+
 	/**
 	 * Dumps the stacktrace so stderr.
 	 */
 	public static void stderrStackTrace() {
 		printStackTrace(System.err, 1);
 	}
-	
+
 	/**
 	 * Dumps the stacktrace into the print stream.
 	 * @param out the stream to be used
@@ -569,7 +575,7 @@ public class CommonUtils {
 			out.println(s);
 		}
 	}
-	
+
 	/**
 	 * Dumps the stacktrace in ERROR mode.
 	 * @param log the logger to be used
@@ -599,7 +605,7 @@ public class CommonUtils {
 			log.debug(s);
 		}
 	}
-	
+
 	/**
 	 * Dumps the stacktrace in TRACE mode.
 	 * @param log the logger to be used
@@ -609,287 +615,287 @@ public class CommonUtils {
 			log.trace(s);
 		}
 	}
-	
-    /**
-     * Loads a property file.
-     * @param file the file to load
-     * @return the properties
-     */
-    public static Properties loadProperties(File file) throws IOException {
-        Properties props = new Properties();
-        loadProperties(props, file);
-        return props;
-    }
-    
-    /**
-     * Loads a property file.
-     * @param file the file to load
-     * @return the properties
-     */
-    public static Properties loadProperties(String file) throws IOException {
-        return loadProperties(new File(file));
-    }
-    
-    /**
-     * Loads a property file.
-     * @param props the properties object
-     * @param file the file to load
-     */
-    public static void loadProperties(Properties props, File file) throws IOException {
-        InputStream in = new FileInputStream(file);
-        try {
-        	props.load(in);
-        } finally {
-        	in.close();
-        }
-    }
 
-    /**
-     * Loads a property file.
-     * @param props the properties object
-     * @param file the file to load
-     */
-    public static void loadProperties(Properties props, String file) throws IOException {
-        loadProperties(props, new File(file));
-    }
-    
-    /**
-     * Stores a property file.
-     * @param props the properties object
-     * @param file the file to load
-     */
-    public static void storeProperties(Properties props, File file) throws IOException {
-        OutputStream out = new FileOutputStream(file);
-        try {
-        	props.store(out, null);
-        } finally {
-        	out.close();
-        }
-    }
+	/**
+	 * Loads a property file.
+	 * @param file the file to load
+	 * @return the properties
+	 */
+	public static Properties loadProperties(File file) throws IOException {
+		Properties props = new Properties();
+		loadProperties(props, file);
+		return props;
+	}
 
-    /**
-     * Stores a property file.
-     * @param props the properties object
-     * @param file the file to load
-     */
-    public static void storeProperties(Properties props, String file) throws IOException {
-        storeProperties(props, new File(file));
-    }
-    
-    /**
-     * Loads the content of the URL as a string.
-     * @param url URL to be loaded
-     * @return the content of the URL
-     * @throws IOException when content of URL cannot be loaded
-     */
-    public static String loadContent(URL url) throws IOException {
-    	return loadContent(url, null);
-    }
-    
-    /**
-     * Loads the content of the URL as a string.
-     * @param url URL to be loaded
-     * @param charset the charset of the content (<code>null</code> for {@link Charset#defaultCharset() default charset})
-     * @return the content of the URL
-     * @throws IOException when content of URL cannot be loaded
-     */
-    public static String loadContent(URL url, Charset charset) throws IOException {
-    	return loadContent(url.openStream(), charset);
-    }
-    
-    /**
-     * Loads the content of a file as a string.
-     * @param name name of file to be loaded
-     * @return the content of the file
-     * @throws IOException when content of file cannot be loaded
-     */
-    public static String loadContent(String name) throws IOException {
-    	return loadContent(name, null);
-    }
-    
-    /**
-     * Loads the content of a file as a string.
-     * @param name name of file to be loaded
-     * @param charset the charset of the content (<code>null</code> for {@link Charset#defaultCharset() default charset})
-     * @return the content of the file
-     * @throws IOException when content of file cannot be loaded
-     */
-    public static String loadContent(String name, Charset charset) throws IOException {
-    	return loadContent(new File(name), charset);
-    }
-    
-    /**
-     * Loads the content of a file as a string.
-     * @param f file to be loaded
-     * @return the content of the file
-     * @throws IOException when content of file cannot be loaded
-     */
-    public static String loadContent(File f) throws IOException {
-    	return loadContent(f, null);    	
-    }
-      
-    /**
-     * Loads the content of a file as a string.
-     * @param f file to be loaded
-     * @param charset the charset of the content (<code>null</code> for {@link Charset#defaultCharset() default charset})
-     * @return the content of the file
-     * @throws IOException when content of file cannot be loaded
-     */
-    public static String loadContent(File f, Charset charset) throws IOException {
-    	return loadContent(new FileInputStream(f), charset);    	
-    }
-      
-    /**
-     * Loads the content of a stream as a string.
-     * @param in stream to be loaded
-     * @return the content of the stream
-     * @throws IOException when content of stream cannot be loaded
-     */
-    public static String loadContent(InputStream in) throws IOException {
-    	return loadContent(in, null);
-    }
+	/**
+	 * Loads a property file.
+	 * @param file the file to load
+	 * @return the properties
+	 */
+	public static Properties loadProperties(String file) throws IOException {
+		return loadProperties(new File(file));
+	}
 
-    /**
-     * Loads the content of a stream as a string.
-     * @param in stream to be loaded
-     * @param charset the charset of the content (<code>null</code> for {@link Charset#defaultCharset() default charset})
-     * @return the content of the stream
-     * @throws IOException when content of stream cannot be loaded
-     */
-    public static String loadContent(InputStream in, Charset charset) throws IOException {
-    	if (charset == null) charset = Charset.defaultCharset();
-    	return loadContent(new InputStreamReader(in, charset));
-    }
+	/**
+	 * Loads a property file.
+	 * @param props the properties object
+	 * @param file the file to load
+	 */
+	public static void loadProperties(Properties props, File file) throws IOException {
+		InputStream in = new FileInputStream(file);
+		try {
+			props.load(in);
+		} finally {
+			in.close();
+		}
+	}
 
-    /**
-     * Loads the content of a reader as a string.
-     * @param reader reader to be loaded
-     * @return the content of the reader
-     * @throws IOException when content of reader cannot be loaded
-     */
-    public static String loadContent(Reader reader) throws IOException {
-    	BufferedReader r = null;
-    	try {
-    		StringBuilder rc = new StringBuilder(1000);
-    		r = new BufferedReader(reader);
-    		String line = null;
-    		while ((line = r.readLine()) != null) {
-    			rc.append(line);
-    			rc.append('\n');
-    		}
-    		return rc.toString();
-    	} finally {
-    		if (r != null) r.close();
-    		else reader.close();
-    	}
-    }
+	/**
+	 * Loads a property file.
+	 * @param props the properties object
+	 * @param file the file to load
+	 */
+	public static void loadProperties(Properties props, String file) throws IOException {
+		loadProperties(props, new File(file));
+	}
 
-    /**
-     * Writes the string to a file.
-     * @param name name of file to be written to
-     * @param content the content to be written
-     * @throws IOException when content cannot be written
-     */
-    public static void writeContent(String name, String content) throws IOException {
-    	writeContent(name, content, null);
-    }
-    
-    /**
-     * Writes the string to a file.
-     * @param name name of file to be written to
-     * @param content the content to be written
-     * @param charset the charset of the content (<code>null</code> for {@link Charset#defaultCharset() default charset})
-     * @throws IOException when content cannot be written
-     */
-    public static void writeContent(String name, String content, Charset charset) throws IOException {
-    	writeContent(new File(name), content, charset);
-    }
-    
-    /**
-     * Writes the string to a file.
-     * @param f file to be written to
-     * @param content the content to be written
-     * @throws IOException when content cannot be written
-     */
-    public static void writeContent(File f, String content) throws IOException {
-    	writeContent(f, content, null);    	
-    }
+	/**
+	 * Stores a property file.
+	 * @param props the properties object
+	 * @param file the file to load
+	 */
+	public static void storeProperties(Properties props, File file) throws IOException {
+		OutputStream out = new FileOutputStream(file);
+		try {
+			props.store(out, null);
+		} finally {
+			out.close();
+		}
+	}
 
-    /**
-     * Writes the string to a file.
-     * @param f file to be written to
-     * @param content the content to be written
-     * @param charset the charset of the content (<code>null</code> for {@link Charset#defaultCharset() default charset})
-     * @throws IOException when content cannot be written
-     */
-    public static void writeContent(File f, String content, Charset charset) throws IOException {
-    	writeContent(new FileOutputStream(f), content, charset);    	
-    }
+	/**
+	 * Stores a property file.
+	 * @param props the properties object
+	 * @param file the file to load
+	 */
+	public static void storeProperties(Properties props, String file) throws IOException {
+		storeProperties(props, new File(file));
+	}
 
-    /**
-     * Writes the string to a stream.
-     * @param out stream to be written to
-     * @param content the content to be written
-     * @throws IOException when content cannot be written
-     */
-    public static void writeContent(OutputStream out, String content) throws IOException {
-    	writeContent(out, content, null);
-    }
-    
-    /**
-     * Writes the string to a stream.
-     * @param out stream to be written to
-     * @param content the content to be written
-     * @param charset the charset of the content (<code>null</code> for {@link Charset#defaultCharset() default charset})
-     * @throws IOException when content cannot be written
-     */
-    public static void writeContent(OutputStream out, String content, Charset charset) throws IOException {
-    	if (charset == null) charset = Charset.defaultCharset();
-    	writeContent(new OutputStreamWriter(out, charset), content);
-    }
+	/**
+	 * Loads the content of the URL as a string.
+	 * @param url URL to be loaded
+	 * @return the content of the URL
+	 * @throws IOException when content of URL cannot be loaded
+	 */
+	public static String loadContent(URL url) throws IOException {
+		return loadContent(url, null);
+	}
 
-    /**
-     * Writes the string to a writer.
-     * @param writer writer to be written to
-     * @param content the content to be written
-     * @throws IOException when content cannot be written
-     */
-    public static void writeContent(Writer writer, String content) throws IOException {
-    	try {
-    		writer.write(content);
-    	} finally {
-    		if (writer != null) writer.close();
-    	}
-    }
+	/**
+	 * Loads the content of the URL as a string.
+	 * @param url URL to be loaded
+	 * @param charset the charset of the content (<code>null</code> for {@link Charset#defaultCharset() default charset})
+	 * @return the content of the URL
+	 * @throws IOException when content of URL cannot be loaded
+	 */
+	public static String loadContent(URL url, Charset charset) throws IOException {
+		return loadContent(url.openStream(), charset);
+	}
 
-    /**
-     * Tells whether runtime is a Windows system. 
-     * @return <code>true</code> when OS is a Windows system
-     */
+	/**
+	 * Loads the content of a file as a string.
+	 * @param name name of file to be loaded
+	 * @return the content of the file
+	 * @throws IOException when content of file cannot be loaded
+	 */
+	public static String loadContent(String name) throws IOException {
+		return loadContent(name, null);
+	}
+
+	/**
+	 * Loads the content of a file as a string.
+	 * @param name name of file to be loaded
+	 * @param charset the charset of the content (<code>null</code> for {@link Charset#defaultCharset() default charset})
+	 * @return the content of the file
+	 * @throws IOException when content of file cannot be loaded
+	 */
+	public static String loadContent(String name, Charset charset) throws IOException {
+		return loadContent(new File(name), charset);
+	}
+
+	/**
+	 * Loads the content of a file as a string.
+	 * @param f file to be loaded
+	 * @return the content of the file
+	 * @throws IOException when content of file cannot be loaded
+	 */
+	public static String loadContent(File f) throws IOException {
+		return loadContent(f, null);    	
+	}
+
+	/**
+	 * Loads the content of a file as a string.
+	 * @param f file to be loaded
+	 * @param charset the charset of the content (<code>null</code> for {@link Charset#defaultCharset() default charset})
+	 * @return the content of the file
+	 * @throws IOException when content of file cannot be loaded
+	 */
+	public static String loadContent(File f, Charset charset) throws IOException {
+		return loadContent(new FileInputStream(f), charset);    	
+	}
+
+	/**
+	 * Loads the content of a stream as a string.
+	 * @param in stream to be loaded
+	 * @return the content of the stream
+	 * @throws IOException when content of stream cannot be loaded
+	 */
+	public static String loadContent(InputStream in) throws IOException {
+		return loadContent(in, null);
+	}
+
+	/**
+	 * Loads the content of a stream as a string.
+	 * @param in stream to be loaded
+	 * @param charset the charset of the content (<code>null</code> for {@link Charset#defaultCharset() default charset})
+	 * @return the content of the stream
+	 * @throws IOException when content of stream cannot be loaded
+	 */
+	public static String loadContent(InputStream in, Charset charset) throws IOException {
+		if (charset == null) charset = Charset.defaultCharset();
+		return loadContent(new InputStreamReader(in, charset));
+	}
+
+	/**
+	 * Loads the content of a reader as a string.
+	 * @param reader reader to be loaded
+	 * @return the content of the reader
+	 * @throws IOException when content of reader cannot be loaded
+	 */
+	public static String loadContent(Reader reader) throws IOException {
+		BufferedReader r = null;
+		try {
+			StringBuilder rc = new StringBuilder(1000);
+			r = new BufferedReader(reader);
+			String line = null;
+			while ((line = r.readLine()) != null) {
+				rc.append(line);
+				rc.append('\n');
+			}
+			return rc.toString();
+		} finally {
+			if (r != null) r.close();
+			else reader.close();
+		}
+	}
+
+	/**
+	 * Writes the string to a file.
+	 * @param name name of file to be written to
+	 * @param content the content to be written
+	 * @throws IOException when content cannot be written
+	 */
+	public static void writeContent(String name, String content) throws IOException {
+		writeContent(name, content, null);
+	}
+
+	/**
+	 * Writes the string to a file.
+	 * @param name name of file to be written to
+	 * @param content the content to be written
+	 * @param charset the charset of the content (<code>null</code> for {@link Charset#defaultCharset() default charset})
+	 * @throws IOException when content cannot be written
+	 */
+	public static void writeContent(String name, String content, Charset charset) throws IOException {
+		writeContent(new File(name), content, charset);
+	}
+
+	/**
+	 * Writes the string to a file.
+	 * @param f file to be written to
+	 * @param content the content to be written
+	 * @throws IOException when content cannot be written
+	 */
+	public static void writeContent(File f, String content) throws IOException {
+		writeContent(f, content, null);    	
+	}
+
+	/**
+	 * Writes the string to a file.
+	 * @param f file to be written to
+	 * @param content the content to be written
+	 * @param charset the charset of the content (<code>null</code> for {@link Charset#defaultCharset() default charset})
+	 * @throws IOException when content cannot be written
+	 */
+	public static void writeContent(File f, String content, Charset charset) throws IOException {
+		writeContent(new FileOutputStream(f), content, charset);    	
+	}
+
+	/**
+	 * Writes the string to a stream.
+	 * @param out stream to be written to
+	 * @param content the content to be written
+	 * @throws IOException when content cannot be written
+	 */
+	public static void writeContent(OutputStream out, String content) throws IOException {
+		writeContent(out, content, null);
+	}
+
+	/**
+	 * Writes the string to a stream.
+	 * @param out stream to be written to
+	 * @param content the content to be written
+	 * @param charset the charset of the content (<code>null</code> for {@link Charset#defaultCharset() default charset})
+	 * @throws IOException when content cannot be written
+	 */
+	public static void writeContent(OutputStream out, String content, Charset charset) throws IOException {
+		if (charset == null) charset = Charset.defaultCharset();
+		writeContent(new OutputStreamWriter(out, charset), content);
+	}
+
+	/**
+	 * Writes the string to a writer.
+	 * @param writer writer to be written to
+	 * @param content the content to be written
+	 * @throws IOException when content cannot be written
+	 */
+	public static void writeContent(Writer writer, String content) throws IOException {
+		try {
+			writer.write(content);
+		} finally {
+			if (writer != null) writer.close();
+		}
+	}
+
+	/**
+	 * Tells whether runtime is a Windows system. 
+	 * @return <code>true</code> when OS is a Windows system
+	 */
 	public static boolean isWindows() {
 		return OS.indexOf("win") >= 0;
 	}
- 
-    /**
-     * Tells whether runtime is a Mac system. 
-     * @return <code>true</code> when OS is a Mac system
-     */
+
+	/**
+	 * Tells whether runtime is a Mac system. 
+	 * @return <code>true</code> when OS is a Mac system
+	 */
 	public static boolean isMac() {
 		return OS.indexOf("mac") >= 0;
 	}
- 
-    /**
-     * Tells whether runtime is a Unix system. 
-     * @return <code>true</code> when OS is a Unix system
-     */
+
+	/**
+	 * Tells whether runtime is a Unix system. 
+	 * @return <code>true</code> when OS is a Unix system
+	 */
 	public static boolean isUnix() {
 		return (OS.indexOf("nix") >= 0) || (OS.indexOf("nux") >= 0) || (OS.indexOf("aix") > 0) || (OS.indexOf("sunos") >= 0);
 	}
- 
-    /**
-     * Tells whether runtime is a Windows system. 
-     * @return <code>true</code> when OS is a Windows system
-     */
+
+	/**
+	 * Tells whether runtime is a Windows system. 
+	 * @return <code>true</code> when OS is a Windows system
+	 */
 	public static boolean isSolaris() {
 		return OS.indexOf("sunos") >= 0;
 	}
@@ -901,11 +907,11 @@ public class CommonUtils {
 	public static String getOS() {
 		return OS;
 	}
-	
+
 	public static String getDisplay(Object o) {
 		return getDisplay(o, Locale.getDefault());
 	}
-	
+
 	/**
 	 * Returns the display string of an object.
 	 * The method detects {@link IDisplayable}, {@link IDisplayProvider} and {@link NamedObject}.
@@ -916,13 +922,13 @@ public class CommonUtils {
 	public static String getDisplay(Object o, Locale locale) {
 		if (o == null) return "";
 		String rc = o.toString();
-		
+
 		if (o instanceof IDisplayable) rc = ((IDisplayable)o).toString(locale);
 		else if (o instanceof IDisplayProvider) rc = ((IDisplayProvider)o).getDisplay();
 		else if (o instanceof NamedObject) rc = ((NamedObject)o).getName();
 		return rc;
 	}
-	
+
 	/**
 	 * Set the anchor id for at the given URL.
 	 * @param url url to be modified
