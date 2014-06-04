@@ -10,7 +10,6 @@
 		<project.home>http://techblog.ralph-schuster.eu/rs-library/</project.home>
 	</properties>
 
-	<groupId>eu.ralph-schuster</groupId>
 	<artifactId>libs</artifactId>
 	<version>1.2.6-SNAPSHOT</version>
 	<packaging>pom</packaging>
@@ -20,15 +19,15 @@
 	<description>A collection of utilities</description>
 
 	<scm>
-		<connection>scm:svn:https://h2031995.stratoserver.net/svn/OSS/eu.ralph-schuster.libs/trunk</connection>
-		<developerConnection>scm:svn:https://h2031995.stratoserver.net/svn/OSS/eu.ralph-schuster.libs/trunk</developerConnection>
-		<url>https://h2031995.stratoserver.net/svn/OSS/eu.ralph-schuster.libs/trunk</url>
+		<connection>scm:svn:https://svn.ralph-schuster.eu/svn/OSS/eu.ralph-schuster.libs/trunk</connection>
+		<developerConnection>scm:svn:https://svn.ralph-schuster.eu/svn/OSS/eu.ralph-schuster.libs/trunk</developerConnection>
+		<url>https://svn.ralph-schuster.eu/svn/OSS/eu.ralph-schuster.libs/trunk</url>
 	</scm>
 
 	<distributionManagement>
 		<site>
 			<id>strato-server</id>
-			<url>scp://h2031995.stratoserver.net/var/www/vhosts/ralph-schuster.eu/download/eu.ralph-schuster.libs/${project.version}</url>
+			<url>scp://download.ralph-schuster.eu/var/www/vhosts/ralph-schuster.eu/download/eu.ralph-schuster.libs/${project.version}</url>
 		</site>
 	</distributionManagement>
 
