@@ -9,6 +9,7 @@
 
 	<properties>
 		<project.home>http://techblog.ralph-schuster.eu/rs-library/data-hibernate/</project.home>
+		<hibernate.version>4.2.10.Final</hibernate.version>
 	</properties>
 
 	<artifactId>data-hibernate</artifactId>
@@ -30,12 +31,12 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
-			<version>4.2.3.Final</version>
+			<version>${hibernate.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
-			<version>4.2.3.Final</version>
+			<version>${hibernate.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.ow2.spec.ee</groupId>
