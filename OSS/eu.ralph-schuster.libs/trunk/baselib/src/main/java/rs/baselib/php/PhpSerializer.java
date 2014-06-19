@@ -26,6 +26,7 @@ import java.util.Map;
  * <p>Implementation based on pherialize by Klaus Reimer: 
  * {@link https://github.com/kayahr/pherialize/blob/master/}</p>
  * @author ralph
+ * @since 1.2.6
  */
 public class PhpSerializer {
 
@@ -34,6 +35,7 @@ public class PhpSerializer {
 	 *
 	 * @param object object to serialize
 	 * @return The serialized data
+	 * @since 1.2.6
 	 */
 	public static String serialize(Object object) {
 		return serialize(object, null);
@@ -45,6 +47,7 @@ public class PhpSerializer {
 	 * @param object object to serialize
 	 * @param charset to be used
 	 * @return The serialized data
+	 * @since 1.2.6
 	 */
 	public static String serialize(Object object, Charset charset) {
 		StringBuilder buffer;
