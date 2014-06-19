@@ -17,7 +17,6 @@
  */
 package rs.baselib.util;
 
-import org.slf4j.Logger;
 
 /**
  * A definition of log levels for internal uses.
