@@ -44,7 +44,7 @@ public class ReleaseRepositoryTest {
 		if (infos.size() == 0) infos = ReleaseRepository.INSTANCE.getVersionInfos(ReleaseRepository.BASELIB_GROUP_ID, ReleaseRepository.BUNDLE_ARTIFACT_ID);
 		assertTrue("No release information for baselib", infos.size() > 0);
 		for (ReleaseInformation info : infos) {
-			assertTrue("Wrong SVN Repository", info.isSnapshot() || info.getSvnRepository().indexOf("h2031995.stratoserver.net") > 0 || info.getSvnPath().contains("eu.ralph-schuster.baselib"));
+			assertTrue("Wrong SVN Repository", info.isSnapshot() || info.getSvnRepository().indexOf("svn.ralph-schuster.eu") > 0 || info.getSvnPath().contains("eu.ralph-schuster.baselib"));
 		}
 	}
 
