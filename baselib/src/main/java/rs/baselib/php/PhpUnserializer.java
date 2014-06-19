@@ -27,6 +27,7 @@ import java.util.Map;
  * <p>Implementation based on pherialize by Klaus Reimer: 
  * {@link https://github.com/kayahr/pherialize/blob/master/}</p>
  * @author ralph
+ * @since 1.2.6
  */
 public class PhpUnserializer {
 
@@ -34,6 +35,7 @@ public class PhpUnserializer {
 	 * Unserializes string to an object.
 	 * @param data the data string
 	 * @return The unserialized object
+	 * @since 1.2.6
 	 */
 	public static Object unserialize(String data) {	
 		return unserialize(data, (Charset)null);
@@ -44,6 +46,7 @@ public class PhpUnserializer {
 	 * @param data the data string
 	 * @param charset the charset to use
 	 * @return The unserialized object
+	 * @since 1.2.6
 	 */
 	public static Object unserialize(String data, Charset charset) {	
 		return unserialize(data, new ParseInfo(charset));

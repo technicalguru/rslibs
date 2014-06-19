@@ -20,6 +20,7 @@ package rs.baselib.php;
 /**
  * Exception occurred while serializing
  * @author ralph
+ * @since 1.2.6
  *
  */
 public class PhpUnserializeException extends RuntimeException {

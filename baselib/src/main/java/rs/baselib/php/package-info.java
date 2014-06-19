@@ -18,6 +18,7 @@
 /**
  * Providing serializing support for PHP communication.
  * @author ralph
+ * @since 1.2.6
  *
  */
 package rs.baselib.php;
