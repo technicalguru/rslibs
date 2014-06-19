@@ -24,8 +24,8 @@ import java.util.Map;
 
 /**
  * Unerializes PHP format string to Java objects.
- * <p>Implementation based on pherialize by Klaus Reimer: 
- * {@link https://github.com/kayahr/pherialize/blob/master/}</p>
+ * <p>Implementation based on pherialize by Klaus Reimer:
+ *  https://github.com/kayahr/pherialize/blob/master</p>
  * @author ralph
  * @since 1.2.6
  */

@@ -25,14 +25,14 @@ package rs.baselib.util;
  */
 public enum LogLevel {
 
-	/** SLF4J Trace level. See {@link Logger#trace(String)}. */
+	/** SLF4J Trace level. See {@link org.slf4j.Logger#trace(String)}. */
 	TRACE,
-	/** SLF4J Debug level. See {@link Logger#debug(String)}. */
+	/** SLF4J Debug level. See {@link org.slf4j.Logger#debug(String)}. */
 	DEBUG,
-	/** SLF4J Info level. See {@link Logger#info(String)}. */
+	/** SLF4J Info level. See {@link org.slf4j.Logger#info(String)}. */
 	INFO,
-	/** SLF4J Warning level. See {@link Logger#warn(String)}. */
+	/** SLF4J Warning level. See {@link org.slf4j.Logger#warn(String)}. */
 	WARN,
-	/** SLF4J Error level. See {@link Logger#error(String)}. */
+	/** SLF4J Error level. See {@link org.slf4j.Logger#error(String)}. */
 	ERROR
 }
