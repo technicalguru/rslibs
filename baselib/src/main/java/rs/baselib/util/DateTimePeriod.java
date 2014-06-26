@@ -30,17 +30,17 @@ public class DateTimePeriod implements Serializable {
 	 * Serial UID.
 	 */
 	private static final long serialVersionUID = 7921353873601015818L;
-	
+
 	private RsDate from;
 	private RsDate until;
-	
+
 	/**
 	 * Constructor.
 	 */
 	public DateTimePeriod() {
 		this(null, null);
 	}
-	
+
 	/**
 	 * Constructor.
 	 */
@@ -52,8 +52,13 @@ public class DateTimePeriod implements Serializable {
 	 * Constructor.
 	 */
 	public DateTimePeriod(RsDate from, RsDate until) {
-		setFrom(from);
-		setUntil(until);
+		if ((from != null) && (until != null) && from.after(until)) {
+			setFrom(until);
+			setUntil(from);
+		} else {
+			setFrom(from);
+			setUntil(until);
+		}
 	}
 
 	/**
@@ -98,7 +103,7 @@ public class DateTimePeriod implements Serializable {
 		if ((from == null) || (until == null)) return -1;
 		return until.getTimeInMillis()-from.getTimeInMillis();
 	}
-	
+
 	/**
 	 * Tells whether date is in this range.
 	 * @param date date to be checked
@@ -156,7 +161,7 @@ public class DateTimePeriod implements Serializable {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Returns a deep copy of this period.
 	 * @return deep copy
