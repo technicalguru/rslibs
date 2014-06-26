@@ -250,7 +250,8 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 			if (rc instanceof IConfigurable) ConfigurationUtils.configure((IConfigurable)rc, config);
 
 			// Add the DAO to our list
-			registerDao(rc);
+			String name = config.getString("[@name]");
+			registerDao(name, rc);
 		} catch (Exception e) {
 			throw new RuntimeException("Cannot load class from configuration", e);
 		} finally {
@@ -312,14 +313,24 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 	 */
 	@Override
 	public void registerDao(IGeneralDAO<? extends Serializable,? extends IGeneralBO<? extends Serializable>> dao) {
+		registerDao(dao.getClass().getName(), dao);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void registerDao(String name, IGeneralDAO<? extends Serializable,? extends IGeneralBO<? extends Serializable>> dao) {
+		if (name == null) name = dao.getClass().getName();
+		
 		dao.setFactory(this); // Just in case
 		
 		// Add the factory as a listener
 		dao.addDaoListener(daoListener);
 
-		this.daos.put(dao.getClass().getName(), dao);
+		this.daos.put(name, dao);
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -337,6 +348,15 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 			}
 		}
 		return rc;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@SuppressWarnings("unchecked")
+	public <X extends IGeneralDAO<?, ?>> X getDao(String name, Class<X> clazz) {
+		return (X) daos.get(name);
 	}
 
 	/**

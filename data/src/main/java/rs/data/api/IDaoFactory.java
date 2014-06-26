@@ -119,17 +119,35 @@ public interface IDaoFactory {
 	public <B extends IGeneralBO<?>> IGeneralDAO<?,B> getDaoFor(Class<B> clazz);
 	
 	/**
-	 * Registers a DAO with this factory.
+	 * Registers a DAO with this factory (under its class name).
 	 * @param dao the DAO to be registered.
 	 */
 	public void registerDao(IGeneralDAO<? extends Serializable,? extends IGeneralBO<? extends Serializable>> dao);
 
 	/**
-	 * Returns a registered DAO of given class
+	 * Registers a DAO with this factory.
+	 * @param name name of registration
+	 * @param dao the DAO to be registered.
+	 */
+	public void registerDao(String name, IGeneralDAO<? extends Serializable,? extends IGeneralBO<? extends Serializable>> dao);
+	
+	/**
+	 * Returns a registered DAO of given class (registered under its class name).
+	 * <p>The method will try to return the DAO registered under the class name. If that cannopt be found then the
+	 * first object found being an instance of the class will be returned.</p>
 	 * @param clazz the class of the DAO to be returned
 	 * @return the DAO or null if not registered
 	 */
 	public <X extends IGeneralDAO<?, ?>> X getDao(Class<X> clazz);
+
+	/**
+	 * Returns a registered DAO of given class.
+	 * @param name the name of the registration
+	 * @param clazz the class of the DAO to be returned
+	 * @return the DAO or null if not registered
+	 * @throws ClassCastException when the registered object is not an instance of the given class.
+	 */
+	public <X extends IGeneralDAO<?, ?>> X getDao(String name, Class<X> clazz);
 
 	/**
 	 * Return an iterable of the registered DAOs.
