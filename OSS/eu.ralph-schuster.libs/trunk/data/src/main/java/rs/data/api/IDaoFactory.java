@@ -128,6 +128,7 @@ public interface IDaoFactory {
 	 * Registers a DAO with this factory.
 	 * @param name name of registration
 	 * @param dao the DAO to be registered.
+	 * @since 1.2.7
 	 */
 	public void registerDao(String name, IGeneralDAO<? extends Serializable,? extends IGeneralBO<? extends Serializable>> dao);
 	
@@ -146,6 +147,7 @@ public interface IDaoFactory {
 	 * @param clazz the class of the DAO to be returned
 	 * @return the DAO or null if not registered
 	 * @throws ClassCastException when the registered object is not an instance of the given class.
+	 * @since 1.2.7
 	 */
 	public <X extends IGeneralDAO<?, ?>> X getDao(String name, Class<X> clazz);
 
