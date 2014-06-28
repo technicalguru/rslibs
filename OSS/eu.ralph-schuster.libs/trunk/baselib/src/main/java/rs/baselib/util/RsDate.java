@@ -115,4 +115,14 @@ public class RsDate extends GregorianCalendar {
 		if (timestamp == 0) return null;
 		return new RsDate(timestamp);
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return "RsDate ["+getTime()+"]";
+	}
+	
+	
 }

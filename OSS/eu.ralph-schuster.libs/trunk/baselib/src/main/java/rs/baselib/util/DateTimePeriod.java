@@ -163,6 +163,14 @@ public class DateTimePeriod implements Serializable {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return "DateTimePeriod [from=" + from + ", until=" + until + "]";
+	}
+
+	/**
 	 * Returns a deep copy of this period.
 	 * @return deep copy
 	 */
