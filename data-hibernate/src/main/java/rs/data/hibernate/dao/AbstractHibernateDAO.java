@@ -420,11 +420,12 @@ public abstract class AbstractHibernateDAO<K extends Serializable, T extends Gen
 	 */
 	protected int deleteByCriteria(Criterion criterions[]) {
 		int rc = 0;
-		Iterator<T> i = _iterateByCriteria(criterions, null);
+		IDaoIterator<T> i = _iterateByCriteria(criterions, null);
 		while (i.hasNext()) {
 			_delete(i.next());
 			rc++;
 		}
+		i.close();
 		return rc;
 	}
 
