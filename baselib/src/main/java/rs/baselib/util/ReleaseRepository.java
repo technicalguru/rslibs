@@ -77,7 +77,11 @@ public class ReleaseRepository {
 			Collection<JarDescriptor> descs = ResourceList.getJars();
 			for (JarDescriptor desc : descs) addJar(desc);
 			Collection<File> dirs = ResourceList.getDirectories();
-			for (File dir : dirs) addProperties(new File(dir, "build.properties"));
+			for (File dir : dirs) {
+				if (!addProperties(new File(dir, "build.properties"))) {
+					addProperties(new File(dir, "WEB-INF/classes/build.properties"));
+				}
+			}
 		} catch (IOException e) {
 			log.error("Cannot load baselib version information: ", e);
 		}
@@ -102,7 +106,11 @@ public class ReleaseRepository {
 		// Load properties from standard build.properties file
 		if (!added) try {
 			// Try to add build.properties
-			added = addBuildProperties(new URL(desc.getUrlPrefix()+"build.properties"));
+			if (desc.getFile().getName().endsWith("war")) {
+				added = addBuildProperties(new URL(desc.getUrlPrefix()+"WEB-INF/classes/build.properties"));
+			} else {
+				added = addBuildProperties(new URL(desc.getUrlPrefix()+"build.properties"));
+			}
 		} catch (IOException e) {
 			// Ignore: no such info
 		}
