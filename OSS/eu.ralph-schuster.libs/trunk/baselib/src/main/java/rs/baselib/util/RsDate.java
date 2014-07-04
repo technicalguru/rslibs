@@ -63,6 +63,64 @@ public class RsDate extends GregorianCalendar {
 	}
 
 	/**
+	 * Constructor.
+	 * <p>time will be 00:00:00.000.</p>
+	 * @param year year value
+	 * @param month month value (0-11)
+	 * @param dayOfMonth day of month value (1-31)
+	 */
+	public RsDate(int year, int month, int dayOfMonth) {
+		this(year, month, dayOfMonth, 0, 0, 0, 0);
+	}
+
+	/**
+	 * Constructor.
+	 * <p>{@link Calendar#SECOND}s and {@link Calendar#MILLISECOND}s will be 0.</p>
+	 * @param year year value
+	 * @param month month value (0-11)
+	 * @param dayOfMonth day of month value (1-31)
+	 * @param hourOfDay hoir of day (0-23)
+	 * @param minute minute value (0-59)
+	 */
+	public RsDate(int year, int month, int dayOfMonth, int hourOfDay, int minute) {
+		this(year, month, dayOfMonth, hourOfDay, minute, 0, 0);
+	}
+
+	/**
+	 * Constructor.
+	 * <p>{@link Calendar#MILLISECOND}s will be 0.</p>
+	 * @param year year value
+	 * @param month month value (0-11)
+	 * @param dayOfMonth day of month value (1-31)
+	 * @param hourOfDay hoir of day (0-23)
+	 * @param minute minute value (0-59)
+	 * @param seconds seconds value(0-59)
+	 */
+	public RsDate(int year, int month, int dayOfMonth, int hourOfDay, int minute, int seconds) {
+		this(year, month, dayOfMonth, hourOfDay, minute, seconds, 0);
+	}
+	
+	/**
+	 * Constructor.
+	 * @param year year value
+	 * @param month month value (0-11)
+	 * @param dayOfMonth day of month value (1-31)
+	 * @param hourOfDay hoir of day (0-23)
+	 * @param minute minute value (0-59)
+	 * @param seconds seconds value(0-59)
+	 * @param milliseconds milliseconds value (0-999)
+	 */
+	public RsDate(int year, int month, int dayOfMonth, int hourOfDay, int minute, int seconds, int milliseconds) {
+		set(Calendar.YEAR,         year);
+		set(Calendar.MONTH,        month);
+		set(Calendar.DAY_OF_MONTH, dayOfMonth);
+		set(Calendar.HOUR_OF_DAY,  hourOfDay);
+		set(Calendar.MINUTE,       minute);
+		set(Calendar.SECOND,       seconds);
+		set(Calendar.MILLISECOND,  milliseconds);
+	}
+	
+	/**
 	 * Returns the year object for this date.
 	 * @return year
 	 */
