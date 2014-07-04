@@ -23,6 +23,7 @@ import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -57,9 +58,9 @@ public class SimpleLicenseTest extends AbstractLicenseTest {
 	public static Collection<Object[]> data() throws Exception {
 		Collection<Object[]> data = new ArrayList<Object[]>();
 		data.add(new Object[] { 1, 0L, "aLicenseHolder" });
-		data.add(new Object[] { 1, System.currentTimeMillis()+2000L, "aLicenseHolder" });
-		data.add(new Object[] { 1, System.currentTimeMillis()+2000L, "a2ndLicenseHolder" });
-		data.add(new Object[] { 2, System.currentTimeMillis()+2000L, "a2ndLicenseHolder" });
+		data.add(new Object[] { 1, System.currentTimeMillis()+DateUtils.MILLIS_PER_HOUR, "aLicenseHolder" });
+		data.add(new Object[] { 1, System.currentTimeMillis()+DateUtils.MILLIS_PER_HOUR, "a2ndLicenseHolder" });
+		data.add(new Object[] { 2, System.currentTimeMillis()+DateUtils.MILLIS_PER_HOUR, "a2ndLicenseHolder" });
 		return data;
 	}
 	
