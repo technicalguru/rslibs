@@ -65,10 +65,25 @@
 		</plugins>
 	</reporting>
 
-
 	<repositories>
 		<repository>
-			<id>ow2</id>
+			<id>ow2-snapshots</id>
+			<name>ObjectWeb Repository</name>
+			<releases>
+				<enabled>false</enabled>
+				<updatePolicy>never</updatePolicy>
+				<checksumPolicy>warn</checksumPolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+				<checksumPolicy>fail</checksumPolicy>
+			</snapshots>
+			<url>http://repository.ow2.org/nexus/content/repositories/snapshots</url>
+			<layout>default</layout>
+		</repository>
+		<repository>
+			<id>ow2-releases</id>
 			<name>ObjectWeb Repository</name>
 			<releases>
 				<enabled>true</enabled>
@@ -76,11 +91,11 @@
 				<checksumPolicy>warn</checksumPolicy>
 			</releases>
 			<snapshots>
-				<enabled>true</enabled>
+				<enabled>false</enabled>
 				<updatePolicy>never</updatePolicy>
 				<checksumPolicy>fail</checksumPolicy>
 			</snapshots>
-			<url>http://repository.ow2.org/nexus/content/groups/public</url>
+			<url>http://repository.ow2.org/nexus/content/repositories/releases</url>
 			<layout>default</layout>
 		</repository>
 	</repositories>
