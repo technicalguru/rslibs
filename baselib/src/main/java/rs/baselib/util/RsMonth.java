@@ -20,6 +20,7 @@ package rs.baselib.util;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * A month.
@@ -41,6 +42,14 @@ public class RsMonth extends RsDate {
 	 * Constructor.
 	 */
 	public RsMonth() {
+		this(TimeZone.getDefault());
+	}
+
+	/**
+	 * Constructor.
+	 */
+	public RsMonth(TimeZone timezone) {
+		setTimeZone(timezone != null ? timezone : TimeZone.getDefault());
 		ensureBegin();
 	}
 
@@ -73,7 +82,15 @@ public class RsMonth extends RsDate {
 	 * Constructor.
 	 */
 	public RsMonth(int month, int year) {
+		this(TimeZone.getDefault(), month, year);
+	}
+
+	/**
+	 * Constructor.
+	 */
+	public RsMonth(TimeZone timezone, int month, int year) {
 		super(0);
+		setTimeZone(timezone != null ? timezone : TimeZone.getDefault());
 		set(MONTH, month);
 		set(YEAR, year);
 		ensureBegin();
