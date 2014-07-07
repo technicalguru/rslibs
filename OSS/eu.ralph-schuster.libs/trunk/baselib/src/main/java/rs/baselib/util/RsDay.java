@@ -20,6 +20,7 @@ package rs.baselib.util;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * A day.
@@ -41,6 +42,14 @@ public class RsDay extends RsDate {
 	 * Constructor.
 	 */
 	public RsDay() {
+		this(TimeZone.getDefault());
+	}
+
+	/**
+	 * Constructor.
+	 */
+	public RsDay(TimeZone timezone) {
+		setTimeZone(timezone != null ? timezone : TimeZone.getDefault());
 		ensureBegin();
 	}
 
@@ -73,7 +82,15 @@ public class RsDay extends RsDate {
 	 * Constructor.
 	 */
 	public RsDay(int day, int month, int year) {
+		this(TimeZone.getDefault(), day, month, year);
+	}
+
+	/**
+	 * Constructor.
+	 */
+	public RsDay(TimeZone timezone, int day, int month, int year) {
 		super(0);
+		setTimeZone(timezone != null ? timezone : TimeZone.getDefault());
 		set(DAY_OF_MONTH, day);
 		set(MONTH, month);
 		set(YEAR, year);

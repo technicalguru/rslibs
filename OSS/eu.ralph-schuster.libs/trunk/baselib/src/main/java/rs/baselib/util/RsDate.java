@@ -21,6 +21,7 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 /**
  * A {@link Date} replacement object to allow better date computations.
@@ -38,6 +39,14 @@ public class RsDate extends GregorianCalendar {
 	 * Constructor.
 	 */
 	public RsDate() {
+		this(TimeZone.getDefault());
+	}
+
+	/**
+	 * Constructor.
+	 */
+	public RsDate(TimeZone timezone) {
+		setTimeZone(timezone != null ? timezone : TimeZone.getDefault());
 	}
 
 	/**
@@ -63,18 +72,30 @@ public class RsDate extends GregorianCalendar {
 	}
 
 	/**
-	 * Constructor.
+	 * Constructor with default timezone.
 	 * <p>time will be 00:00:00.000.</p>
 	 * @param year year value
 	 * @param month month value (0-11)
 	 * @param dayOfMonth day of month value (1-31)
 	 */
 	public RsDate(int year, int month, int dayOfMonth) {
-		this(year, month, dayOfMonth, 0, 0, 0, 0);
+		this(TimeZone.getDefault(), year, month, dayOfMonth, 0, 0, 0, 0);
 	}
 
 	/**
 	 * Constructor.
+	 * <p>time will be 00:00:00.000.</p>
+	 * @param timezone the timezone to be used
+	 * @param year year value
+	 * @param month month value (0-11)
+	 * @param dayOfMonth day of month value (1-31)
+	 */
+	public RsDate(TimeZone timezone, int year, int month, int dayOfMonth) {
+		this(timezone, year, month, dayOfMonth, 0, 0, 0, 0);
+	}
+
+	/**
+	 * Constructor with default timezone.
 	 * <p>{@link Calendar#SECOND}s and {@link Calendar#MILLISECOND}s will be 0.</p>
 	 * @param year year value
 	 * @param month month value (0-11)
@@ -83,11 +104,25 @@ public class RsDate extends GregorianCalendar {
 	 * @param minute minute value (0-59)
 	 */
 	public RsDate(int year, int month, int dayOfMonth, int hourOfDay, int minute) {
-		this(year, month, dayOfMonth, hourOfDay, minute, 0, 0);
+		this(TimeZone.getDefault(), year, month, dayOfMonth, hourOfDay, minute, 0, 0);
 	}
 
 	/**
 	 * Constructor.
+	 * <p>{@link Calendar#SECOND}s and {@link Calendar#MILLISECOND}s will be 0.</p>
+	 * @param timezone the timezone to be used
+	 * @param year year value
+	 * @param month month value (0-11)
+	 * @param dayOfMonth day of month value (1-31)
+	 * @param hourOfDay hoir of day (0-23)
+	 * @param minute minute value (0-59)
+	 */
+	public RsDate(TimeZone timezone, int year, int month, int dayOfMonth, int hourOfDay, int minute) {
+		this(timezone, year, month, dayOfMonth, hourOfDay, minute, 0, 0);
+	}
+
+	/**
+	 * Constructor with default timezone.
 	 * <p>{@link Calendar#MILLISECOND}s will be 0.</p>
 	 * @param year year value
 	 * @param month month value (0-11)
@@ -97,11 +132,26 @@ public class RsDate extends GregorianCalendar {
 	 * @param seconds seconds value(0-59)
 	 */
 	public RsDate(int year, int month, int dayOfMonth, int hourOfDay, int minute, int seconds) {
-		this(year, month, dayOfMonth, hourOfDay, minute, seconds, 0);
+		this(TimeZone.getDefault(), year, month, dayOfMonth, hourOfDay, minute, seconds, 0);
 	}
 	
 	/**
 	 * Constructor.
+	 * <p>{@link Calendar#MILLISECOND}s will be 0.</p>
+	 * @param timezone the timezone to be used
+	 * @param year year value
+	 * @param month month value (0-11)
+	 * @param dayOfMonth day of month value (1-31)
+	 * @param hourOfDay hoir of day (0-23)
+	 * @param minute minute value (0-59)
+	 * @param seconds seconds value(0-59)
+	 */
+	public RsDate(TimeZone timezone, int year, int month, int dayOfMonth, int hourOfDay, int minute, int seconds) {
+		this(timezone, year, month, dayOfMonth, hourOfDay, minute, seconds, 0);
+	}
+	
+	/**
+	 * Constructor with default timezone.
 	 * @param year year value
 	 * @param month month value (0-11)
 	 * @param dayOfMonth day of month value (1-31)
@@ -111,6 +161,22 @@ public class RsDate extends GregorianCalendar {
 	 * @param milliseconds milliseconds value (0-999)
 	 */
 	public RsDate(int year, int month, int dayOfMonth, int hourOfDay, int minute, int seconds, int milliseconds) {
+		this(TimeZone.getDefault(), year, month, dayOfMonth, hourOfDay, minute, seconds, milliseconds);
+	}
+	
+	/**
+	 * Constructor.
+	 * @param timezone the timezone to be used
+	 * @param year year value
+	 * @param month month value (0-11)
+	 * @param dayOfMonth day of month value (1-31)
+	 * @param hourOfDay hoir of day (0-23)
+	 * @param minute minute value (0-59)
+	 * @param seconds seconds value(0-59)
+	 * @param milliseconds milliseconds value (0-999)
+	 */
+	public RsDate(TimeZone timezone, int year, int month, int dayOfMonth, int hourOfDay, int minute, int seconds, int milliseconds) {
+		setTimeZone(timezone != null ? timezone : TimeZone.getDefault());
 		set(Calendar.YEAR,         year);
 		set(Calendar.MONTH,        month);
 		set(Calendar.DAY_OF_MONTH, dayOfMonth);

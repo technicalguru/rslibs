@@ -20,6 +20,7 @@ package rs.baselib.util;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * A year.
@@ -41,6 +42,14 @@ public class RsYear extends RsDate {
 	 * Constructor.
 	 */
 	public RsYear() {
+		this(TimeZone.getDefault());
+	}
+
+	/**
+	 * Constructor.
+	 */
+	public RsYear(TimeZone timezone) {
+		setTimeZone(timezone != null ? timezone : TimeZone.getDefault());
 		ensureBegin();
 	}
 
@@ -73,7 +82,15 @@ public class RsYear extends RsDate {
 	 * Constructor.
 	 */
 	public RsYear(int year) {
+		this(TimeZone.getDefault(), year);
+	}
+	
+	/**
+	 * Constructor.
+	 */
+	public RsYear(TimeZone timezone, int year) {
 		super(0);
+		setTimeZone(timezone != null ? timezone : TimeZone.getDefault());
 		set(YEAR, year);
 		ensureBegin();
 	}
