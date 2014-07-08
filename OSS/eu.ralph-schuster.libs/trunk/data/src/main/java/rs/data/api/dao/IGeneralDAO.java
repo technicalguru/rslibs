@@ -68,6 +68,12 @@ public interface IGeneralDAO<K extends Serializable, B extends IGeneralBO<K>> {
 	 */
 	public B newInstance();
 	
+	/**
+	 * Shutdown the DAO.
+	 * @since 1.2.8
+	 */
+	public void shutdown();
+
 	/********************* CREATION ******************/
 	
 	/**

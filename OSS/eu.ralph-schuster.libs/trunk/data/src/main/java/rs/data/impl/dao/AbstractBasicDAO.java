@@ -94,8 +94,16 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void configure(Configuration cfg) throws ConfigurationException {
 
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void shutdown() {
 	}
 
 	/**

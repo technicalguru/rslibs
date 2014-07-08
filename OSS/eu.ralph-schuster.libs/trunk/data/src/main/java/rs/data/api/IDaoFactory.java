@@ -159,8 +159,14 @@ public interface IDaoFactory {
 	
 	/**
 	 * Clear cache of all DAOs.
+	 * @since 1.2.8
 	 */
 	public void clearCache();
+	
+	/**
+	 * Shutdown the factory.
+	 */
+	public void shutdown();
 	
 	/********************* TRANSACTIONS ************************/
 	

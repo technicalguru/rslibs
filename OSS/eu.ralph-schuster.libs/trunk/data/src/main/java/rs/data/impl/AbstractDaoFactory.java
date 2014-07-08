@@ -219,6 +219,30 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 		return daoMasters.get(id);
 	}
 
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void shutdown() {
+		// Shutdown all DAOs
+		for (IGeneralDAO<?, ?> dao : daos.values()) {
+			try {
+				dao.shutdown();
+			} catch (Throwable t) {
+				getLog().error("Cannot shutdown DAO:", t);
+			}
+		}
+		// Shutdown all DAO Masters
+		for (IDaoMaster master : daoMasters.values()) {
+			try {
+				master.shutdown();
+			} catch (Throwable t) {
+				getLog().error("Cannot shutdown DAO Master:", t);
+			}
+		}
+	}
+
 	/**
 	 * Loads an object from a configuration.
 	 * The object is configured if it is an instance of {@link IConfigurable}.
