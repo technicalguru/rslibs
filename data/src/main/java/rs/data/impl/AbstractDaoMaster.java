@@ -94,6 +94,13 @@ public abstract class AbstractDaoMaster implements IDaoMaster, IConfigurable {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public void shutdown() {
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public String getProperty(String key) {
 		return properties.getProperty(key);
 	}

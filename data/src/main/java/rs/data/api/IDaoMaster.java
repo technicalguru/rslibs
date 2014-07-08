@@ -50,4 +50,11 @@ public interface IDaoMaster {
 	 * @param value value of property
 	 */
 	public void setProperty(String key, String value);
+	
+	/**
+	 * Shutdown the DAO master.
+	 * @since 1.2.8
+	 */
+	public void shutdown();
+
 }

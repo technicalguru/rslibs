@@ -58,7 +58,7 @@ public class HibernateDaoMaster extends AbstractDaoMaster {
 		"hibernate.dialect"
 	};
 	private static Logger log = LoggerFactory.getLogger(HibernateDaoMaster.class);
-	private SessionFactory factory;
+	private SessionFactory sessionFactory;
 	
 	/**
 	 * Constructor.
@@ -111,7 +111,7 @@ public class HibernateDaoMaster extends AbstractDaoMaster {
 		loadDataSource(dbconfig.configurationAt("datasource(0)"));
 
 		// Create the session factory now
-		factory = createSessionFactory(configFile, overriddenProperties);
+		setSessionFactory(createSessionFactory(configFile, overriddenProperties));
 	}
 
 	/**
@@ -160,6 +160,38 @@ public class HibernateDaoMaster extends AbstractDaoMaster {
 			throw new RuntimeException("Cannot prepare data source:", e);
 		}
 	}
+	
+	
+	/**
+	 * Returns the sessionFactory.
+	 * @return the sessionFactory
+	 */
+	public SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
+
+	/**
+	 * Sets the sessionFactory.
+	 * @param sessionFactory the sessionFactory to set
+	 */
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		if (this.sessionFactory != null) {
+			this.sessionFactory.close();
+		}
+		this.sessionFactory = sessionFactory;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void shutdown() {
+		super.shutdown();
+		if (this.sessionFactory != null) {
+			this.sessionFactory.close();
+		}
+	}
+
 	/**
 	 * Returns the Hibernate session. This method will start a new transaction
 	 * if required.
@@ -167,7 +199,7 @@ public class HibernateDaoMaster extends AbstractDaoMaster {
 	 * @return hibernate session.
 	 */
 	public Session getSession() {
-		Session rc = factory.getCurrentSession();
+		Session rc = getSessionFactory().getCurrentSession();
 		/*
 		if (rc != null) {
 			// Some check on valid sessions
