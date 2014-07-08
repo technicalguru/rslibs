@@ -142,6 +142,7 @@ public class HibernateDaoMaster extends AbstractDaoMaster {
 		try {
 			Class<? extends DataSource> clazz = (Class<? extends DataSource>)LangUtils.forName(dbconfig.getString("[@class]"));
 			DataSource datasource = clazz.newInstance();
+			setProperty("datasource.class", datasource.getClass().getName());
 			int idx=0;
 			while (true) {
 				String name = dbconfig.getString("property("+idx+")[@name]");
@@ -150,6 +151,7 @@ public class HibernateDaoMaster extends AbstractDaoMaster {
 				if ((value == null) && (name.equals("user") || name.equals("password"))) value = "";
 				if (value != null) {
 					PropertyUtils.setProperty(datasource, name, value);
+					setProperty("datasource."+name, value);
 				}
 				if (name.equals("url")) log.debug("Using Database:   "+value);
 				else if (name.equals("user")) log.debug("Using Login Name: "+value);
