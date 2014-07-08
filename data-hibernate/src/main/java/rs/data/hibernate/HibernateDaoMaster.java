@@ -192,6 +192,7 @@ public class HibernateDaoMaster extends AbstractDaoMaster {
 		if (this.sessionFactory != null) {
 			this.sessionFactory.close();
 		}
+		this.sessionFactory = null;
 	}
 
 	/**
