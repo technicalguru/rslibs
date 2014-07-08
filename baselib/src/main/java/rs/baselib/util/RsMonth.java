@@ -47,6 +47,7 @@ public class RsMonth extends RsDate {
 
 	/**
 	 * Constructor.
+	 * @since 1.2.8
 	 */
 	public RsMonth(TimeZone timezone) {
 		setTimeZone(timezone != null ? timezone : TimeZone.getDefault());
@@ -87,6 +88,7 @@ public class RsMonth extends RsDate {
 
 	/**
 	 * Constructor.
+	 * @since 1.2.8
 	 */
 	public RsMonth(TimeZone timezone, int month, int year) {
 		super(0);

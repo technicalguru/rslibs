@@ -40,6 +40,7 @@ public class RsYear extends RsDate {
 	
 	/**
 	 * Constructor.
+	 * @since 1.2.8
 	 */
 	public RsYear() {
 		this(TimeZone.getDefault());
@@ -87,6 +88,7 @@ public class RsYear extends RsDate {
 	
 	/**
 	 * Constructor.
+	 * @since 1.2.8
 	 */
 	public RsYear(TimeZone timezone, int year) {
 		super(0);

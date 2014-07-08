@@ -47,6 +47,7 @@ public class RsDay extends RsDate {
 
 	/**
 	 * Constructor.
+	 * @since 1.2.8
 	 */
 	public RsDay(TimeZone timezone) {
 		setTimeZone(timezone != null ? timezone : TimeZone.getDefault());
@@ -80,6 +81,7 @@ public class RsDay extends RsDate {
 
 	/**
 	 * Constructor.
+	 * @since 1.2.7
 	 */
 	public RsDay(int day, int month, int year) {
 		this(TimeZone.getDefault(), day, month, year);
@@ -87,6 +89,7 @@ public class RsDay extends RsDate {
 
 	/**
 	 * Constructor.
+	 * @since 1.2.8
 	 */
 	public RsDay(TimeZone timezone, int day, int month, int year) {
 		super(0);
