@@ -32,6 +32,9 @@ import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.internal.SessionFactoryImpl;
+import org.hibernate.service.jdbc.connections.internal.C3P0ConnectionProvider;
+import org.hibernate.service.jdbc.connections.spi.ConnectionProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -200,6 +203,13 @@ public class HibernateDaoMaster extends AbstractDaoMaster {
 	public void shutdown() {
 		super.shutdown();
 		if (this.sessionFactory != null) {
+			if (this.sessionFactory instanceof SessionFactoryImpl) {
+				SessionFactoryImpl sf = (SessionFactoryImpl)sessionFactory;
+				ConnectionProvider conn = sf.getConnectionProvider();
+				if(conn instanceof C3P0ConnectionProvider) { 
+					((C3P0ConnectionProvider)conn).close(); 
+				}
+			}
 			this.sessionFactory.close();
 		}
 		this.sessionFactory = null;
