@@ -44,6 +44,7 @@ public class RsDate extends GregorianCalendar {
 
 	/**
 	 * Constructor.
+	 * @since 1.2.8
 	 */
 	public RsDate(TimeZone timezone) {
 		setTimeZone(timezone != null ? timezone : TimeZone.getDefault());
@@ -77,6 +78,7 @@ public class RsDate extends GregorianCalendar {
 	 * @param year year value
 	 * @param month month value (0-11)
 	 * @param dayOfMonth day of month value (1-31)
+	 * @since 1.2.7
 	 */
 	public RsDate(int year, int month, int dayOfMonth) {
 		this(TimeZone.getDefault(), year, month, dayOfMonth, 0, 0, 0, 0);
@@ -89,6 +91,7 @@ public class RsDate extends GregorianCalendar {
 	 * @param year year value
 	 * @param month month value (0-11)
 	 * @param dayOfMonth day of month value (1-31)
+	 * @since 1.2.8
 	 */
 	public RsDate(TimeZone timezone, int year, int month, int dayOfMonth) {
 		this(timezone, year, month, dayOfMonth, 0, 0, 0, 0);
@@ -102,6 +105,7 @@ public class RsDate extends GregorianCalendar {
 	 * @param dayOfMonth day of month value (1-31)
 	 * @param hourOfDay hoir of day (0-23)
 	 * @param minute minute value (0-59)
+	 * @since 1.2.7
 	 */
 	public RsDate(int year, int month, int dayOfMonth, int hourOfDay, int minute) {
 		this(TimeZone.getDefault(), year, month, dayOfMonth, hourOfDay, minute, 0, 0);
@@ -116,6 +120,7 @@ public class RsDate extends GregorianCalendar {
 	 * @param dayOfMonth day of month value (1-31)
 	 * @param hourOfDay hoir of day (0-23)
 	 * @param minute minute value (0-59)
+	 * @since 1.2.8
 	 */
 	public RsDate(TimeZone timezone, int year, int month, int dayOfMonth, int hourOfDay, int minute) {
 		this(timezone, year, month, dayOfMonth, hourOfDay, minute, 0, 0);
@@ -130,6 +135,7 @@ public class RsDate extends GregorianCalendar {
 	 * @param hourOfDay hoir of day (0-23)
 	 * @param minute minute value (0-59)
 	 * @param seconds seconds value(0-59)
+	 * @since 1.2.7
 	 */
 	public RsDate(int year, int month, int dayOfMonth, int hourOfDay, int minute, int seconds) {
 		this(TimeZone.getDefault(), year, month, dayOfMonth, hourOfDay, minute, seconds, 0);
@@ -145,6 +151,7 @@ public class RsDate extends GregorianCalendar {
 	 * @param hourOfDay hoir of day (0-23)
 	 * @param minute minute value (0-59)
 	 * @param seconds seconds value(0-59)
+	 * @since 1.2.8
 	 */
 	public RsDate(TimeZone timezone, int year, int month, int dayOfMonth, int hourOfDay, int minute, int seconds) {
 		this(timezone, year, month, dayOfMonth, hourOfDay, minute, seconds, 0);
@@ -159,6 +166,7 @@ public class RsDate extends GregorianCalendar {
 	 * @param minute minute value (0-59)
 	 * @param seconds seconds value(0-59)
 	 * @param milliseconds milliseconds value (0-999)
+	 * @since 1.2.7
 	 */
 	public RsDate(int year, int month, int dayOfMonth, int hourOfDay, int minute, int seconds, int milliseconds) {
 		this(TimeZone.getDefault(), year, month, dayOfMonth, hourOfDay, minute, seconds, milliseconds);
@@ -174,6 +182,7 @@ public class RsDate extends GregorianCalendar {
 	 * @param minute minute value (0-59)
 	 * @param seconds seconds value(0-59)
 	 * @param milliseconds milliseconds value (0-999)
+	 * @since 1.2.8
 	 */
 	public RsDate(TimeZone timezone, int year, int month, int dayOfMonth, int hourOfDay, int minute, int seconds, int milliseconds) {
 		setTimeZone(timezone != null ? timezone : TimeZone.getDefault());
