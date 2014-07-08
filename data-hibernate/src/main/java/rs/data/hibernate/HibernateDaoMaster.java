@@ -35,6 +35,8 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mchange.v2.c3p0.PooledDataSource;
+
 import rs.baselib.io.FileFinder;
 import rs.baselib.lang.LangUtils;
 import rs.data.hibernate.util.DataSourceConnectionProvider;
@@ -59,6 +61,7 @@ public class HibernateDaoMaster extends AbstractDaoMaster {
 	};
 	private static Logger log = LoggerFactory.getLogger(HibernateDaoMaster.class);
 	private SessionFactory sessionFactory;
+	private DataSource datasource;
 	
 	/**
 	 * Constructor.
@@ -141,7 +144,7 @@ public class HibernateDaoMaster extends AbstractDaoMaster {
 	protected void loadDataSource(SubnodeConfiguration dbconfig) {
 		try {
 			Class<? extends DataSource> clazz = (Class<? extends DataSource>)LangUtils.forName(dbconfig.getString("[@class]"));
-			DataSource datasource = clazz.newInstance();
+			datasource = clazz.newInstance();
 			setProperty("datasource.class", datasource.getClass().getName());
 			int idx=0;
 			while (true) {
@@ -163,7 +166,14 @@ public class HibernateDaoMaster extends AbstractDaoMaster {
 		}
 	}
 	
-	
+	/**
+	 * Returns the datasource.
+	 * @return the datasource
+	 */
+	public DataSource getDatasource() {
+		return datasource;
+	}
+
 	/**
 	 * Returns the sessionFactory.
 	 * @return the sessionFactory
@@ -193,6 +203,13 @@ public class HibernateDaoMaster extends AbstractDaoMaster {
 			this.sessionFactory.close();
 		}
 		this.sessionFactory = null;
+		DataSource ds = getDatasource();
+		if (ds instanceof PooledDataSource) try {
+			((PooledDataSource)ds).hardReset();
+		} catch (Exception e) {
+			// Do not log
+		}
+
 	}
 
 	/**
@@ -203,20 +220,6 @@ public class HibernateDaoMaster extends AbstractDaoMaster {
 	 */
 	public Session getSession() {
 		Session rc = getSessionFactory().getCurrentSession();
-		/*
-		if (rc != null) {
-			// Some check on valid sessions
-			if (!rc.isOpen()) {
-				log.debug("Session is not open!");
-				rc = null;
-			}
-		}
-		
-		if (rc == null) {
-			log.debug("Creating session!");
-			rc = factory.openSession();
-		}
-		*/
 		return rc;
 	}
 
