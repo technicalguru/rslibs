@@ -56,4 +56,23 @@
 		<module>templating</module>
 	</modules>
 
+	<repositories>
+		<repository>
+			<id>ow2-releases</id>
+			<name>ObjectWeb Repository</name>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+				<checksumPolicy>fail</checksumPolicy>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+				<updatePolicy>never</updatePolicy>
+				<checksumPolicy>warn</checksumPolicy>
+			</snapshots>
+			<url>http://repository.ow2.org/nexus/content/repositories/ow2-legacy/</url>
+			<layout>default</layout>
+		</repository>
+	</repositories>
+
 </project>
