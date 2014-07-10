@@ -112,7 +112,7 @@ public class PhpSerializer {
 		buffer.append(decoded.length());
 		buffer.append(":\"");
 		buffer.append(string);
-		buffer.append("\"");
+		buffer.append("\";");
 	}
 
 	/**
@@ -125,7 +125,7 @@ public class PhpSerializer {
 	private static void serializeCharacter(Character value, StringBuilder buffer, Charset charset) {
 		buffer.append("s:1:\"");
 		buffer.append(value);
-		buffer.append("\"");
+		buffer.append("\";");
 	}
 
 	/**
@@ -134,7 +134,7 @@ public class PhpSerializer {
 	 * @param buffer The string buffer to append serialized data to
 	 */
 	private static void serializeNull(StringBuilder buffer, Charset charset) {
-		buffer.append("N");
+		buffer.append("N;");
 	}
 
 	/**
@@ -147,6 +147,7 @@ public class PhpSerializer {
 	private static void serializeInteger(int number, StringBuilder buffer, Charset charset) {
 		buffer.append("i:");
 		buffer.append(number);
+		buffer.append(";");
 	}
 
 	/**
@@ -163,6 +164,7 @@ public class PhpSerializer {
 			buffer.append("d:");
 		}
 		buffer.append(number);
+		buffer.append(";");
 	}
 
 	/**
@@ -175,6 +177,7 @@ public class PhpSerializer {
 	private static void serializeDouble(double number, StringBuilder buffer, Charset charset) {
 		buffer.append("d:");
 		buffer.append(number);
+		buffer.append(";");
 	}
 
 	/**
@@ -187,6 +190,7 @@ public class PhpSerializer {
 	private static void serializeBoolean(Boolean value, StringBuilder buffer, Charset charset) {
 		buffer.append("b:");
 		buffer.append(value.booleanValue() ? 1 : 0);
+		buffer.append(";");
 	}
 
 	/**
@@ -204,9 +208,7 @@ public class PhpSerializer {
 		buffer.append(max);
 		buffer.append(":{");
 		for (int i = 0; i < max; i++) {
-			if (i>0) buffer.append(';');
 			serializeObject(Integer.valueOf(i), buffer, charset);
-			buffer.append(';');
 			serializeObject(array[i], buffer, charset);
 		}
 		buffer.append('}');
@@ -222,12 +224,8 @@ public class PhpSerializer {
 		buffer.append("a:");
 		buffer.append(map.size());
 		buffer.append(":{");
-		boolean isFirst = true;
 		for (Map.Entry<?, ?> entry : map.entrySet()) {
-			if (isFirst) isFirst = false;
-			else buffer.append(';');
 			serializeObject(entry.getKey(), buffer, charset);
-			buffer.append(';');
 			serializeObject(entry.getValue(), buffer, charset);
 		}
 		buffer.append('}');

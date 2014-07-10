@@ -190,9 +190,9 @@ public class PhpUnserializer {
 		parseInfo.pos = pos + 2;
 		for (i=0; i<max; i++) {
 			key = unserialize(data, parseInfo);
-			parseInfo.pos++;
+			if (data.charAt(parseInfo.pos) == ';') parseInfo.pos++;
 			value = unserialize(data, parseInfo);
-			parseInfo.pos++;
+			if (data.charAt(parseInfo.pos) == ';') parseInfo.pos++;
 			result.put(key, value);
 			if (decimalSequence) {
 				if (!(key instanceof Integer)) {
