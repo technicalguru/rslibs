@@ -44,6 +44,7 @@ import rs.baselib.configuration.IConfigurable;
 import rs.baselib.io.FileFinder;
 import rs.baselib.lang.LangUtils;
 import rs.baselib.util.CommonUtils;
+import rs.baselib.util.IUrlTransformer;
 import rs.data.api.IDaoFactory;
 import rs.data.api.IDaoMaster;
 import rs.data.api.bo.IGeneralBO;
@@ -56,7 +57,6 @@ import rs.data.event.IDaoListener;
 import rs.data.impl.dao.AbstractBasicDAO;
 import rs.data.impl.dao.AbstractDAO;
 import rs.data.impl.dto.GeneralDTO;
-import rs.baselib.util.IUrlTransformer;
 
 /**
  * The basic implementation of a DAO factory.
@@ -241,6 +241,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 				getLog().error("Cannot shutdown DAO Master:", t);
 			}
 		}
+		// Check the TX contexts
 	}
 
 	/**
@@ -522,7 +523,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 	 */
 	@Override
 	public void commit() {
-		txContext.get().commit();
+		if (txContext.get().commit()) txContext.remove();
 	}
 
 	/**
@@ -530,7 +531,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 	 */
 	@Override
 	public void rollback() {
-		txContext.get().rollback();
+		if (txContext.get().rollback()) txContext.remove();
 	}
 
 	/**
@@ -679,9 +680,11 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 		 * If the last call to {@link #begin()} did not start a new TX then
 		 * this method does nothing.
 		 */
-		public void commit() {
+		public boolean commit() {
+			boolean rc = false;
 			try {
 				if (beginCount == 1) {
+					rc = true;
 					boolean doRollback = false;
 					Transaction tx = getTransaction();
 					if (tx != null) {
@@ -723,6 +726,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 			if (beginCount < 0) {
 				throw new RuntimeException("No active transaction found");
 			}
+			return rc;
 		}
 
 		/**
@@ -730,11 +734,13 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 		 * If the last call to {@link #begin()} did not start a new TX then
 		 * this method will just mark the transaction for rollback only.
 		 */
-		public void rollback() {
+		public boolean rollback() {
+			boolean rc = true;
 			try {
 				beginCount--;
 				if (beginCount == 0) {
 					fireDaoFactoryEvent(new DaoFactoryEvent(AbstractDaoFactory.this, Type.TRANSACTION_ROLLING_BACK));
+					rc = true;
 					getTransaction().rollback();
 					if (debugTransactions) {
 						log.debug("Transaction rolled back: TX-"+Thread.currentThread().getId());
@@ -754,6 +760,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 			if (beginCount < 0) {
 				throw new RuntimeException("No active transaction found");
 			}
+			return rc;
 		}
 
 		/**
