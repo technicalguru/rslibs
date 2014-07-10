@@ -22,6 +22,7 @@ import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;
 
 import org.objectweb.jotm.Jotm;
+import org.objectweb.jotm.TimerManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,6 +63,8 @@ public class JotmSupport {
 			jotm.stop();
 			jotm = null;
 			txManager = null;
+			// Stop every thread remaining
+			TimerManager.stop(true);
 			log.info("JOTM stopped");
 		}
 	}
