@@ -17,7 +17,6 @@
  */
 package rs.baselib.php;
 
-import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.Map;
 
@@ -38,23 +37,10 @@ public class PhpSerializer {
 	 * @since 1.2.6
 	 */
 	public static String serialize(Object object) {
-		return serialize(object, null);
-	}
-	
-	/**
-	 * Serializes the specified object.
-	 *
-	 * @param object object to serialize
-	 * @param charset to be used
-	 * @return The serialized data
-	 * @since 1.2.6
-	 */
-	public static String serialize(Object object, Charset charset) {
 		StringBuilder buffer;
-		if (charset == null) charset = Charset.forName("UTF-8");
 
 		buffer = new StringBuilder();
-		serializeObject(object, buffer, charset);
+		serializeObject(object, buffer);
 		return buffer.toString();
 	}
 
@@ -66,33 +52,33 @@ public class PhpSerializer {
 	 * @param object The object to serialize
 	 * @param buffer he string buffer to append serialized data to
 	 */
-	private static void serializeObject(Object object, StringBuilder buffer, Charset charset) {
+	private static void serializeObject(Object object, StringBuilder buffer) {
 		if (object == null) {
-			serializeNull(buffer, charset);
+			serializeNull(buffer);
 		} else if (object instanceof String) {
-			serializeString((String) object, buffer, charset);
+			serializeString((String) object, buffer);
 		} else if (object instanceof Character) {
-			serializeCharacter((Character) object, buffer, charset);
+			serializeCharacter((Character) object, buffer);
 		} else if (object instanceof Integer) {
-			serializeInteger(((Integer) object).intValue(), buffer, charset);
+			serializeInteger(((Integer) object).intValue(), buffer);
 		} else if (object instanceof Short) {
-			serializeInteger(((Short) object).intValue(), buffer, charset);
+			serializeInteger(((Short) object).intValue(), buffer);
 		} else if (object instanceof Byte) {
-			serializeInteger(((Byte) object).intValue(), buffer, charset);
+			serializeInteger(((Byte) object).intValue(), buffer);
 		} else if (object instanceof Long) {
-			serializeLong(((Long) object).longValue(), buffer, charset);
+			serializeLong(((Long) object).longValue(), buffer);
 		} else if (object instanceof Double) {
-			serializeDouble(((Double) object).doubleValue(), buffer, charset);
+			serializeDouble(((Double) object).doubleValue(), buffer);
 		} else if (object instanceof Float) {
-			serializeDouble(((Float) object).doubleValue(), buffer, charset);
+			serializeDouble(((Float) object).doubleValue(), buffer);
 		} else if (object instanceof Boolean) {
-			serializeBoolean((Boolean) object, buffer, charset);
+			serializeBoolean((Boolean) object, buffer);
 		} else if (object instanceof Object[]) {
-			serializeArray((Object[]) object, buffer, charset);
+			serializeArray((Object[]) object, buffer);
 		} else if (object instanceof Collection<?>) {
-			serializeArray(((Collection<?>) object).toArray(), buffer, charset);
+			serializeArray(((Collection<?>) object).toArray(), buffer);
 		} else if (object instanceof Map<?, ?>) {
-			serializeMap((Map<?, ?>) object, buffer, charset);
+			serializeMap((Map<?, ?>) object, buffer);
 		} else {
 			throw new PhpSerializeException("Unable to serialize " + object.getClass().getName());
 		}
@@ -105,11 +91,9 @@ public class PhpSerializer {
 	 * @param string The string to serialize
 	 * @param buffer The string buffer to append serialized data to
 	 */
-	private static void serializeString(String string, StringBuilder buffer, Charset charset) {
-		String decoded = PhpUnserializer.decode(string, charset);
-
+	private static void serializeString(String string, StringBuilder buffer) {
 		buffer.append("s:");
-		buffer.append(decoded.length());
+		buffer.append(string.length());
 		buffer.append(":\"");
 		buffer.append(string);
 		buffer.append("\";");
@@ -122,7 +106,7 @@ public class PhpSerializer {
 	 * @param value The value to serialize
 	 * @param buffer The string buffer to append serialized data to
 	 */
-	private static void serializeCharacter(Character value, StringBuilder buffer, Charset charset) {
+	private static void serializeCharacter(Character value, StringBuilder buffer) {
 		buffer.append("s:1:\"");
 		buffer.append(value);
 		buffer.append("\";");
@@ -133,7 +117,7 @@ public class PhpSerializer {
 	 *
 	 * @param buffer The string buffer to append serialized data to
 	 */
-	private static void serializeNull(StringBuilder buffer, Charset charset) {
+	private static void serializeNull(StringBuilder buffer) {
 		buffer.append("N;");
 	}
 
@@ -144,7 +128,7 @@ public class PhpSerializer {
 	 * @param number The integer number to serialize
 	 * @param buffer The string buffer to append serialized data to
 	 */
-	private static void serializeInteger(int number, StringBuilder buffer, Charset charset) {
+	private static void serializeInteger(int number, StringBuilder buffer) {
 		buffer.append("i:");
 		buffer.append(number);
 		buffer.append(";");
@@ -157,7 +141,7 @@ public class PhpSerializer {
 	 * @param number The long number to serialize
 	 * @param buffer The string buffer to append serialized data to
 	 */
-	private static void serializeLong(long number, StringBuilder buffer, Charset charset) {
+	private static void serializeLong(long number, StringBuilder buffer) {
 		if ((number >= Integer.MIN_VALUE) && (number <= Integer.MAX_VALUE)) {
 			buffer.append("i:");
 		} else {
@@ -174,7 +158,7 @@ public class PhpSerializer {
 	 * @param number The number to serialize
 	 * @param buffer The string buffer to append serialized data to
 	 */
-	private static void serializeDouble(double number, StringBuilder buffer, Charset charset) {
+	private static void serializeDouble(double number, StringBuilder buffer) {
 		buffer.append("d:");
 		buffer.append(number);
 		buffer.append(";");
@@ -187,7 +171,7 @@ public class PhpSerializer {
 	 * @param value The value to serialize
 	 * @param buffer The string buffer to append serialized data to
 	 */
-	private static void serializeBoolean(Boolean value, StringBuilder buffer, Charset charset) {
+	private static void serializeBoolean(Boolean value, StringBuilder buffer) {
 		buffer.append("b:");
 		buffer.append(value.booleanValue() ? 1 : 0);
 		buffer.append(";");
@@ -200,7 +184,7 @@ public class PhpSerializer {
 	 * @param array The array to serialize
 	 * @param buffer The string buffer to append serialized data to
 	 */
-	private static void serializeArray(Object[] array, StringBuilder buffer, Charset charset) {
+	private static void serializeArray(Object[] array, StringBuilder buffer) {
 		int max;
 
 		buffer.append("a:");
@@ -208,8 +192,8 @@ public class PhpSerializer {
 		buffer.append(max);
 		buffer.append(":{");
 		for (int i = 0; i < max; i++) {
-			serializeObject(Integer.valueOf(i), buffer, charset);
-			serializeObject(array[i], buffer, charset);
+			serializeObject(Integer.valueOf(i), buffer);
+			serializeObject(array[i], buffer);
 		}
 		buffer.append('}');
 	}
@@ -220,13 +204,13 @@ public class PhpSerializer {
 	 * @param map The map to serialize
 	 * @param buffer The string buffer to append serialized data to
 	 */
-	private static void serializeMap(Map<?, ?> map, StringBuilder buffer, Charset charset) {
+	private static void serializeMap(Map<?, ?> map, StringBuilder buffer) {
 		buffer.append("a:");
 		buffer.append(map.size());
 		buffer.append(":{");
 		for (Map.Entry<?, ?> entry : map.entrySet()) {
-			serializeObject(entry.getKey(), buffer, charset);
-			serializeObject(entry.getValue(), buffer, charset);
+			serializeObject(entry.getKey(), buffer);
+			serializeObject(entry.getValue(), buffer);
 		}
 		buffer.append('}');
 	}

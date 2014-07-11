@@ -125,4 +125,10 @@ public class PhpUnserializerTest {
 		assertEquals("EN(guestTeam) not correct", "Ljungskile SK",   enMap.get("guestTeam"));
 	}
 
+//	@Test
+//	public void testArrayOfArray() {
+//		// a:2:{s:2:"de";a:3:{s:8:"category";s:29:"Internationale Turniere: Uefa";s:8:"homeTeam";s:16:"NK Siroki Brijeg";s:9:"guestTeam";s:12:"FK Qï¿½bï¿½lï¿½";}s:2:"en";a:3:{s:8:"category";s:27:"International Matches: Uefa";s:8:"homeTeam";s:16:"NK Siroki Brijeg";s:9:"guestTeam";s:12:"FK Qï¿½bï¿½lï¿½";}}
+//		String s = "a:2:{s:2:\"de\";a:3:{s:8:\"category\";s:29:\"Internationale Turniere: Uefa\";s:8:\"homeTeam\";s:16:\"NK Siroki Brijeg\";s:9:\"guestTeam\";s:12:\"FK Qï¿½bï¿½lï¿½\";}s:2:\"en\";a:3:{s:8:\"category\";s:27:\"International Matches: Uefa\";s:8:\"homeTeam\";s:16:\"NK Siroki Brijeg\";s:9:\"guestTeam\";s:12:\"FK Qï¿½bï¿½lï¿½\";}}";
+//		assertNotNull("No unserialization", PhpUnserializer.unserialize(s));
+//	}
 }

@@ -17,7 +17,6 @@
  */
 package rs.baselib.php;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
@@ -100,7 +99,7 @@ public class PhpUnserializer {
 		pos = data.indexOf(':', parseInfo.pos + 2);
 		length = Integer.parseInt(data.substring(parseInfo.pos + 2, pos));
 		parseInfo.pos = pos + length + 3;
-		String unencoded = data.substring(pos + 2, pos + 2 + length);
+		byte unencoded[] = data.substring(pos + 2, pos + 2 + length).getBytes();
 		return encode(unencoded, parseInfo.charset);
 	}
 
@@ -226,21 +225,8 @@ public class PhpUnserializer {
 		return data.length();
 	}
 
-	public static String decode(String encoded, Charset charset) {
-		try {
-			return new String(encoded.getBytes(charset), "ISO-8859-1");
-		} catch (UnsupportedEncodingException e) {
-			return encoded;
-		}
-	}
-
-
-	public static String encode(String decoded, Charset charset) {
-		try {
-			return new String(decoded.getBytes("ISO-8859-1"), charset);
-		} catch (UnsupportedEncodingException e) {
-			return decoded;
-		}
+	public static String encode(byte decoded[], Charset charset) {
+		return new String(decoded, charset);
 	}
 
 	/**
