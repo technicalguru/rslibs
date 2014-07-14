@@ -11,7 +11,7 @@
 	</properties>
 
 	<artifactId>libs</artifactId>
-	<version>1.2.8</version>
+	<version>1.2.9-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<url>http://download.ralph-schuster.eu/eu.ralph-schuster.libs/${project.version}</url>
@@ -19,9 +19,9 @@
 	<description>A collection of utilities</description>
 
 	<scm>
-		<connection>scm:svn:https://svn.ralph-schuster.eu/svn/OSS/eu.ralph-schuster.libs/tags/libs-1.2.8</connection>
-		<developerConnection>scm:svn:https://svn.ralph-schuster.eu/svn/OSS/eu.ralph-schuster.libs/tags/libs-1.2.8</developerConnection>
-		<url>https://svn.ralph-schuster.eu/svn/OSS/eu.ralph-schuster.libs/tags/libs-1.2.8</url>
+		<connection>scm:svn:https://svn.ralph-schuster.eu/svn/OSS/eu.ralph-schuster.libs/trunk</connection>
+		<developerConnection>scm:svn:https://svn.ralph-schuster.eu/svn/OSS/eu.ralph-schuster.libs/trunk</developerConnection>
+		<url>https://svn.ralph-schuster.eu/svn/OSS/eu.ralph-schuster.libs/trunk</url>
 	</scm>
 
 	<distributionManagement>
