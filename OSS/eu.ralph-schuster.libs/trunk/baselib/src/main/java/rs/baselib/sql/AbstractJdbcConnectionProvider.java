@@ -98,6 +98,8 @@ public abstract class AbstractJdbcConnectionProvider implements IJdbcConnectionP
 	private Set<Integer> enabledAdditionalArguments = new HashSet<Integer>();
 	/** Map of default additional arguments */
 	private Map<Integer,String> defaultAdditionalArguments = new HashMap<Integer,String>();
+	/** Driver parameters */
+	private Map<String,String> driverParameters = new HashMap<String, String>();
 	
 	/**
 	 * Constructor.
@@ -167,10 +169,9 @@ public abstract class AbstractJdbcConnectionProvider implements IJdbcConnectionP
 	}
 
 	/**
-	 * Returns the {@link #dbDriverClassName}.
-	 * The method shall return <code>null</code> in case of any errors.
-	 * @return the dbDriverClassName
+	 * {@inheritDoc}
 	 */
+	@Override
 	public String getDbDriverClassName() {
 		return dbDriverClassName;
 	}
@@ -198,7 +199,7 @@ public abstract class AbstractJdbcConnectionProvider implements IJdbcConnectionP
 		args[3] = getDbLogin(dbLogin);
 		args[4] = getDbPassword(dbPassword);
 		for (int i=0; i<=maxAdditionalArgumentIndex; i++) args[i+5] = getAdditionalArgument(i, i<addOnArgs.length ? addOnArgs[i] : null);
-		return MessageFormat.format(getUrlTemplate(), args);
+		return MessageFormat.format(getUrlTemplate(), args)+getDriverParametersString();
 	}
 
 	/**
@@ -575,5 +576,50 @@ public abstract class AbstractJdbcConnectionProvider implements IJdbcConnectionP
 	@Override
 	public int getAdditionalArgumentCount() {
 		return maxAdditionalArgumentIndex+1;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int getDriverParameterCount() {
+		return driverParameters.size();
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void setDriverParameter(String name, String value) {
+		if (value != null) {
+			driverParameters.put(name, value);
+		} else {
+			driverParameters.remove(name);
+		}
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getDriverParameter(String name) {
+		return driverParameters.get(name);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getDriverParametersString() {
+		if (driverParameters.isEmpty()) return "";
+		StringBuilder rc = new StringBuilder();
+		for (Map.Entry<String, String> entry : driverParameters.entrySet()) {
+			if (rc.length() == 0) rc.append('?');
+			else rc.append('&');
+			rc.append(entry.getKey());
+			rc.append('=');
+			rc.append(entry.getValue());
+		}
+		return rc.toString();
 	}
 }
