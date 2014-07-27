@@ -341,4 +341,35 @@ public interface IJdbcConnectionProvider2 extends IJdbcConnectionProvider {
 	 * @return number of additional arguments
 	 */
 	public int getAdditionalArgumentCount();
+	
+	/**
+	 * Returns the number of additional driver parameters.
+	 * @return number of driver parameters.
+	 * @since 1.2.9
+	 */
+	public int getDriverParameterCount();
+	
+	/**
+	 * Sets a driver parameter value or deletes it.
+	 * @param name name of parameter
+	 * @param value value of parameter or <code>null</code> if parameter shall be removed
+	 * @since 1.2.9
+	 */
+	public void setDriverParameter(String name, String value);
+	
+	/**
+	 * Returns the value of th edriver parameter.
+	 * @param name name of parameter
+	 * @return value of parameter
+	 * @since 1.2.9
+	 */
+	public String getDriverParameter(String name);
+	
+	/**
+	 * Returns the URL driver parameter string to be used in {@link #getDriverUrl(String, String, String, String, String, String...) url}.
+	 * @return the parameter string
+	 * @since 1.2.9
+	 */
+	public String getDriverParametersString();
+
 }

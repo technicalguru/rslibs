@@ -46,6 +46,14 @@ public interface IJdbcConnectionProvider {
 	 * @throws SQLException when the connection cannot be opened
 	 */
 	public Connection getConnection(String host, String port, String dbName, String dbLogin, String dbPassword, String... addOnArgs) throws SQLException;
+	
+	/**
+	 * Returns the {@link #dbDriverClassName}.
+	 * The method shall return <code>null</code> in case of any errors.
+	 * @return the dbDriverClassName
+	 * @since 1.2.9
+	 */
+	public String getDbDriverClassName();
 
 	/**
 	 * Constructs the driver's URL from the arguments.
