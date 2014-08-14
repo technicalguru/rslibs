@@ -20,6 +20,7 @@ package rs.data.hibernate.bo;
 import java.io.Serializable;
 
 import org.hibernate.Session;
+import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.LazyInitializer;
 
@@ -129,18 +130,18 @@ public abstract class AbstractHibernateBO<K extends Serializable, T extends Gene
 				LazyInitializer initializer = ((HibernateProxy)t).getHibernateLazyInitializer();
 				if (initializer != null) {
 					if (initializer.getSession() == null || !initializer.getSession().isOpen()) {
-						t = (T)getSession().get(getTransferClass(), getId());
-						super.setTransferObject(t);
+						initializer.setSession((SessionImplementor)getSession());
 					}
+					t = (T)initializer.getImplementation();
+					super.setTransferObject(t);
 				}
 			}
 			commitTx();
 		} catch (Exception e) {
-			getLog().error("init problem:", e);
 			try {
 				rollbackTx();
 			} catch (Exception e2) {
-				throw new RuntimeException("Cannot rollback exception", e2);
+				throw new RuntimeException("Cannot initialize DTO", e2);
 			}
 			throw new RuntimeException("Cannot initialize DTO", e);
 		}
