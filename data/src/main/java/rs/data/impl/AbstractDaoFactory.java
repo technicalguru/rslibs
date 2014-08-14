@@ -73,7 +73,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 	private boolean debugTransactions = false;
 	private boolean traceTransactions = false;
 
-	
+
 	private IDaoListener daoListener = new MyDaoListener();
 	private Map<String, Object> properties = new HashMap<String, Object>();
 	private Map<String, String> params = new HashMap<String, String>();
@@ -219,7 +219,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 		return daoMasters.get(id);
 	}
 
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -347,15 +347,15 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 	@Override
 	public void registerDao(String name, IGeneralDAO<? extends Serializable,? extends IGeneralBO<? extends Serializable>> dao) {
 		if (name == null) name = dao.getClass().getName();
-		
+
 		dao.setFactory(this); // Just in case
-		
+
 		// Add the factory as a listener
 		dao.addDaoListener(daoListener);
 
 		this.daos.put(name, dao);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -441,7 +441,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 			dao.clearCache();
 		}
 	}
-	
+
 	/********************* TRANSACTIONS ************************/
 
 	/**
@@ -523,7 +523,9 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 	 */
 	@Override
 	public void commit() {
-		if (txContext.get().commit()) txContext.remove();
+		if (txContext.get() != null) {
+			if (txContext.get().commit()) txContext.remove();
+		}
 	}
 
 	/**
@@ -531,7 +533,9 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 	 */
 	@Override
 	public void rollback() {
-		if (txContext.get().rollback()) txContext.remove();
+		if (txContext.get() != null) {
+			if (txContext.get().rollback()) txContext.remove();
+		}
 	}
 
 	/**
@@ -583,7 +587,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 	public boolean isDebugTransactions() {
 		return this.debugTransactions;
 	}
-	
+
 	/**
 	 * Sets debugging of transaction demarcations.
 	 * @param debug <code>true</code> when debugging shall be enabled (via SLF4J)
@@ -592,7 +596,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 		this.debugTransactions = debug;
 		if (debugTransactions) log.info("Enabling transaction demarcation log");
 	}
-	
+
 	/**
 	 * Returns whether stacktracing is enabled with {@link #isDebugTransactions() transaction demarcation debugging} option.
 	 * @return <code>true</code> when stacktrace shall be enabled (via SLF4J)
@@ -600,7 +604,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 	public boolean isTraceTransactions() {
 		return this.traceTransactions;
 	}
-	
+
 	/**
 	 * Sets whether stacktracing is enabled with {@link #isDebugTransactions() transaction demarcation debugging} option.
 	 * @param trace <code>true</code> when stacktrace shall be enabled (via SLF4J)
@@ -609,7 +613,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 		this.traceTransactions = trace;
 		if (debugTransactions && traceTransactions) log.info("Enabling stacktrace for transaction demarcation");
 	}
-	
+
 	/**
 	 * Keeps track of transaction creation.
 	 * @author ralph
@@ -620,7 +624,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 		private int beginCount;
 		private boolean modelChanged;
 		private Logger log = LoggerFactory.getLogger(TransactionContext.class);
-		
+
 		public TransactionContext() {
 			this.beginCount = 0;
 			this.modelChanged = false;
@@ -648,6 +652,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 				Transaction tx = getTransaction();
 				if (tx != null) {
 					int txStatus = tx.getStatus();
+					getLog().error("TX status: "+txStatus);
 					startTx = (txStatus != Status.STATUS_ACTIVE) && (txStatus != Status.STATUS_MARKED_ROLLBACK) && (txStatus != Status.STATUS_ROLLEDBACK);
 				}
 
@@ -717,7 +722,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 						log.debug("Transaction usage decreased to "+(beginCount-1)+": TX-"+Thread.currentThread().getId());
 						if (traceTransactions) CommonUtils.debugStackTrace(log);
 					}
-					
+
 				}
 				beginCount--;
 			} catch (Exception e) {
