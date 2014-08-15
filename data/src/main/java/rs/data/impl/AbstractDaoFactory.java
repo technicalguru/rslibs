@@ -741,7 +741,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 		 * this method will just mark the transaction for rollback only.
 		 */
 		public boolean rollback() {
-			boolean rc = true;
+			boolean rc = false;
 			try {
 				log.debug("rollback: count="+beginCount+": TX-"+Thread.currentThread().getId());
 				beginCount--;
