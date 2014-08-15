@@ -23,10 +23,13 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.apache.commons.beanutils.PropertyUtils;
@@ -262,6 +265,36 @@ public class LangUtilsTest {
 		long start = System.currentTimeMillis();
 		LangUtils.sleep(500L);
 		assertTrue("sleep is not long enough", System.currentTimeMillis() - start >= 500L);
+	}
+
+	@Test
+	public void testNullClass() {
+		assertFalse("NULL objects must be false in isInstanceOf check", LangUtils.isInstanceOf((Object)null, "java.lang.Object"));
+	}
+
+	@Test
+	public void testAlwaysObjectClass() {
+		assertTrue("Object is not recognized", LangUtils.isInstanceOf(4L, "java.lang.Object"));
+	}
+
+	@Test
+	public void testInterfaceClass() {
+		assertTrue("Interface is not recognized", LangUtils.isInstanceOf(4L, "java.lang.Comparable"));
+	}
+	
+	@Test
+	public void testSuperInterfaceClass() {
+		assertTrue("Interface of superclass is not recognized", LangUtils.isInstanceOf(new GregorianCalendar(), "java.lang.Comparable"));
+	}
+	
+	@Test
+	public void testInterfaceSuperClass() {
+		assertTrue("Superclass of interface is not recognized", LangUtils.isInstanceOf(new ArrayList<Object>(), "java.util.Collection"));
+	}
+
+	@Test
+	public void testNoInstanceClass() {
+		assertFalse("Interface shall not be detecetd", LangUtils.isInstanceOf(4L, "java.util.Collection"));
 	}
 
 }

@@ -693,4 +693,40 @@ public class LangUtils {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	/**
+	 * Replacement for "instanceof" operator when it cannot be guaranteed that
+	 * the class is available in classpath at runtime.
+	 * @param className the complete class name
+	 * @return when the object is of that class
+	 */
+	public static boolean isInstanceOf(Object o, String className) {
+		if (o == null) return false;
+		Class<?> clazz = o.getClass();
+		return isInstanceOf(clazz, className);
+	}
+	
+	/**
+	 * Replacement for {@link Class#isAssignableFrom(Class)} when it cannot be guaranteed that
+	 * the class is available in classpath at runtime.
+	 * @param inspectedClass the class to be checked
+	 * @param className the complete class name that should be implemented or a superclass of the inspected class
+	 * @return when the inspected class implements or derived from the class with given name
+	 */
+	public static boolean isInstanceOf(Class<?> inspectedClass, String className) {
+		// Check type of class
+		if (inspectedClass.getName().equals(className)) return true;
+		
+		// Check all interfaces
+		for (Class<?> i : inspectedClass.getInterfaces()) {
+			boolean rc = isInstanceOf(i, className);
+			if (rc) return true;
+		}
+		
+		// check superclass
+		Class<?> parent = inspectedClass.getSuperclass();
+		if (parent != null) return isInstanceOf(parent, className);
+		
+		return false;
+	}
 }
