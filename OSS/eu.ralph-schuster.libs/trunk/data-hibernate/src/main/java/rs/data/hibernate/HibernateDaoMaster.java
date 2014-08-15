@@ -18,6 +18,7 @@
 package rs.data.hibernate;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
@@ -33,12 +34,9 @@ import org.apache.commons.configuration.XMLConfiguration;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.internal.SessionFactoryImpl;
-import org.hibernate.service.jdbc.connections.internal.C3P0ConnectionProvider;
 import org.hibernate.service.jdbc.connections.spi.ConnectionProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.mchange.v2.c3p0.PooledDataSource;
 
 import rs.baselib.io.FileFinder;
 import rs.baselib.lang.LangUtils;
@@ -206,16 +204,22 @@ public class HibernateDaoMaster extends AbstractDaoMaster {
 			if (this.sessionFactory instanceof SessionFactoryImpl) {
 				SessionFactoryImpl sf = (SessionFactoryImpl)sessionFactory;
 				ConnectionProvider conn = sf.getConnectionProvider();
-				if(conn instanceof C3P0ConnectionProvider) { 
-					((C3P0ConnectionProvider)conn).close(); 
+				if((conn != null) && conn.getClass().getName().equals("org.hibernate.service.jdbc.connections.internal.C3P0ConnectionProvider")) {
+					try {
+						conn.getClass().getMethod("close").invoke(conn);
+					} catch (InvocationTargetException e) {
+						log.error("Cannot close C3P0ConnectionProvider: ", e);
+					} catch (Throwable t) {
+						// Ignore, there is no such class
+					}
 				}
 			}
 			this.sessionFactory.close();
 		}
 		this.sessionFactory = null;
 		DataSource ds = getDatasource();
-		if (ds instanceof PooledDataSource) try {
-			((PooledDataSource)ds).hardReset();
+		if ((ds != null) && ds.getClass().getName().equals("com.mchange.v2.c3p0.PooledDataSource")) try {
+			ds.getClass().getMethod("hardReset").invoke(ds);
 		} catch (Exception e) {
 			// Do not log
 		}

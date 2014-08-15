@@ -84,4 +84,10 @@ public interface IOsgiModelService {
 	 */
 	public void registerFactory(String name, IDaoFactory factory);
 	
+	/**
+	 * Shutdown all data factories.
+	 * @return true whenn all factories could be shut down.
+	 */
+	public boolean stop();
+	
 }

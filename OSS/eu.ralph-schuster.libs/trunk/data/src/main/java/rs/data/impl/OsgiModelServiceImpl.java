@@ -205,4 +205,39 @@ public class OsgiModelServiceImpl implements IOsgiModelService {
 		factories.put(name, factory);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean stop() {
+		boolean rc = true;
+		log.info("Shutting down OsgiModelService");
+		if (factoriesLoaded) {
+			for (Map.Entry<String, IDaoFactory> entry : factories.entrySet()) {
+				log.info("Shutting down \""+entry.getKey()+"\"...");
+				try {
+					entry.getValue().shutdown();
+				} catch (Throwable t) {
+					log.error("Cannot shutdown \""+entry.getKey()+"\".", t);
+					rc = false;
+				}
+			}
+			factories.clear();
+			factoriesLoaded = false;
+			if (txManager != null) {
+				try {
+					log.info("Shutting down Transaction Manager...");
+					// Shutdown JOTM TX Manager
+					JotmSupport.stop();
+					setTransactionManager(null);
+				} catch (Exception e) {
+					log.error("Cannot shutdown Transaction Manager", e);
+				}			
+			}
+		}
+		log.info("Shutdown completed");
+		return rc;
+	}
+
+
 }
