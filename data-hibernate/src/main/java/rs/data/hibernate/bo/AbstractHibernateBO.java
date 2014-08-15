@@ -39,6 +39,7 @@ public abstract class AbstractHibernateBO<K extends Serializable, T extends Gene
 	 * Serial UID.
 	 */
 	private static final long serialVersionUID = -248221407299395538L;
+	private boolean isInitialized = false;
 
 	/**
 	 * Constructor.
@@ -61,7 +62,7 @@ public abstract class AbstractHibernateBO<K extends Serializable, T extends Gene
 	protected HibernateDaoMaster getDaoMaster() {
 		return (HibernateDaoMaster)getDao().getDaoMaster();
 	}
-	
+
 	/**
 	 * Returns a Hibernate session.
 	 * @return the session
@@ -69,22 +70,29 @@ public abstract class AbstractHibernateBO<K extends Serializable, T extends Gene
 	protected Session getSession() {
 		return getDaoMaster().getSession();
 	}
-	
+
 	/**
 	 * Returns the transferObject.
 	 * @return the transferObject
 	 */
-	public synchronized T getTransferObject() {
-		boolean needsInit = false;
+	public T getTransferObject() {
 		T t = super.getTransferObject();
-		if (t instanceof HibernateProxy) {
-			LazyInitializer initializer = ((HibernateProxy)t).getHibernateLazyInitializer();
-			if (initializer != null) needsInit = initializer.isUninitialized();
+		if (!isInitialized) {
+			synchronized (this) {
+				if (!isInitialized) {
+					boolean needsInit = false;
+					if (t instanceof HibernateProxy) {
+						LazyInitializer initializer = ((HibernateProxy)t).getHibernateLazyInitializer();
+						if (initializer != null) needsInit = initializer.isUninitialized();
+					}
+					if (needsInit) t = initialize();
+					isInitialized = true;
+				}
+			}
 		}
-		if (needsInit) t = initialize();
 		return t;
 	}
-	
+
 	/**
 	 * Returns the session-attached transferObject.
 	 * @return the session attached transferObject
@@ -107,8 +115,8 @@ public abstract class AbstractHibernateBO<K extends Serializable, T extends Gene
 		setTransferObject(t);
 		return t;
 	}
-	
-	
+
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -147,6 +155,6 @@ public abstract class AbstractHibernateBO<K extends Serializable, T extends Gene
 		}
 		return t;
 	}
-	
+
 
 }
