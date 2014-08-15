@@ -652,7 +652,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 				Transaction tx = getTransaction();
 				if (tx != null) {
 					int txStatus = tx.getStatus();
-					getLog().error("TX status: "+txStatus);
+					getLog().error("TX status: "+txStatus+ " count="+beginCount);
 					startTx = (txStatus != Status.STATUS_ACTIVE) && (txStatus != Status.STATUS_MARKED_ROLLBACK) && (txStatus != Status.STATUS_ROLLEDBACK);
 				}
 
@@ -688,6 +688,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 		public boolean commit() {
 			boolean rc = false;
 			try {
+				System.out.println("commit: count="+beginCount);
 				if (beginCount == 1) {
 					rc = true;
 					boolean doRollback = false;
@@ -742,6 +743,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 		public boolean rollback() {
 			boolean rc = true;
 			try {
+				System.out.println("rollback: count="+beginCount);
 				beginCount--;
 				if (beginCount == 0) {
 					fireDaoFactoryEvent(new DaoFactoryEvent(AbstractDaoFactory.this, Type.TRANSACTION_ROLLING_BACK));
