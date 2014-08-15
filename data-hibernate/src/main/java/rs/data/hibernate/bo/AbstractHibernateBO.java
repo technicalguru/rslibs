@@ -74,7 +74,7 @@ public abstract class AbstractHibernateBO<K extends Serializable, T extends Gene
 	 * Returns the transferObject.
 	 * @return the transferObject
 	 */
-	public T getTransferObject() {
+	public synchronized T getTransferObject() {
 		boolean needsInit = false;
 		T t = super.getTransferObject();
 		if (t instanceof HibernateProxy) {
