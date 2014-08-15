@@ -204,7 +204,7 @@ public class HibernateDaoMaster extends AbstractDaoMaster {
 			if (this.sessionFactory instanceof SessionFactoryImpl) {
 				SessionFactoryImpl sf = (SessionFactoryImpl)sessionFactory;
 				ConnectionProvider conn = sf.getConnectionProvider();
-				if((conn != null) && conn.getClass().getName().equals("org.hibernate.service.jdbc.connections.internal.C3P0ConnectionProvider")) {
+				if(LangUtils.isInstanceOf(conn, "org.hibernate.service.jdbc.connections.internal.C3P0ConnectionProvider")) {
 					try {
 						conn.getClass().getMethod("close").invoke(conn);
 					} catch (InvocationTargetException e) {
@@ -218,7 +218,7 @@ public class HibernateDaoMaster extends AbstractDaoMaster {
 		}
 		this.sessionFactory = null;
 		DataSource ds = getDatasource();
-		if ((ds != null) && ds.getClass().getName().equals("com.mchange.v2.c3p0.PooledDataSource")) try {
+		if (LangUtils.isInstanceOf(ds, "com.mchange.v2.c3p0.PooledDataSource")) try {
 			ds.getClass().getMethod("hardReset").invoke(ds);
 		} catch (Exception e) {
 			// Do not log
