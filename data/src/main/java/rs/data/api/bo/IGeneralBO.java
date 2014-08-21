@@ -23,6 +23,7 @@ import javax.persistence.Transient;
 
 import rs.baselib.bean.IBean;
 import rs.baselib.bean.NoCopy;
+import rs.baselib.type.IIdObject;
 import rs.baselib.util.RsDate;
 import rs.data.api.dao.IGeneralDAO;
 import rs.data.util.CID;
@@ -34,7 +35,7 @@ import rs.data.util.LockInformation;
  * @author ralph
  *
  */
-public interface IGeneralBO<K extends Serializable> extends Serializable, IBean {
+public interface IGeneralBO<K extends Serializable> extends Serializable, IBean, IIdObject<K> {
 	
 	public static final String PROPERTY_CREATION_DATE = "creationDate";
 	public static final String PROPERTY_CHANGE_DATE = "changeDate";
@@ -46,13 +47,6 @@ public interface IGeneralBO<K extends Serializable> extends Serializable, IBean 
 	@Transient
 	public IGeneralDAO<K, ? extends IGeneralBO<K>> getDao();
 	
-	/**
-	 * Returns the id.
-	 * @return the id
-	 */
-	@Transient
-	public K getId();
-
 	/**
 	 * Returns the CID.
 	 * @return the CID

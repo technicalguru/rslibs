@@ -31,6 +31,7 @@ import org.hibernate.usertype.ParameterizedType;
 import org.hibernate.usertype.UserType;
 
 import rs.baselib.lang.LangUtils;
+import rs.baselib.type.IIdObject;
 
 /**
  * Reads enumerations.
@@ -77,7 +78,14 @@ public class EnumerationType implements UserType, ParameterizedType {
 	public Object nullSafeGet(ResultSet resultSet, String[] names, SessionImplementor session, Object owner) throws HibernateException, SQLException { 
 		Enum<?> result = null; 
 		Object value = resultSet.getObject(names[0]);
-		if (value instanceof Number) {
+		if (IIdObject.class.isAssignableFrom(clazz)) {
+			for (Enum<?> e : clazz.getEnumConstants()) {
+				if (((IIdObject<?>)e).getId().equals(value)) {
+					result = e;
+					break;
+				}
+			}
+		} else if (value instanceof Number) {
 			int i = LangUtils.getInt(value);
 			result = clazz.getEnumConstants()[i];
 		} else if (value != null) {
