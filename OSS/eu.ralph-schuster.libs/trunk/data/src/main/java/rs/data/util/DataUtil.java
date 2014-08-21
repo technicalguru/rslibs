@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import rs.data.api.bo.IGeneralBO;
+import rs.baselib.type.IIdObject;
 
 /**
  * Some data utilities.
@@ -37,9 +37,9 @@ public class DataUtil {
 	 * @param businessObjects collection of business objects.
 	 * @return list of IDs.
 	 */
-	public static <K extends Serializable> List<K> idList(Collection<? extends IGeneralBO<K>> businessObjects) {
+	public static <K extends Serializable> List<K> idList(Collection<? extends IIdObject<K>> businessObjects) {
 		List<K> rc = new ArrayList<K>();
-		for (IGeneralBO<K> bo : businessObjects) {
+		for (IIdObject<K> bo : businessObjects) {
 			if (bo != null) {
 				rc.add(bo.getId());
 			}
@@ -53,7 +53,7 @@ public class DataUtil {
 	 * @return list of IDs.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <K extends Serializable> K[] idArray(Collection<? extends IGeneralBO<K>> businessObjects, Class<K> keyClass) {
+	public static <K extends Serializable> K[] idArray(Collection<? extends IIdObject<K>> businessObjects, Class<K> keyClass) {
 		List<K> list = idList(businessObjects);
 		return list.toArray((K[])Array.newInstance(keyClass, list.size()));
 	}
