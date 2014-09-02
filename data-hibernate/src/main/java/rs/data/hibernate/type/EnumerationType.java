@@ -92,7 +92,7 @@ public class EnumerationType implements UserType, ParameterizedType {
 			String name = LangUtils.getString(value);
 
 			if (!resultSet.wasNull()) {
-				name = name.trim();
+				name = name.trim().toUpperCase();
 
 				// This is the name of the enum
 				if (name.length() > 0) {
@@ -111,7 +111,16 @@ public class EnumerationType implements UserType, ParameterizedType {
 		if (null == value) { 
 			preparedStatement.setNull(index, Types.VARCHAR);
 		} else { 
-			preparedStatement.setString(index, ((Enum<?>)value).name());
+			if (value instanceof IIdObject) {
+				value = ((IIdObject<?>)value).getId();
+				if (value instanceof String) {
+					preparedStatement.setString(index, (String)value);
+				} else if (value instanceof Number) {
+					preparedStatement.setInt(index, ((Number)value).intValue());
+				}
+			} else {
+				preparedStatement.setString(index, ((Enum<?>)value).name());
+			}
 		} 
 	} 
 
