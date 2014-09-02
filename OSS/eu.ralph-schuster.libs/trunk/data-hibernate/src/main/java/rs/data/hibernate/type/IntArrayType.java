@@ -184,8 +184,8 @@ public class IntArrayType implements UserType, ParameterizedType {
 	}
 
 	/**
-	 * Sets the splitExpression.
-	 * @param splitExpression the splitExpression to set
+	 * Sets the split character.
+	 * @param splitChar the split character to set
 	 */
 	public void setSplitChar(String splitChar) {
 		this.splitChar = splitChar != null ? splitChar : ",";
