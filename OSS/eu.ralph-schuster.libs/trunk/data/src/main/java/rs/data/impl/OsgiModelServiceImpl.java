@@ -109,13 +109,17 @@ public class OsgiModelServiceImpl implements IOsgiModelService {
 	@Override
 	public TransactionManager getTransactionManager() {
 		if (txManager == null) {
-			try {
-				// Create JOTM TX Manager
-				JotmSupport.start();
-				setTransactionManager(JotmSupport.getTransactionManager());
-			} catch (Exception e) {
-				throw new RuntimeException("Cannot setup Transaction Manager", e);
-			}			
+			synchronized (this) {
+				if (txManager == null) {
+					try {
+						// Create JOTM TX Manager
+						JotmSupport.start();
+						setTransactionManager(JotmSupport.getTransactionManager());
+					} catch (Exception e) {
+						throw new RuntimeException("Cannot setup Transaction Manager", e);
+					}			
+				}
+			}
 		}
 		return txManager;
 	}
