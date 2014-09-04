@@ -468,7 +468,11 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 	@Override
 	public TransactionManager getTransactionManager() {
 		if (txManager == null) {
-			setTransactionManager(createTransactionManager());
+			synchronized (this) {
+				if (txManager == null) {
+					setTransactionManager(createTransactionManager());
+				}
+			}
 		}
 		return txManager;
 	}
