@@ -26,7 +26,9 @@ import java.sql.Types;
 
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
-import org.hibernate.usertype.UserType;
+import org.hibernate.type.TimestampType;
+import org.hibernate.type.Type;
+import org.hibernate.usertype.CompositeUserType;
 
 import rs.baselib.util.DateTimePeriod;
 import rs.baselib.util.RsDate;
@@ -36,25 +38,31 @@ import rs.baselib.util.RsDate;
  * @author ralph
  *
  */
-public class DateTimePeriodType implements UserType {
+public class DateTimePeriodType implements CompositeUserType {
 
-	/** The database data types */
-	private static final int SQL_TYPES[] = { Types.TIMESTAMP, Types.TIMESTAMP };
-	
 	/**
 	 * Default Constructor.
 	 */
 	public DateTimePeriodType() {
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getPropertyNames() {
+        // ORDER IS IMPORTANT!  it must match the order the columns are defined in the property mapping
+        return new String[] { "from", "until" };
+    }
+	
     /**
      * {@inheritDoc}
      */
 	@Override
-    public int[] sqlTypes() { 
-    	return SQL_TYPES; 
+	public Type[] getPropertyTypes() {
+        return new Type[] { TimestampType.INSTANCE, TimestampType.INSTANCE };
     }
-
+	
     /**
      * {@inheritDoc}
      */
@@ -63,34 +71,42 @@ public class DateTimePeriodType implements UserType {
     	return DateTimePeriod.class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-    public boolean equals(Object x, Object y) {
-        if (x == y) return true;
-        if (x == null || y == null) return false;
-        return x.equals(y);
+	public Object getPropertyValue(Object component, int propertyIndex) {
+        if (component == null) return null;
+
+        DateTimePeriod period = (DateTimePeriod) component;
+        switch (propertyIndex) {
+            case 0: return period.getFrom();
+            case 1: return period.getUntil();
+            default:
+                throw new HibernateException( "Invalid property index [" + propertyIndex + "]" );
+        }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-    public Object deepCopy(Object value) {
-    	if (value == null) return null;
-    	DateTimePeriod src = (DateTimePeriod)value;
-    	return src.deepCopy();
+    public void setPropertyValue(Object component, int propertyIndex, Object value) throws HibernateException {
+        if (component == null) return;
+
+        DateTimePeriod period = (DateTimePeriod) component;
+        switch (propertyIndex) {
+            case 0:
+                period.setFrom((RsDate)value);
+                break;
+            case 1:
+                period.setUntil((RsDate)value);
+                break;
+            default:
+                throw new HibernateException( "Invalid property index [" + propertyIndex + "]" );
+        }
     }
-    
-    /**
-     * {@inheritDoc}
-     */
-	@Override
-    public boolean isMutable() {
-    	return true;
-    }
-    
+	
     /**
      * {@inheritDoc}
      */
@@ -123,22 +139,6 @@ public class DateTimePeriodType implements UserType {
      * {@inheritDoc}
      */
 	@Override
-    public Object assemble(Serializable cached, Object owner) throws HibernateException {
-    	return cached;
-    }
-    
-    /**
-     * {@inheritDoc}
-     */
-	@Override
-    public Serializable disassemble(Object value) throws HibernateException {
-    	return (Serializable) value;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-	@Override
 	public int hashCode(Object component) throws HibernateException {
 		return ((DateTimePeriod)component).hashCode();
 	}
@@ -147,9 +147,52 @@ public class DateTimePeriodType implements UserType {
      * {@inheritDoc}
      */
 	@Override
-	public Object replace(Object original, Object target, Object owner) throws HibernateException {
-		return deepCopy(original);
+	public boolean equals(Object x, Object y) throws HibernateException {
+        if (x == y) return true;
+        if (x == null || y == null) return false;
+        return x.equals(y);
 	}
 
+    /**
+     * {@inheritDoc}
+     */
+	@Override
+	public Object deepCopy(Object value) throws HibernateException {
+    	if (value == null) return null;
+    	DateTimePeriod src = (DateTimePeriod)value;
+    	return src.deepCopy();
+	}
+
+    /**
+     * {@inheritDoc}
+     */
+	@Override
+	public boolean isMutable() {
+		return true;
+	}
+
+    /**
+     * {@inheritDoc}
+     */
+	@Override
+	public Serializable disassemble(Object value, SessionImplementor session) throws HibernateException {
+    	return (Serializable) value;
+	}
+
+    /**
+     * {@inheritDoc}
+     */
+	@Override
+	public Object assemble(Serializable cached, SessionImplementor session, Object owner) throws HibernateException {
+    	return cached;
+	}
+
+    /**
+     * {@inheritDoc}
+     */
+	@Override
+	public Object replace(Object original, Object target, SessionImplementor session, Object owner) throws HibernateException {
+		return deepCopy(original);
+	}
 
 }
