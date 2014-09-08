@@ -376,6 +376,16 @@ public class CommonUtils {
 	}
 
 	/**
+	 * Makes a join of an object array.
+	 * @param separator - the string to be used inbetween parts
+	 * @param parts - the parts to join
+	 * @return the joined string
+	 */
+	public static String join(String separator, Object parts[]) {
+		return join(separator, parts, 0, parts.length+1);
+	}
+
+	/**
 	 * Makes a join of a string array.
 	 * @param separator - the string to be used inbetween parts
 	 * @param parts - the parts to join
@@ -383,6 +393,17 @@ public class CommonUtils {
 	 * @return the joined string
 	 */
 	public static String join(String separator, String parts[], int startIndex) {
+		return join(separator, parts, startIndex, parts.length+1);
+	}
+
+	/**
+	 * Makes a join of an object array.
+	 * @param separator - the string to be used inbetween parts
+	 * @param parts - the parts to join
+	 * @param startIndex - starting index (negative values not allowed)
+	 * @return the joined string
+	 */
+	public static String join(String separator, Object parts[], int startIndex) {
 		return join(separator, parts, startIndex, parts.length+1);
 	}
 
@@ -399,6 +420,23 @@ public class CommonUtils {
 		for (int i=startIndex; i<parts.length && i<=endIndex; i++) {
 			if (i != startIndex) s.append(separator);
 			s.append(parts[i]);
+		}
+		return s.toString();
+	}
+
+	/**
+	 * Makes a join of an object array.
+	 * @param separator - the string to be used inbetween parts
+	 * @param parts - the parts to join
+	 * @param startIndex - starting index (negative values not allowed)
+	 * @param endIndex - endIndex (bigger values than number or array elements have no effect)
+	 * @return the joined string
+	 */
+	public static String join(String separator, Object parts[], int startIndex, int endIndex) {
+		StringBuilder s = new StringBuilder();
+		for (int i=startIndex; i<parts.length && i<=endIndex; i++) {
+			if (i != startIndex) s.append(separator);
+			s.append(parts[i] != null ? parts[i].toString() : "");
 		}
 		return s.toString();
 	}
