@@ -45,6 +45,8 @@ public abstract class AbstractBean implements IBean {
 	private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 	/** Object is dirty? */
 	private boolean dirty = false;
+	/** all property names (cached) */
+	private List<String> propertyNames = null;
 	/** All registed changes */
 	private Map<String, PropertyChangeEvent> registeredChanges = new HashMap<String, PropertyChangeEvent>();
 
@@ -386,11 +388,9 @@ public abstract class AbstractBean implements IBean {
 			throw new IllegalArgumentException("The destination must be of same type but is of "+destination.getClass().getName());
 		}
 
-		PropertyDescriptor descriptors[] = PropertyUtils.getPropertyDescriptors(getClass());
-		for (PropertyDescriptor descriptor : descriptors) {
-			String name = descriptor.getName();
+		for (String name : getPropertyNames()) {
 
-			if (isCopyAllowed(descriptor) && PropertyUtils.isReadable(this, name) && PropertyUtils.isWriteable(destination, name)) {
+			if (isCopyAllowed(name) && PropertyUtils.isReadable(this, name) && PropertyUtils.isWriteable(destination, name)) {
 				try {
 					Object value = PropertyUtils.getProperty(this, name);
 					PropertyUtils.setProperty(destination, name, value);
@@ -402,6 +402,26 @@ public abstract class AbstractBean implements IBean {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Iterable<String> getPropertyNames() {
+		if (propertyNames == null) {
+			synchronized (this) {
+				if (propertyNames == null) {
+					propertyNames = new ArrayList<String>();
+					PropertyDescriptor descriptors[] = PropertyUtils.getPropertyDescriptors(getClass());
+					for (PropertyDescriptor descriptor : descriptors) {
+						String name = descriptor.getName();
+						propertyNames.add(name);
+					}
+				}
+			}
+		}
+		return propertyNames;
+	}
+	
+	/**
 	 * Returns true when {@link #copyTo(Object)} is allowed to copy the given property.
 	 * <p>
 	 * This method relies on the {@link NoCopy} and {@link Transient} annotations on read methods.
@@ -410,7 +430,19 @@ public abstract class AbstractBean implements IBean {
 	 * @see BeanSupport#isCopyForbidden(Class, String)
 	 */
 	protected boolean isCopyAllowed(PropertyDescriptor descriptor) {
-		return !BeanSupport.INSTANCE.isCopyForbidden(getClass(), descriptor.getName());
+		return isCopyAllowed(descriptor.getName());
+	}
+
+	/**
+	 * Returns true when {@link #copyTo(Object)} is allowed to copy the given property.
+	 * <p>
+	 * This method relies on the {@link NoCopy} and {@link Transient} annotations on read methods.
+	 * </p>
+	 * @return <code>true</code> when copy is allowed
+	 * @see BeanSupport#isCopyForbidden(Class, String)
+	 */
+	protected boolean isCopyAllowed(String name) {
+		return !BeanSupport.INSTANCE.isCopyForbidden(getClass(), name);
 	}
 
 	/**

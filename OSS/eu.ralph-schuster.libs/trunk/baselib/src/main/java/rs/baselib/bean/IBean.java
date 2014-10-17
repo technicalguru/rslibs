@@ -33,6 +33,12 @@ import rs.baselib.util.IDirtyable;
 public interface IBean extends IPropertyChangeProvider, IDirtyable {
 
 	/**
+	 * Returns the property names of this bean.
+	 * @return the property names
+	 */
+	public Iterable<String> getPropertyNames();
+	
+	/**
 	 * Set the property with given name to the value
 	 * @param name property name
 	 * @param value value
