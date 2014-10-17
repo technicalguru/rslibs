@@ -38,7 +38,7 @@ public class BeanSupportTest {
 	@Test
 	public void testGetTransientProperties() {
 		Collection<String> properties = BeanSupport.INSTANCE.getTransientProperties(TestBean.class);
-		assertEquals("Not enough transient properties recognized", 3, properties.size());
+		assertEquals("Not enough transient properties recognized", 4, properties.size());
 		assertTrue("dirty not recognized as transient", properties.contains("dirty"));
 		assertTrue("changes not recognized as transient", properties.contains("changes"));
 		assertTrue("class not recognized as transient", properties.contains("class"));
@@ -63,7 +63,7 @@ public class BeanSupportTest {
 	@Test
 	public void testGetForbiddenList() {
 		Collection<String> properties = BeanSupport.INSTANCE.getForbiddenList(TestBean.class, true);
-		assertEquals("Not enough forbidden properties recognized", 4, properties.size());
+		assertEquals("Not enough forbidden properties recognized", 5, properties.size());
 		assertTrue("dirty not recognized as NoCopy", properties.contains("dirty"));
 		assertTrue("changes not recognized as NoCopy", properties.contains("changes"));
 		assertTrue("class not recognized as NoCopy", properties.contains("class"));
