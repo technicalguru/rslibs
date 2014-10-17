@@ -270,4 +270,12 @@ public class AbstractBeanTest {
 		}
 		
 	}
+	
+	@Test
+	public void testGetProperties() {
+		Iterable<String> properties = bean.getPropertyNames();
+		int cnt = 0; for (@SuppressWarnings("unused") String s : properties) cnt++;
+		assertEquals("Not the correct number of properties", 6, cnt);
+	}
+	
 }
