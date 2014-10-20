@@ -46,6 +46,7 @@ import java.util.Properties;
 import java.util.TimeZone;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -938,6 +939,15 @@ public class CommonUtils {
 		return OS.indexOf("sunos") >= 0;
 	}
 
+	/**
+	 * Checks validity of an email address.
+	 * @param s
+	 * @return
+	 */
+	public static boolean isEmail(String s) {
+		return !isEmpty(s) && EmailValidator.getInstance().isValid(s.trim());
+	}
+	
 	/**
 	 * Returns the OS name.
 	 * @return the OS name as returned by <code>System.getProperty("os.name")</code>
