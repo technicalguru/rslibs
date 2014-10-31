@@ -150,14 +150,24 @@ public class CronSchedule {
  
 	/**
 	 * Returns the cron-like definition of the schedule.
+	 * @return the cron-like string
+	 * @since 1.2.9
 	 */
-	public String toString() {
+	public String getCronString() {
 		StringBuilder rc = new StringBuilder();
 		for (int i=0; i<TYPES.length; i++) {
 			rc.append(" ");
 			rc.append(get(getType(i)));
 		}
 		return rc.toString().trim();
+	}
+	
+	/**
+	 * Returns the cron-like definition of the schedule.
+	 * @return the cron-like string
+	 */
+	public String toString() {
+		return getCronString();
 	}
  
 	/**
@@ -273,6 +283,24 @@ public class CronSchedule {
 		return rc;
 	}
  
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		return toString().hashCode();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) return false;
+		if (!getClass().equals(obj.getClass())) return false;
+		return toString().equals(obj.toString());
+	}
+
 	/**
 	 * Returns the type at the specified index
 	 * @param index - index
