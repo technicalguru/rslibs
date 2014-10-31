@@ -35,6 +35,7 @@ public interface IBean extends IPropertyChangeProvider, IDirtyable {
 	/**
 	 * Returns the property names of this bean.
 	 * @return the property names
+	 * @since 1.2.9
 	 */
 	@Transient
 	public Iterable<String> getPropertyNames();

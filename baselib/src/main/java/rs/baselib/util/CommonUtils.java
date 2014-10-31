@@ -381,6 +381,7 @@ public class CommonUtils {
 	 * @param separator - the string to be used inbetween parts
 	 * @param parts - the parts to join
 	 * @return the joined string
+	 * @since 1.2.9
 	 */
 	public static String join(String separator, Object parts[]) {
 		return join(separator, parts, 0, parts.length+1);
@@ -403,6 +404,7 @@ public class CommonUtils {
 	 * @param parts - the parts to join
 	 * @param startIndex - starting index (negative values not allowed)
 	 * @return the joined string
+	 * @since 1.2.9
 	 */
 	public static String join(String separator, Object parts[], int startIndex) {
 		return join(separator, parts, startIndex, parts.length+1);
@@ -432,6 +434,7 @@ public class CommonUtils {
 	 * @param startIndex - starting index (negative values not allowed)
 	 * @param endIndex - endIndex (bigger values than number or array elements have no effect)
 	 * @return the joined string
+	 * @since 1.2.9
 	 */
 	public static String join(String separator, Object parts[], int startIndex, int endIndex) {
 		StringBuilder s = new StringBuilder();
@@ -941,8 +944,9 @@ public class CommonUtils {
 
 	/**
 	 * Checks validity of an email address.
-	 * @param s
-	 * @return
+	 * @param s the string to be checked
+	 * @return <code>true</code> when string is a valid email address
+	 * @since 1.2.9
 	 */
 	public static boolean isEmail(String s) {
 		return !isEmpty(s) && EmailValidator.getInstance().isValid(s.trim());

@@ -39,6 +39,7 @@ import org.slf4j.LoggerFactory;
  * Load a int array from an comma-separated string column.
  * 
  * @author ralph
+ * @since 1.2.9
  *
  */
 public class IntArrayType implements UserType, ParameterizedType {
