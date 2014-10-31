@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Keeps track of a runtime environment.
  * @author ralph
- *
+ * @since 1.2.9
  */
 public class EnvironmentRuntime {
 

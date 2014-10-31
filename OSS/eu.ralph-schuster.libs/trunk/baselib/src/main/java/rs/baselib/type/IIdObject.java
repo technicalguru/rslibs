@@ -24,6 +24,7 @@ import javax.persistence.Transient;
 /**
  * An object having an ID.
  * @author ralph
+ * @since 1.2.9
  *
  * @param <T> the type of the ID
  */

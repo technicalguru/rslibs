@@ -39,6 +39,7 @@ import org.slf4j.LoggerFactory;
  * Load a long array from an comma-separated string column.
  * 
  * @author ralph
+ * @since 1.2.9
  *
  */
 public class LongArrayType implements UserType, ParameterizedType {
