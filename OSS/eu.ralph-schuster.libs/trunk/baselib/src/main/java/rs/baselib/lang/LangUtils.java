@@ -23,20 +23,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.lang.reflect.Array;
-import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.persistence.Transient;
 
@@ -126,23 +119,10 @@ public class LangUtils {
 	 * Get the underlying class for a type, or null if the type is a variable type.
 	 * @param type the type
 	 * @return the underlying class
+	 * @deprecated see {@link ReflectionUtils#getClass(Type)}
 	 */
 	public static Class<?> getClass(Type type) {
-		if (type instanceof Class) {
-			return (Class<?>) type;
-		} else if (type instanceof ParameterizedType) {
-			return getClass(((ParameterizedType) type).getRawType());
-		} else if (type instanceof GenericArrayType) {
-			Type componentType = ((GenericArrayType) type).getGenericComponentType();
-			Class<?> componentClass = getClass(componentType);
-			if (componentClass != null ) {
-				return Array.newInstance(componentClass, 0).getClass();
-			} else {
-				return null;
-			}
-		} else {
-			return null;
-		}
+		return ReflectionUtils.getClass(type);
 	}
 
 	/**
@@ -151,51 +131,10 @@ public class LangUtils {
 	 * @param baseClass the base class
 	 * @param childClass the child class
 	 * @return a list of the raw classes for the actual type arguments.
+	 * @deprecated see {@link ReflectionUtils#getTypeArguments(Class, Class)}
 	 */
 	public static <T> List<Class<?>> getTypeArguments(Class<T> baseClass, Class<? extends T> childClass) {
-		Map<Type, Type> resolvedTypes = new HashMap<Type, Type>();
-		Type type = childClass;
-		
-		// start walking up the inheritance hierarchy until we hit baseClass
-		Class<?> typeClass = getClass(type);
-		while ((typeClass != null) && !typeClass.equals(baseClass)) {
-			if (type instanceof Class) {
-				// there is no useful information for us in raw types, so just keep going.
-				type = ((Class<?>) type).getGenericSuperclass();
-			} else {
-				ParameterizedType parameterizedType = (ParameterizedType) type;
-				Class<?> rawType = (Class<?>) parameterizedType.getRawType();
-
-				Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
-				TypeVariable<?>[] typeParameters = rawType.getTypeParameters();
-				for (int i = 0; i < actualTypeArguments.length; i++) {
-					resolvedTypes.put(typeParameters[i], actualTypeArguments[i]);
-				}
-
-				if (!rawType.equals(baseClass)) {
-					type = rawType.getGenericSuperclass();
-				}
-			}
-			typeClass = getClass(type);
-		}
-
-		// finally, for each actual type argument provided to baseClass, determine (if possible)
-		// the raw class for that type argument.
-		Type[] actualTypeArguments;
-		if (type instanceof Class) {
-			actualTypeArguments = ((Class<?>) type).getTypeParameters();
-		} else {
-			actualTypeArguments = ((ParameterizedType) type).getActualTypeArguments();
-		}
-		List<Class<?>> typeArgumentsAsClasses = new ArrayList<Class<?>>();
-		// resolve types by chasing down type variables.
-		for (Type baseType: actualTypeArguments) {
-			while (resolvedTypes.containsKey(baseType)) {
-				baseType = resolvedTypes.get(baseType);
-			}
-			typeArgumentsAsClasses.add(getClass(baseType));
-		}
-		return typeArgumentsAsClasses;
+		return ReflectionUtils.getTypeArguments(baseClass, childClass);
 	}
 	
 	/**
@@ -699,11 +638,10 @@ public class LangUtils {
 	 * the class is available in classpath at runtime.
 	 * @param className the complete class name
 	 * @return when the object is of that class
+	 * @deprecated see {@link ReflectionUtils#isInstanceOf(Object, String)}
 	 */
 	public static boolean isInstanceOf(Object o, String className) {
-		if (o == null) return false;
-		Class<?> clazz = o.getClass();
-		return isInstanceOf(clazz, className);
+		return ReflectionUtils.isInstanceOf(o, className);
 	}
 	
 	/**
@@ -712,21 +650,9 @@ public class LangUtils {
 	 * @param inspectedClass the class to be checked
 	 * @param className the complete class name that should be implemented or a superclass of the inspected class
 	 * @return when the inspected class implements or derived from the class with given name
+	 * @deprecated see {@link ReflectionUtils#isInstanceOf(Class, String)}
 	 */
 	public static boolean isInstanceOf(Class<?> inspectedClass, String className) {
-		// Check type of class
-		if (inspectedClass.getName().equals(className)) return true;
-		
-		// Check all interfaces
-		for (Class<?> i : inspectedClass.getInterfaces()) {
-			boolean rc = isInstanceOf(i, className);
-			if (rc) return true;
-		}
-		
-		// check superclass
-		Class<?> parent = inspectedClass.getSuperclass();
-		if (parent != null) return isInstanceOf(parent, className);
-		
-		return false;
+		return ReflectionUtils.isInstanceOf(inspectedClass, className);
 	}
 }
