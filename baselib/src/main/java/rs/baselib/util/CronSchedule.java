@@ -19,6 +19,8 @@ package rs.baselib.util;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+
+import rs.baselib.lang.LangUtils;
  
 /**
  * Provides cron-like scheduling information.
@@ -467,6 +469,7 @@ public class CronSchedule {
 			String r = def.substring(0, divPos);
 			if (r.equals("*")) setRange(new TimeAll());
 			else if (r.indexOf("-") > 0) setRange(new TimeRange(r));
+			else if (LangUtils.getInt(r, -1) >=0 ) setRange(new SingleTimeValue(r));
 			else throw new IllegalArgumentException("Invalid range: "+def);
 			setSteps(Integer.parseInt(def.substring(divPos+1)));
 		}
@@ -477,8 +480,14 @@ public class CronSchedule {
 		 * @return true when time matches the interval
 		 */
 		public boolean matches(int timeValue) {
-			boolean rc = getRange().matches(timeValue);
-			if (rc) rc = timeValue % getSteps() == 0;
+			AbstractTimeValue range = getRange();
+			boolean rc = false;
+			if (range instanceof SingleTimeValue) {
+				return timeValue % getSteps() == ((SingleTimeValue)range).getValue();
+			} else {
+				rc = range.matches(timeValue);
+				if (rc) rc = timeValue % getSteps() == 0;
+			}
 			return rc;
 		}
  
