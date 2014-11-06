@@ -40,6 +40,7 @@ import org.slf4j.LoggerFactory;
 
 import rs.baselib.io.FileFinder;
 import rs.baselib.lang.LangUtils;
+import rs.baselib.lang.ReflectionUtils;
 import rs.data.hibernate.util.DataSourceConnectionProvider;
 import rs.data.impl.AbstractDaoMaster;
 
@@ -157,7 +158,7 @@ public class HibernateDaoMaster extends AbstractDaoMaster {
 					PropertyUtils.setProperty(datasource, name, value);
 					setProperty("datasource."+name, value);
 				}
-				if (name.equals("url")) log.debug("Using Database:   "+value);
+				if (name.toLowerCase().contains("url")) log.debug("Using Database:   "+value);
 				else if (name.equals("user")) log.debug("Using Login Name: "+value);
 				idx++;
 			}
@@ -204,7 +205,7 @@ public class HibernateDaoMaster extends AbstractDaoMaster {
 			if (this.sessionFactory instanceof SessionFactoryImpl) {
 				SessionFactoryImpl sf = (SessionFactoryImpl)sessionFactory;
 				ConnectionProvider conn = sf.getConnectionProvider();
-				if(LangUtils.isInstanceOf(conn, "org.hibernate.service.jdbc.connections.internal.C3P0ConnectionProvider")) {
+				if(ReflectionUtils.isInstanceOf(conn, "org.hibernate.service.jdbc.connections.internal.C3P0ConnectionProvider")) {
 					try {
 						conn.getClass().getMethod("close").invoke(conn);
 					} catch (InvocationTargetException e) {
@@ -218,7 +219,7 @@ public class HibernateDaoMaster extends AbstractDaoMaster {
 		}
 		this.sessionFactory = null;
 		DataSource ds = getDatasource();
-		if (LangUtils.isInstanceOf(ds, "com.mchange.v2.c3p0.PooledDataSource")) try {
+		if (ReflectionUtils.isInstanceOf(ds, "com.mchange.v2.c3p0.PooledDataSource")) try {
 			ds.getClass().getMethod("hardReset").invoke(ds);
 		} catch (Exception e) {
 			// Do not log

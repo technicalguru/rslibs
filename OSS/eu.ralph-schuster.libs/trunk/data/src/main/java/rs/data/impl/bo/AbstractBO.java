@@ -24,7 +24,7 @@ import javax.persistence.Transient;
 
 import rs.baselib.bean.NamedObject;
 import rs.baselib.bean.NoCopy;
-import rs.baselib.lang.LangUtils;
+import rs.baselib.lang.ReflectionUtils;
 import rs.baselib.util.RsDate;
 import rs.data.api.bo.IGeneralBO;
 import rs.data.api.dao.IGeneralDAO;
@@ -79,7 +79,7 @@ public abstract class AbstractBO<K extends Serializable, T extends GeneralDTO<K>
 	 */
 	@SuppressWarnings("unchecked")
 	private void init() {
-		List<Class<?>> classes = LangUtils.getTypeArguments(AbstractBO.class, getClass());
+		List<Class<?>> classes = ReflectionUtils.getTypeArguments(AbstractBO.class, getClass());
 		this.transferClass = (Class<T>) classes.get(1);
 	}
 	

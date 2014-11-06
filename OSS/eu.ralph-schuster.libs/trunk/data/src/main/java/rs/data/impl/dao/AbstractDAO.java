@@ -23,7 +23,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import rs.baselib.lang.LangUtils;
+import rs.baselib.lang.ReflectionUtils;
 import rs.data.api.bo.IGeneralBO;
 import rs.data.api.dao.IGeneralDAO;
 import rs.data.impl.bo.AbstractBO;
@@ -59,7 +59,7 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	@Override
 	protected void init() {
 		super.init();
-		List<Class<?>> classes = LangUtils.getTypeArguments(AbstractDAO.class, getClass());
+		List<Class<?>> classes = ReflectionUtils.getTypeArguments(AbstractDAO.class, getClass());
 		this.transferClass = (Class<T>) classes.get(1);		
 	}
 

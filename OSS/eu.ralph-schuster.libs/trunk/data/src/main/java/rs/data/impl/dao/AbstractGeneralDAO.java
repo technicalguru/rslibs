@@ -20,7 +20,7 @@ package rs.data.impl.dao;
 import java.io.Serializable;
 import java.util.List;
 
-import rs.baselib.lang.LangUtils;
+import rs.baselib.lang.ReflectionUtils;
 import rs.data.api.bo.IGeneralBO;
 import rs.data.impl.bo.AbstractGeneralBO;
 
@@ -51,7 +51,7 @@ public abstract class AbstractGeneralDAO<K extends Serializable, B extends Abstr
 	@SuppressWarnings("unchecked")
 	protected void init() {
 		super.init();
-		List<Class<?>> classes = LangUtils.getTypeArguments(AbstractGeneralDAO.class, getClass());
+		List<Class<?>> classes = ReflectionUtils.getTypeArguments(AbstractGeneralDAO.class, getClass());
 		this.boImplementationClass = (Class<B>) classes.get(1);		
 	}
 

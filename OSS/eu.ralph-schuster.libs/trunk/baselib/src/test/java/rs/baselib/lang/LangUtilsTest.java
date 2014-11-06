@@ -58,7 +58,7 @@ public class LangUtilsTest {
 	 */
 	@Test
 	public void testGetTypeArguments() {
-		List<Class<?>> l = LangUtils.getTypeArguments(BaseClass.class, GrandChildClass.class);
+		List<Class<?>> l = ReflectionUtils.getTypeArguments(BaseClass.class, GrandChildClass.class);
 		assertNotNull("Type arguments are null", l);
 		assertEquals("Type arguments are incorrect", 2, l.size());
 		assertEquals("Type arguments are incorrect", String.class, l.get(0));
@@ -269,32 +269,32 @@ public class LangUtilsTest {
 
 	@Test
 	public void testNullClass() {
-		assertFalse("NULL objects must be false in isInstanceOf check", LangUtils.isInstanceOf((Object)null, "java.lang.Object"));
+		assertFalse("NULL objects must be false in isInstanceOf check", ReflectionUtils.isInstanceOf((Object)null, "java.lang.Object"));
 	}
 
 	@Test
 	public void testAlwaysObjectClass() {
-		assertTrue("Object is not recognized", LangUtils.isInstanceOf(4L, "java.lang.Object"));
+		assertTrue("Object is not recognized", ReflectionUtils.isInstanceOf(4L, "java.lang.Object"));
 	}
 
 	@Test
 	public void testInterfaceClass() {
-		assertTrue("Interface is not recognized", LangUtils.isInstanceOf(4L, "java.lang.Comparable"));
+		assertTrue("Interface is not recognized", ReflectionUtils.isInstanceOf(4L, "java.lang.Comparable"));
 	}
 	
 	@Test
 	public void testSuperInterfaceClass() {
-		assertTrue("Interface of superclass is not recognized", LangUtils.isInstanceOf(new GregorianCalendar(), "java.lang.Comparable"));
+		assertTrue("Interface of superclass is not recognized", ReflectionUtils.isInstanceOf(new GregorianCalendar(), "java.lang.Comparable"));
 	}
 	
 	@Test
 	public void testInterfaceSuperClass() {
-		assertTrue("Superclass of interface is not recognized", LangUtils.isInstanceOf(new ArrayList<Object>(), "java.util.Collection"));
+		assertTrue("Superclass of interface is not recognized", ReflectionUtils.isInstanceOf(new ArrayList<Object>(), "java.util.Collection"));
 	}
 
 	@Test
 	public void testNoInstanceClass() {
-		assertFalse("Interface shall not be detecetd", LangUtils.isInstanceOf(4L, "java.util.Collection"));
+		assertFalse("Interface shall not be detecetd", ReflectionUtils.isInstanceOf(4L, "java.util.Collection"));
 	}
 
 }
