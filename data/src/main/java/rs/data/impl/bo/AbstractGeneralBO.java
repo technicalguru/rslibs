@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import rs.baselib.bean.AbstractBean;
 import rs.baselib.lang.HashCodeUtil;
-import rs.baselib.lang.LangUtils;
+import rs.baselib.lang.ReflectionUtils;
 import rs.data.api.IDaoFactory;
 import rs.data.api.bo.IGeneralBO;
 import rs.data.api.dao.IGeneralDAO;
@@ -70,7 +70,7 @@ public abstract class AbstractGeneralBO<K extends Serializable> extends Abstract
 	 */
 	@SuppressWarnings("unchecked")
 	private void init() {
-		List<Class<?>> classes = LangUtils.getTypeArguments(AbstractGeneralBO.class, getClass());
+		List<Class<?>> classes = ReflectionUtils.getTypeArguments(AbstractGeneralBO.class, getClass());
 		this.keyClass = (Class<K>) classes.get(0);
 		
 		for (Class<?> clazz : getClass().getInterfaces()) {

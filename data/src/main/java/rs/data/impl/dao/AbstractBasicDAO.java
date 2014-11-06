@@ -30,7 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import rs.baselib.configuration.IConfigurable;
-import rs.baselib.lang.LangUtils;
+import rs.baselib.lang.ReflectionUtils;
 import rs.baselib.util.ICache;
 import rs.baselib.util.RsDate;
 import rs.baselib.util.WeakMapCache;
@@ -77,7 +77,7 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 	 */
 	@SuppressWarnings("unchecked")
 	protected void init() {
-		List<Class<?>> classes = LangUtils.getTypeArguments(AbstractBasicDAO.class, getClass());
+		List<Class<?>> classes = ReflectionUtils.getTypeArguments(AbstractBasicDAO.class, getClass());
 		this.keyClass = (Class<K>) classes.get(0);
 		this.boInterfaceClass = (Class<C>) classes.get(1);	
 		this.cache = createCache();
