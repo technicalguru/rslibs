@@ -77,6 +77,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 	private IDaoListener daoListener = new MyDaoListener();
 	private Map<String, Object> properties = new HashMap<String, Object>();
 	private Map<String, String> params = new HashMap<String, String>();
+	private long defaultTimeout = DEFAULT_TX_TIMEOUT;
 	private TransactionManager txManager;
 	private IUrlTransformer urlTransformer;
 	private Map<String, IDaoMaster> daoMasters = new HashMap<String, IDaoMaster>();
@@ -504,6 +505,23 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public long getDefaultTransactionTimeout() {
+		return defaultTimeout;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void setDefaultTransactionTimeout(long defaultTimeout) {
+		if (defaultTimeout == 0) defaultTimeout = DEFAULT_TX_TIMEOUT;
+		this.defaultTimeout = defaultTimeout;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public void begin() {
 		begin(0L);
 	}
@@ -662,7 +680,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 
 				// Start the TX if required
 				if (startTx) {
-					int seconds = (int)(timeout > 0 ? timeout/1000L : DEFAULT_TX_TIMEOUT/1000L); 
+					int seconds = (int)(timeout > 0 ? timeout/1000L : getDefaultTransactionTimeout()/1000L); 
 					getTransactionManager().setTransactionTimeout(seconds);
 					getTransactionManager().begin();
 					beginCount = 1;

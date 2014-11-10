@@ -183,6 +183,20 @@ public interface IDaoFactory {
 	public void setTransactionManager(TransactionManager txManager);
 	
 	/**
+	 * Returns the default timeout for transactions.
+	 * @return timeout in ms
+	 * @since 1.2.9
+	 */
+	public long getDefaultTransactionTimeout();
+	
+	/**
+	 * Sets the default timeout for transactions.
+	 * @param defaultTimeout timeout in ms, {@link #DEFAULT_TX_TIMEOUT} will be used when value is 0.
+	 * @since 1.2.9
+	 */
+	public void setDefaultTransactionTimeout(long defaultTimeout);
+
+	/**
 	 * Begins a transaction.
 	 * This method does nothing if the thread is already within a transaction.
 	 */
