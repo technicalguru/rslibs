@@ -35,6 +35,16 @@ import rs.baselib.lang.LangUtils;
  */
 public class CronSchedule {
  
+	/** 
+	 * The schedule string that never matches. 
+	 */
+	public static final String NEVER_MARKER = "NEVER";
+	
+	/** A schedule that never matches.
+	 *  <p>This instance can be used when it is essential to have a schedule set that is never matches.</p> 
+	 */
+	public static final CronSchedule NEVER = new CronSchedule(NEVER_MARKER);
+	
 	/**
 	 * Types being used.
 	 * This array defines the types and their indices.
@@ -89,6 +99,11 @@ public class CronSchedule {
 	 */
 	public String set(String schedule) {
 		String parts[] = schedule.split(" ", TYPES.length+1);
+		if (NEVER_MARKER.equalsIgnoreCase(parts[0])) {
+			for (int i=0; i<TYPES.length; i++) {
+				set(getType(i), new AbstractTimeValue[] { NEVER_VALUE });
+			}
+		}
 		if (parts.length < TYPES.length) throw new IllegalArgumentException("Invalid cron format: "+schedule);
 		for (int i=0; i<TYPES.length; i++) set(getType(i), parts[i]);
 		return parts.length > TYPES.length ? parts[TYPES.length] : null;
@@ -339,8 +354,27 @@ public class CronSchedule {
 	}
  
 	/**
+	 * Never matches any time.
+	 * @author ralph
+	 * @since 1.2.9
+	 * @see #NEVER
+	 * @see #NEVER_MARKER
+	 */
+	public static class NeverValue extends AbstractTimeValue {
+
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		public boolean matches(int timeValue) {
+			return false;
+		}
+		
+	}
+	
+	/**
 	 * Represents a single time value, e.g. 9
-	 * @author RalphSchuster
+	 * @author ralph
 	 */
 	public static class SingleTimeValue extends AbstractTimeValue {
  
@@ -387,7 +421,7 @@ public class CronSchedule {
  
 	/**
 	 * Represents a time range, e.g. 5-9
-	 * @author RalphSchuster
+	 * @author ralph
 	 */
 	public static class TimeRange extends AbstractTimeValue {
  
@@ -452,7 +486,7 @@ public class CronSchedule {
  
 	/**
 	 * Represents a time interval, e.g. 0-4/10
-	 * @author RalphSchuster
+	 * @author ralph
 	 */
 	public static class TimeSteps extends AbstractTimeValue {
  
@@ -530,7 +564,7 @@ public class CronSchedule {
  
 	/**
 	 * Represents the ALL time, *.
-	 * @author RalphSchuster
+	 * @author ralph
 	 */
 	public static class TimeAll extends AbstractTimeValue {
  
@@ -554,4 +588,7 @@ public class CronSchedule {
 			return "*";
 		}
 	}
+	
+	/** A static instance of the never value */
+	private static final NeverValue NEVER_VALUE = new NeverValue();
 }
