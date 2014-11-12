@@ -21,7 +21,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import rs.baselib.lang.LangUtils;
- 
+
 /**
  * Provides cron-like scheduling information.
  * This class implements cron-like definition of scheduling information.
@@ -34,17 +34,12 @@ import rs.baselib.lang.LangUtils;
  *
  */
 public class CronSchedule {
- 
+
 	/** 
 	 * The schedule string that never matches. 
 	 */
 	public static final String NEVER_MARKER = "NEVER";
-	
-	/** A schedule that never matches.
-	 *  <p>This instance can be used when it is essential to have a schedule set that is never matches.</p> 
-	 */
-	public static final CronSchedule NEVER = new CronSchedule(NEVER_MARKER);
-	
+
 	/**
 	 * Types being used.
 	 * This array defines the types and their indices.
@@ -54,9 +49,14 @@ public class CronSchedule {
 		Calendar.DAY_OF_MONTH, Calendar.MONTH, 
 		Calendar.DAY_OF_WEEK
 	};
- 
+
+	/** A schedule that never matches.
+	 *  <p>This instance can be used when it is essential to have a schedule set that is never matches.</p> 
+	 */
+	public static final CronSchedule NEVER = new CronSchedule(NEVER_MARKER);
+
 	private AbstractTimeValue timeValues[][] = new AbstractTimeValue[TYPES.length][];
- 
+
 	/**
 	 * Default constructor
 	 * Constructor with all terms set to "*".
@@ -64,7 +64,7 @@ public class CronSchedule {
 	public CronSchedule() {
 		this("*", "*", "*", "*", "*");
 	}
- 
+
 	/**
 	 * Constructor with cron-style string initialization.
 	 * The cron style is: $minute $hour $dayOfMonth $month $dayOfWeek
@@ -73,7 +73,7 @@ public class CronSchedule {
 	public CronSchedule(String schedule) {
 		set(schedule);
 	}
- 
+
 	/**
 	 * Constructor with separate initialization values.
 	 * @param min - minute definition
@@ -89,7 +89,7 @@ public class CronSchedule {
 		set(Calendar.MONTH, mon);
 		set(Calendar.DAY_OF_WEEK, dow);
 	}
- 
+
 	/**
 	 * Sets the cron schedule.
 	 * The cron style is: $minute $hour $dayOfMonth $month $dayOfWeek
@@ -103,12 +103,14 @@ public class CronSchedule {
 			for (int i=0; i<TYPES.length; i++) {
 				set(getType(i), new AbstractTimeValue[] { NEVER_VALUE });
 			}
+			return parts.length > 1 ? parts[1] : null;
+		} else {
+			if (parts.length < TYPES.length) throw new IllegalArgumentException("Invalid cron format: "+schedule);
+			for (int i=0; i<TYPES.length; i++) set(getType(i), parts[i]);
+			return parts.length > TYPES.length ? parts[TYPES.length] : null;
 		}
-		if (parts.length < TYPES.length) throw new IllegalArgumentException("Invalid cron format: "+schedule);
-		for (int i=0; i<TYPES.length; i++) set(getType(i), parts[i]);
-		return parts.length > TYPES.length ? parts[TYPES.length] : null;
 	}
- 
+
 	/**
 	 * Sets the time values accordingly
 	 * @param type - Calendar constant to define what values will be set
@@ -118,7 +120,7 @@ public class CronSchedule {
 		// Split the values
 		String parts[] = values.split(",");
 		AbstractTimeValue result[] = new AbstractTimeValue[parts.length];
- 
+
 		// Iterate over entries
 		for (int i=0; i<parts .length; i++) {
 			// Decide what time value is set and create it
@@ -127,11 +129,11 @@ public class CronSchedule {
 			else if (parts[i].equals("*")) result[i] = new TimeAll();
 			else result[i] = new SingleTimeValue(parts[i]);
 		}
- 
+
 		// Save the array
 		set(type, result);
 	}
- 
+
 	/**
 	 * Sets the values for a specific type
 	 * @param type - Calendar constant defining the time type
@@ -140,7 +142,7 @@ public class CronSchedule {
 	protected void set(int type, AbstractTimeValue values[]) {
 		timeValues[getIndex(type)] = values;
 	}
- 
+
 	/**
 	 * Returns the values for a specific time type
 	 * @param type - Calendar constant defining the type
@@ -149,7 +151,7 @@ public class CronSchedule {
 	protected AbstractTimeValue[] getValues(int type) {
 		return timeValues[getIndex(type)];
 	}
- 
+
 	/**
 	 * Returns the cron-like definition string for the given time value
 	 * @param type - Calendar constant defining time type
@@ -164,7 +166,7 @@ public class CronSchedule {
 		}
 		return rc.substring(1);
 	}
- 
+
 	/**
 	 * Returns the cron-like definition of the schedule.
 	 * @return the cron-like string
@@ -176,9 +178,11 @@ public class CronSchedule {
 			rc.append(" ");
 			rc.append(get(getType(i)));
 		}
-		return rc.toString().trim();
+		String s = rc.toString().trim();
+		if (s.startsWith(NEVER_MARKER)) return NEVER_MARKER;
+		return s;
 	}
-	
+
 	/**
 	 * Returns the cron-like definition of the schedule.
 	 * @return the cron-like string
@@ -186,7 +190,7 @@ public class CronSchedule {
 	public String toString() {
 		return getCronString();
 	}
- 
+
 	/**
 	 * Checks whether given timestamp matches with defined schedule.
 	 * This is default check method. All criteria must be met including seconds to be 0.
@@ -196,7 +200,7 @@ public class CronSchedule {
 	public boolean matches(long timeStamp) {
 		return matches(getCalendar(timeStamp));
 	}
- 
+
 	/**
 	 * Checks whether given timestamp matches with defined schedule.
 	 * This is default check method. All criteria must be met including seconds to be 0.
@@ -206,7 +210,7 @@ public class CronSchedule {
 	public boolean matches(Calendar cal) {
 		return isMinute(cal) && (cal.get(Calendar.SECOND) == 0);
 	}
- 
+
 	/**
 	 * Checks whether given timestamp matches with defined schedule.
 	 * This method can be used when seconds are not relevant for matching.
@@ -217,7 +221,7 @@ public class CronSchedule {
 	public boolean isMinute(long timeStamp) {
 		return isMinute(getCalendar(timeStamp));
 	}
- 
+
 	/**
 	 * Checks whether given calendar date matches with defined schedule.
 	 * This method can be used when seconds are not relevant for matching.
@@ -227,7 +231,7 @@ public class CronSchedule {
 	public boolean isMinute(Calendar cal) {
 		return matches(Calendar.MINUTE, cal) && isHour(cal);
 	}
- 
+
 	/**
 	 * Checks whether given timestamp matches with defined hour schedule.
 	 * This method can be used when minute definition is not relevant for matching.
@@ -237,7 +241,7 @@ public class CronSchedule {
 	public boolean isHour(long timestamp) {
 		return isHour(getCalendar(timestamp));
 	}
- 
+
 	/**
 	 * Checks whether given calendar date matches with defined hour schedule.
 	 * This method can be used when minute definition is not relevant for matching.
@@ -247,7 +251,7 @@ public class CronSchedule {
 	public boolean isHour(Calendar cal) {
 		return matches(Calendar.HOUR_OF_DAY, cal) && isDay(cal);
 	}
- 
+
 	/**
 	 * Checks whether given timestamp matches with defined day schedule.
 	 * This method can be used when minute and hour definitions are not relevant for matching.
@@ -257,7 +261,7 @@ public class CronSchedule {
 	public boolean isDay(long timestamp) {
 		return isDay(getCalendar(timestamp));
 	}
- 
+
 	/**
 	 * Checks whether given calendar date matches with defined day schedule.
 	 * This method can be used when minute and hour definitions are not relevant for matching.
@@ -266,11 +270,11 @@ public class CronSchedule {
 	 */
 	public boolean isDay(Calendar cal) {
 		return 
-			matches(Calendar.DAY_OF_WEEK, cal) &&
-			matches(Calendar.DAY_OF_MONTH, cal) &&
-			matches(Calendar.MONTH, cal);
+				matches(Calendar.DAY_OF_WEEK, cal) &&
+				matches(Calendar.DAY_OF_MONTH, cal) &&
+				matches(Calendar.MONTH, cal);
 	}
- 
+
 	/**
 	 * Checks whether specific schedule definition matches against the given calendar date.
 	 * @param type - Calendar constant defining time type to check for
@@ -281,14 +285,14 @@ public class CronSchedule {
 		// get the definitions and the comparison value
 		AbstractTimeValue defs[] = timeValues[getIndex(type)];
 		int value = calendar.get(type);
- 
+
 		// Any of the criteria must be met
 		for (int i=0; i<defs.length; i++) {
 			if (defs[i].matches(value)) return true;
 		}
 		return false;
 	}
- 
+
 	/**
 	 * Creates the calendar for a timestamp.
 	 * @param timeStamp - timestamp
@@ -299,7 +303,7 @@ public class CronSchedule {
 		rc.setTimeInMillis(timeStamp);
 		return rc;
 	}
- 
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -326,7 +330,7 @@ public class CronSchedule {
 	protected static int getType(int index) {
 		return TYPES[index];
 	}
- 
+
 	/**
 	 * Returns the index for the specified Calendar type.
 	 * @param type - Calendar constant for type
@@ -338,13 +342,13 @@ public class CronSchedule {
 		}
 		throw new IllegalArgumentException("No such time type: "+type);
 	}
- 
+
 	/**
 	 * Base class for timing values.
 	 * @author RalphSchuster
 	 */
 	public static abstract class AbstractTimeValue {
- 
+
 		/**
 		 * Returns true when given time value matches defined time.
 		 * @param timeValue - time value to evaluate
@@ -352,7 +356,7 @@ public class CronSchedule {
 		 */
 		public abstract boolean matches(int timeValue);
 	}
- 
+
 	/**
 	 * Never matches any time.
 	 * @author ralph
@@ -369,39 +373,45 @@ public class CronSchedule {
 		public boolean matches(int timeValue) {
 			return false;
 		}
-		
+
+		/**
+		 * Returns cron-like string of this definition.
+		 */
+		public String toString() {
+			return NEVER_MARKER;
+		}
 	}
-	
+
 	/**
 	 * Represents a single time value, e.g. 9
 	 * @author ralph
 	 */
 	public static class SingleTimeValue extends AbstractTimeValue {
- 
+
 		private int value;
- 
+
 		public SingleTimeValue(int value) {
 			setValue(value);
 		}
- 
+
 		public SingleTimeValue(String value) {
 			setValue(Integer.parseInt(value));
 		}
- 
+
 		/**
 		 * @return the value
 		 */
 		public int getValue() {
 			return value;
 		}
- 
+
 		/**
 		 * @param value the value to set
 		 */
 		public void setValue(int value) {
 			this.value = value;
 		}
- 
+
 		/**
 		 * Returns true when given time value matches defined value.
 		 * @param timeValue - time value to evaluate
@@ -410,7 +420,7 @@ public class CronSchedule {
 		public boolean matches(int timeValue) {
 			return timeValue == getValue();
 		}
- 
+
 		/**
 		 * Returns cron-like string of this definition.
 		 */
@@ -418,55 +428,55 @@ public class CronSchedule {
 			return ""+getValue();
 		}
 	}
- 
+
 	/**
 	 * Represents a time range, e.g. 5-9
 	 * @author ralph
 	 */
 	public static class TimeRange extends AbstractTimeValue {
- 
+
 		private int startValue;
 		private int endValue;
- 
+
 		public TimeRange(int startValue, int endValue) {
 			setStartValue(startValue);
 			setEndValue(endValue);
 		}
- 
+
 		public TimeRange(String range) {
 			int dashPos = range.indexOf("-");
 			setStartValue(Integer.parseInt(range.substring(0, dashPos)));
 			setEndValue(Integer.parseInt(range.substring(dashPos+1)));
 		}
- 
+
 		/**
 		 * @return the endValue
 		 */
 		public int getEndValue() {
 			return endValue;
 		}
- 
+
 		/**
 		 * @param endValue the endValue to set
 		 */
 		public void setEndValue(int endValue) {
 			this.endValue = endValue;
 		}
- 
+
 		/**
 		 * @return the startValue
 		 */
 		public int getStartValue() {
 			return startValue;
 		}
- 
+
 		/**
 		 * @param startValue the startValue to set
 		 */
 		public void setStartValue(int startValue) {
 			this.startValue = startValue;
 		}
- 
+
 		/**
 		 * Returns true when given time value falls in range.
 		 * @param timeValue - time value to evaluate
@@ -475,7 +485,7 @@ public class CronSchedule {
 		public boolean matches(int timeValue) {
 			return (getStartValue() <= timeValue) && (timeValue <= getEndValue());
 		}
- 
+
 		/**
 		 * Returns cron-like string of this definition.
 		 */
@@ -483,21 +493,21 @@ public class CronSchedule {
 			return getStartValue()+"-"+getEndValue();
 		}
 	}
- 
+
 	/**
 	 * Represents a time interval, e.g. 0-4/10
 	 * @author ralph
 	 */
 	public static class TimeSteps extends AbstractTimeValue {
- 
+
 		private AbstractTimeValue range;
 		private int steps;
- 
+
 		public TimeSteps(AbstractTimeValue range, int steps) {
 			setRange(range);
 			setSteps(steps);
 		}
- 
+
 		public TimeSteps(String def) {
 			int divPos = def.indexOf("/");
 			String r = def.substring(0, divPos);
@@ -507,7 +517,7 @@ public class CronSchedule {
 			else throw new IllegalArgumentException("Invalid range: "+def);
 			setSteps(Integer.parseInt(def.substring(divPos+1)));
 		}
- 
+
 		/**
 		 * Returns true when given time value matches the interval.
 		 * @param timeValue - time value to evaluate
@@ -524,54 +534,54 @@ public class CronSchedule {
 			}
 			return rc;
 		}
- 
+
 		/**
 		 * @return the range
 		 */
 		public AbstractTimeValue getRange() {
 			return range;
 		}
- 
+
 		/**
 		 * @param range the range to set
 		 */
 		public void setRange(AbstractTimeValue range) {
 			this.range = range;
 		}
- 
+
 		/**
 		 * @return the steps
 		 */
 		public int getSteps() {
 			return steps;
 		}
- 
+
 		/**
 		 * @param steps the steps to set
 		 */
 		public void setSteps(int steps) {
 			this.steps = steps;
 		}
- 
+
 		/**
 		 * Returns cron-like string of this definition.
 		 */
 		public String toString() {
 			return getRange()+"/"+getSteps();
 		}
- 
+
 	}
- 
+
 	/**
 	 * Represents the ALL time, *.
 	 * @author ralph
 	 */
 	public static class TimeAll extends AbstractTimeValue {
- 
+
 		public TimeAll() {
- 
+
 		}
- 
+
 		/**
 		 * Returns always true.
 		 * @param timeValue - time value to evaluate
@@ -580,7 +590,7 @@ public class CronSchedule {
 		public boolean matches(int timeValue) {
 			return true;
 		}
- 
+
 		/**
 		 * Returns cron-like string of this definition.
 		 */
@@ -588,7 +598,7 @@ public class CronSchedule {
 			return "*";
 		}
 	}
-	
+
 	/** A static instance of the never value */
 	private static final NeverValue NEVER_VALUE = new NeverValue();
 }
