@@ -302,8 +302,6 @@ public class CronSchedule implements Serializable {
 		}
 	}
 
-	/** A static instance of the never value */
-	private static final NeverValue NEVER_VALUE = new NeverValue();
 	/** A static instance of the never value array */
 	private static final AbstractTimeValue NEVER_VALUES[] = new AbstractTimeValue[] { new NeverValue() };
 	

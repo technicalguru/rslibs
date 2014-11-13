@@ -211,6 +211,7 @@ public abstract class AbstractBO<K extends Serializable, T extends GeneralDTO<K>
 	 * Returns the property of given name.
 	 * @param name name of property
 	 * @return value of property
+	 * @since 1.2.9
 	 */
 	public <X> X getProperty(String name) {
 		return getTransferObject().getProperty(name);
@@ -223,6 +224,7 @@ public abstract class AbstractBO<K extends Serializable, T extends GeneralDTO<K>
 	 * it fires a {@link PropertyChangeEvent} for this property name.</p>
 	 * @param name name of DTO property and name to be used in {@link PropertyChangeEvent}
 	 * @param value value of property
+	 * @since 1.2.9
 	 */
 	public <X> void setProperty(String name, X value) {
 		setProperty(name, name, value);
@@ -236,6 +238,7 @@ public abstract class AbstractBO<K extends Serializable, T extends GeneralDTO<K>
 	 * @param name name of DTO property 
 	 * @param firePropertyName name to be used in {@link PropertyChangeEvent}
 	 * @param value new value of property
+	 * @since 1.2.9
 	 */
 	public <X> void setProperty(String name, String firePropertyName, X value) {
 		X oldValue = getProperty(name);
