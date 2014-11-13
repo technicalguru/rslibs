@@ -40,4 +40,10 @@ public class CronScheduleTest {
 		CronSchedule s2 = new CronSchedule("*/5 */3 * * *");
 		assertEquals("hashCode() is not equal", s1, s2);
 	}
+	
+	@Test
+	public void testNever() {
+		CronSchedule s = CronSchedule.NEVER;
+		assertEquals("cronString is not correct", CronSchedule.NEVER_MARKER, s.getCronString());
+	}
 }

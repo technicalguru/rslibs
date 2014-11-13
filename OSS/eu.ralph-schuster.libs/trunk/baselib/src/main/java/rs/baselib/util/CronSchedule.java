@@ -47,309 +47,6 @@ public class CronSchedule implements Serializable {
 	public static final String NEVER_MARKER = "NEVER";
 
 	/**
-	 * Types being used.
-	 * This array defines the types and their indices.
-	 */
-	protected static int TYPES[] = new int[] {
-		Calendar.MINUTE, Calendar.HOUR_OF_DAY, 
-		Calendar.DAY_OF_MONTH, Calendar.MONTH, 
-		Calendar.DAY_OF_WEEK
-	};
-
-	/** A schedule that never matches.
-	 *  <p>This instance can be used when it is essential to have a schedule set that is never matches.</p> 
-	 */
-	public static final CronSchedule NEVER = new CronSchedule(NEVER_MARKER);
-
-	private AbstractTimeValue timeValues[][] = new AbstractTimeValue[TYPES.length][];
-
-	/**
-	 * Default constructor
-	 * Constructor with all terms set to "*".
-	 */
-	public CronSchedule() {
-		this("*", "*", "*", "*", "*");
-	}
-
-	/**
-	 * Constructor with cron-style string initialization.
-	 * The cron style is: $minute $hour $dayOfMonth $month $dayOfWeek
-	 * @param schedule
-	 */
-	public CronSchedule(String schedule) {
-		set(schedule);
-	}
-
-	/**
-	 * Constructor with separate initialization values.
-	 * @param min - minute definition
-	 * @param hour - hour definition
-	 * @param dom - day of month definition
-	 * @param mon - month definition
-	 * @param dow - day of week definition
-	 */
-	public CronSchedule(String min, String hour, String dom, String mon, String dow) {
-		set(Calendar.MINUTE, min);
-		set(Calendar.HOUR_OF_DAY, hour);
-		set(Calendar.DAY_OF_MONTH, dom);
-		set(Calendar.MONTH, mon);
-		set(Calendar.DAY_OF_WEEK, dow);
-	}
-
-	/**
-	 * Sets the cron schedule.
-	 * The cron style is: $minute $hour $dayOfMonth $month $dayOfWeek
-	 * The function will return any characters that follow the cron definition
-	 * @param schedule - cron-like schedule definition
-	 * @return characters following the cron definition.
-	 */
-	public String set(String schedule) {
-		String parts[] = schedule.split(" ", TYPES.length+1);
-		if (NEVER_MARKER.equalsIgnoreCase(parts[0])) {
-			for (int i=0; i<TYPES.length; i++) {
-				set(getType(i), new AbstractTimeValue[] { NEVER_VALUE });
-			}
-			return parts.length > 1 ? parts[1] : null;
-		} else {
-			if (parts.length < TYPES.length) throw new IllegalArgumentException("Invalid cron format: "+schedule);
-			for (int i=0; i<TYPES.length; i++) set(getType(i), parts[i]);
-			return parts.length > TYPES.length ? parts[TYPES.length] : null;
-		}
-	}
-
-	/**
-	 * Sets the time values accordingly
-	 * @param type - Calendar constant to define what values will be set
-	 * @param values - comma-separated list of definitions for that type
-	 */
-	public void set(int type, String values) {
-		// Split the values
-		String parts[] = values.split(",");
-		AbstractTimeValue result[] = new AbstractTimeValue[parts.length];
-
-		// Iterate over entries
-		for (int i=0; i<parts .length; i++) {
-			// Decide what time value is set and create it
-			if (parts[i].indexOf("/") > 0) result[i] = new TimeSteps(parts[i]);
-			else if (parts[i].indexOf("-") > 0) result[i] = new TimeRange(parts[i]);
-			else if (parts[i].equals("*")) result[i] = new TimeAll();
-			else result[i] = new SingleTimeValue(parts[i]);
-		}
-
-		// Save the array
-		set(type, result);
-	}
-
-	/**
-	 * Sets the values for a specific type
-	 * @param type - Calendar constant defining the time type
-	 * @param values - values to be set
-	 */
-	protected void set(int type, AbstractTimeValue values[]) {
-		timeValues[getIndex(type)] = values;
-	}
-
-	/**
-	 * Returns the values for a specific time type
-	 * @param type - Calendar constant defining the type
-	 * @return time value definitions
-	 */
-	protected AbstractTimeValue[] getValues(int type) {
-		return timeValues[getIndex(type)];
-	}
-
-	/**
-	 * Returns the cron-like definition string for the given time value
-	 * @param type - Calendar constant defining time type
-	 * @return cron-like definition
-	 */
-	public String get(int type) {
-		AbstractTimeValue values[] = getValues(type);
-		StringBuilder rc = new StringBuilder(values.length);
-		for (int i=0; i<values .length; i++) {
-			rc.append(",");
-			rc.append(values[i].toString());
-		}
-		return rc.substring(1);
-	}
-
-	/**
-	 * Returns the cron-like definition of the schedule.
-	 * @return the cron-like string
-	 * @since 1.2.9
-	 */
-	public String getCronString() {
-		StringBuilder rc = new StringBuilder();
-		for (int i=0; i<TYPES.length; i++) {
-			rc.append(" ");
-			rc.append(get(getType(i)));
-		}
-		String s = rc.toString().trim();
-		if (s.startsWith(NEVER_MARKER)) return NEVER_MARKER;
-		return s;
-	}
-
-	/**
-	 * Returns the cron-like definition of the schedule.
-	 * @return the cron-like string
-	 */
-	public String toString() {
-		return getCronString();
-	}
-
-	/**
-	 * Checks whether given timestamp matches with defined schedule.
-	 * This is default check method. All criteria must be met including seconds to be 0.
-	 * @param timeStamp - time in ms since Epoch time
-	 * @return true when schedule matches
-	 */
-	public boolean matches(long timeStamp) {
-		return matches(getCalendar(timeStamp));
-	}
-
-	/**
-	 * Checks whether given timestamp matches with defined schedule.
-	 * This is default check method. All criteria must be met including seconds to be 0.
-	 * @param cal - calendar date
-	 * @return true when schedule matches
-	 */
-	public boolean matches(Calendar cal) {
-		return isMinute(cal) && (cal.get(Calendar.SECOND) == 0);
-	}
-
-	/**
-	 * Checks whether given timestamp matches with defined schedule.
-	 * This method can be used when seconds are not relevant for matching.
-	 * This is default check method.
-	 * @param timeStamp - time in ms since Epoch time
-	 * @return true when schedule matches
-	 */
-	public boolean isMinute(long timeStamp) {
-		return isMinute(getCalendar(timeStamp));
-	}
-
-	/**
-	 * Checks whether given calendar date matches with defined schedule.
-	 * This method can be used when seconds are not relevant for matching.
-	 * @param cal - calendar date
-	 * @return true when schedule matches
-	 */
-	public boolean isMinute(Calendar cal) {
-		return matches(Calendar.MINUTE, cal) && isHour(cal);
-	}
-
-	/**
-	 * Checks whether given timestamp matches with defined hour schedule.
-	 * This method can be used when minute definition is not relevant for matching.
-	 * @param timestamp - time in ms since Epoch time
-	 * @return true when schedule matches
-	 */
-	public boolean isHour(long timestamp) {
-		return isHour(getCalendar(timestamp));
-	}
-
-	/**
-	 * Checks whether given calendar date matches with defined hour schedule.
-	 * This method can be used when minute definition is not relevant for matching.
-	 * @param cal - calendar date
-	 * @return true when schedule matches
-	 */
-	public boolean isHour(Calendar cal) {
-		return matches(Calendar.HOUR_OF_DAY, cal) && isDay(cal);
-	}
-
-	/**
-	 * Checks whether given timestamp matches with defined day schedule.
-	 * This method can be used when minute and hour definitions are not relevant for matching.
-	 * @param timestamp - time in ms since Epoch time
-	 * @return true when schedule matches
-	 */
-	public boolean isDay(long timestamp) {
-		return isDay(getCalendar(timestamp));
-	}
-
-	/**
-	 * Checks whether given calendar date matches with defined day schedule.
-	 * This method can be used when minute and hour definitions are not relevant for matching.
-	 * @param cal - calendar date
-	 * @return true when schedule matches
-	 */
-	public boolean isDay(Calendar cal) {
-		return 
-				matches(Calendar.DAY_OF_WEEK, cal) &&
-				matches(Calendar.DAY_OF_MONTH, cal) &&
-				matches(Calendar.MONTH, cal);
-	}
-
-	/**
-	 * Checks whether specific schedule definition matches against the given calendar date.
-	 * @param type - Calendar constant defining time type to check for
-	 * @param calendar - calendar representing the date to check
-	 * @return true when definition matches
-	 */
-	protected boolean matches(int type, Calendar calendar) {
-		// get the definitions and the comparison value
-		AbstractTimeValue defs[] = timeValues[getIndex(type)];
-		int value = calendar.get(type);
-
-		// Any of the criteria must be met
-		for (int i=0; i<defs.length; i++) {
-			if (defs[i].matches(value)) return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Creates the calendar for a timestamp.
-	 * @param timeStamp - timestamp
-	 * @return calendar
-	 */
-	protected Calendar getCalendar(long timeStamp) {
-		Calendar rc = new GregorianCalendar();
-		rc.setTimeInMillis(timeStamp);
-		return rc;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public int hashCode() {
-		return toString().hashCode();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) return false;
-		if (!getClass().equals(obj.getClass())) return false;
-		return toString().equals(obj.toString());
-	}
-
-	/**
-	 * Returns the type at the specified index
-	 * @param index - index
-	 * @return Calendar constant of type
-	 */
-	protected static int getType(int index) {
-		return TYPES[index];
-	}
-
-	/**
-	 * Returns the index for the specified Calendar type.
-	 * @param type - Calendar constant for type
-	 * @return internal index
-	 */
-	protected static int getIndex(int type) {
-		for (int i=0; i<TYPES.length; i++) {
-			if (TYPES[i] == type) return i;
-		}
-		throw new IllegalArgumentException("No such time type: "+type);
-	}
-
-	/**
 	 * Base class for timing values.
 	 * @author RalphSchuster
 	 */
@@ -607,4 +304,309 @@ public class CronSchedule implements Serializable {
 
 	/** A static instance of the never value */
 	private static final NeverValue NEVER_VALUE = new NeverValue();
+	
+	/**
+	 * Types being used.
+	 * This array defines the types and their indices.
+	 */
+	protected static int TYPES[] = new int[] {
+		Calendar.MINUTE, Calendar.HOUR_OF_DAY, 
+		Calendar.DAY_OF_MONTH, Calendar.MONTH, 
+		Calendar.DAY_OF_WEEK
+	};
+
+	/** A schedule that never matches.
+	 *  <p>This instance can be used when it is essential to have a schedule set that is never matches.</p> 
+	 */
+	public static final CronSchedule NEVER = new CronSchedule(NEVER_MARKER);
+
+	private AbstractTimeValue timeValues[][] = new AbstractTimeValue[TYPES.length][];
+
+	/**
+	 * Default constructor
+	 * Constructor with all terms set to "*".
+	 */
+	public CronSchedule() {
+		this("*", "*", "*", "*", "*");
+	}
+
+	/**
+	 * Constructor with cron-style string initialization.
+	 * The cron style is: $minute $hour $dayOfMonth $month $dayOfWeek
+	 * @param schedule
+	 */
+	public CronSchedule(String schedule) {
+		set(schedule);
+	}
+
+	/**
+	 * Constructor with separate initialization values.
+	 * @param min - minute definition
+	 * @param hour - hour definition
+	 * @param dom - day of month definition
+	 * @param mon - month definition
+	 * @param dow - day of week definition
+	 */
+	public CronSchedule(String min, String hour, String dom, String mon, String dow) {
+		set(Calendar.MINUTE, min);
+		set(Calendar.HOUR_OF_DAY, hour);
+		set(Calendar.DAY_OF_MONTH, dom);
+		set(Calendar.MONTH, mon);
+		set(Calendar.DAY_OF_WEEK, dow);
+	}
+
+	/**
+	 * Sets the cron schedule.
+	 * The cron style is: $minute $hour $dayOfMonth $month $dayOfWeek
+	 * The function will return any characters that follow the cron definition
+	 * @param schedule - cron-like schedule definition
+	 * @return characters following the cron definition.
+	 */
+	public String set(String schedule) {
+		String parts[] = schedule.split(" ", TYPES.length+1);
+		if (NEVER_MARKER.equalsIgnoreCase(parts[0])) {
+			for (int i=0; i<TYPES.length; i++) {
+				set(getType(i), new AbstractTimeValue[] { NEVER_VALUE });
+			}
+			return parts.length > 1 ? parts[1] : null;
+		} else {
+			if (parts.length < TYPES.length) throw new IllegalArgumentException("Invalid cron format: "+schedule);
+			for (int i=0; i<TYPES.length; i++) set(getType(i), parts[i]);
+			return parts.length > TYPES.length ? parts[TYPES.length] : null;
+		}
+	}
+
+	/**
+	 * Sets the time values accordingly
+	 * @param type - Calendar constant to define what values will be set
+	 * @param values - comma-separated list of definitions for that type
+	 */
+	public void set(int type, String values) {
+		// Split the values
+		String parts[] = values.split(",");
+		AbstractTimeValue result[] = new AbstractTimeValue[parts.length];
+
+		// Iterate over entries
+		for (int i=0; i<parts .length; i++) {
+			// Decide what time value is set and create it
+			if (parts[i].indexOf("/") > 0) result[i] = new TimeSteps(parts[i]);
+			else if (parts[i].indexOf("-") > 0) result[i] = new TimeRange(parts[i]);
+			else if (parts[i].equals("*")) result[i] = new TimeAll();
+			else result[i] = new SingleTimeValue(parts[i]);
+		}
+
+		// Save the array
+		set(type, result);
+	}
+
+	/**
+	 * Sets the values for a specific type
+	 * @param type - Calendar constant defining the time type
+	 * @param values - values to be set
+	 */
+	protected void set(int type, AbstractTimeValue values[]) {
+		timeValues[getIndex(type)] = values;
+	}
+
+	/**
+	 * Returns the values for a specific time type
+	 * @param type - Calendar constant defining the type
+	 * @return time value definitions
+	 */
+	protected AbstractTimeValue[] getValues(int type) {
+		return timeValues[getIndex(type)];
+	}
+
+	/**
+	 * Returns the cron-like definition string for the given time value
+	 * @param type - Calendar constant defining time type
+	 * @return cron-like definition
+	 */
+	public String get(int type) {
+		AbstractTimeValue values[] = getValues(type);
+		StringBuilder rc = new StringBuilder(values.length);
+		for (int i=0; i<values.length; i++) {
+			rc.append(",");
+			rc.append(values[i].toString());
+		}
+		return rc.substring(1);
+	}
+
+	/**
+	 * Returns the cron-like definition of the schedule.
+	 * @return the cron-like string
+	 * @since 1.2.9
+	 */
+	public String getCronString() {
+		StringBuilder rc = new StringBuilder();
+		for (int i=0; i<TYPES.length; i++) {
+			rc.append(" ");
+			rc.append(get(getType(i)));
+		}
+		String s = rc.toString().trim();
+		if (s.startsWith(NEVER_MARKER)) return NEVER_MARKER;
+		return s;
+	}
+
+	/**
+	 * Returns the cron-like definition of the schedule.
+	 * @return the cron-like string
+	 */
+	public String toString() {
+		return getCronString();
+	}
+
+	/**
+	 * Checks whether given timestamp matches with defined schedule.
+	 * This is default check method. All criteria must be met including seconds to be 0.
+	 * @param timeStamp - time in ms since Epoch time
+	 * @return true when schedule matches
+	 */
+	public boolean matches(long timeStamp) {
+		return matches(getCalendar(timeStamp));
+	}
+
+	/**
+	 * Checks whether given timestamp matches with defined schedule.
+	 * This is default check method. All criteria must be met including seconds to be 0.
+	 * @param cal - calendar date
+	 * @return true when schedule matches
+	 */
+	public boolean matches(Calendar cal) {
+		return isMinute(cal) && (cal.get(Calendar.SECOND) == 0);
+	}
+
+	/**
+	 * Checks whether given timestamp matches with defined schedule.
+	 * This method can be used when seconds are not relevant for matching.
+	 * This is default check method.
+	 * @param timeStamp - time in ms since Epoch time
+	 * @return true when schedule matches
+	 */
+	public boolean isMinute(long timeStamp) {
+		return isMinute(getCalendar(timeStamp));
+	}
+
+	/**
+	 * Checks whether given calendar date matches with defined schedule.
+	 * This method can be used when seconds are not relevant for matching.
+	 * @param cal - calendar date
+	 * @return true when schedule matches
+	 */
+	public boolean isMinute(Calendar cal) {
+		return matches(Calendar.MINUTE, cal) && isHour(cal);
+	}
+
+	/**
+	 * Checks whether given timestamp matches with defined hour schedule.
+	 * This method can be used when minute definition is not relevant for matching.
+	 * @param timestamp - time in ms since Epoch time
+	 * @return true when schedule matches
+	 */
+	public boolean isHour(long timestamp) {
+		return isHour(getCalendar(timestamp));
+	}
+
+	/**
+	 * Checks whether given calendar date matches with defined hour schedule.
+	 * This method can be used when minute definition is not relevant for matching.
+	 * @param cal - calendar date
+	 * @return true when schedule matches
+	 */
+	public boolean isHour(Calendar cal) {
+		return matches(Calendar.HOUR_OF_DAY, cal) && isDay(cal);
+	}
+
+	/**
+	 * Checks whether given timestamp matches with defined day schedule.
+	 * This method can be used when minute and hour definitions are not relevant for matching.
+	 * @param timestamp - time in ms since Epoch time
+	 * @return true when schedule matches
+	 */
+	public boolean isDay(long timestamp) {
+		return isDay(getCalendar(timestamp));
+	}
+
+	/**
+	 * Checks whether given calendar date matches with defined day schedule.
+	 * This method can be used when minute and hour definitions are not relevant for matching.
+	 * @param cal - calendar date
+	 * @return true when schedule matches
+	 */
+	public boolean isDay(Calendar cal) {
+		return 
+				matches(Calendar.DAY_OF_WEEK, cal) &&
+				matches(Calendar.DAY_OF_MONTH, cal) &&
+				matches(Calendar.MONTH, cal);
+	}
+
+	/**
+	 * Checks whether specific schedule definition matches against the given calendar date.
+	 * @param type - Calendar constant defining time type to check for
+	 * @param calendar - calendar representing the date to check
+	 * @return true when definition matches
+	 */
+	protected boolean matches(int type, Calendar calendar) {
+		// get the definitions and the comparison value
+		AbstractTimeValue defs[] = timeValues[getIndex(type)];
+		int value = calendar.get(type);
+
+		// Any of the criteria must be met
+		for (int i=0; i<defs.length; i++) {
+			if (defs[i].matches(value)) return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Creates the calendar for a timestamp.
+	 * @param timeStamp - timestamp
+	 * @return calendar
+	 */
+	protected Calendar getCalendar(long timeStamp) {
+		Calendar rc = new GregorianCalendar();
+		rc.setTimeInMillis(timeStamp);
+		return rc;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		return toString().hashCode();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) return false;
+		if (!getClass().equals(obj.getClass())) return false;
+		return toString().equals(obj.toString());
+	}
+
+	/**
+	 * Returns the type at the specified index
+	 * @param index - index
+	 * @return Calendar constant of type
+	 */
+	protected static int getType(int index) {
+		return TYPES[index];
+	}
+
+	/**
+	 * Returns the index for the specified Calendar type.
+	 * @param type - Calendar constant for type
+	 * @return internal index
+	 */
+	protected static int getIndex(int type) {
+		for (int i=0; i<TYPES.length; i++) {
+			if (TYPES[i] == type) return i;
+		}
+		throw new IllegalArgumentException("No such time type: "+type);
+	}
+
+
 }
