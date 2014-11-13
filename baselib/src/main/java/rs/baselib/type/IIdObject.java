@@ -30,6 +30,12 @@ import javax.persistence.Transient;
  */
 public interface IIdObject<T extends Serializable> {
 
+	/** 
+	 * Property name of ID.
+	 * @since 1.2.9 
+	 */
+	public static final String ID = "id";
+	
 	/** Returns the ID. */
 	@Transient
 	public T getId();

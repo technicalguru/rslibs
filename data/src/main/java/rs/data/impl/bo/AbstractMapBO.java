@@ -20,7 +20,7 @@ package rs.data.impl.bo;
 import java.io.Serializable;
 
 import rs.baselib.util.RsDate;
-import rs.data.impl.dto.MapDTO;
+import rs.data.impl.dto.GeneralDTO;
 
 /**
  * A simplified BO storing its data in a HashMap.
@@ -29,7 +29,7 @@ import rs.data.impl.dto.MapDTO;
  * @author ralph
  *
  */
-public abstract class AbstractMapBO<K extends Serializable> extends AbstractBO<K, MapDTO<K>> {
+public abstract class AbstractMapBO<K extends Serializable> extends AbstractBO<K, GeneralDTO<K>> {
 
 	/** Serial UID */
 	private static final long serialVersionUID = 1L;
@@ -38,13 +38,13 @@ public abstract class AbstractMapBO<K extends Serializable> extends AbstractBO<K
 	 * Constructor.
 	 */
 	public AbstractMapBO() {
-		this (new MapDTO<K>());
+		this (new GeneralDTO<K>());
 	}
 
 	/**
 	 * Constructor.
 	 */
-	public AbstractMapBO(MapDTO<K> transferObject) {
+	public AbstractMapBO(GeneralDTO<K> transferObject) {
 		super(transferObject);
 	}
 
@@ -73,7 +73,7 @@ public abstract class AbstractMapBO<K extends Serializable> extends AbstractBO<K
 	 */
 	@Override
 	public RsDate getCreationDate() {
-		return (RsDate)getData(PROPERTY_CREATION_DATE);
+		return (RsDate)getData(CREATION_DATE);
 	}
 
 	/**
@@ -81,7 +81,7 @@ public abstract class AbstractMapBO<K extends Serializable> extends AbstractBO<K
 	 */
 	@Override
 	public void setCreationDate(RsDate creationDate) {
-		setData(PROPERTY_CREATION_DATE, creationDate);
+		setData(CREATION_DATE, creationDate);
 	}
 
 	/**
@@ -89,7 +89,7 @@ public abstract class AbstractMapBO<K extends Serializable> extends AbstractBO<K
 	 */
 	@Override
 	public RsDate getChangeDate() {
-		return (RsDate)getData(PROPERTY_CHANGE_DATE);
+		return (RsDate)getData(CHANGE_DATE);
 	}
 
 	/**
@@ -97,7 +97,7 @@ public abstract class AbstractMapBO<K extends Serializable> extends AbstractBO<K
 	 */
 	@Override
 	public void setChangeDate(RsDate changeDate) {
-		setData(PROPERTY_CHANGE_DATE, changeDate);
+		setData(CHANGE_DATE, changeDate);
 	}
 
 }

@@ -37,8 +37,27 @@ import rs.data.util.LockInformation;
  */
 public interface IGeneralBO<K extends Serializable> extends Serializable, IBean, IIdObject<K> {
 	
-	public static final String PROPERTY_CREATION_DATE = "creationDate";
-	public static final String PROPERTY_CHANGE_DATE = "changeDate";
+	/** 
+	 * Property name of creationDate.
+	 * @since 1.2.9 
+	 */
+	public static final String CREATION_DATE = "creationDate";
+	/** 
+	 * Property name of changeDate.
+	 * @since 1.2.9 
+	 */
+	public static final String CHANGE_DATE = "changeDate";
+	/** 
+	 * Property name of creationDate.
+	 * @deprecated As of release 1.2.9, replaced by {@link #CREATION_DATE}.
+	 */
+	public static final String PROPERTY_CREATION_DATE = CREATION_DATE;
+	/** 
+	 * Property name of changeDate.
+	 * @deprecated As of release 1.2.9, replaced by {@link #CHANGE_DATE}.
+	 * @since 1.2.9 
+	 */
+	public static final String PROPERTY_CHANGE_DATE = CHANGE_DATE;
 	
 	/**
 	 * Returns the responsible DAO.
