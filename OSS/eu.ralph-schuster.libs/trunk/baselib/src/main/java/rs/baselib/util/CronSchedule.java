@@ -17,6 +17,7 @@
  */
 package rs.baselib.util;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -33,7 +34,12 @@ import rs.baselib.lang.LangUtils;
  * @author RalphSchuster
  *
  */
-public class CronSchedule {
+public class CronSchedule implements Serializable {
+
+	/**
+	 * Serial UID.
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/** 
 	 * The schedule string that never matches. 
