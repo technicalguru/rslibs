@@ -304,6 +304,8 @@ public class CronSchedule implements Serializable {
 
 	/** A static instance of the never value */
 	private static final NeverValue NEVER_VALUE = new NeverValue();
+	/** A static instance of the never value array */
+	private static final AbstractTimeValue NEVER_VALUES[] = new AbstractTimeValue[] { new NeverValue() };
 	
 	/**
 	 * Types being used.
@@ -366,7 +368,7 @@ public class CronSchedule implements Serializable {
 		String parts[] = schedule.split(" ", TYPES.length+1);
 		if (NEVER_MARKER.equalsIgnoreCase(parts[0])) {
 			for (int i=0; i<TYPES.length; i++) {
-				set(getType(i), new AbstractTimeValue[] { NEVER_VALUE });
+				set(getType(i), NEVER_VALUES);
 			}
 			return parts.length > 1 ? parts[1] : null;
 		} else {
