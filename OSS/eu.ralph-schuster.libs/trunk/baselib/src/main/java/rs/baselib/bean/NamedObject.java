@@ -24,7 +24,16 @@ package rs.baselib.bean;
  */
 public interface NamedObject {
 
-	public static final String PROPERTY_NAME = "name";
+	/** 
+	 * Property name of name.
+	 * @since 1.2.9 
+	 */
+	public static final String NAME = "name";
+	/** 
+	 * Property name of name.
+	 * @deprecated As of release 1.2.9, replaced by {@link #NAME}.
+	 */
+	public static final String PROPERTY_NAME = NAME;
 	
 	/**
 	 * Returns the name of this object.

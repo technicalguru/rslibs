@@ -18,8 +18,14 @@
 package rs.data.impl.dto;
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
+import rs.baselib.bean.NamedObject;
+import rs.baselib.type.IIdObject;
 import rs.baselib.util.RsDate;
+import rs.data.api.bo.IGeneralBO;
 
 /**
  * Abstract Implementation for Data Transfer Objects.
@@ -27,17 +33,14 @@ import rs.baselib.util.RsDate;
  * @author ralph
  *
  */
-public abstract class GeneralDTO<K extends Serializable> implements Serializable {
+public class GeneralDTO<K extends Serializable> implements Serializable {
 
 	/**
 	 * Serial UID.
 	 */
-	private static final long serialVersionUID = -6017060445792763535L;
+	private static final long serialVersionUID = 1L;
 
-	private K id;
-	private RsDate creationDate;
-	private RsDate changeDate;
-	private String name;
+	private Map<String, Object> properties = new HashMap<String, Object>();
 	
 	/**
 	 * Constructor.
@@ -50,7 +53,7 @@ public abstract class GeneralDTO<K extends Serializable> implements Serializable
 	 * @return the ID
 	 */
 	public K getId() {
-		return id;
+		return getProperty(IIdObject.ID);
 	}
 
 	/**
@@ -58,7 +61,7 @@ public abstract class GeneralDTO<K extends Serializable> implements Serializable
 	 * @param id the ID to set
 	 */
 	public void setId(K id) {
-		this.id = id;
+		setProperty(IGeneralBO.ID, id);
 	}
 
 	/**
@@ -66,7 +69,7 @@ public abstract class GeneralDTO<K extends Serializable> implements Serializable
 	 * @return the creation date
 	 */
 	public RsDate getCreationDate() {
-		return creationDate;
+		return getProperty(IGeneralBO.CREATION_DATE);
 	}
 
 	/**
@@ -74,7 +77,7 @@ public abstract class GeneralDTO<K extends Serializable> implements Serializable
 	 * @param creationDate the creation date to set
 	 */
 	public void setCreationDate(RsDate creationDate) {
-		this.creationDate = creationDate;
+		setProperty(IGeneralBO.CREATION_DATE, creationDate);
 	}
 
 	/**
@@ -82,7 +85,7 @@ public abstract class GeneralDTO<K extends Serializable> implements Serializable
 	 * @return the change date
 	 */
 	public RsDate getChangeDate() {
-		return changeDate;
+		return getProperty(IGeneralBO.CHANGE_DATE);
 	}
 
 	/**
@@ -90,7 +93,7 @@ public abstract class GeneralDTO<K extends Serializable> implements Serializable
 	 * @param changeDate the change date to set
 	 */
 	public void setChangeDate(RsDate changeDate) {
-		this.changeDate = changeDate;
+		setProperty(IGeneralBO.CHANGE_DATE, changeDate);
 	}
 
 	/**
@@ -98,7 +101,7 @@ public abstract class GeneralDTO<K extends Serializable> implements Serializable
 	 * @return the name
 	 */
 	public String getName() {
-		return name;
+		return getProperty(NamedObject.NAME);
 	}
 
 	/**
@@ -106,7 +109,36 @@ public abstract class GeneralDTO<K extends Serializable> implements Serializable
 	 * @param name the name to set
 	 */
 	public void setName(String name) {
-		this.name = name;
+		setProperty(NamedObject.NAME, name);
+	}
+
+	/**
+	 * Returns the property value.
+	 * @param name name of property
+	 * @return the value of the property
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> T getProperty(String name) {
+		return (T)properties.get(name);
+	}
+	
+	/**
+	 * Sets the property with given name.
+	 * @param name name of property
+	 * @param value new value of property
+	 */
+	public void setProperty(String name, Object value) {
+		properties.put(name, value);
+	}
+	
+	/**
+	 * Returns the {@link #properties}.
+	 * <p>This map can be incomplete as it doesn't contain properties that are handled through
+	 * custom fields of the object.</p>
+	 * @return the properties
+	 */
+	public Map<String, Object> getProperties() {
+		return Collections.unmodifiableMap(properties);
 	}
 
 }

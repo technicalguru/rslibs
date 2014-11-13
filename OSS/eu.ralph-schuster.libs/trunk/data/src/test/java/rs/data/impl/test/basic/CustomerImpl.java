@@ -74,7 +74,7 @@ public class CustomerImpl extends AbstractGeneralBO<Long> implements Customer {
 	public void setCreationDate(RsDate creationDate) {
 		RsDate oldValue = getCreationDate();
 		this.creationDate = creationDate;
-		firePropertyChange(PROPERTY_CREATION_DATE, oldValue, creationDate);
+		firePropertyChange(CREATION_DATE, oldValue, creationDate);
 	}
 
 	/**
@@ -92,7 +92,7 @@ public class CustomerImpl extends AbstractGeneralBO<Long> implements Customer {
 	public void setChangeDate(RsDate changeDate) {
 		RsDate oldValue = getChangeDate();
 		this.changeDate = changeDate;
-		firePropertyChange(PROPERTY_CHANGE_DATE, oldValue, changeDate);
+		firePropertyChange(CHANGE_DATE, oldValue, changeDate);
 	}
 
 	/**
@@ -110,7 +110,7 @@ public class CustomerImpl extends AbstractGeneralBO<Long> implements Customer {
 	public void setName(String name) {
 		String oldValue = getName();
 		this.name = name;
-		firePropertyChange(PROPERTY_NAME, oldValue, name);
+		firePropertyChange(NAME, oldValue, name);
 	}
 
 	

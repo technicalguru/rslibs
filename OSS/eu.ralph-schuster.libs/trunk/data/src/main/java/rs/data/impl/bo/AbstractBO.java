@@ -143,7 +143,7 @@ public abstract class AbstractBO<K extends Serializable, T extends GeneralDTO<K>
 	public void setCreationDate(RsDate creationDate) {
 		RsDate oldValue = getCreationDate();
 		getTransferObject().setCreationDate(creationDate);
-		firePropertyChange(PROPERTY_CREATION_DATE, oldValue, creationDate);
+		firePropertyChange(CREATION_DATE, oldValue, creationDate);
 	}
 
 	/**
@@ -161,7 +161,7 @@ public abstract class AbstractBO<K extends Serializable, T extends GeneralDTO<K>
 	public void setChangeDate(RsDate changeDate) {
 		RsDate oldValue = getChangeDate();
 		getTransferObject().setChangeDate(changeDate);
-		firePropertyChange(PROPERTY_CHANGE_DATE, oldValue, changeDate);
+		firePropertyChange(CHANGE_DATE, oldValue, changeDate);
 	}
 	
 	/**
@@ -180,7 +180,7 @@ public abstract class AbstractBO<K extends Serializable, T extends GeneralDTO<K>
 	public void setName(String name) {
 		String oldValue = getName();
 		getTransferObject().setName(name);
-		firePropertyChange(NamedObject.PROPERTY_NAME, oldValue, name);
+		firePropertyChange(NamedObject.NAME, oldValue, name);
 	}
 	
 	/**
