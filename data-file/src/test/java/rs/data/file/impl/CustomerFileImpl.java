@@ -46,7 +46,7 @@ public class CustomerFileImpl extends AbstractFileBO<Long> implements Customer {
 	 */
 	@Override
 	public String getName() {
-		return (String)getData(NAME);
+		return getProperty(NAME);
 	}
 
 	/**
@@ -54,7 +54,7 @@ public class CustomerFileImpl extends AbstractFileBO<Long> implements Customer {
 	 */
 	@Override
 	public void setName(String name) {
-		setData(NAME, name);
+		setProperty(NAME, name);
 	}
 
 	/**
@@ -62,7 +62,7 @@ public class CustomerFileImpl extends AbstractFileBO<Long> implements Customer {
 	 */
 	@Override
 	public Address getInvoiceAddress() {
-		return (Address)getData(INVOICE_ADDRESS);
+		return getProperty(INVOICE_ADDRESS);
 	}
 
 	/**
@@ -70,16 +70,15 @@ public class CustomerFileImpl extends AbstractFileBO<Long> implements Customer {
 	 */
 	@Override
 	public void setInvoiceAddress(Address address) {
-		setData(INVOICE_ADDRESS, address);
+		setProperty(INVOICE_ADDRESS, address);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String,String> getPhones() {
-		Map<String,String> rc = (Map<String,String>)getData(PHONES);
+		Map<String,String> rc = getProperty(PHONES);
 		if (rc == null) {
 			rc = new HashMap<String, String>();
 			setPhones(rc);
@@ -92,7 +91,7 @@ public class CustomerFileImpl extends AbstractFileBO<Long> implements Customer {
 	 */
 	@Override
 	public void setPhones(Map<String,String> phone) {
-		setData(PHONES, phone);
+		setProperty(PHONES, phone);
 	}
 
 	/**
@@ -116,10 +115,9 @@ public class CustomerFileImpl extends AbstractFileBO<Long> implements Customer {
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Address> getDeliveryAddresses() {
-		Collection<Address> rc = (Collection<Address>)getData(DELIVERY_ADDRESSES);
+		Collection<Address> rc = getProperty(DELIVERY_ADDRESSES);
 		if (rc == null) {
 			rc = new HashSet<Address>();
 			setDeliveryAddresses(rc);
@@ -132,7 +130,7 @@ public class CustomerFileImpl extends AbstractFileBO<Long> implements Customer {
 	 */
 	@Override
 	public void setDeliveryAddresses(Collection<Address> addresses) {
-		setData(DELIVERY_ADDRESSES, addresses);
+		setProperty(DELIVERY_ADDRESSES, addresses);
 	}
 
 	/**

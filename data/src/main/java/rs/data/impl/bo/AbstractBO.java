@@ -17,6 +17,7 @@
  */
 package rs.data.impl.bo;
 
+import java.beans.PropertyChangeEvent;
 import java.io.Serializable;
 import java.util.List;
 
@@ -206,5 +207,40 @@ public abstract class AbstractBO<K extends Serializable, T extends GeneralDTO<K>
 		return o.getTransferObject();
 	}
 	
-
+	/**
+	 * Returns the property of given name.
+	 * @param name name of property
+	 * @return value of property
+	 */
+	public <X> X getProperty(String name) {
+		return getTransferObject().getProperty(name);
+	}
+	
+	/**
+	 * Standard implementation of setter method.
+	 * <p>The method retrieves the old value via {@link #getProperty(String)} and sets
+	 * the new value through {@link GeneralDTO#setProperty(String, Object)}. Afterwards
+	 * it fires a {@link PropertyChangeEvent} for this property name.</p>
+	 * @param name name of DTO property and name to be used in {@link PropertyChangeEvent}
+	 * @param value value of property
+	 */
+	public <X> void setProperty(String name, X value) {
+		setProperty(name, name, value);
+	}
+	
+	/**
+	 * Standard implementation of setter method.
+	 * <p>The method retrieves the old value via {@link #getProperty(String)} and sets
+	 * the new value through {@link GeneralDTO#setProperty(String, Object)}. Afterwards
+	 * it fires a {@link PropertyChangeEvent} with parameter firePropertyName.</p>
+	 * @param name name of DTO property 
+	 * @param firePropertyName name to be used in {@link PropertyChangeEvent}
+	 * @param value new value of property
+	 */
+	public <X> void setProperty(String name, String firePropertyName, X value) {
+		X oldValue = getProperty(name);
+		getTransferObject().setProperty(name, value);
+		firePropertyChange(firePropertyName, oldValue, value);
+	}
+	
 }
