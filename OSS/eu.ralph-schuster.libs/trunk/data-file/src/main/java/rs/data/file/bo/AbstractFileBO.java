@@ -22,15 +22,15 @@ import java.io.Serializable;
 
 import javax.persistence.Transient;
 
-import rs.data.impl.bo.AbstractMapBO;
-import rs.data.impl.dto.MapDTO;
+import rs.data.impl.bo.AbstractBO;
+import rs.data.impl.dto.GeneralDTO;
 
 /**
  * A Business Object with a File underneath.
  * @author ralph
  *
  */
-public abstract class AbstractFileBO<K extends Serializable> extends AbstractMapBO<K> {
+public abstract class AbstractFileBO<K extends Serializable> extends AbstractBO<K,GeneralDTO<K>> {
 
 	/** Serial UID */
 	private static final long serialVersionUID = 1L;
@@ -41,13 +41,13 @@ public abstract class AbstractFileBO<K extends Serializable> extends AbstractMap
 	 * Constructor.
 	 */
 	public AbstractFileBO() {
-		this(new MapDTO<K>());
+		this(new GeneralDTO<K>());
 	}
 
 	/**
 	 * Constructor.
 	 */
-	public AbstractFileBO(MapDTO<K> dto) {
+	public AbstractFileBO(GeneralDTO<K> dto) {
 		super(dto);
 	}
 

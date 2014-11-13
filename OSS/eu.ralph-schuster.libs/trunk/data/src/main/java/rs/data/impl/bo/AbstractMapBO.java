@@ -19,16 +19,16 @@ package rs.data.impl.bo;
 
 import java.io.Serializable;
 
-import rs.baselib.util.RsDate;
 import rs.data.impl.dto.GeneralDTO;
 
 /**
  * A simplified BO storing its data in a HashMap.
- * The save/load mechanism of this BO implementation is externalized and used e.g. for
- * file-based storage. 
+ * <p>The save/load mechanism of this BO implementation is externalized and used e.g. for
+ * file-based storage.</p> 
  * @author ralph
- *
+ * @deprecated As of release 1.2.9, functionality is integrated in {@link AbstractBO}.
  */
+@Deprecated
 public abstract class AbstractMapBO<K extends Serializable> extends AbstractBO<K, GeneralDTO<K>> {
 
 	/** Serial UID */
@@ -54,7 +54,7 @@ public abstract class AbstractMapBO<K extends Serializable> extends AbstractBO<K
 	 * @return data value
 	 */
 	protected Object getData(String key) {
-		return getTransferObject().getProperty(key);
+		return getProperty(key);
 	}
 	
 	/**
@@ -63,41 +63,7 @@ public abstract class AbstractMapBO<K extends Serializable> extends AbstractBO<K
 	 * @param value value of data
 	 */
 	protected void setData(String key, Object value) {
-		Object oldValue = getData(key);
-		getTransferObject().setProperty(key, value);
-		firePropertyChange(key, oldValue, value);
+		setProperty(key, value);
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public RsDate getCreationDate() {
-		return (RsDate)getData(CREATION_DATE);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setCreationDate(RsDate creationDate) {
-		setData(CREATION_DATE, creationDate);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public RsDate getChangeDate() {
-		return (RsDate)getData(CHANGE_DATE);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setChangeDate(RsDate changeDate) {
-		setData(CHANGE_DATE, changeDate);
-	}
-
 }
