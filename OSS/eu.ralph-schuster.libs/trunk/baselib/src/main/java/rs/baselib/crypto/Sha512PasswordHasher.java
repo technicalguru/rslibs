@@ -18,27 +18,26 @@
 package rs.baselib.crypto;
 
 import org.apache.commons.codec.binary.StringUtils;
-import org.apache.commons.codec.digest.Md5Crypt;
+import org.apache.commons.codec.digest.Sha2Crypt;
 
 /**
- * Uses salted MD5 hashes from {@link Md5Crypt}.
+ * Uses salted SHA512 hashes from {@link Sha2Crypt}.
  * @author ralph
- * @see Md5Crypt
+ * @see Sha2Crypt
  * @since 1.2.9
- *
  */
-public class Md5PasswordHasher implements ExtendedPasswordHasher {
+public class Sha512PasswordHasher implements ExtendedPasswordHasher {
 
 	/** The prefix that is present for hashes of this algorithm */
-	public static final String PREFIX = "$1$";
-	
-	/** A static instance of the MD5 hasher */
-	public static final ExtendedPasswordHasher INSTANCE = new Md5PasswordHasher();
+	public static final String PREFIX = "$6$";
+
+	/** A static instance of the SHA512 hasher */
+	public static final ExtendedPasswordHasher INSTANCE = new Sha512PasswordHasher();
 
 	/**
 	 * Constructor.
 	 */
-	public Md5PasswordHasher() {
+	public Sha512PasswordHasher() {
 	}
 
 	/**
@@ -46,7 +45,7 @@ public class Md5PasswordHasher implements ExtendedPasswordHasher {
 	 */
 	@Override
 	public String getPasswordHash(String plainPassword) {
-		return Md5Crypt.md5Crypt(plainPassword.getBytes());
+		return Sha2Crypt.sha512Crypt(plainPassword.getBytes());
 	}
 
 	/**
@@ -55,7 +54,7 @@ public class Md5PasswordHasher implements ExtendedPasswordHasher {
 	@Override
 	public boolean testPassword(String plainPassword, String passwordHash) {
 		if ((plainPassword != null) && isHash(passwordHash)) {
-			String otherHash = Md5Crypt.md5Crypt(StringUtils.getBytesUtf8(plainPassword), passwordHash);
+			String otherHash = Sha2Crypt.sha512Crypt(StringUtils.getBytesUtf8(plainPassword), passwordHash);
 			return otherHash.equals(passwordHash);
 		}
 		return false;
@@ -69,5 +68,4 @@ public class Md5PasswordHasher implements ExtendedPasswordHasher {
 		return (passwordHash != null) && passwordHash.startsWith(PREFIX);
 	}
 
-	
 }

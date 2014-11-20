@@ -35,11 +35,14 @@ public class CombinedPasswordHasher implements PasswordHasher {
 	 * <li>{@link Md5PasswordHasher}</li>
 	 * <li>{@link BlowfishPasswordHasher}</li>
 	 * <li>{@link PhpPasswordHasher}</li>
+	 * <li>{@link Sha512PasswordHasher}</li>
+	 * <li>{@link Sha256PasswordHasher}</li>
 	 * <li>{@link DummyPasswordHasher}</li>
 	 * </ul>
 	 */
 	public static final PasswordHasher UNIX_STRATEGY_MD5 = 
-			new CombinedPasswordHasher(Md5PasswordHasher.INSTANCE, BlowfishPasswordHasher.INSTANCE, PhpPasswordHasher.INSTANCE, DummyPasswordHasher.INSTANCE);
+			new CombinedPasswordHasher(Md5PasswordHasher.INSTANCE, BlowfishPasswordHasher.INSTANCE, PhpPasswordHasher.INSTANCE, 
+					Sha512PasswordHasher.INSTANCE, Sha256PasswordHasher.INSTANCE, DummyPasswordHasher.INSTANCE);
 	
 	/**
 	 * A UNIX strategy to hash and check passwords (with {@link BlowfishPasswordHasher} as default).
@@ -48,11 +51,14 @@ public class CombinedPasswordHasher implements PasswordHasher {
 	 * <li>{@link BlowfishPasswordHasher}</li>
 	 * <li>{@link Md5PasswordHasher}</li>
 	 * <li>{@link PhpPasswordHasher}</li>
+	 * <li>{@link Sha512PasswordHasher}</li>
+	 * <li>{@link Sha256PasswordHasher}</li>
 	 * <li>{@link DummyPasswordHasher}</li>
 	 * </ul>
 	 */
 	public static final PasswordHasher UNIX_STRATEGY_BLOWFISH = 
-			new CombinedPasswordHasher(BlowfishPasswordHasher.INSTANCE, Md5PasswordHasher.INSTANCE, PhpPasswordHasher.INSTANCE, DummyPasswordHasher.INSTANCE);
+			new CombinedPasswordHasher(BlowfishPasswordHasher.INSTANCE, Md5PasswordHasher.INSTANCE, PhpPasswordHasher.INSTANCE, 
+					Sha512PasswordHasher.INSTANCE, Sha256PasswordHasher.INSTANCE, DummyPasswordHasher.INSTANCE);
 	
 	/**
 	 * A UNIX strategy to hash and check passwords (with {@link PhpPasswordHasher} as default).
@@ -61,11 +67,46 @@ public class CombinedPasswordHasher implements PasswordHasher {
 	 * <li>{@link PhpPasswordHasher}</li>
 	 * <li>{@link Md5PasswordHasher}</li>
 	 * <li>{@link BlowfishPasswordHasher}</li>
+	 * <li>{@link Sha512PasswordHasher}</li>
+	 * <li>{@link Sha256PasswordHasher}</li>
 	 * <li>{@link DummyPasswordHasher}</li>
 	 * </ul>
 	 */
 	public static final PasswordHasher UNIX_STRATEGY_PHP = 
-			new CombinedPasswordHasher(PhpPasswordHasher.INSTANCE, Md5PasswordHasher.INSTANCE, BlowfishPasswordHasher.INSTANCE, DummyPasswordHasher.INSTANCE);
+			new CombinedPasswordHasher(PhpPasswordHasher.INSTANCE, Md5PasswordHasher.INSTANCE, BlowfishPasswordHasher.INSTANCE, 
+					Sha512PasswordHasher.INSTANCE, Sha256PasswordHasher.INSTANCE, DummyPasswordHasher.INSTANCE);
+	
+	/**
+	 * A UNIX strategy to hash and check passwords (with {@link Md5PasswordHasher} as default).
+	 * <p>This instance used (in order of check):</p>
+	 * <ul>
+	 * <li>{@link Sha512PasswordHasher}</li>
+	 * <li>{@link Md5PasswordHasher}</li>
+	 * <li>{@link BlowfishPasswordHasher}</li>
+	 * <li>{@link PhpPasswordHasher}</li>
+	 * <li>{@link Sha256PasswordHasher}</li>
+	 * <li>{@link DummyPasswordHasher}</li>
+	 * </ul>
+	 */
+	public static final PasswordHasher UNIX_STRATEGY_SHA512 = 
+			new CombinedPasswordHasher(Sha512PasswordHasher.INSTANCE, Md5PasswordHasher.INSTANCE, BlowfishPasswordHasher.INSTANCE, 
+					PhpPasswordHasher.INSTANCE, Sha256PasswordHasher.INSTANCE, DummyPasswordHasher.INSTANCE);
+	
+	/**
+	 * A UNIX strategy to hash and check passwords (with {@link Md5PasswordHasher} as default).
+	 * <p>This instance used (in order of check):</p>
+	 * <ul>
+	 * <li>{@link Sha256PasswordHasher}</li>
+	 * <li>{@link Md5PasswordHasher}</li>
+	 * <li>{@link BlowfishPasswordHasher}</li>
+	 * <li>{@link PhpPasswordHasher}</li>
+	 * <li>{@link Sha512PasswordHasher}</li>
+	 * <li>{@link DummyPasswordHasher}</li>
+	 * </ul>
+	 */
+	public static final PasswordHasher UNIX_STRATEGY_SHA256 = 
+			new CombinedPasswordHasher(Sha256PasswordHasher.INSTANCE, Md5PasswordHasher.INSTANCE, BlowfishPasswordHasher.INSTANCE, 
+					PhpPasswordHasher.INSTANCE,	Sha512PasswordHasher.INSTANCE, DummyPasswordHasher.INSTANCE);
 	
 	
 	/** all hashers */

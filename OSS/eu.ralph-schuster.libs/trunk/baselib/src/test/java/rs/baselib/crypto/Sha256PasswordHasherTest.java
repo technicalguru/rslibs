@@ -23,11 +23,11 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 
 /**
- * Tests the {@link Md5PasswordHasher}.
+ * Tests the {@link Sha256PasswordHasher}.
  * @author ralph
  *
  */
-public class Md5PasswordHasherTest {
+public class Sha256PasswordHasherTest {
 
 	public static final String PASSWORD = "aPassword";
 	
@@ -36,10 +36,10 @@ public class Md5PasswordHasherTest {
 	 */
 	@Test
 	public void testHash() {
-		String hash = Md5PasswordHasher.INSTANCE.getPasswordHash(PASSWORD);
+		String hash = Sha256PasswordHasher.INSTANCE.getPasswordHash(PASSWORD);
 		assertNotNull("No hash created", hash);
 		assertNotEquals("Hash returned the plain password", PASSWORD, hash);
-		assertTrue("Not a MD5 hash", hash.startsWith(Md5PasswordHasher.PREFIX));
+		assertTrue("Not a MD5 hash", hash.startsWith(Sha256PasswordHasher.PREFIX));
 	}
 
 	/**
@@ -47,8 +47,8 @@ public class Md5PasswordHasherTest {
 	 */
 	@Test
 	public void testIsHash() {
-		String hash = Md5PasswordHasher.INSTANCE.getPasswordHash(PASSWORD);
-		assertTrue("MD5 hasher does not recognize its own hash", Md5PasswordHasher.INSTANCE.isHash(hash));
+		String hash = Sha256PasswordHasher.INSTANCE.getPasswordHash(PASSWORD);
+		assertTrue("MD5 hasher does not recognize its own hash", Sha256PasswordHasher.INSTANCE.isHash(hash));
 	}
 
 	/**
@@ -56,8 +56,8 @@ public class Md5PasswordHasherTest {
 	 */
 	@Test
 	public void testTestPassword() {
-		String hash = Md5PasswordHasher.INSTANCE.getPasswordHash(PASSWORD);
-		assertTrue("MD5 hasher does not test his own hash", Md5PasswordHasher.INSTANCE.testPassword(PASSWORD, hash));
+		String hash = Sha256PasswordHasher.INSTANCE.getPasswordHash(PASSWORD);
+		assertTrue("MD5 hasher does not test his own hash", Sha256PasswordHasher.INSTANCE.testPassword(PASSWORD, hash));
 	}
 
 }

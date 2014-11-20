@@ -36,12 +36,35 @@ public class CombinedPasswordHasherTest {
 	 * Constructor.
 	 */
 	@Test
-	public void testHash() {
+	public void testMd5Hash() {
 		String hash = CombinedPasswordHasher.UNIX_STRATEGY_MD5.getPasswordHash(PASSWORD);
 		assertNotNull("No hash created", hash);
 		assertNotEquals("Hash returned the plain password", PASSWORD, hash);
-		assertTrue("Not a MD5 hash", hash.startsWith("$1$"));
+		assertTrue("Not a MD5 hash", hash.startsWith(Md5PasswordHasher.PREFIX));
 	}
+
+	/**
+	 * Constructor.
+	 */
+	@Test
+	public void testSha512Hash() {
+		String hash = CombinedPasswordHasher.UNIX_STRATEGY_SHA512.getPasswordHash(PASSWORD);
+		assertNotNull("No hash created", hash);
+		assertNotEquals("Hash returned the plain password", PASSWORD, hash);
+		assertTrue("Not a MD5 hash", hash.startsWith(Sha512PasswordHasher.PREFIX));
+	}
+
+	/**
+	 * Constructor.
+	 */
+	@Test
+	public void testSha256Hash() {
+		String hash = CombinedPasswordHasher.UNIX_STRATEGY_SHA256.getPasswordHash(PASSWORD);
+		assertNotNull("No hash created", hash);
+		assertNotEquals("Hash returned the plain password", PASSWORD, hash);
+		assertTrue("Not a MD5 hash", hash.startsWith(Sha256PasswordHasher.PREFIX));
+	}
+
 
 	/**
 	 * Constructor.
