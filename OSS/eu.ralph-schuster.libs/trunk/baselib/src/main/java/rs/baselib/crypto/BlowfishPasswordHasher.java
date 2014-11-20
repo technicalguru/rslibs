@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Uses salted Blowfish hashes from ???.
  * @author ralph
+ * @since 1.2.9
  *
  */
 public class BlowfishPasswordHasher implements ExtendedPasswordHasher {

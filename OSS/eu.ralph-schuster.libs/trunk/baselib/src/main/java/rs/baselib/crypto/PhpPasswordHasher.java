@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Uses PHP-alike hashes.
  * @author ralph
+ * @since 1.2.9
  *
  */
 public class PhpPasswordHasher implements ExtendedPasswordHasher {

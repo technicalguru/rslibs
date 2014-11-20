@@ -20,6 +20,7 @@ package rs.baselib.crypto;
 /**
  * An interface that is able to hash passwords and check existing hashes against a password.
  * @author ralph
+ * @since 1.2.9
  *
  */
 public interface PasswordHasher {

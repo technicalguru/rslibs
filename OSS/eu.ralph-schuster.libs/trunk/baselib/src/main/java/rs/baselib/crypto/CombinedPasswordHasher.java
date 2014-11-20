@@ -23,6 +23,7 @@ package rs.baselib.crypto;
  * to create hashes but will use all defined hashers to test a given password hash.
  * @author ralph
  * @see ExtendedPasswordHasher
+ * @since 1.2.9
  *
  */
 public class CombinedPasswordHasher implements PasswordHasher {

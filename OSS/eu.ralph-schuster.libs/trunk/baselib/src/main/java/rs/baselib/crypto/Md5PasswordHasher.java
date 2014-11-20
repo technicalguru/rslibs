@@ -24,6 +24,7 @@ import org.apache.commons.codec.digest.Md5Crypt;
  * Uses salted MD5 hashes from {@link Md5Crypt}.
  * @author ralph
  * @see Md5Crypt
+ * @since 1.2.9
  *
  */
 public class Md5PasswordHasher implements ExtendedPasswordHasher {
