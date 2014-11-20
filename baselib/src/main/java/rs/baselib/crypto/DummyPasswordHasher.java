@@ -22,6 +22,7 @@ package rs.baselib.crypto;
  * <p>This implementation shall be used for fallback testing when no other hash algorithm fits. You should never
  * use this class to actually hash passwords.</p>
  * @author ralph
+ * @since 1.2.9
  *
  */
 public class DummyPasswordHasher implements ExtendedPasswordHasher {

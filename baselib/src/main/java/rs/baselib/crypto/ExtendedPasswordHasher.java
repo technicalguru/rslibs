@@ -20,6 +20,7 @@ package rs.baselib.crypto;
 /**
  * Extends {@link PasswordHasher} by a method to detect responsibility.
  * @author ralph
+ * @since 1.2.9
  *
  */
 public interface ExtendedPasswordHasher extends PasswordHasher {
