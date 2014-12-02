@@ -27,6 +27,7 @@ import org.hibernate.proxy.LazyInitializer;
 import rs.data.hibernate.HibernateDaoMaster;
 import rs.data.impl.bo.AbstractBO;
 import rs.data.impl.dto.GeneralDTO;
+import rs.data.util.ObjectDeletedException;
 
 /**
  * Abstract implementation for hibernate BO.
@@ -111,9 +112,12 @@ public abstract class AbstractHibernateBO<K extends Serializable, T extends Gene
 			}
 			return t;
 		}
-		t = (T)getSession().get(getTransferClass(), getId());
-		setTransferObject(t);
-		return t;
+		T dbObject = (T)getSession().get(getTransferClass(), getId());
+		if (dbObject != null) {
+			setTransferObject(dbObject);
+			return dbObject;
+		}
+		throw new ObjectDeletedException(this);
 	}
 
 

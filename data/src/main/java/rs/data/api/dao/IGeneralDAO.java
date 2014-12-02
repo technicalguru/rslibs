@@ -26,6 +26,7 @@ import rs.data.api.IDaoMaster;
 import rs.data.api.bo.IGeneralBO;
 import rs.data.event.IDaoListener;
 import rs.data.util.IDaoIterator;
+import rs.data.util.ObjectDeletedException;
 
 /**
  * Interface for Data Access Objects.
@@ -137,6 +138,8 @@ public interface IGeneralDAO<K extends Serializable, B extends IGeneralBO<K>> {
 	
 	/**
 	 * Refresh the given object.
+	 * <p>The method will throw an {@link ObjectDeletedException} when the underlying
+	 * persistence store does not have this object anymore.</p>
 	 * @param object object to be refreshed
 	 */
 	public void refresh(B object);

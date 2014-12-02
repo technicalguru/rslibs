@@ -39,6 +39,7 @@ import rs.data.hibernate.bo.AbstractHibernateBO;
 import rs.data.impl.dao.AbstractDAO;
 import rs.data.impl.dto.GeneralDTO;
 import rs.data.util.IDaoIterator;
+import rs.data.util.ObjectDeletedException;
 
 /**
  * Implements the Hibernate specific functions.
@@ -81,6 +82,14 @@ public abstract class AbstractHibernateDAO<K extends Serializable, T extends Gen
 			T t = ((B)object).getAttachedTransferObject();
 			getSession().refresh(t, LockOptions.NONE);
 			getFactory().commit();
+		} catch (ObjectDeletedException e) {
+			// Ignore all subsequent exceptions and re-throw
+			try {
+				getFactory().commit();
+			} catch (Exception e2) { 
+				try { getFactory().rollback(); } catch (Exception e3) {	}				
+			}
+			throw e;
 		} catch (Exception e) {
 			try {
 				getFactory().rollback();
