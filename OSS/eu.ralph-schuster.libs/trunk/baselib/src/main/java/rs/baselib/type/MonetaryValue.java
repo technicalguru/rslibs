@@ -170,17 +170,16 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	/**
 	 * Adds another value to this object
 	 * @param value value to be added
-	 * @return this object (for concatenation purposes)
+	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue add(MonetaryValue value) {
-		amount = amount.add(value.getAmount(), MATH_CONTEXT).setScale(2, roundingMode);
-		return this;
+		return new MonetaryValue(amount.add(value.getAmount(), MATH_CONTEXT), roundingMode);
 	}
 
 	/**
 	 * Adds another value to this object
 	 * @param value value to be added
-	 * @return this object (for concatenation purposes)
+	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue add(BigDecimal value) {
 		return add(new MonetaryValue(value));
@@ -189,7 +188,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	/**
 	 * Adds another value to this object
 	 * @param value value to be added
-	 * @return this object (for concatenation purposes)
+	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue add(int value) {
 		return add(new MonetaryValue(value));
@@ -198,7 +197,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	/**
 	 * Adds another value to this object
 	 * @param value value to be added
-	 * @return this object (for concatenation purposes)
+	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue add(long value) {
 		return add(new MonetaryValue(value));
@@ -207,7 +206,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	/**
 	 * Adds another value to this object
 	 * @param value value to be added
-	 * @return this object (for concatenation purposes)
+	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue add(double value) {
 		return add(new MonetaryValue(value));
@@ -216,7 +215,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	/**
 	 * Adds another value to this object
 	 * @param value value to be added
-	 * @return this object (for concatenation purposes)
+	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue add(BigInteger value) {
 		return add(new MonetaryValue(value));
@@ -225,7 +224,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	/**
 	 * Adds another value to this object
 	 * @param value value to be added
-	 * @return this object (for concatenation purposes)
+	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue add(CharSequence value) {
 		return add(new MonetaryValue(value));
@@ -234,17 +233,16 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	/**
 	 * Subtracts another value from this object.
 	 * @param value value to be subtracted
-	 * @return this object (for concatenation purposes)
+	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue subtract(MonetaryValue value) {
-		amount = amount.subtract(value.getAmount(), MATH_CONTEXT).setScale(2, roundingMode);
-		return this;
+		return new MonetaryValue(amount.subtract(value.getAmount(), MATH_CONTEXT), roundingMode);
 	}
 
 	/**
 	 * Subtracts another value from this object.
 	 * @param value value to be subtracted
-	 * @return this object (for concatenation purposes)
+	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue subtract(BigDecimal value) {
 		return subtract(new MonetaryValue(value));
@@ -253,7 +251,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	/**
 	 * Subtracts another value from this object.
 	 * @param value value to be subtracted
-	 * @return this object (for concatenation purposes)
+	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue subtract(int value) {
 		return subtract(new MonetaryValue(value));
@@ -262,7 +260,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	/**
 	 * Subtracts another value from this object.
 	 * @param value value to be subtracted
-	 * @return this object (for concatenation purposes)
+	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue subtract(long value) {
 		return subtract(new MonetaryValue(value));
@@ -271,7 +269,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	/**
 	 * Subtracts another value from this object.
 	 * @param value value to be subtracted
-	 * @return this object (for concatenation purposes)
+	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue subtract(double value) {
 		return subtract(new MonetaryValue(value));
@@ -280,7 +278,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	/**
 	 * Subtracts another value from this object.
 	 * @param value value to be subtracted
-	 * @return this object (for concatenation purposes)
+	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue subtract(BigInteger value) {
 		return subtract(new MonetaryValue(value));
@@ -289,7 +287,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	/**
 	 * Subtracts another value from this object.
 	 * @param value value to be subtracted
-	 * @return this object (for concatenation purposes)
+	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue subtract(CharSequence value) {
 		return subtract(new MonetaryValue(value));
@@ -298,17 +296,16 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	/**
 	 * Multiplies another value with this object.
 	 * @param value value to be multiplied with
-	 * @return this object (for concatenation purposes)
+	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue multiply(BigDecimal value) {
-		amount = amount.multiply(value, MATH_CONTEXT).setScale(2, roundingMode);
-		return this;
+		return new MonetaryValue(amount.multiply(value, MATH_CONTEXT), roundingMode);
 	}
 
 	/**
 	 * Multiplies another value with this object.
 	 * @param value value to be multiplied with
-	 * @return this object (for concatenation purposes)
+	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue multiply(int value) {
 		return multiply(new BigDecimal(value));
@@ -317,7 +314,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	/**
 	 * Multiplies another value with this object.
 	 * @param value value to be multiplied with
-	 * @return this object (for concatenation purposes)
+	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue multiply(long value) {
 		return multiply(new BigDecimal(value));
@@ -326,7 +323,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	/**
 	 * Multiplies another value with this object.
 	 * @param value value to be multiplied with
-	 * @return this object (for concatenation purposes)
+	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue multiply(double value) {
 		return multiply(new BigDecimal(value));
@@ -335,7 +332,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	/**
 	 * Multiplies another value with this object.
 	 * @param value value to be multiplied with
-	 * @return this object (for concatenation purposes)
+	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue multiply(BigInteger value) {
 		return multiply(new BigDecimal(value));
@@ -344,7 +341,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	/**
 	 * Multiplies another value with this object.
 	 * @param value value to be multiplied with
-	 * @return this object (for concatenation purposes)
+	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue multiply(CharSequence value) {
 		return multiply(new BigDecimal(value.toString().toCharArray()));
@@ -353,17 +350,16 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	/**
 	 * Divides this object by another value.
 	 * @param value value to be divided by
-	 * @return this object (for concatenation purposes)
+	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue divide(BigDecimal value) {
-		amount = amount.divide(value, MATH_CONTEXT).setScale(2, roundingMode);
-		return this;
+		return new MonetaryValue(amount.divide(value, MATH_CONTEXT), roundingMode);
 	}
 
 	/**
 	 * Divides this object by another value.
 	 * @param value value to be divided by
-	 * @return this object (for concatenation purposes)
+	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue divide(int value) {
 		return divide(new BigDecimal(value));
@@ -372,7 +368,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	/**
 	 * Divides this object by another value.
 	 * @param value value to be divided by
-	 * @return this object (for concatenation purposes)
+	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue divide(long value) {
 		return divide(new BigDecimal(value));
@@ -381,7 +377,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	/**
 	 * Divides this object by another value.
 	 * @param value value to be divided by
-	 * @return this object (for concatenation purposes)
+	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue divide(double value) {
 		return divide(new BigDecimal(value));
@@ -390,7 +386,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	/**
 	 * Divides this object by another value.
 	 * @param value value to be divided by
-	 * @return this object (for concatenation purposes)
+	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue divide(BigInteger value) {
 		return divide(new BigDecimal(value));
@@ -399,7 +395,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	/**
 	 * Divides this object by another value.
 	 * @param value value to be divided by
-	 * @return this object (for concatenation purposes)
+	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue divide(CharSequence value) {
 		return divide(new BigDecimal(value.toString().toCharArray()));
@@ -408,7 +404,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	/**
 	 * Divides this object by another value.
 	 * @param value value to be divided by
-	 * @return this object (for concatenation purposes)
+	 * @return the result of the operation
 	 */
 	public BigDecimal divide(MonetaryValue value) {
 		return this.amount.divide(value.getAmount(), MATH_CONTEXT);

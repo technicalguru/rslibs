@@ -114,7 +114,7 @@ public class MonetaryValueType implements UserType {
 	 */
 	@Override
 	public boolean isMutable() {
-		return true;
+		return false;
 	}
 
 	/**
@@ -138,7 +138,7 @@ public class MonetaryValueType implements UserType {
 	 */
 	@Override
 	public Object replace(Object original, Object target, Object owner) throws HibernateException {
-		return original != null ? new MonetaryValue((MonetaryValue)original) : null;
+		return original;
 	}
 
 }
