@@ -42,7 +42,9 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	public static final RoundingMode ROUNDING_MODE = RoundingMode.HALF_EVEN;
 	/** The {@link MathContext} to be used for monetary values */
 	public static final MathContext MATH_CONTEXT = MathContext.UNLIMITED;
-
+	/** 0 */
+	public static final MonetaryValue ZERO = new MonetaryValue(0);
+	
 	private BigDecimal amount;
 	private RoundingMode roundingMode;
 
