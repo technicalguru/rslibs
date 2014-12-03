@@ -99,7 +99,6 @@ public class MonetaryValueType implements UserType {
 		} else {
 			st.setBigDecimal(index, ((MonetaryValue)value).getAmount());
 		}
-
 	}
 
 	/**
