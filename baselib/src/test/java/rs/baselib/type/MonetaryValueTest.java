@@ -59,7 +59,7 @@ public class MonetaryValueTest {
 	
 	@Test
 	public void testToString6() {
-		MonetaryValue value = new MonetaryValue(0);
+		MonetaryValue value = MonetaryValue.ZERO;
 		assertEquals("toString() does not work correctly", "0.00", value.toString());
 	}
 	
