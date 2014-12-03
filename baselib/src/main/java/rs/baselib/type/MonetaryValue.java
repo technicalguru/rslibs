@@ -173,7 +173,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	 * @return this object (for concatenation purposes)
 	 */
 	public MonetaryValue add(MonetaryValue value) {
-		amount = amount.add(value.getAmount());
+		amount = amount.add(value.getAmount(), MATH_CONTEXT).setScale(2, roundingMode);
 		return this;
 	}
 
@@ -237,7 +237,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	 * @return this object (for concatenation purposes)
 	 */
 	public MonetaryValue subtract(MonetaryValue value) {
-		amount = amount.subtract(value.getAmount());
+		amount = amount.subtract(value.getAmount(), MATH_CONTEXT).setScale(2, roundingMode);
 		return this;
 	}
 
@@ -301,7 +301,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	 * @return this object (for concatenation purposes)
 	 */
 	public MonetaryValue multiply(BigDecimal value) {
-		amount = amount.multiply(value);
+		amount = amount.multiply(value, MATH_CONTEXT).setScale(2, roundingMode);
 		return this;
 	}
 
@@ -356,7 +356,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	 * @return this object (for concatenation purposes)
 	 */
 	public MonetaryValue divide(BigDecimal value) {
-		amount = amount.divide(value);
+		amount = amount.divide(value, MATH_CONTEXT).setScale(2, roundingMode);
 		return this;
 	}
 
@@ -411,7 +411,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	 * @return this object (for concatenation purposes)
 	 */
 	public BigDecimal divide(MonetaryValue value) {
-		return this.amount.divide(value.getAmount());
+		return this.amount.divide(value.getAmount(), MATH_CONTEXT);
 	}
 
 	/**

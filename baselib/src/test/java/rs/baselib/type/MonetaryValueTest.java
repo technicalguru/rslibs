@@ -80,4 +80,30 @@ public class MonetaryValueTest {
 		MonetaryValue value = new MonetaryValue(-0.011);
 		assertEquals("toString() does not work correctly", "-0.01", value.toString());
 	}
+	
+	@Test
+	public void testAdd() {
+		MonetaryValue value = new MonetaryValue(5.23).add(0.005);
+		assertEquals("multiplication does not work correctly", new MonetaryValue(5.24), value);
+	}
+
+	
+	@Test
+	public void testSubtract() {
+		MonetaryValue value = new MonetaryValue(5.23).subtract(0.005);
+		assertEquals("multiplication does not work correctly", new MonetaryValue(5.22), value);
+	}
+
+	@Test
+	public void testMultiply() {
+		MonetaryValue value = new MonetaryValue(5.23).multiply(0.5);
+		assertEquals("multiplication does not work correctly", new MonetaryValue(2.62), value);
+	}
+
+	@Test
+	public void testDivide() {
+		MonetaryValue value = new MonetaryValue(5.23).divide(2);
+		assertEquals("multiplication does not work correctly", new MonetaryValue(2.62), value);
+	}
+
 }
