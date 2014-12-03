@@ -411,6 +411,15 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	}
 
 	/**
+	 * Negates this value.
+	 * @return new monetary value holding the result
+	 */
+	public MonetaryValue negate() {
+		return new MonetaryValue(amount.negate(MATH_CONTEXT), roundingMode);
+	}
+
+
+	/**
 	 * Returns this value as a double.
 	 * @return value as double
 	 * @see BigDecimal#doubleValue()
