@@ -29,7 +29,7 @@ import rs.baselib.lang.HashCodeUtil;
  * A {@link BigDecimal} configured for monetary operations.
  * <p>The {@link BigDecimal} is configured with a precision scale of 2, {@link RoundingMode#HALF_UP}.</p>
  * @author ralph
- *
+ * @since 1.2.9
  */
 public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 
@@ -41,13 +41,17 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	/** Banker's rounding */
 	public static final RoundingMode ROUNDING_MODE = RoundingMode.HALF_EVEN;
 	/** The {@link MathContext} to be used for monetary values */
-	public static final MathContext MATH_CONTEXT = MathContext.UNLIMITED;
+	public static final MathContext MATH_CONTEXT = MathContext.DECIMAL128;
+	/** The default scale to be used for monetary values */
+	public static final int DEFAULT_SCALE = 2;
 	/** 0 */
 	public static final MonetaryValue ZERO = new MonetaryValue(0);
 	
 	private BigDecimal amount;
 	private RoundingMode roundingMode;
-
+	private int scale;
+	private MathContext mathContext;
+	
 	/**
 	 * Constructor.
 	 * @param value the monetary value
@@ -67,10 +71,24 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	/**
 	 * Constructor.
 	 * @param value the monetary value
+	 * @param roundingMode the rounding mode to be used
 	 */
 	public MonetaryValue(BigDecimal value, RoundingMode roundingMode) {
-		this.amount = value.setScale(2, roundingMode);
+		this(value, roundingMode, MATH_CONTEXT, DEFAULT_SCALE);
+	}
+
+	/**
+	 * Constructor.
+	 * @param value the monetary value
+	 * @param roundingMode the rounding mode to be used
+	 * @param mathContext the {@link MathContext} to be used
+	 * @param the scale to be used
+	 */
+	public MonetaryValue(BigDecimal value, RoundingMode roundingMode, MathContext mathContext, int scale) {
+		this.amount = value.setScale(scale, roundingMode);
 		this.roundingMode = roundingMode;
+		this.scale = scale;
+		this.mathContext = mathContext;
 	}
 
 	/**
@@ -146,6 +164,38 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	}
 
 	/**
+	 * Returns the scale.
+	 * @return the scale
+	 */
+	public int getScale() {
+		return scale;
+	}
+
+	/**
+	 * Sets the scale.
+	 * @param scale the scale to set
+	 */
+	public void setScale(int scale) {
+		this.scale = scale;
+	}
+
+	/**
+	 * Returns the {@link MathContext}.
+	 * @return the mathContext
+	 */
+	public MathContext getMathContext() {
+		return mathContext;
+	}
+
+	/**
+	 * Sets the {@link MathContext}.
+	 * @param mathContext the mathContext to set
+	 */
+	public void setMathContext(MathContext mathContext) {
+		this.mathContext = mathContext;
+	}
+
+	/**
 	 * Is value positive?
 	 * @return {@code true} when value is a positive number
 	 */
@@ -175,7 +225,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue add(MonetaryValue value) {
-		return new MonetaryValue(amount.add(value.getAmount(), MATH_CONTEXT), roundingMode);
+		return new MonetaryValue(amount.add(value.getAmount(), getMathContext()), getRoundingMode(), getMathContext(), getScale());
 	}
 
 	/**
@@ -238,7 +288,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue subtract(MonetaryValue value) {
-		return new MonetaryValue(amount.subtract(value.getAmount(), MATH_CONTEXT), roundingMode);
+		return new MonetaryValue(amount.subtract(value.getAmount(), getMathContext()), getRoundingMode(), getMathContext(), getScale());
 	}
 
 	/**
@@ -301,7 +351,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue multiply(BigDecimal value) {
-		return new MonetaryValue(amount.multiply(value, MATH_CONTEXT), roundingMode);
+		return new MonetaryValue(amount.multiply(value, getMathContext()), getRoundingMode(), getMathContext(), getScale());
 	}
 
 	/**
@@ -355,7 +405,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue divide(BigDecimal value) {
-		return new MonetaryValue(amount.divide(value, MATH_CONTEXT), roundingMode);
+		return new MonetaryValue(amount.divide(value, getMathContext()), getRoundingMode(), getMathContext(), getScale());
 	}
 
 	/**
@@ -409,7 +459,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	 * @return the result of the operation
 	 */
 	public BigDecimal divide(MonetaryValue value) {
-		return this.amount.divide(value.getAmount(), MATH_CONTEXT);
+		return this.amount.divide(value.getAmount(), getMathContext());
 	}
 
 	/**
@@ -417,7 +467,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue negate() {
-		return new MonetaryValue(amount.negate(MATH_CONTEXT), roundingMode);
+		return new MonetaryValue(amount.negate(getMathContext()), getRoundingMode(), getMathContext(), getScale());
 	}
 
 
