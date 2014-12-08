@@ -770,7 +770,12 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 				if (beginCount == 0) {
 					fireDaoFactoryEvent(new DaoFactoryEvent(AbstractDaoFactory.this, Type.TRANSACTION_ROLLING_BACK));
 					rc = true;
-					getTransaction().rollback();
+					Transaction tx = getTransaction();
+					if (tx != null) {
+						tx.rollback();
+					} else {
+						log.warn("No transaction found for rollback");
+					}
 					if (debugTransactions) {
 						log.debug("Transaction rolled back: TX-"+Thread.currentThread().getId());
 						if (traceTransactions) CommonUtils.debugStackTrace(log);
