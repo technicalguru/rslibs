@@ -105,7 +105,8 @@ public abstract class AbstractHibernateBO<K extends Serializable, T extends Gene
 		if (t instanceof HibernateProxy) {
 			LazyInitializer initializer = ((HibernateProxy)t).getHibernateLazyInitializer();
 			if (initializer != null) {
-				if (!initializer.getSession().isOpen()) {
+				SessionImplementor session = initializer.getSession();
+				if ((session != null) && !session.isOpen()) {
 					t = (T)getSession().get(getTransferClass(), getId());
 					setTransferObject(t);
 				}
