@@ -521,7 +521,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	 */
 	@Override
 	public int compareTo(MonetaryValue o) {
-		return amount.compareTo(getAmount());
+		return amount.compareTo(o.getAmount());
 	}
 
 	/**
