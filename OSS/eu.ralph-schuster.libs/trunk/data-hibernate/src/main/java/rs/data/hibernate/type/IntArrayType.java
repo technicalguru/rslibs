@@ -149,7 +149,7 @@ public class IntArrayType implements UserType, ParameterizedType {
 	 */
 	@Override
 	public Object assemble(Serializable cached, Object owner) throws HibernateException {
-		return cached;
+		return deepCopy(cached);
 	}
 
 	/**
@@ -157,7 +157,7 @@ public class IntArrayType implements UserType, ParameterizedType {
 	 */
 	@Override
 	public Serializable disassemble(Object value) throws HibernateException {
-		return (Serializable) value;
+		return (Serializable) deepCopy(value);
 	}
 
 	/**
@@ -165,7 +165,7 @@ public class IntArrayType implements UserType, ParameterizedType {
 	 */
 	@Override
 	public int hashCode(Object component) throws HibernateException {
-		return ((Date)component).hashCode();
+		return component.hashCode();
 	}
 
 	/**
