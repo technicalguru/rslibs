@@ -28,12 +28,6 @@ public class LevenshteinDistance implements DistanceCalculation {
 	public static final DistanceCalculation INSTANCE = new LevenshteinDistance();
 	
 	/**
-	 * Constructor.
-	 */
-	public LevenshteinDistance() {
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	@Override
