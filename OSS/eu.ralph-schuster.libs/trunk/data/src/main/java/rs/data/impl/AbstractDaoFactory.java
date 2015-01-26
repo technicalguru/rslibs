@@ -57,6 +57,7 @@ import rs.data.event.IDaoListener;
 import rs.data.impl.dao.AbstractBasicDAO;
 import rs.data.impl.dao.AbstractDAO;
 import rs.data.impl.dto.GeneralDTO;
+import rs.data.util.TxStatus;
 
 /**
  * The basic implementation of a DAO factory.
@@ -568,7 +569,19 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 		return getTransactionManager().getTransaction();
 	}
 
+	
 	/********************* PROPERTY CHANGES **********************************/
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void cleanTransactionContext() {
+		if (txContext.get() != null) {
+			txContext.get().cleanContext();
+			txContext.remove();
+		}
+	}
 
 	/**
 	 * {@inheritDoc}
@@ -660,6 +673,36 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 			begin(0L);
 		}
 
+		/**
+		 * Cleans up the context and immediately closes a running transaction.
+		 */
+		public void cleanContext() {
+			try {
+				beginCount = 1;
+				Transaction tx = getTransaction();
+				if (tx != null) {
+					TxStatus status = TxStatus.getStatus(tx);
+					switch (status) {
+					case ACTIVE:
+						tx.commit();
+						getLog().info("Cleaned-up transaction by COMMIT");
+						break;
+					case PREPARED:
+					case PREPARING:
+					case MARKED_ROLLBACK:
+						tx.rollback();
+						getLog().info("Cleaned-up transaction by ROLLBACK");
+						break;
+					default:
+						getLog().info("Cleaned-up transaction context (status="+status+")");
+						break;
+					}
+				}
+			} catch (Exception e) {
+				getLog().error("Cannot close TX properly: ", e);
+			}
+		}
+		
 		/**
 		 * Starts the transaction (or increments the internal counter).
 		 * If there is already a transaction started then nothing will be performed.
