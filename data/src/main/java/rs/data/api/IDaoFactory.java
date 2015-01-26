@@ -232,6 +232,11 @@ public interface IDaoFactory {
 	 */
 	public Transaction getTransaction() throws SystemException;
 	
+	/**
+	 * Ensures that the current thread has no left-overs from last TX activity.
+	 */
+	public void cleanTransactionContext();
+	
 	/********************* FACTORY CHANGES **********************************/
 	
 	/**
