@@ -675,6 +675,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 
 		/**
 		 * Cleans up the context and immediately closes a running transaction.
+		 * @since 1.2.9
 		 */
 		public void cleanContext() {
 			try {
