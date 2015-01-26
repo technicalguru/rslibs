@@ -31,6 +31,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * <p>The need comes from threads that leave behind resources, however cannot
  * detect the problem themselfs.</p>
  * @author ralph
+ * @since 1.2.9
  *
  */
 public class AdvancedThreadLocal<T> {

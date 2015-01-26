@@ -234,6 +234,7 @@ public interface IDaoFactory {
 	
 	/**
 	 * Ensures that the current thread has no left-overs from last TX activity.
+	 * @since 1.2.9
 	 */
 	public void cleanTransactionContext();
 	
