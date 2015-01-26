@@ -20,6 +20,9 @@ package rs.data.util;
 import javax.transaction.Status;
 import javax.transaction.SystemException;
 import javax.transaction.Transaction;
+import javax.transaction.TransactionManager;
+
+import rs.data.api.IDaoFactory;
 
 /**
  * A transaction status as enumeration.
@@ -77,6 +80,30 @@ public enum TxStatus {
 	
 	public int getId() {
 		return id;
+	}
+	
+	/**
+	 * Returns the status of the current transaction.
+	 * @param factory the factory holding the transaction
+	 * @return the status of the transaction as enum object
+	 */
+	public static TxStatus getStatus(IDaoFactory factory) throws SystemException {
+		if (factory != null) {
+			return getStatus(factory.getTransaction());
+		}
+		return NO_TRANSACTION;
+	}
+	
+	/**
+	 * Returns the status of the current transaction.
+	 * @param manager TX manager holding the transaction
+	 * @return the status of the transaction as enum object
+	 */
+	public static TxStatus getStatus(TransactionManager manager) throws SystemException {
+		if (manager != null) {
+			return getStatus(manager.getTransaction());
+		}
+		return NO_TRANSACTION;
 	}
 	
 	/**
