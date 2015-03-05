@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>eu.ralph-schuster</groupId>
 		<artifactId>libs</artifactId>
-		<version>1.2.10-SNAPSHOT</version>
+		<version>1.3.0-SNPASHOT</version>
 	</parent>
 
 	<properties>
@@ -11,6 +11,7 @@
 	</properties>
 	
 	<artifactId>templating</artifactId>
+  <version> 1.3.0-SNPASHOT</version>
 	<packaging>bundle</packaging>
 	<name>${project.groupId}.${project.artifactId}</name>
 	<description>Using Typo3 templates with Java</description>
