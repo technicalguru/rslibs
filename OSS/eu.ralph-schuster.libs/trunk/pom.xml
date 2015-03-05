@@ -19,9 +19,9 @@
 	<description>A collection of utilities</description>
 
 	<scm>
-		<connection>scm:svn:https://svn.ralph-schuster.eu/svn/OSS/eu.ralph-schuster.libs/trunk</connection>
-		<developerConnection>scm:svn:https://svn.ralph-schuster.eu/svn/OSS/eu.ralph-schuster.libs/trunk</developerConnection>
-		<url>https://svn.ralph-schuster.eu/svn/OSS/eu.ralph-schuster.libs/trunk</url>
+		<connection>scm:svn:https://svn.ralph-schuster.eu/svn/OSS/eu.ralph-schuster.libs/branches/libs-1.2</connection>
+		<developerConnection>scm:svn:https://svn.ralph-schuster.eu/svn/OSS/eu.ralph-schuster.libs/branches/libs-1.2</developerConnection>
+		<url>https://svn.ralph-schuster.eu/svn/OSS/eu.ralph-schuster.libs/branches/libs-1.2</url>
 	</scm>
 
 	<distributionManagement>
