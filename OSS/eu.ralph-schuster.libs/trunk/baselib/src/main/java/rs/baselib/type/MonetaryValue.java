@@ -82,7 +82,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	 * @param value the monetary value
 	 * @param roundingMode the rounding mode to be used
 	 * @param mathContext the {@link MathContext} to be used
-	 * @param the scale to be used
+	 * @param scale the scale to be used
 	 */
 	public MonetaryValue(BigDecimal value, RoundingMode roundingMode, MathContext mathContext, int scale) {
 		this.amount = value.setScale(scale, roundingMode);
