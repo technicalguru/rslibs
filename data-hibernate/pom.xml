@@ -9,7 +9,7 @@
 
 	<properties>
 		<project.home>http://techblog.ralph-schuster.eu/rs-library/data-hibernate/</project.home>
-		<hibernate.version>4.2.16.Final</hibernate.version>
+		<hibernate.version>4.2.18.Final</hibernate.version>
 	</properties>
 
 	<artifactId>data-hibernate</artifactId>
