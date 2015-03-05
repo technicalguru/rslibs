@@ -18,7 +18,7 @@
 package rs.baselib.util;
 
 /**
- * Damerau Levenshstein distance from {@link http://en.wikipedia.org/wiki/Damerau-Levenshtein_distance}. 
+ * <a href="http://en.wikipedia.org/wiki/Damerau-Levenshtein_distance">Damerau Levenshstein distance</a>. 
  * @author ralph
  * @since 1.2.9
  *

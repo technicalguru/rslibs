@@ -18,7 +18,7 @@
 package rs.baselib.util;
 
 /**
- * Implementation of Hamming Distance from {@link http://en.wikipedia.org/wiki/Hamming_distance}
+ * Implementation of <a href="http://en.wikipedia.org/wiki/Hamming_distance">Hamming Distance</a>.
  * @author ralph
  * @since 1.2.9
  */
