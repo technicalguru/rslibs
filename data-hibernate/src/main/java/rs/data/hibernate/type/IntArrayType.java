@@ -111,7 +111,7 @@ public class IntArrayType implements UserType, ParameterizedType {
 			return NULL_ARRAY;
 		}
 		String l[] = s.split(getSplitChar());
-		if (logger2.isTraceEnabled()) logger2.trace("found ["+l.toString()+"] as column ["+names[0]+"]");
+		if (logger2.isTraceEnabled()) logger2.trace("found ["+s+"] as column ["+names[0]+"]");
 		int rc[] = new int[l.length];
 		for (int i=0; i<rc.length; i++) {
 			try {
