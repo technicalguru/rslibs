@@ -46,7 +46,7 @@ public class Md5PasswordHasher implements ExtendedPasswordHasher {
 	 */
 	@Override
 	public String getPasswordHash(String plainPassword) {
-		return Md5Crypt.md5Crypt(plainPassword.getBytes());
+		return Md5Crypt.md5Crypt(StringUtils.getBytesUtf8(plainPassword));
 	}
 
 	/**

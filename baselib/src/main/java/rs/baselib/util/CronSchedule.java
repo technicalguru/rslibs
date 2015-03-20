@@ -50,7 +50,12 @@ public class CronSchedule implements Serializable {
 	 * Base class for timing values.
 	 * @author RalphSchuster
 	 */
-	public static abstract class AbstractTimeValue {
+	public static abstract class AbstractTimeValue implements Serializable {
+
+		/**
+		 * Default Serial Version UID.
+		 */
+		private static final long serialVersionUID = 1L;
 
 		/**
 		 * Returns true when given time value matches defined time.
@@ -68,6 +73,11 @@ public class CronSchedule implements Serializable {
 	 * @see #NEVER_MARKER
 	 */
 	public static class NeverValue extends AbstractTimeValue {
+
+		/**
+		 * Default Serial Version UID.
+		 */
+		private static final long serialVersionUID = 1L;
 
 		/**
 		 * {@inheritDoc}
@@ -90,6 +100,11 @@ public class CronSchedule implements Serializable {
 	 * @author ralph
 	 */
 	public static class SingleTimeValue extends AbstractTimeValue {
+
+		/**
+		 * Default Serial Version UID.
+		 */
+		private static final long serialVersionUID = 1L;
 
 		private int value;
 
@@ -137,6 +152,11 @@ public class CronSchedule implements Serializable {
 	 * @author ralph
 	 */
 	public static class TimeRange extends AbstractTimeValue {
+
+		/**
+		 * Default Serial Version UID.
+		 */
+		private static final long serialVersionUID = 1L;
 
 		private int startValue;
 		private int endValue;
@@ -202,6 +222,11 @@ public class CronSchedule implements Serializable {
 	 * @author ralph
 	 */
 	public static class TimeSteps extends AbstractTimeValue {
+
+		/**
+		 * Default Serial Version UID.
+		 */
+		private static final long serialVersionUID = 1L;
 
 		private AbstractTimeValue range;
 		private int steps;
@@ -281,8 +306,13 @@ public class CronSchedule implements Serializable {
 	 */
 	public static class TimeAll extends AbstractTimeValue {
 
-		public TimeAll() {
+		/**
+		 * Default Serial Version UID.
+		 */
+		private static final long serialVersionUID = 1L;
 
+		/** Constructor */
+		public TimeAll() {
 		}
 
 		/**

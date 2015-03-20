@@ -84,7 +84,14 @@ public class AdvancedThreadLocal<T> {
 			Thread t = Thread.currentThread();
 			if (!map.containsKey(t)) {
 				readLock.unlock();
-				set(initialValue());
+				try {
+					writeLock.lock();
+					if (!map.containsKey(t)) {
+						map.put(t, initialValue());
+					}
+				} finally {
+					writeLock.unlock();
+				}
 				readLock.lock();
 			}
 			return map.get(t);
