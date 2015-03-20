@@ -45,7 +45,7 @@ public class Sha256PasswordHasher implements ExtendedPasswordHasher {
 	 */
 	@Override
 	public String getPasswordHash(String plainPassword) {
-		return Sha2Crypt.sha256Crypt(plainPassword.getBytes());
+		return Sha2Crypt.sha256Crypt(StringUtils.getBytesUtf8(plainPassword));
 	}
 
 	/**
