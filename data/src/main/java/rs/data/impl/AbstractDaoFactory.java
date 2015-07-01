@@ -42,8 +42,8 @@ import org.slf4j.LoggerFactory;
 import rs.baselib.configuration.ConfigurationUtils;
 import rs.baselib.configuration.IConfigurable;
 import rs.baselib.io.FileFinder;
-import rs.baselib.lang.AltThreadLocal;
 import rs.baselib.lang.LangUtils;
+import rs.baselib.util.AdvancedThreadLocal;
 import rs.baselib.util.CommonUtils;
 import rs.baselib.util.IUrlTransformer;
 import rs.data.api.IDaoFactory;
@@ -70,7 +70,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 	private Logger log = LoggerFactory.getLogger(getClass());
 
 	// TX Management	
-	private AltThreadLocal<TransactionContext> txContext = new AltThreadLocal<TransactionContext>();
+	private AdvancedThreadLocal<TransactionContext> txContext = new AdvancedThreadLocal<TransactionContext>();
 	private Set<IDaoFactoryListener> listeners = new HashSet<IDaoFactoryListener>();
 	private boolean debugTransactions = false;
 	private boolean traceTransactions = false;

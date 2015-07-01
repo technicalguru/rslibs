@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -79,25 +80,24 @@ public class AdvancedThreadLocal<T> {
 	 * @return the initial value for this thread-local
 	 */
 	public T get() {
+		T rc = null;
 		try {
 			readLock.lock();
-			Thread t = Thread.currentThread();
-			if (!map.containsKey(t)) {
-				readLock.unlock();
+			if (map.containsKey(Thread.currentThread())) {
+				rc = map.get(Thread.currentThread());
+			} else {
+				rc = initialValue();
 				try {
-					writeLock.lock();
-					if (!map.containsKey(t)) {
-						map.put(t, initialValue());
-					}
+					readLock.unlock();
+					set(rc);
 				} finally {
-					writeLock.unlock();
+					readLock.lock();
 				}
-				readLock.lock();
 			}
-			return map.get(t);
 		} finally {
 			readLock.unlock();
 		}
+		return rc;
 	}
 
 	/**
@@ -107,12 +107,10 @@ public class AdvancedThreadLocal<T> {
 	 * @param value the value to be stored in the current thread's copy of this thread-local.
 	 * @see java.lang.ThreadLocal#set(java.lang.Object)
 	 */
-	public void set(T value) {
-		checkThreads();
+	public T set(T value) {
 		try {
 			writeLock.lock();
-			Thread t = Thread.currentThread();
-			map.put(t, value);
+			return map.put(Thread.currentThread(), value);
 		} finally {
 			writeLock.unlock();
 		}
@@ -126,11 +124,10 @@ public class AdvancedThreadLocal<T> {
 	 * current thread.
 	 * @see java.lang.ThreadLocal#remove()
 	 */
-	public void remove() {
+	public T remove() {
 		try {
 			writeLock.lock();
-			Thread t = Thread.currentThread();
-			map.remove(t);
+			return map.remove(Thread.currentThread());
 		} finally {
 			writeLock.unlock();
 		}
@@ -152,17 +149,34 @@ public class AdvancedThreadLocal<T> {
 	/**
 	 * Removes all values where the thried died meanwhile.
 	 */
-	protected void checkThreads() {
-		for (Map.Entry<Thread, T> entry : getEntries()) {
-			Thread t = entry.getKey();
-			if (!t.isAlive()) {
-				try {
-					writeLock.lock();
-					map.remove(t);
-				} finally {
-					writeLock.unlock();
+	public void verifyThreads() {
+		try {
+			writeLock.lock();
+			Set<Thread> keys = map.keySet();
+			Set<Thread> remove = new HashSet<Thread>();
+			for (Thread t : keys) {
+				if (!t.isAlive() || t.isInterrupted()) {
+					remove.add(t);
 				}
 			}
+			for (Thread t : remove) {
+				map.remove(t);
+			}
+		} finally {
+			writeLock.unlock();
 		}
 	}
+	
+	/**
+	 * Clears all values on all threads.
+	 */
+	public void clear() {
+		try {
+			writeLock.lock();
+			map.clear();
+		} finally {
+			writeLock.unlock();
+		}
+	}
+
 }
