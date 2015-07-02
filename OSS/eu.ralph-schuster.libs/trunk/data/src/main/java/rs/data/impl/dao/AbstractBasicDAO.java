@@ -62,6 +62,7 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 
 	private IDaoFactory factory;
 	private IDaoMaster daoMaster;
+	private boolean cacheEnabled = true;
 	private ICache<CID,C> cache;
 	private Set<IDaoListener> listeners = new HashSet<IDaoListener>();
 
@@ -96,7 +97,7 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 	 */
 	@Override
 	public void configure(Configuration cfg) throws ConfigurationException {
-
+		setCacheEnabled(cfg.getBoolean("cache", true));
 	}
 
 	/**
@@ -212,8 +213,10 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 	 * @param object object to add
 	 */
 	protected void addCached(C object) {
-		// It is important to have the CID held by the BO to avoid losing the cache
-		cache.put(object.getCID(), object);
+		if (isCacheEnabled()) {
+			// It is important to have the CID held by the BO to avoid losing the cache
+			cache.put(object.getCID(), object);
+		}
 	}
 
 	/**
@@ -221,7 +224,9 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 	 * @param object object to add
 	 */
 	protected void removeCached(C object) {
-		cache.remove(object.getCID());
+		if (isCacheEnabled()) {
+			cache.remove(object.getCID());
+		}
 	}
 
 	/**
@@ -238,14 +243,19 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 	 * @param cid CID of object
 	 */
 	protected C getCached(CID cid) {
-		return cache.get(cid);
+		if (isCacheEnabled()) {
+			return cache.get(cid);
+		}
+		return null;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void clearCache() {
-		cache.clear();
+		if (isCacheEnabled()) {
+			cache.clear();
+		}
 	}
 
 	/**
@@ -254,6 +264,28 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 	 */
 	protected ICache<CID, C> getCache() {
 		return cache;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void setCacheEnabled(boolean enabled) {
+		boolean oldValue = isCacheEnabled();
+		if (enabled && !oldValue) {
+			this.cache = createCache();
+		} else if (!enabled && oldValue) {
+			this.cache = null;
+		}
+		this.cacheEnabled = enabled;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean isCacheEnabled() {
+		return cacheEnabled;
 	}
 
 

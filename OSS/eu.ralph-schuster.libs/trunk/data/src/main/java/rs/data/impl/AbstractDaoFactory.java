@@ -383,6 +383,16 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public void setCacheEnabled(boolean cacheEnabled) {
+		for (IGeneralDAO<?,?> dao : daos.values()) {
+			dao.setCacheEnabled(cacheEnabled);
+		}
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public <X extends IGeneralDAO<?, ?>> X getDao(String name, Class<X> clazz) {
 		return (X) daos.get(name);

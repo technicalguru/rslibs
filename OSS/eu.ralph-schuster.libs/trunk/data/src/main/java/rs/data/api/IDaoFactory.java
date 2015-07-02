@@ -98,6 +98,13 @@ public interface IDaoFactory {
 	public Iterator<String> getParameterKeys();
 
 	/**
+	 * Enable or disable caching for all registered DAOs.
+	 * @param cacheEnabled {@code true} when cache shall be enabled
+	 * @see IGeneralDAO#setCacheEnabled(boolean)
+	 */
+	public void setCacheEnabled(boolean cacheEnabled);
+	
+	/**
 	 * Returns the correct DAO for the given transfer object.
 	 * @param o the object to look for
 	 * @return DAO or null if not found
