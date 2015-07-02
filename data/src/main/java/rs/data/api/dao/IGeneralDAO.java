@@ -75,6 +75,20 @@ public interface IGeneralDAO<K extends Serializable, B extends IGeneralBO<K>> {
 	 */
 	public void shutdown();
 
+	/********************* CACHING ******************/
+	
+	/**
+	 * Enables or disables the caching mechanism.
+	 * @param enabled {@code true} when cache shall be enabled.
+	 */
+	public void setCacheEnabled(boolean enabled);
+	
+	/**
+	 * Returns status of caching mechanism.
+	 * @returns {@code true} when cache shall be enabled.
+	 */
+	public boolean isCacheEnabled();
+	
 	/********************* CREATION ******************/
 	
 	/**
