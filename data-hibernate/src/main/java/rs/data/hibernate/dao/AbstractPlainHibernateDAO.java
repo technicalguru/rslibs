@@ -40,6 +40,7 @@ import rs.data.util.ObjectDeletedException;
 /**
  * Abstract implementation of DAO using {@link AbstractPlainBO}s as transfer objects
  * between HMB store and application.
+ * <p>Please notice that caching mechanism is disabled for this DAO and cannot be enabled.</p>
  * @author ralph
  *
  */
@@ -49,7 +50,18 @@ public abstract class AbstractPlainHibernateDAO<K extends Serializable, B extend
 	 * Constructor.
 	 */
 	public AbstractPlainHibernateDAO() {
+		super.setCacheEnabled(false);
 	}
+
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void setCacheEnabled(boolean enabled) {
+		// NULL method. Never enable cache!
+	}
+
 
 	/**
 	 * {@inheritDoc}
