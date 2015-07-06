@@ -74,6 +74,8 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 	private Set<IDaoFactoryListener> listeners = new HashSet<IDaoFactoryListener>();
 	private boolean debugTransactions = false;
 	private boolean traceTransactions = false;
+	private volatile long lastThreadVerification = 0L;
+	private volatile long threadVerificationPeriod = -1L;
 
 
 	private IDaoListener daoListener = new MyDaoListener();
@@ -388,7 +390,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 			dao.setCacheEnabled(cacheEnabled);
 		}
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -521,7 +523,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 	public long getDefaultTransactionTimeout() {
 		return defaultTimeout;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -530,7 +532,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 		if (defaultTimeout == 0) defaultTimeout = DEFAULT_TX_TIMEOUT;
 		this.defaultTimeout = defaultTimeout;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -540,10 +542,40 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 	}
 
 	/**
+	 * Returns the time in ms after the TX contexts shall be verified.
+	 * <p>The verification period is a minimum requirement. All contexts
+	 * assigned to dead threads will be removed.</p>
+	 * @return the threadVerificationPeriod or -1 if not set
+	 */
+	public long getThreadVerificationPeriod() {
+		return threadVerificationPeriod;
+	}
+
+	/**
+	 * Sets the threadVerificationPeriod.
+	 * <p>The verification period is a minimum requirement. All contexts
+	 * assigned to dead threads will be removed.</p>
+	 * @param threadVerificationPeriod the threadVerificationPeriod to set, -1 for unset
+	 */
+	public void setThreadVerificationPeriod(long threadVerificationPeriod) {
+		this.threadVerificationPeriod = threadVerificationPeriod;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void begin(long timeout) {
+		if (threadVerificationPeriod > 0) {
+			if (System.currentTimeMillis() > lastThreadVerification + threadVerificationPeriod) {
+				synchronized (this) {
+					if (System.currentTimeMillis() > lastThreadVerification + threadVerificationPeriod) {
+						txContext.verifyThreads();
+						lastThreadVerification = System.currentTimeMillis();
+					}
+				}
+			}
+		}
 		TransactionContext context = txContext.get();
 		if (context == null) {
 			context = new TransactionContext();
@@ -581,7 +613,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 		return getTransactionManager().getTransaction();
 	}
 
-	
+
 	/********************* PROPERTY CHANGES **********************************/
 
 	/**
@@ -715,7 +747,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 				getLog().error("Cannot close TX properly: ", e);
 			}
 		}
-		
+
 		/**
 		 * Starts the transaction (or increments the internal counter).
 		 * If there is already a transaction started then nothing will be performed.
