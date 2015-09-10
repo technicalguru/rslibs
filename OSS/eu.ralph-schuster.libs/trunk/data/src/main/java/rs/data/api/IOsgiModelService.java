@@ -90,4 +90,10 @@ public interface IOsgiModelService {
 	 */
 	public boolean stop();
 	
+	/**
+	 * Returns whether the model service has started.
+	 * @return {@code true} when service is up and running
+	 * @since 1.3.0
+	 */
+	public boolean isRunning();
 }
