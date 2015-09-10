@@ -243,5 +243,13 @@ public class OsgiModelServiceImpl implements IOsgiModelService {
 		return rc;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean isRunning() {
+		return factoriesLoaded;
+	}
+
 
 }
