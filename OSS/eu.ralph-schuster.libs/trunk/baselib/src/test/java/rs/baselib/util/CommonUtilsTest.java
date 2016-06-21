@@ -220,5 +220,38 @@ public class CommonUtilsTest {
 		assertEquals("loadContent() does not work correctly", "finder-file4", CommonUtils.loadContent(FileFinder.find("finder-file4.txt").openStream()).trim());
 	}
 
+	@Test
+	public void testReplaceEnvVariables() throws IOException {
+		String path = System.getenv("PATH");
+		String s = "abc=$ENV{PATH}+.text";
+		String expected = "abc="+path+"+.text";
+		assertEquals("simple replaceEnvVariables does not work", expected, CommonUtils.replaceEnvVariables(s));
+	}
+	
+	@Test
+	public void testReplaceRuntimeVariables() throws IOException {
+		String userHome = System.getProperty("user.home");
+		String s = "abc=+$RUNTIME{user.home}.text";
+		String expected = "abc=+"+userHome+".text";
+		assertEquals("simple replaceRuntimeVariables does not work", expected, CommonUtils.replaceRuntimeVariables(s));
+	}
 
+	@Test
+	public void testReplaceVariablesSimple() throws IOException {
+		String path = System.getenv("PATH");
+		String userHome = System.getProperty("user.home");
+		String s = "abc=$ENV{PATH}+$RUNTIME{user.home}.text";
+		String expected = "abc="+path+"+"+userHome+".text";
+		assertEquals("simple replaceVariables does not work", expected, CommonUtils.replaceVariables(s));
+	}
+	
+	@Test
+	public void testReplaceVariablesCombined() throws IOException {
+		String path = System.getenv("PATH");
+		String userHome = System.getProperty("user.home");
+		String s = "abc=$ENV{PATH}+$RUNTIME{user.home}.text";
+		String expected = "abc="+path+"+"+userHome+".text";
+		assertEquals("simple replaceVariables does not work", expected, CommonUtils.replaceVariables(s));
+	}
+	
 }
