@@ -41,6 +41,7 @@ import org.slf4j.LoggerFactory;
 import rs.baselib.io.FileFinder;
 import rs.baselib.lang.LangUtils;
 import rs.baselib.lang.ReflectionUtils;
+import rs.baselib.util.CommonUtils;
 import rs.data.hibernate.util.DataSourceConnectionProvider;
 import rs.data.impl.AbstractDaoMaster;
 
@@ -102,7 +103,7 @@ public class HibernateDaoMaster extends AbstractDaoMaster {
 					String k = dbconfig.getString("property("+idx+")[@name]");
 					if (k == null) break;
 					if (k.equals(key)) {
-						String value = dbconfig.getString("property("+idx+")");
+						String value = CommonUtils.replaceVariables(dbconfig.getString("property("+idx+")"));
 						overriddenProperties.setProperty(key, value);
 						break;
 					} else idx++;
@@ -152,7 +153,7 @@ public class HibernateDaoMaster extends AbstractDaoMaster {
 			while (true) {
 				String name = dbconfig.getString("property("+idx+")[@name]");
 				if (name == null) break;
-				String value = dbconfig.getString("property("+idx+")");
+				String value = CommonUtils.replaceVariables(dbconfig.getString("property("+idx+")"));
 				if ((value == null) && (name.equals("user") || name.equals("password"))) value = "";
 				if (value != null) {
 					PropertyUtils.setProperty(datasource, name, value);

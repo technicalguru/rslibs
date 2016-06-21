@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import rs.baselib.configuration.IConfigurable;
 import rs.baselib.io.FileFinder;
 import rs.baselib.lang.LangUtils;
+import rs.baselib.util.CommonUtils;
 import rs.baselib.util.IUriProvider;
 import rs.baselib.util.IUrlProvider;
 import rs.baselib.util.UriProviderWrapper;
@@ -102,7 +103,7 @@ public abstract class AbstractDaoMaster implements IDaoMaster, IConfigurable {
 	 */
 	@Override
 	public String getProperty(String key) {
-		return properties.getProperty(key);
+		return CommonUtils.replaceVariables(properties.getProperty(key));
 	}
 	
 	/**
