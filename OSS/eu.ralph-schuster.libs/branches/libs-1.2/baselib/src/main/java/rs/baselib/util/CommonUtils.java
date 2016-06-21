@@ -1000,4 +1000,96 @@ public class CommonUtils {
 		}
 		return url;
 	}
+
+	/**
+	 * Replaces environment variables. 
+	 * <p>
+	 * The variables must be formed as <code>$ENV{&lt;name&gt;}</code>, e.g. <code>$ENV{PATH}</code>.
+	 * </p>
+	 * @param s string to be analyzed (can be null or empty)
+	 * @return string with variables replaced
+	 */
+	public static String replaceEnvVariables(String s) {
+		if (isEmpty(s)) return s;
+		int replaces = 0;
+		do {
+			replaces = 0;
+			StringBuilder replaced = new StringBuilder();
+			Matcher m = ENV_VAR_PATTERN.matcher(s);
+			int lastEnd = 0;
+			while (m.find()) {
+				String name = m.group(1);
+				int start = m.start();
+				if (start > lastEnd) replaced.append(s.substring(lastEnd, start));
+				replaced.append(System.getenv(name));
+				lastEnd = m.end();
+				replaces++;
+			}
+			if (lastEnd < s.length()) {
+				replaced.append(s.substring(lastEnd, s.length()));
+			}
+			s = replaced.toString();
+			
+		} while (replaces > 0);
+		
+		return s;
+	}			
+
+	/**
+	 * Replaces environment variables. 
+	 * <p>
+	 * The variables must be formed as <code>$SYSTEM{&lt;name&gt;}</code>, e.g. <code>$SYSTEM{user.home}</code>.
+	 * </p>
+	 * @param s string to be analyzed (can be null or empty)
+	 * @return string with variables replaced
+	 */
+	public static String replaceRuntimeVariables(String s) {
+		if (isEmpty(s)) return s;
+		int replaces = 0;
+		do {
+			replaces = 0;
+			StringBuilder replaced = new StringBuilder();
+			Matcher m = RUNTIME_VAR_PATTERN.matcher(s);
+			int lastEnd = 0;
+			while (m.find()) {
+				String name = m.group(1);
+				int start = m.start();
+				if (start > lastEnd) replaced.append(s.substring(lastEnd, start));
+				replaced.append(System.getProperty(name));
+				lastEnd = m.end();
+				replaces++;
+			}
+			if (lastEnd < s.length()) {
+				replaced.append(s.substring(lastEnd, s.length()));
+			}
+			s = replaced.toString();
+			
+		} while (replaces > 0);
+		
+		return s;
+	}			
+
+	/**
+	 * Replaces environment and system variables. 
+	 * <p>
+	 * The variables must be formed as:
+	 * <ul>
+	 * <li><code>$ENV{&lt;name&gt;}</code>, e.g. <code>$ENV{PATH}</code></li>
+	 * <li><code>$SYSTEM{&lt;name&gt;}</code>, e.g. <code>$SYSTEM{user.home}</code></li>
+	 * </ul>
+	 * @param s string to be analyzed (can be null or empty)
+	 * @return string with variables replaced
+	 */
+	public static String replaceVariables(String s) {
+		if (isEmpty(s)) return s;
+		String oldS = s;
+		do {
+			oldS = s;
+			s = replaceEnvVariables(s);
+			s = replaceRuntimeVariables(s);
+		} while (!s.equals(oldS));
+		
+		return s;
+	}
+
 }
