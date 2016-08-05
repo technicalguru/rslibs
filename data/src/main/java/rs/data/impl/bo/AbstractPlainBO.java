@@ -17,14 +17,12 @@
  */
 package rs.data.impl.bo;
 
-import java.beans.PropertyChangeEvent;
 import java.io.Serializable;
 
 import org.apache.commons.beanutils.PropertyUtils;
 
 import rs.baselib.bean.NamedObject;
 import rs.baselib.util.RsDate;
-import rs.data.impl.dto.GeneralDTO;
 
 /**
  * Abstract implementation for BOs that are transfer objects itself.

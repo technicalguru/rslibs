@@ -17,7 +17,6 @@
  */
 package rs.data.impl.bo;
 
-import java.beans.PropertyChangeEvent;
 import java.io.Serializable;
 import java.util.List;
 
