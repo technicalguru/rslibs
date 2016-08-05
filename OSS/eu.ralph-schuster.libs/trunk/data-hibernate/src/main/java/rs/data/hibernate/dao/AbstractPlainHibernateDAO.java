@@ -32,7 +32,6 @@ import org.hibernate.criterion.Projections;
 import rs.data.api.bo.IGeneralBO;
 import rs.data.hibernate.HibernateDaoMaster;
 import rs.data.hibernate.bo.AbstractPlainHibernateBO;
-import rs.data.impl.bo.AbstractPlainBO;
 import rs.data.impl.dao.AbstractPlainDAO;
 import rs.data.util.IDaoIterator;
 import rs.data.util.ObjectDeletedException;

@@ -26,7 +26,6 @@ import rs.data.api.IDaoMaster;
 import rs.data.api.bo.IGeneralBO;
 import rs.data.event.IDaoListener;
 import rs.data.util.IDaoIterator;
-import rs.data.util.ObjectDeletedException;
 
 /**
  * Interface for Data Access Objects.
