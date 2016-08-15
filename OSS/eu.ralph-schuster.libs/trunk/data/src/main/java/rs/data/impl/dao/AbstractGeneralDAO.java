@@ -76,5 +76,25 @@ public abstract class AbstractGeneralDAO<K extends Serializable, B extends Abstr
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void afterCreate(C object) {
+		super.afterCreate(object);
+		((B)object).setFromDb(true);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void afterSave(C object) {
+		super.afterSave(object);
+		((B)object).setFromDb(true);
+	}
+
 	
 }

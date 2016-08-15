@@ -53,6 +53,7 @@ public abstract class AbstractGeneralBO<K extends Serializable> extends Abstract
 	private Class<? extends IGeneralBO<K>> interfaceClass;
 	private Logger log = null; // Will be created upon request only
 	private boolean invalid;
+	private boolean fromDb = false;
 	private CID cid;
 	private IGeneralDAO<K, ? extends IGeneralBO<K>> dao;
 	
@@ -118,7 +119,7 @@ public abstract class AbstractGeneralBO<K extends Serializable> extends Abstract
 
 	/**
 	 * Sets the id of this object.
-	 * @param id
+	 * @param id id of object
 	 */
 	public abstract void setId(K id);
 	
@@ -207,9 +208,18 @@ public abstract class AbstractGeneralBO<K extends Serializable> extends Abstract
 	 */
 	@Override
 	public boolean isNew() {
-		return getId() == null;
+		return !fromDb;
 	}
 
+	/** 
+	 * Marks this object as been loaded from database.
+	 * @param fromDb {@code true} when loaded or saved from/to DB
+	 */
+	@Transient
+	public void setFromDb(boolean fromDb) {
+		this.fromDb = fromDb;
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */

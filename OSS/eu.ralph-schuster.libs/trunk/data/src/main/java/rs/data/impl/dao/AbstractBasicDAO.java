@@ -322,7 +322,7 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 	 */
 	@Override
 	public void create(C object, boolean setCreationDate) {
-		if (object.getId() != null) throw new RuntimeException("Object already exists: "+object);
+		if (!object.isNew()) throw new RuntimeException("Object already exists: "+object);
 
 		if (setCreationDate) {
 			object.setCreationDate(new RsDate());
