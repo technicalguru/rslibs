@@ -115,6 +115,7 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	/**
 	 * Returns the business objects for the transfer object.
 	 */
+	@SuppressWarnings("unchecked")
 	public C getBusinessObject(T object) {
 		if (object == null) return null;
 
@@ -125,7 +126,8 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 
 		// Create the BO
 		C rc = newInstance(object);
-
+		((B)rc).setFromDb(true);
+		
 		// Add it to our cache
 		addCached(rc);
 
