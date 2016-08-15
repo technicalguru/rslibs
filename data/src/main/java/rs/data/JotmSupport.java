@@ -23,6 +23,7 @@ import javax.transaction.UserTransaction;
 
 import org.objectweb.jotm.Jotm;
 import org.objectweb.jotm.TimerManager;
+import org.objectweb.jotm.rmi.RmiLocalConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,7 +50,7 @@ public class JotmSupport {
 		setDebugTransactions(LangUtils.getBoolean(System.getProperty("transaction.debug")));
 		setTraceTransactions(LangUtils.getBoolean(System.getProperty("transaction.trace")));
 		if (txManager == null) {
-			jotm = new Jotm(true, false);
+			jotm = new Jotm(true, false, new RmiLocalConfiguration());
 			setTransactionManager(jotm.getTransactionManager());
 			log.info("JOTM started");
 		}
