@@ -566,6 +566,7 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 	 * @param object object deleted
 	 */
 	protected void afterDelete(C object) {
+		object.set("fromDb", false);
 	}
 
 	/**

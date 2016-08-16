@@ -52,7 +52,18 @@ public abstract class AbstractPlainHibernateDAO<K extends Serializable, B extend
 		super.setCacheEnabled(false);
 	}
 
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected C _newInstance() {
+		C rc = super._newInstance();
+		prepareObject(rc, false);
+		return rc;
+	}
+
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -79,7 +90,7 @@ public abstract class AbstractPlainHibernateDAO<K extends Serializable, B extend
 	}
 
 	/*************************** FIND / ITERATE **********************/
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -87,9 +98,40 @@ public abstract class AbstractPlainHibernateDAO<K extends Serializable, B extend
 	@SuppressWarnings("unchecked")
 	public C findBy(K id) {
 		C rc = (C) getSession().get(getBoImplementationClass(), id);
+		prepareObject(rc, true);
 		return rc;
 	}
 
+	/**
+	 * Prepares an data object for usage.
+	 * @param obj object to be prepared
+	 * @param persisted whether the object was loaded from DB or not
+	 * @return the object
+	 */
+	protected C prepareObject(C obj, boolean persisted) {
+		if (obj != null) {
+			obj.set("dao", this);
+			obj.set("fromDb", persisted);
+			afterNewInstance(obj, persisted);
+		}
+		return obj;
+	}
+	
+	/**
+	 * Prepares all objects in list for usage.
+	 * @param objects the list of objects
+	 * @param persisted whether objects were loaded from DB
+	 * @return the list
+	 */
+	protected List<C> prepareObjects(List<C> objects, boolean persisted) {
+		if (objects != null) {
+			for (C obj : objects) {
+				prepareObject(obj, persisted);
+			}
+		}
+		return objects;
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -127,7 +169,7 @@ public abstract class AbstractPlainHibernateDAO<K extends Serializable, B extend
 	}
 
 	/**************************** CREATE ***********************/
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -138,7 +180,7 @@ public abstract class AbstractPlainHibernateDAO<K extends Serializable, B extend
 	}
 
 	/**************************** UPDATE ***********************/
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -149,7 +191,7 @@ public abstract class AbstractPlainHibernateDAO<K extends Serializable, B extend
 	}
 
 	/**************************** DELETE ***********************/
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -270,7 +312,7 @@ public abstract class AbstractPlainHibernateDAO<K extends Serializable, B extend
 	@SuppressWarnings("unchecked")
 	protected List<C> findByCriteria(Criteria crit) {
 		if (crit == null) crit = buildCriteria();
-		List<C> rc = crit.list();
+		List<C> rc = prepareObjects(crit.list(), true);
 		return rc;
 	}
 
@@ -484,7 +526,7 @@ public abstract class AbstractPlainHibernateDAO<K extends Serializable, B extend
 			//log.debug("Asking for next object...");
 			if (scrollableResult.next()) {
 				//log.debug("   Next object in postSelect...");
-				nextObject = (C)scrollableResult.get(0);
+				nextObject = prepareObject((C)scrollableResult.get(0), true);
 			}
 			//log.debug("    Next object retrieved");
 		}
