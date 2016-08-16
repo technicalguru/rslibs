@@ -60,7 +60,8 @@ public class HibernateDaoMaster extends AbstractDaoMaster {
 		"hibernate.connection.url",
 		"hibernate.connection.username",
 		"hibernate.connection.password",
-		"hibernate.dialect"
+		"hibernate.dialect",
+		"hibernate.hbm2ddl.auto"
 	};
 	private static Logger log = LoggerFactory.getLogger(HibernateDaoMaster.class);
 	private SessionFactory sessionFactory;
