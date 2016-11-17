@@ -17,14 +17,14 @@ Javadoc API for latest stable version can be accessed [here](https://download.ra
  
 ## License
 
-CSV is free software: you can redistribute it and/or modify it under the terms of version 3 of the GNU 
+RsLibs is free software: you can redistribute it and/or modify it under the terms of version 3 of the GNU 
 Lesser General Public  License as published by the Free Software Foundation.
 
-CSV is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied 
+RsLibs is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied 
 warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public 
 License for more details.
 
-You should have received a copy of the GNU Lesser General Public License along with CSV.  If not, see 
+You should have received a copy of the GNU Lesser General Public License along with RsLibs.  If not, see 
 <http://www.gnu.org/licenses/lgpl-3.0.html>.
 
 Summary:
