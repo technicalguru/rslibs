@@ -19,9 +19,9 @@
 	<description>A collection of utilities</description>
 
 	<scm>
-		<connection>scm:svn:https://svn.ralph-schuster.eu/svn/OSS/eu.ralph-schuster.libs/trunk</connection>
-		<developerConnection>scm:svn:https://svn.ralph-schuster.eu/svn/OSS/eu.ralph-schuster.libs/trunk</developerConnection>
-		<url>https://svn.ralph-schuster.eu/svn/OSS/eu.ralph-schuster.libs/trunk</url>
+		<connection>scm:git:https://github.com/technicalguru/rslibs.git</connection>
+		<developerConnection>scm:git:https://github.com/technicalguru/rslibs.git</developerConnection>
+		<url>https://github.com/technicalguru/rslibs</url>
 	</scm>
 
 	<distributionManagement>
