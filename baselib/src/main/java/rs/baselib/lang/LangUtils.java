@@ -25,6 +25,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
@@ -34,7 +35,6 @@ import java.util.Locale;
 import javax.persistence.Transient;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.io.Charsets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -531,7 +531,7 @@ public class LangUtils {
 	 * @return the serialized string
 	 */
 	public static String serializeBase64(Object value) throws IOException {
-		return new String(Base64.encodeBase64(serialize(value)), Charsets.UTF_8);
+		return new String(Base64.encodeBase64(serialize(value)), StandardCharsets.UTF_8);
 	}
 	
 	/**

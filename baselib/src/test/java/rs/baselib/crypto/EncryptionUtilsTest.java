@@ -23,11 +23,11 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
-import org.apache.commons.io.Charsets;
 import org.junit.Test;
 
 /**
@@ -69,7 +69,7 @@ public class EncryptionUtilsTest {
 			String seed = EncryptionUtils.generatePassword(8);
 			assertNotNull("No seed", seed);
 
-			KeyPair keyPair = EncryptionUtils.generateKey(seed.getBytes(Charsets.UTF_8));
+			KeyPair keyPair = EncryptionUtils.generateKey(seed.getBytes(StandardCharsets.UTF_8));
 			assertNotNull(keyPair);
 			PrivateKey privateKey = keyPair.getPrivate();
 			PublicKey publicKey   = keyPair.getPublic();
@@ -88,7 +88,7 @@ public class EncryptionUtilsTest {
 	public void testEncodeBase64() {
 		String seed = EncryptionUtils.generatePassword(8);
 		assertNotNull("No seed", seed);
-		byte b[] = seed.getBytes(Charsets.UTF_8);
+		byte b[] = seed.getBytes(StandardCharsets.UTF_8);
 		assertArrayEquals(b, EncryptionUtils.decodeBase64(EncryptionUtils.encodeBase64(b)));
 	}
 
@@ -102,7 +102,7 @@ public class EncryptionUtilsTest {
 			// Create the key first
 			String seed = EncryptionUtils.generatePassword(8);
 			assertNotNull("No seed", seed);
-			KeyPair keyPair = EncryptionUtils.generateKey(seed.getBytes(Charsets.UTF_8));
+			KeyPair keyPair = EncryptionUtils.generateKey(seed.getBytes(StandardCharsets.UTF_8));
 			assertNotNull(keyPair);
 			PrivateKey privateKey = keyPair.getPrivate();
 			PublicKey publicKey   = keyPair.getPublic();
