@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object class="rs.data.file.impl.CustomerFileImpl">
+   <deliveryAddresses class="java.util.HashSet">
+      <item class="rs.baselib.type.Address">
+         <country class="rs.baselib.type.Country">GERMANY</country>
+         <zipCode class="java.lang.String">60549</zipCode>
+         <city class="java.lang.String">Frankfurt/Main</city>
+         <street1 class="java.lang.String">42, 2nd Street</street1>
+         <state/>
+         <street2/>
+      </item>
+      <item class="rs.baselib.type.Address">
+         <country class="rs.baselib.type.Country">GERMANY</country>
+         <zipCode class="java.lang.String">60549</zipCode>
+         <city class="java.lang.String">Darmstadt</city>
+         <street1 class="java.lang.String">1, 4th Street</street1>
+         <state/>
+         <street2/>
+      </item>
+   </deliveryAddresses>
+   <name class="java.lang.String">John Doe</name>
+   <phones class="java.util.HashMap">
+      <item>
+         <key class="java.lang.String">private</key>
+         <value class="java.lang.String">+49-69-1234567890</value>
+      </item>
+      <item>
+         <key class="java.lang.String">business</key>
+         <value class="java.lang.String">+49-69-9876543210</value>
+      </item>
+   </phones>
+   <invoiceAddress class="rs.baselib.type.Address">
+      <country class="rs.baselib.type.Country">GERMANY</country>
+      <zipCode class="java.lang.String">60549</zipCode>
+      <city class="java.lang.String">Frankfurt/Main</city>
+      <street1 class="java.lang.String">42, 2nd Street</street1>
+      <state/>
+      <street2/>
+   </invoiceAddress>
+   <id/>
+</object>
