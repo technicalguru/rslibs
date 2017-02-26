@@ -163,7 +163,7 @@ public class HibernateDaoMaster extends AbstractDaoMaster {
 						value = Boolean.FALSE;
 					} else if (LangUtils.isNumber(value.toString())) {
 						value = Integer.parseInt(value.toString());
-					}
+					} 
 					PropertyUtils.setProperty(datasource, name, value);
 					setProperty("datasource."+name, ""+value);
 				}
