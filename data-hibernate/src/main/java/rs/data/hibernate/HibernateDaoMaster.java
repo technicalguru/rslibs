@@ -154,11 +154,18 @@ public class HibernateDaoMaster extends AbstractDaoMaster {
 			while (true) {
 				String name = dbconfig.getString("property("+idx+")[@name]");
 				if (name == null) break;
-				String value = CommonUtils.replaceVariables(dbconfig.getString("property("+idx+")"));
+				Object value = CommonUtils.replaceVariables(dbconfig.getString("property("+idx+")"));
 				if ((value == null) && (name.equals("user") || name.equals("password"))) value = "";
 				if (value != null) {
+					if ("true".equalsIgnoreCase(value.toString())) {
+						value = Boolean.TRUE;
+					} else if ("false".equalsIgnoreCase(value.toString())) {
+						value = Boolean.FALSE;
+					} else if (LangUtils.isNumber(value.toString())) {
+						value = Integer.parseInt(value.toString());
+					}
 					PropertyUtils.setProperty(datasource, name, value);
-					setProperty("datasource."+name, value);
+					setProperty("datasource."+name, ""+value);
 				}
 				if (name.toLowerCase().contains("url")) log.debug("Using Database:   "+value);
 				else if (name.equals("user")) log.debug("Using Login Name: "+value);
