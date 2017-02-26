@@ -173,8 +173,7 @@ public class LangUtils {
 		
 		if (o instanceof String) {
 			return (String)o;
-		}
-		
+		}	
 		return o.toString();
 	}
 
