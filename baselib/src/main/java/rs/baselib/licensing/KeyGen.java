@@ -24,7 +24,7 @@ import java.security.PublicKey;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
@@ -136,7 +136,7 @@ public class KeyGen implements Runnable {
 		boolean overwrite = false;
 		
 		try {
-			CommandLineParser parser = new GnuParser();
+			CommandLineParser parser = new DefaultParser();
 			CommandLine cmd = parser.parse(options, args);
 
 			if (cmd.hasOption("a")) {

@@ -17,9 +17,9 @@
  */
 package rs.baselib.crypto;
 
+import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
 
-import org.apache.commons.io.Charsets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +40,7 @@ public class KeyGen {
 		try {
 			if (seed == null) seed = EncryptionUtils.generatePassword(8);
 			
-			KeyPair keyPair = EncryptionUtils.generateKey(seed.getBytes(Charsets.UTF_8));
+			KeyPair keyPair = EncryptionUtils.generateKey(seed.getBytes(StandardCharsets.UTF_8));
 			String privateKey = EncryptionUtils.encodeBase64(keyPair.getPrivate());
 			String publicKey  = EncryptionUtils.encodeBase64(keyPair.getPublic());
 			log.info("Private Key: "+privateKey);

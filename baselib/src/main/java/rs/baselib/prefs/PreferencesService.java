@@ -29,11 +29,11 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.prefs.BackingStoreException;
 
-import org.apache.commons.io.Charsets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -157,7 +157,7 @@ public class PreferencesService extends AbstractPreferencesService {
 	protected void load(IPreferences node, InputStream in) throws BackingStoreException {
 		BufferedReader r = null;
 		try {
-			r = new BufferedReader(new InputStreamReader(in, Charsets.UTF_8));
+			r = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
 			String s = null;
 			while ((s = r.readLine()) != null) {
 				if (!CommonUtils.isEmpty(s) && !s.startsWith("#")) {
@@ -202,7 +202,7 @@ public class PreferencesService extends AbstractPreferencesService {
 	 * @throws BackingStoreException when the stream produces errors
 	 */
 	protected void save(IPreferences node, OutputStream out) throws BackingStoreException {
-		PrintWriter w = new PrintWriter(new OutputStreamWriter(out, Charsets.UTF_8));
+		PrintWriter w = new PrintWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8));
 		save(null, node, w);
 		w.close();
 	}

@@ -24,11 +24,13 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.prefs.BackingStoreException;
 
-import org.apache.commons.io.Charsets;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -95,7 +97,7 @@ public class PreferencesServiceTest {
 	 */
 	@Test
 	public void testLoad() throws BackingStoreException {
-		ByteArrayInputStream in = new ByteArrayInputStream(EXAMPLE_CONFIG.getBytes(Charsets.UTF_8));
+		ByteArrayInputStream in = new ByteArrayInputStream(EXAMPLE_CONFIG.getBytes(StandardCharsets.UTF_8));
 		IPreferences prefs = new Preferences(null, null);
 		service.load(prefs, in);
 		testNode(prefs, new int[]{ 1, 2 }, new int[]{ 1, 2 } );
@@ -110,7 +112,7 @@ public class PreferencesServiceTest {
 	 */
 	@Test
 	public void testLoadIgnored() throws BackingStoreException {
-		ByteArrayInputStream in = new ByteArrayInputStream(EXAMPLE_CONFIG2.getBytes(Charsets.UTF_8));
+		ByteArrayInputStream in = new ByteArrayInputStream(EXAMPLE_CONFIG2.getBytes(StandardCharsets.UTF_8));
 		IPreferences prefs = new Preferences(null, null);
 		service.load(prefs, in);
 		testNode(prefs, new int[]{ 1, 2 }, new int[]{ 1, 2 } );
@@ -145,12 +147,12 @@ public class PreferencesServiceTest {
 	 */
 	@Test
 	public void testSaveIPreferencesOutputStream() throws BackingStoreException, UnsupportedEncodingException {
-		ByteArrayInputStream in = new ByteArrayInputStream(EXAMPLE_CONFIG.getBytes(Charsets.UTF_8));
+		ByteArrayInputStream in = new ByteArrayInputStream(EXAMPLE_CONFIG.getBytes(StandardCharsets.UTF_8));
 		IPreferences prefs = new Preferences(null, null);
 		service.load(prefs, in);
-		ByteArrayOutputStream out = new ByteArrayOutputStream(EXAMPLE_CONFIG.getBytes(Charsets.UTF_8).length);
+		ByteArrayOutputStream out = new ByteArrayOutputStream(EXAMPLE_CONFIG.getBytes(StandardCharsets.UTF_8).length);
 		service.save(prefs, out);
-		testOutput(out.toString(Charsets.UTF_8.name()));
+		testOutput(out.toString(StandardCharsets.UTF_8.name()));
 	}
 
 	/**
