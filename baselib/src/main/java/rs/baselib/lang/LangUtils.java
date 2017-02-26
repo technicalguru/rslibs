@@ -138,6 +138,33 @@ public class LangUtils {
 	}
 	
 	/**
+	 * Returns true when the given string is a number.
+	 * @param s string to be verified
+	 * @return {@code true} when the string contains a number.
+	 */
+	public static boolean isNumber(String s) {
+	    return isNumber(s, 10);
+	}
+
+	/**
+	 * Returns true when the given string is a number with a given radix.
+	 * @param s string to be verified
+	 * @param radix the radix to check
+	 * @return {@code true} when the string contains a number.
+	 */
+	public static boolean isNumber(String s, int radix) {
+	    if(s.isEmpty()) return false;
+	    for(int i = 0; i < s.length(); i++) {
+	        if(i == 0 && s.charAt(i) == '-') {
+	            if(s.length() == 1) return false;
+	            else continue;
+	        }
+	        if(Character.digit(s.charAt(i),radix) < 0) return false;
+	    }
+	    return true;
+	}
+	
+	/**
 	 * Converts the object to a string.
 	 * @param o object to be converted
 	 * @return null if object is null, string value of object otherwise
