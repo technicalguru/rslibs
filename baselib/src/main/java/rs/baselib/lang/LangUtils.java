@@ -34,7 +34,6 @@ import java.util.Locale;
 import javax.persistence.Transient;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.io.Charsets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -135,6 +134,33 @@ public class LangUtils {
 	 */
 	public static <T> List<Class<?>> getTypeArguments(Class<T> baseClass, Class<? extends T> childClass) {
 		return ReflectionUtils.getTypeArguments(baseClass, childClass);
+	}
+	
+	/**
+	 * Returns true when the given string is a number.
+	 * @param s string to be verified
+	 * @return {@code true} when the string contains a number.
+	 */
+	public static boolean isNumber(String s) {
+	    return isNumber(s, 10);
+	}
+
+	/**
+	 * Returns true when the given string is a number with a given radix.
+	 * @param s string to be verified
+	 * @param radix the radix to check
+	 * @return {@code true} when the string contains a number.
+	 */
+	public static boolean isNumber(String s, int radix) {
+	    if(s.isEmpty()) return false;
+	    for(int i = 0; i < s.length(); i++) {
+	        if(i == 0 && s.charAt(i) == '-') {
+	            if(s.length() == 1) return false;
+	            else continue;
+	        }
+	        if(Character.digit(s.charAt(i),radix) < 0) return false;
+	    }
+	    return true;
 	}
 	
 	/**
@@ -531,7 +557,7 @@ public class LangUtils {
 	 * @return the serialized string
 	 */
 	public static String serializeBase64(Object value) throws IOException {
-		return new String(Base64.encodeBase64(serialize(value)), Charsets.UTF_8);
+		return new String(Base64.encodeBase64(serialize(value)), java.nio.charset.StandardCharsets.UTF_8);
 	}
 	
 	/**
