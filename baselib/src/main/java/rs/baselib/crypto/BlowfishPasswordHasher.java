@@ -17,10 +17,8 @@
  */
 package rs.baselib.crypto;
 
-import org.slf4j.LoggerFactory;
-
 /**
- * Uses salted Blowfish hashes from ???.
+ * Uses salted Blowfish hashes from BCrypt.
  * @author ralph
  * @since 1.2.9
  *
@@ -41,7 +39,7 @@ public class BlowfishPasswordHasher implements ExtendedPasswordHasher {
 	 */
 	@Override
 	public String getPasswordHash(String plainPassword) {
-		return plainPassword;
+		return BCrypt.hashpw(plainPassword, BCrypt.gensalt());
 	}
 
 	/**
@@ -50,7 +48,7 @@ public class BlowfishPasswordHasher implements ExtendedPasswordHasher {
 	@Override
 	public boolean testPassword(String plainPassword, String passwordHash) {
 		if (isHash(passwordHash)) {
-			LoggerFactory.getLogger(getClass()).error("Blowfish hashing currently not supported");
+			return BCrypt.checkpw(plainPassword, passwordHash);
 		}
 		return false;
 	}
