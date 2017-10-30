@@ -29,6 +29,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.io.Reader;
 import java.io.Writer;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -47,6 +48,7 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.slf4j.Logger;
@@ -1095,5 +1097,32 @@ public class CommonUtils {
 		} while (!s.equals(oldS));
 		
 		return s;
+	}
+	
+	/**
+	 * Sets markers in a template.
+	 * <p>The markers must be like &#123;@prefix:attribute-name&#125;. The attribute value
+	 * is the value of the getter method of the value object.</p>
+	 * @param template the template
+	 * @param prefix the marker prefix
+	 * @param values the object that contains values
+	 * @return the template with markers replaced
+	 */
+	public static String setMarkers(String template, String prefix, Object valueObject) {
+		try {
+			Map<String,Object> oValues = PropertyUtils.describe(valueObject);
+			for (Map.Entry<String, Object> entry : oValues.entrySet()) {
+				Object value = entry.getValue();
+				String key   = entry.getKey();
+				String marker = "\\{@"+prefix+":"+key+"\\}";
+				if (value != null) {
+					template = template.replaceAll(marker, value.toString());
+				} else  {
+					template = template.replaceAll(marker, "");
+				}
+			}
+		} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+		}
+		return template;
 	}
 }

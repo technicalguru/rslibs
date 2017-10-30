@@ -254,4 +254,67 @@ public class CommonUtilsTest {
 		assertEquals("simple replaceVariables does not work", expected, CommonUtils.replaceVariables(s));
 	}
 	
+    /**
+     * Tests the marker replacement.
+     */
+    @Test
+    public void testSetMarkers() {
+    	TestData data = new TestData();
+    	data.setSubject("A subject");
+    	data.setReplyTo("Hans Mustermann <hans.mustermann@example.com>");
+    	data.setLanguage("de");
+    	String template = "subject={@email:subject} replyTo={@email:replyTo} lang={@email:language}";
+    	String result = CommonUtils.setMarkers(template, "email", data);
+    	assertEquals("subject=A subject replyTo=Hans Mustermann <hans.mustermann@example.com> lang=de", result);
+    }
+    
+    /** Test class object */
+    public static class TestData {
+    	String subject;
+    	String replyTo;
+    	String language;
+		/**
+		 * Returns the subject.
+		 * @return the subject
+		 */
+		public String getSubject() {
+			return subject;
+		}
+		/**
+		 * Sets the subject.
+		 * @param subject the subject to set
+		 */
+		public void setSubject(String subject) {
+			this.subject = subject;
+		}
+		/**
+		 * Returns the replyTo.
+		 * @return the replyTo
+		 */
+		public String getReplyTo() {
+			return replyTo;
+		}
+		/**
+		 * Sets the replyTo.
+		 * @param replyTo the replyTo to set
+		 */
+		public void setReplyTo(String replyTo) {
+			this.replyTo = replyTo;
+		}
+		/**
+		 * Returns the language.
+		 * @return the language
+		 */
+		public String getLanguage() {
+			return language;
+		}
+		/**
+		 * Sets the language.
+		 * @param language the language to set
+		 */
+		public void setLanguage(String language) {
+			this.language = language;
+		}
+    	
+    }
 }
