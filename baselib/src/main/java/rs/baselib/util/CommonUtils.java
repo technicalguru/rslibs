@@ -17,6 +17,7 @@
  */
 package rs.baselib.util;
 
+import java.beans.PropertyDescriptor;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,6 +31,7 @@ import java.io.PrintStream;
 import java.io.Reader;
 import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -39,6 +41,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -1109,26 +1112,35 @@ public class CommonUtils {
 	 * @return the template with markers replaced
 	 */
 	public static String setMarkers(String template, String prefix, Object valueObject) {
-		try {
-			Map<?,?> oValues = null;
-			if (valueObject instanceof Map) {
-				oValues = (Map<?,?>)valueObject;
-			} else {
-				oValues = PropertyUtils.describe(valueObject);
-			}
-			for (Map.Entry<?, ?> entry : oValues.entrySet()) {
-				Object value = entry.getValue();
-				String key   = entry.getKey().toString();
-				String marker = "\\{@"+prefix+":"+key+"\\}";
-				if (value != null) {
-					template = template.replaceAll(marker, value.toString());
-				} else  {
-					template = template.replaceAll(marker, "");
+		Map<?,?> oValues = null;
+		if (valueObject instanceof Map) {
+			oValues = (Map<?,?>)valueObject;
+		} else {
+			Map<Object,Object> map = new HashMap<Object,Object>();
+			for (PropertyDescriptor desc : PropertyUtils.getPropertyDescriptors(valueObject)) {
+				try {
+					Method m = desc.getReadMethod();
+					if (m != null) {
+						Object value = m.invoke(valueObject);
+						map.put(desc.getName(), value);
+					}
+				} catch (IllegalAccessException | InvocationTargetException e) {
+					map.put(desc.getName(), null);
 				}
 			}
-
-		} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+			oValues = map;
 		}
+		for (Map.Entry<?, ?> entry : oValues.entrySet()) {
+			Object value = entry.getValue();
+			String key   = entry.getKey().toString();
+			String marker = "\\{@"+prefix+":"+key+"\\}";
+			if (value != null) {
+				template = template.replaceAll(marker, value.toString());
+			} else  {
+				template = template.replaceAll(marker, "");
+			}
+		}
+
 		return template;
 	}
 }
