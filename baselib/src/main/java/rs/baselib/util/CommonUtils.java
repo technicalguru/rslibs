@@ -68,7 +68,7 @@ public class CommonUtils {
 
 	private static Pattern ENV_VAR_PATTERN     = Pattern.compile("\\$ENV\\{([^\\}]+)\\}");
 	private static Pattern RUNTIME_VAR_PATTERN = Pattern.compile("\\$RUNTIME\\{([^\\}]+)\\}");
-	
+
 	/**
 	 * The formatter for dates (see {@link DateFormat#SHORT}).
 	 */
@@ -958,7 +958,7 @@ public class CommonUtils {
 	public static boolean isEmail(String s) {
 		return !isEmpty(s) && EmailValidator.getInstance().isValid(s.trim());
 	}
-	
+
 	/**
 	 * Returns the OS name.
 	 * @return the OS name as returned by <code>System.getProperty("os.name")</code>
@@ -1007,7 +1007,7 @@ public class CommonUtils {
 		}
 		return url;
 	}
-	
+
 	/**
 	 * Replaces environment variables. 
 	 * <p>
@@ -1036,9 +1036,9 @@ public class CommonUtils {
 				replaced.append(s.substring(lastEnd, s.length()));
 			}
 			s = replaced.toString();
-			
+
 		} while (replaces > 0);
-		
+
 		return s;
 	}			
 
@@ -1070,9 +1070,9 @@ public class CommonUtils {
 				replaced.append(s.substring(lastEnd, s.length()));
 			}
 			s = replaced.toString();
-			
+
 		} while (replaces > 0);
-		
+
 		return s;
 	}			
 
@@ -1095,10 +1095,10 @@ public class CommonUtils {
 			s = replaceEnvVariables(s);
 			s = replaceRuntimeVariables(s);
 		} while (!s.equals(oldS));
-		
+
 		return s;
 	}
-	
+
 	/**
 	 * Sets markers in a template.
 	 * <p>The markers must be like &#123;@prefix:attribute-name&#125;. The attribute value
@@ -1110,10 +1110,15 @@ public class CommonUtils {
 	 */
 	public static String setMarkers(String template, String prefix, Object valueObject) {
 		try {
-			Map<String,Object> oValues = PropertyUtils.describe(valueObject);
-			for (Map.Entry<String, Object> entry : oValues.entrySet()) {
+			Map<?,?> oValues = null;
+			if (valueObject instanceof Map) {
+				oValues = (Map<?,?>)valueObject;
+			} else {
+				oValues = PropertyUtils.describe(valueObject);
+			}
+			for (Map.Entry<?, ?> entry : oValues.entrySet()) {
 				Object value = entry.getValue();
-				String key   = entry.getKey();
+				String key   = entry.getKey().toString();
 				String marker = "\\{@"+prefix+":"+key+"\\}";
 				if (value != null) {
 					template = template.replaceAll(marker, value.toString());
@@ -1121,6 +1126,7 @@ public class CommonUtils {
 					template = template.replaceAll(marker, "");
 				}
 			}
+
 		} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
 		}
 		return template;

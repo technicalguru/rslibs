@@ -24,16 +24,15 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.junit.Test;
 
 import rs.baselib.io.FileFinder;
 import rs.baselib.type.Continent;
-import rs.baselib.util.CommonUtils;
-import rs.baselib.util.RsDate;
-import rs.baselib.util.RsMonth;
 
 /**
  * Test the utilities.
@@ -263,6 +262,20 @@ public class CommonUtilsTest {
     	data.setSubject("A subject");
     	data.setReplyTo("Hans Mustermann <hans.mustermann@example.com>");
     	data.setLanguage("de");
+    	String template = "subject={@email:subject} replyTo={@email:replyTo} lang={@email:language}";
+    	String result = CommonUtils.setMarkers(template, "email", data);
+    	assertEquals("subject=A subject replyTo=Hans Mustermann <hans.mustermann@example.com> lang=de", result);
+    }
+    
+    /**
+     * Tests the marker replacement.
+     */
+    @Test
+    public void testSetMarkersMap() {
+    	Map<String,String> data = new HashMap<String, String>();
+    	data.put("subject", "A subject");
+    	data.put("replyTo", "Hans Mustermann <hans.mustermann@example.com>");
+    	data.put("language", "de");
     	String template = "subject={@email:subject} replyTo={@email:replyTo} lang={@email:language}";
     	String result = CommonUtils.setMarkers(template, "email", data);
     	assertEquals("subject=A subject replyTo=Hans Mustermann <hans.mustermann@example.com> lang=de", result);
