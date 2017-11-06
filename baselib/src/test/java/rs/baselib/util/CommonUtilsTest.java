@@ -20,6 +20,7 @@ package rs.baselib.util;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
@@ -264,7 +265,30 @@ public class CommonUtilsTest {
     	data.setLanguage("de");
     	String template = "subject={@email:subject} replyTo={@email:replyTo} lang={@email:language}";
     	String result = CommonUtils.setMarkers(template, "email", data);
-    	assertEquals("subject=A subject replyTo=Hans Mustermann <hans.mustermann@example.com> lang=de", result);
+    	assertEquals("No marker replacement", "subject=A subject replyTo=Hans Mustermann <hans.mustermann@example.com> lang=de", result);
+    }
+    
+    /**
+     * Tests the marker replacement with NULL argument.
+     */
+    @Test
+    public void testSetMarkersNull() {
+    	String template = "subject={@email:subject} replyTo={@email:replyTo} lang={@email:language}";
+    	String result = CommonUtils.setMarkers(template, "email", null);
+    	assertEquals("NULL value object failed", template, result);
+    }
+    
+    /**
+     * Tests the marker replacement with NULL argument.
+     */
+    @Test
+    public void testSetMarkersNullTemplate() {
+    	TestData data = new TestData();
+    	data.setSubject("A subject");
+    	data.setReplyTo("Hans Mustermann <hans.mustermann@example.com>");
+    	data.setLanguage("de");
+    	String result = CommonUtils.setMarkers(null, "email", data);
+    	assertNull("NULL template failed", result);
     }
     
     /**

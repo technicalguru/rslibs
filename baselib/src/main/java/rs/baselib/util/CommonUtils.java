@@ -377,6 +377,16 @@ public class CommonUtils {
 	}
 
 	/**
+	 * Makes a join of a collection.
+	 * @param separator - the string to be used inbetween parts
+	 * @param parts - the collection to join
+	 * @return the joined string
+	 */
+	public static String join(String separator, Collection<?> parts) {
+		return join(separator, parts, 0, parts.size()+1);
+	}
+
+	/**
 	 * Makes a join of a string array.
 	 * @param separator - the string to be used inbetween parts
 	 * @param parts - the parts to join
@@ -406,6 +416,18 @@ public class CommonUtils {
 	 */
 	public static String join(String separator, String parts[], int startIndex) {
 		return join(separator, parts, startIndex, parts.length+1);
+	}
+
+	/**
+	 * Makes a join of a collection.
+	 * @param separator - the string to be used inbetween parts
+	 * @param parts - the collection to join
+	 * @param startIndex - starting index (negative values not allowed)
+	 * @return the joined string
+	 * @since 1.2.9
+	 */
+	public static String join(String separator, Collection<?> parts, int startIndex) {
+		return join(separator, parts, startIndex, parts.size()+1);
 	}
 
 	/**
@@ -453,6 +475,19 @@ public class CommonUtils {
 			s.append(parts[i] != null ? parts[i].toString() : "");
 		}
 		return s.toString();
+	}
+
+	/**
+	 * Makes a join of a collection.
+	 * @param separator - the string to be used inbetween parts
+	 * @param parts - the collection to join
+	 * @param startIndex - starting index (negative values not allowed)
+	 * @param endIndex - endIndex (bigger values than number or collection elements have no effect)
+	 * @return the joined string
+	 * @since 1.2.9
+	 */
+	public static String join(String separator, Collection<?> parts, int startIndex, int endIndex) {
+		return join(separator, parts.toArray(new Object[parts.size()]), startIndex, endIndex);
 	}
 
 	/**
@@ -1112,6 +1147,9 @@ public class CommonUtils {
 	 * @return the template with markers replaced
 	 */
 	public static String setMarkers(String template, String prefix, Object valueObject) {
+		if (valueObject == null) return template;
+		if (template == null) return null;
+		
 		Map<?,?> oValues = null;
 		if (valueObject instanceof Map) {
 			oValues = (Map<?,?>)valueObject;
