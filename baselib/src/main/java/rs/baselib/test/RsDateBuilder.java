@@ -32,6 +32,8 @@ public class RsDateBuilder implements Builder<RsDate>{
 
 	/** the time to be used */
 	private Long time = null;
+	/** whether time shall be inited */
+	private boolean initTime = false;
 	/** the timezone to be used */
 	private TimeZone timezone = null;
 	/** the time offset to be used with each build */
@@ -73,6 +75,7 @@ public class RsDateBuilder implements Builder<RsDate>{
 	 */
 	public RsDateBuilder withTimeOffset(long timeOffsetInMilliseconds) {
 		this.timeOffset = timeOffsetInMilliseconds;
+		if (this.time == null) this.initTime = true;
 		return this;
 	}
 	
@@ -85,6 +88,7 @@ public class RsDateBuilder implements Builder<RsDate>{
 		if (this.time != null) time = this.time.longValue();
 		if (timeOffset != null) {
 			time += count*timeOffset;
+			if (initTime && (this.time == null)) this.time = time;
 			count++;
 		}
 		RsDate rc = new RsDate(time);

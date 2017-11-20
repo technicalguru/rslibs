@@ -57,7 +57,7 @@ public class RsDayBuilder implements Builder<RsDay>{
 	/**
 	 * Create the day with given values.
 	 * @param day - day to be used
-	 * @param month - month to be used
+	 * @param month - month to be used (0-based)
 	 * @param year - year to be used
 	 * @return the builder for concatenation
 	 */
@@ -116,9 +116,10 @@ public class RsDayBuilder implements Builder<RsDay>{
 			if (timezone != null) rc.setTimeZone(timezone);
 		}
 		if (dayOffset != null) {
-			long time = rc.getTimeInMillis();
-			time += count*dayOffset*DateUtils.MILLIS_PER_DAY;
+			long time = rc.getBegin().getTimeInMillis();
+			time += count*dayOffset;
 			rc.setTimeInMillis(time);
+			if (this.time == null) this.time = Long.valueOf(time);
 			count++;
 		}			
 		return rc;

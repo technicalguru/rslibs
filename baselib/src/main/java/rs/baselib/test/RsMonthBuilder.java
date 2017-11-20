@@ -63,6 +63,16 @@ public class RsMonthBuilder implements Builder<RsMonth>{
 	}
 
 	/**
+	 * Create the month with given time.
+	 * @param timeInMilliseconds the time to be used for creation (base time)
+	 * @return the builder for concatenation
+	 */
+	public RsMonthBuilder withTime(long timeInMilliseconds) {
+		this.time = timeInMilliseconds;
+		return this;
+	}
+
+	/**
 	 * Create the month with given timezone.
 	 * @param timezone timezone to be used
 	 * @return the builder for concatenation
@@ -113,6 +123,7 @@ public class RsMonthBuilder implements Builder<RsMonth>{
 			}
 			count++;
 		}			
+		if (this.time == null) this.time = rc.getBegin().getTimeInMillis();
 		return rc;
 	}
 

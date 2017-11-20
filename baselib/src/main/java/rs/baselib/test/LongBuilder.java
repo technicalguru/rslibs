@@ -26,12 +26,33 @@ public class LongBuilder implements Builder<Long> {
 
 	/** the uniqueness count */
 	private long count;
+	/** the offset */
+	private long offset;
 	
 	/**
 	 * Constructor.
 	 */
 	public LongBuilder() {
-		this.count   = 0;
+		this.count  = 0;
+		this.offset = 1;
+	}
+
+	/**
+	 * Start the build with a given long.
+	 * @param start - the first number to produce
+	 */
+	public LongBuilder withStart(long start) {
+		this.count   = start;
+		return this;
+	}
+
+	/**
+	 * Set a given increment/decrement for each build.
+	 * @param offset - the increment/decrement to produce
+	 */
+	public LongBuilder withOffset(long offset) {
+		this.offset   = offset;
+		return this;
 	}
 
 	/**
@@ -39,7 +60,9 @@ public class LongBuilder implements Builder<Long> {
 	 */
 	@Override
 	public Long build() {
-		return Long.valueOf(count++);
+		Long rc = Long.valueOf(count);
+		count += offset;
+		return rc;
 	}
 
 	

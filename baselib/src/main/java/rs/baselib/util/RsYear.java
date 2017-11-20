@@ -110,7 +110,7 @@ public class RsYear extends RsDate {
 	}
 	
 	/**
-	 * Returns the key of this month.
+	 * Returns the key of this year.
 	 * @return the key
 	 */
 	public String getKey() {
@@ -118,7 +118,7 @@ public class RsYear extends RsDate {
 	}
 	
 	/**
-	 * Returns the key of this month.
+	 * Returns the key of this year.
 	 * @return the year
 	 */
 	public int getIntKey() {
@@ -126,8 +126,8 @@ public class RsYear extends RsDate {
 	}
 	
 	/**
-	 * Returns the begin of this month.
-	 * @return begin of month
+	 * Returns the begin of this year.
+	 * @return begin of year
 	 */
 	public RsDate getBegin() {
 		RsDate rc = new RsDate(getTimeInMillis());
@@ -141,8 +141,8 @@ public class RsYear extends RsDate {
 	}
 	
 	/**
-	 * Returns the end of this month.
-	 * @return begin of month
+	 * Returns the end of this year.
+	 * @return begin of year
 	 */
 	public RsDate getEnd() {
 		RsDate rc = new RsDate(getTimeInMillis());
@@ -156,8 +156,8 @@ public class RsYear extends RsDate {
 	}
 	
 	/**
-	 * Returns the next month.
-	 * @return next month
+	 * Returns the next year.
+	 * @return next year
 	 */
 	public RsYear getNext() {
 		RsYear rc = new RsYear(getTimeInMillis());
@@ -166,8 +166,8 @@ public class RsYear extends RsDate {
 	}
 	
 	/**
-	 * Returns the previous month.
-	 * @return previous month
+	 * Returns the previous year.
+	 * @return previous year
 	 */
 	public RsYear getPrevious() {
 		RsYear rc = new RsYear(getTimeInMillis());

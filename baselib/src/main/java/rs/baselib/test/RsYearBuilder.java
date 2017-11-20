@@ -50,17 +50,27 @@ public class RsYearBuilder implements Builder<RsYear>{
 	}
 
 	/**
-	 * Create the month with given values.
+	 * Create the year with given time.
+	 * @param timeInMilliseconds the time to be used for creation (base time)
+	 * @return the builder for concatenation
+	 */
+	public RsYearBuilder withTime(long timeInMilliseconds) {
+		this.time = timeInMilliseconds;
+		return this;
+	}
+
+	/**
+	 * Create the year with given values.
 	 * @param year - year to be used
 	 * @return the builder for concatenation
 	 */
-	public RsYearBuilder withMonth(int year) {
+	public RsYearBuilder withYear(int year) {
 		this.year  = year;
 		return this;
 	}
 
 	/**
-	 * Create the month with given timezone.
+	 * Create the year with given timezone.
 	 * @param timezone timezone to be used
 	 * @return the builder for concatenation
 	 */
@@ -100,6 +110,7 @@ public class RsYearBuilder implements Builder<RsYear>{
 			rc = new RsYear(rc.getTimeZone(), rc.get(Calendar.YEAR)+count*yearOffset);
 			count++;
 		}			
+		if (this.time == null) this.time = rc.getBegin().getTimeInMillis();
 		return rc;
 	}
 

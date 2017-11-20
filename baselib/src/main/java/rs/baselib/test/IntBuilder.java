@@ -26,12 +26,33 @@ public class IntBuilder implements Builder<Integer> {
 
 	/** the uniqueness count */
 	private int count;
+	/** the offset */
+	private int offset;
 	
 	/**
 	 * Constructor.
 	 */
 	public IntBuilder() {
-		this.count   = 0;
+		this.count  = 0;
+		this.offset = 1;
+	}
+
+	/**
+	 * Start the build with a given integer.
+	 * @param start - the first number to produce
+	 */
+	public IntBuilder withStart(int start) {
+		this.count   = start;
+		return this;
+	}
+
+	/**
+	 * Set a given increment/decrement for each build.
+	 * @param offset - the increment/decrement to use
+	 */
+	public IntBuilder withOffset(int offset) {
+		this.offset   = offset;
+		return this;
 	}
 
 	/**
@@ -39,7 +60,9 @@ public class IntBuilder implements Builder<Integer> {
 	 */
 	@Override
 	public Integer build() {
-		return Integer.valueOf(count++);
+		Integer rc = Integer.valueOf(count);
+		count += offset;
+		return rc;
 	}
 
 	
