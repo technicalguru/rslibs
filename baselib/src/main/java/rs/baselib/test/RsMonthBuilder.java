@@ -32,6 +32,8 @@ public class RsMonthBuilder implements Builder<RsMonth>{
 
 	/** the time to be used */
 	private Long time = null;
+	/** the time builder to be used */
+	private Builder<Long> timeBuilder = null;
 	/** the month to be used */
 	private Integer month = null;
 	/** the year to be used */
@@ -42,7 +44,7 @@ public class RsMonthBuilder implements Builder<RsMonth>{
 	private Integer monthOffset = null;
 	/** the counter for offsetting the time */
 	private int count;
-	
+
 	/**
 	 * Constructor.
 	 */
@@ -73,6 +75,16 @@ public class RsMonthBuilder implements Builder<RsMonth>{
 	}
 
 	/**
+	 * Create the month with given time builder.
+	 * @param timeBuilder builder for creating the time 
+	 * @return the builder for concatenation
+	 */
+	public RsMonthBuilder withTime(Builder<Long> timeBuilder) {
+		this.timeBuilder = timeBuilder;
+		return this;
+	}
+
+	/**
 	 * Create the month with given timezone.
 	 * @param timezone timezone to be used
 	 * @return the builder for concatenation
@@ -81,7 +93,7 @@ public class RsMonthBuilder implements Builder<RsMonth>{
 		this.timezone = timezone;
 		return this;
 	}
-	
+
 	/**
 	 * Create each month with another month offset.
 	 * @param months - month offset
@@ -91,41 +103,45 @@ public class RsMonthBuilder implements Builder<RsMonth>{
 		this.monthOffset = months;
 		return this;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public RsMonth build() {
 		RsMonth rc = null;
-		if (this.time != null) {
-			long time = this.time.longValue();
-			rc = new RsMonth(time);
-			if (timezone != null) rc.setTimeZone(timezone);
-		} else if (month != null) {
-			if (timezone != null) rc = new RsMonth(timezone, month, year);
-			else rc = new RsMonth(month, year);
+		if (timeBuilder != null) {
+			rc = new RsMonth(timeBuilder.build());
 		} else {
-			rc = new RsMonth();
-			if (timezone != null) rc.setTimeZone(timezone);
-		}
-		if (monthOffset != null) {
-			for (int i=0; i<count; i++) {
-				if (monthOffset < 0) {
-					for (int j=monthOffset; j<0; j++) {
-						rc = rc.getPrevious();
-					}
-				} else {
-					for (int j=0; j<monthOffset; j++) {
-						rc = rc.getNext();
+			if (this.time != null) {
+				long time = this.time.longValue();
+				rc = new RsMonth(time);
+				if (timezone != null) rc.setTimeZone(timezone);
+			} else if (month != null) {
+				if (timezone != null) rc = new RsMonth(timezone, month, year);
+				else rc = new RsMonth(month, year);
+			} else {
+				rc = new RsMonth();
+				if (timezone != null) rc.setTimeZone(timezone);
+			}
+			if (monthOffset != null) {
+				for (int i=0; i<count; i++) {
+					if (monthOffset < 0) {
+						for (int j=monthOffset; j<0; j++) {
+							rc = rc.getPrevious();
+						}
+					} else {
+						for (int j=0; j<monthOffset; j++) {
+							rc = rc.getNext();
+						}
 					}
 				}
-			}
-			count++;
-		}			
-		if (this.time == null) this.time = rc.getBegin().getTimeInMillis();
+				count++;
+			}			
+			if (this.time == null) this.time = rc.getBegin().getTimeInMillis();
+		}
 		return rc;
 	}
 
-	
+
 }

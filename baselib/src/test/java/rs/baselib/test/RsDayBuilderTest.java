@@ -19,6 +19,7 @@ package rs.baselib.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static rs.baselib.test.BuilderUtils.$Long;
 import static rs.baselib.test.BuilderUtils.$RsDay;
 import static rs.baselib.test.BuilderUtils.listOf;
 
@@ -32,6 +33,7 @@ import java.util.TimeZone;
 import org.apache.commons.lang.time.DateUtils;
 import org.junit.Test;
 
+import rs.baselib.util.RsDate;
 import rs.baselib.util.RsDay;
 
 /**
@@ -50,7 +52,7 @@ public class RsDayBuilderTest {
 	}
 	
 	@Test
-	public void testWithTime() {
+	public void testWithTimeLong() {
 		long time = 1000000L;
 		RsDayBuilder b = $RsDay().withTime(time);
 		String expected = new SimpleDateFormat("yyyyMMdd").format(new Date(time));
@@ -59,10 +61,19 @@ public class RsDayBuilderTest {
 	}
 
 	@Test
+	public void testWithTimeBuilder() {
+		LongBuilder builder = $Long().withStart(100000L).withOffset(2*DateUtils.MILLIS_PER_DAY);
+		RsDayBuilder b = $RsDay().withTime(builder);
+		RsDate first   = b.build().getBegin();
+		RsDate actual  = b.build().getBegin();
+		assertEquals("RsDayBuilder not initialized correctly", first.getTimeInMillis()+2*DateUtils.MILLIS_PER_DAY, actual.getTimeInMillis());
+	}
+
+	@Test
 	public void testWithTimeOffset() {
 		RsDayBuilder b = $RsDay().withDayOffset(1);
-		RsDay first = b.build();
-		RsDay actual = b.build();
+		RsDate first  = b.build().getBegin();
+		RsDate actual = b.build().getBegin()	;
 		assertEquals("RsDayBuilder not initialized correctly", first.getTimeInMillis()+DateUtils.MILLIS_PER_DAY, actual.getTimeInMillis());
 	}
 

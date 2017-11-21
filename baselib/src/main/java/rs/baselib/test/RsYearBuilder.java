@@ -33,15 +33,19 @@ public class RsYearBuilder implements Builder<RsYear>{
 
 	/** the time to be used */
 	private Long time = null;
+	/** the time builder to be used */
+	private Builder<Long> timeBuilder = null;
 	/** the year to be used */
 	private Integer year = null;
+	/** the year builder to be used */
+	private Builder<Integer> yearBuilder = null;
 	/** the timezone to be used */
 	private TimeZone timezone = null;
 	/** the month offset to be used with each build */
 	private Integer yearOffset = null;
 	/** the counter for offsetting the time */
 	private int count;
-	
+
 	/**
 	 * Constructor.
 	 */
@@ -60,12 +64,32 @@ public class RsYearBuilder implements Builder<RsYear>{
 	}
 
 	/**
-	 * Create the year with given values.
+	 * Create the year with given time builder.
+	 * @param timeBuilder builder for creating the time 
+	 * @return the builder for concatenation
+	 */
+	public RsYearBuilder withTime(Builder<Long> timeBuilder) {
+		this.timeBuilder = timeBuilder;
+		return this;
+	}
+
+	/**
+	 * Create the year with given value.
 	 * @param year - year to be used
 	 * @return the builder for concatenation
 	 */
 	public RsYearBuilder withYear(int year) {
 		this.year  = year;
+		return this;
+	}
+
+	/**
+	 * Create the year with given builder.
+	 * @param yearBuilder - year builder to be used
+	 * @return the builder for concatenation
+	 */
+	public RsYearBuilder withYear(Builder<Integer> yearBuilder) {
+		this.yearBuilder  = yearBuilder;
 		return this;
 	}
 
@@ -78,7 +102,7 @@ public class RsYearBuilder implements Builder<RsYear>{
 		this.timezone = timezone;
 		return this;
 	}
-	
+
 	/**
 	 * Create each year with another year offset.
 	 * @param years - year offset
@@ -88,31 +112,37 @@ public class RsYearBuilder implements Builder<RsYear>{
 		this.yearOffset = years;
 		return this;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public RsYear build() {
 		RsYear rc = null;
-		if (this.time != null) {
-			long time = this.time.longValue();
-			rc = new RsYear(time);
-			if (timezone != null) rc.setTimeZone(timezone);
-		} else if (year != null) {
-			if (timezone != null) rc = new RsYear(timezone, year);
-			else rc = new RsYear(year);
+		if (timeBuilder != null) {
+			rc = new RsYear(timeBuilder.build());
+		} else if (yearBuilder != null) {
+			rc = new RsYear(yearBuilder.build());
 		} else {
-			rc = new RsYear();
-			if (timezone != null) rc.setTimeZone(timezone);
+			if (this.time != null) {
+				long time = this.time.longValue();
+				rc = new RsYear(time);
+				if (timezone != null) rc.setTimeZone(timezone);
+			} else if (year != null) {
+				if (timezone != null) rc = new RsYear(timezone, year);
+				else rc = new RsYear(year);
+			} else {
+				rc = new RsYear();
+				if (timezone != null) rc.setTimeZone(timezone);
+			}
+			if (yearOffset != null) {
+				rc = new RsYear(rc.getTimeZone(), rc.get(Calendar.YEAR)+count*yearOffset);
+				count++;
+			}			
+			if (this.time == null) this.time = rc.getBegin().getTimeInMillis();
 		}
-		if (yearOffset != null) {
-			rc = new RsYear(rc.getTimeZone(), rc.get(Calendar.YEAR)+count*yearOffset);
-			count++;
-		}			
-		if (this.time == null) this.time = rc.getBegin().getTimeInMillis();
 		return rc;
 	}
 
-	
+
 }

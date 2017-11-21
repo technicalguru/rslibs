@@ -34,6 +34,8 @@ public class RsDayBuilder implements Builder<RsDay>{
 
 	/** the first time to be used */
 	private Long time = null;
+	/** the time builder to be used */
+	private Builder<Long> timeBuilder = null;
 	/** the day to be used */
 	private Integer day = null;
 	/** the month to be used */
@@ -79,6 +81,16 @@ public class RsDayBuilder implements Builder<RsDay>{
 	}
 
 	/**
+	 * Create the day with given time builder.
+	 * @param timeBuilder builder for creating the time 
+	 * @return the builder for concatenation
+	 */
+	public RsDayBuilder withTime(Builder<Long> timeBuilder) {
+		this.timeBuilder = timeBuilder;
+		return this;
+	}
+
+	/**
 	 * Create the day with given timezone.
 	 * @param timezone timezone to be used
 	 * @return the builder for concatenation
@@ -104,26 +116,30 @@ public class RsDayBuilder implements Builder<RsDay>{
 	@Override
 	public RsDay build() {
 		RsDay rc = null;
-		if (this.time != null) {
-			long time = this.time.longValue();
-			rc = new RsDay(time);
-			if (timezone != null) rc.setTimeZone(timezone);
-		} else if (day != null) {
-			if (timezone != null) rc = new RsDay(timezone, day, month, year);
-			else rc = new RsDay(day, month, year);
+		if (timeBuilder != null) {
+			rc = new RsDay(timeBuilder.build());
 		} else {
-			rc = new RsDay();
-			if (timezone != null) rc.setTimeZone(timezone);
+			if (this.time != null) {
+				long time = this.time.longValue();
+				rc = new RsDay(time);
+				if (timezone != null) rc.setTimeZone(timezone);
+			} else {
+				if (day != null) {
+					if (timezone != null) rc = new RsDay(timezone, day, month, year);
+					else rc = new RsDay(day, month, year);
+				} else {
+					rc = new RsDay();
+					if (timezone != null) rc.setTimeZone(timezone);
+				}
+			}
+			if (dayOffset != null) {
+				long time = rc.getBegin().getTimeInMillis();
+				time += count*dayOffset;
+				rc.setTimeInMillis(time);
+				if (this.time == null) this.time = Long.valueOf(time);
+				count++;
+			}
 		}
-		if (dayOffset != null) {
-			long time = rc.getBegin().getTimeInMillis();
-			time += count*dayOffset;
-			rc.setTimeInMillis(time);
-			if (this.time == null) this.time = Long.valueOf(time);
-			count++;
-		}			
 		return rc;
 	}
-
-
 }

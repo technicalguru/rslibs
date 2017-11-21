@@ -19,6 +19,7 @@ package rs.baselib.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static rs.baselib.test.BuilderUtils.$Long;
 import static rs.baselib.test.BuilderUtils.$RsMonth;
 import static rs.baselib.test.BuilderUtils.listOf;
 
@@ -33,6 +34,7 @@ import java.util.TimeZone;
 import org.apache.commons.lang.time.DateUtils;
 import org.junit.Test;
 
+import rs.baselib.util.RsDate;
 import rs.baselib.util.RsMonth;
 
 /**
@@ -51,12 +53,23 @@ public class RsMonthBuilderTest {
 	}
 	
 	@Test
-	public void testWithTime() {
+	public void testWithTimeLong() {
 		long time = 1000000L;
 		RsMonthBuilder b = $RsMonth().withTime(time);
 		String expected = new SimpleDateFormat("yyyyMM").format(new Date(time));
 		RsMonth actual = b.build();
 		assertEquals("RsMonthBuilder not initialized correctly", expected, actual.getKey());
+	}
+
+	@Test
+	public void testWithTimeBuilder() {
+		// Get the number of days of current month first
+		int numDays = new RsDate().getActualMaximum(Calendar.DAY_OF_MONTH);
+		LongBuilder builder = $Long().withStart(System.currentTimeMillis()).withOffset(numDays*DateUtils.MILLIS_PER_DAY);
+		RsMonthBuilder b = $RsMonth().withTime(builder);
+		RsDate first   = b.build().getBegin();
+		RsDate actual  = b.build().getBegin();
+		assertEquals("RsMonthBuilder not initialized correctly", first.getTimeInMillis()+numDays*DateUtils.MILLIS_PER_DAY, actual.getTimeInMillis());
 	}
 
 	@Test

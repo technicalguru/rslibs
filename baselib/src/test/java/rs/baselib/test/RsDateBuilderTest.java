@@ -20,6 +20,7 @@ package rs.baselib.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static rs.baselib.test.BuilderUtils.$Long;
 import static rs.baselib.test.BuilderUtils.$RsDate;
 import static rs.baselib.test.BuilderUtils.listOf;
 
@@ -51,11 +52,21 @@ public class RsDateBuilderTest {
 	}
 	
 	@Test
-	public void testWithTime() {
+	public void testWithTimeLong() {
 		long time = 1000000L;
 		RsDateBuilder b = $RsDate().withTime(time);
 		RsDate actual = b.build();
 		assertEquals("RsDateBuilder not initialized correctly", time, actual.getTimeInMillis());
+	}
+
+	@Test
+	public void testWithTimeBuilder() {
+		LongBuilder builder = $Long().withStart(100000L).withOffset(1000L);
+		RsDateBuilder b = $RsDate().withTime(builder);
+		RsDate actual = b.build();
+		assertEquals("RsDateBuilder not initialized correctly", 100000L, actual.getTimeInMillis());
+		actual = b.build();
+		assertEquals("RsDateBuilder not initialized correctly", 101000L, actual.getTimeInMillis());
 	}
 
 	@Test

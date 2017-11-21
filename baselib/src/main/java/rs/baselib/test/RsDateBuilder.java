@@ -32,6 +32,8 @@ public class RsDateBuilder implements Builder<RsDate>{
 
 	/** the time to be used */
 	private Long time = null;
+	/** the time builder to be used */
+	private Builder<Long> timeBuilder = null;
 	/** whether time shall be inited */
 	private boolean initTime = false;
 	/** the timezone to be used */
@@ -40,7 +42,7 @@ public class RsDateBuilder implements Builder<RsDate>{
 	private Long timeOffset = null;
 	/** the counter for offsetting the time */
 	private int count;
-	
+
 	/**
 	 * Constructor.
 	 */
@@ -57,7 +59,17 @@ public class RsDateBuilder implements Builder<RsDate>{
 		this.time = timeInMilliseconds;
 		return this;
 	}
-	
+
+	/**
+	 * Create the date with given time builder.
+	 * @param timeBuilder builder for creating the time 
+	 * @return the builder for concatenation
+	 */
+	public RsDateBuilder withTime(Builder<Long> timeBuilder) {
+		this.timeBuilder = timeBuilder;
+		return this;
+	}
+
 	/**
 	 * Create the date with given timezone.
 	 * @param timezone timezone to be used
@@ -67,7 +79,7 @@ public class RsDateBuilder implements Builder<RsDate>{
 		this.timezone = timezone;
 		return this;
 	}
-	
+
 	/**
 	 * Create each date with another time offset.
 	 * @param timeInMilliseconds
@@ -78,7 +90,7 @@ public class RsDateBuilder implements Builder<RsDate>{
 		if (this.time == null) this.initTime = true;
 		return this;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -86,15 +98,19 @@ public class RsDateBuilder implements Builder<RsDate>{
 	public RsDate build() {
 		long time = System.currentTimeMillis();
 		if (this.time != null) time = this.time.longValue();
-		if (timeOffset != null) {
-			time += count*timeOffset;
-			if (initTime && (this.time == null)) this.time = time;
-			count++;
+		if (timeBuilder != null) {
+			time = timeBuilder.build().longValue();
+		} else {
+			if (timeOffset != null) {
+				time += count*timeOffset;
+				if (initTime && (this.time == null)) this.time = time;
+				count++;
+			}
 		}
 		RsDate rc = new RsDate(time);
 		if (timezone != null) rc.setTimeZone(timezone);
 		return rc;
 	}
 
-	
+
 }

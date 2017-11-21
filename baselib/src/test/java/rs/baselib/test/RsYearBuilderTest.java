@@ -19,18 +19,23 @@ package rs.baselib.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static rs.baselib.test.BuilderUtils.$Long;
+import static rs.baselib.test.BuilderUtils.$Int;
 import static rs.baselib.test.BuilderUtils.$RsYear;
 import static rs.baselib.test.BuilderUtils.listOf;
 
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TimeZone;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.junit.Test;
 
+import rs.baselib.util.RsDate;
 import rs.baselib.util.RsYear;
 
 /**
@@ -49,12 +54,23 @@ public class RsYearBuilderTest {
 	}
 	
 	@Test
-	public void testWithTime() {
+	public void testWithTimeLong() {
 		long time = 1000000L;
 		RsYearBuilder b = $RsYear().withTime(time);
 		String expected = new SimpleDateFormat("yyyy").format(new Date(time));
 		RsYear actual = b.build();
 		assertEquals("RsYearBuilder not initialized correctly", expected, actual.getKey());
+	}
+
+	@Test
+	public void testWithTimeBuilder() {
+		// Get the number of days of current month first
+		int numDays = new RsDate().getActualMaximum(Calendar.DAY_OF_YEAR);
+		LongBuilder builder = $Long().withStart(System.currentTimeMillis()).withOffset(numDays*DateUtils.MILLIS_PER_DAY);
+		RsYearBuilder b = $RsYear().withTime(builder);
+		RsDate first   = b.build().getBegin();
+		RsDate actual  = b.build().getBegin();
+		assertEquals("RsYearBuilder not initialized correctly", first.getTimeInMillis()+numDays*DateUtils.MILLIS_PER_DAY, actual.getTimeInMillis());
 	}
 
 	@Test
@@ -75,10 +91,19 @@ public class RsYearBuilderTest {
 	}
 
 	@Test
-	public void testWithMonth() {
+	public void testWithYearInt() {
 		RsYearBuilder b = $RsYear().withYear(2015);
 		RsYear actual = b.build();
 		assertEquals("RsYearBuilder not initialized correctly", "2015", actual.getKey());
+	}
+
+	@Test
+	public void testWithYearBuilder() {
+		RsYearBuilder b = $RsYear().withYear($Int().withStart(2015).withOffset(2));
+		RsYear actual = b.build();
+		assertEquals("RsYearBuilder not initialized correctly", "2015", actual.getKey());
+		actual = b.build();
+		assertEquals("RsYearBuilder not initialized correctly", "2017", actual.getKey());
 	}
 
 	@Test
