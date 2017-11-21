@@ -107,4 +107,12 @@ public class BuilderUtils {
 		return new RsYearBuilder();
 	}
 
+	/**
+	 * Returns the {@link rs.baselib.util.DateTimePeriod} Builder factory.
+	 * @return the builder for {@link rs.baselib.util.DateTimePeriod}
+	 */
+	public static DateTimePeriodBuilder $DateTimePeriod() {
+		return new DateTimePeriodBuilder();
+	}
+
 }

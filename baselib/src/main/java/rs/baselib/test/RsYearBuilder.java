@@ -17,7 +17,6 @@
  */
 package rs.baselib.test;
 
-import java.util.Calendar;
 import java.util.TimeZone;
 
 import rs.baselib.util.RsYear;
@@ -41,16 +40,11 @@ public class RsYearBuilder implements Builder<RsYear>{
 	private Builder<Integer> yearBuilder = null;
 	/** the timezone to be used */
 	private TimeZone timezone = null;
-	/** the month offset to be used with each build */
-	private Integer yearOffset = null;
-	/** the counter for offsetting the time */
-	private int count;
 
 	/**
 	 * Constructor.
 	 */
 	public RsYearBuilder() {
-		this.count = 0;
 	}
 
 	/**
@@ -104,42 +98,23 @@ public class RsYearBuilder implements Builder<RsYear>{
 	}
 
 	/**
-	 * Create each year with another year offset.
-	 * @param years - year offset
-	 * @return the builder for concatenation
-	 */
-	public RsYearBuilder withYearOffset(int years) {
-		this.yearOffset = years;
-		return this;
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public RsYear build() {
 		RsYear rc = null;
-		if (timeBuilder != null) {
+		if (this.time != null) {
+			rc = new RsYear(this.time);
+			if (timezone != null) rc.setTimeZone(timezone);
+		} else if (year != null) {
+			rc = timezone != null ? new RsYear(timezone, year) : new RsYear(year);
+		} else if (timeBuilder != null) {
 			rc = new RsYear(timeBuilder.build());
+			if (timezone != null) rc.setTimeZone(timezone);
 		} else if (yearBuilder != null) {
 			rc = new RsYear(yearBuilder.build());
 		} else {
-			if (this.time != null) {
-				long time = this.time.longValue();
-				rc = new RsYear(time);
-				if (timezone != null) rc.setTimeZone(timezone);
-			} else if (year != null) {
-				if (timezone != null) rc = new RsYear(timezone, year);
-				else rc = new RsYear(year);
-			} else {
-				rc = new RsYear();
-				if (timezone != null) rc.setTimeZone(timezone);
-			}
-			if (yearOffset != null) {
-				rc = new RsYear(rc.getTimeZone(), rc.get(Calendar.YEAR)+count*yearOffset);
-				count++;
-			}			
-			if (this.time == null) this.time = rc.getBegin().getTimeInMillis();
+			rc = timezone != null ? new RsYear(timezone) : new RsYear();
 		}
 		return rc;
 	}

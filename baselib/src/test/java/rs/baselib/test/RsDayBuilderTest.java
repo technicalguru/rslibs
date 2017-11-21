@@ -18,16 +18,12 @@
 package rs.baselib.test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static rs.baselib.test.BuilderUtils.$Long;
 import static rs.baselib.test.BuilderUtils.$RsDay;
-import static rs.baselib.test.BuilderUtils.listOf;
 
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.TimeZone;
 
 import org.apache.commons.lang.time.DateUtils;
@@ -70,14 +66,6 @@ public class RsDayBuilderTest {
 	}
 
 	@Test
-	public void testWithTimeOffset() {
-		RsDayBuilder b = $RsDay().withDayOffset(1);
-		RsDate first  = b.build().getBegin();
-		RsDate actual = b.build().getBegin()	;
-		assertEquals("RsDayBuilder not initialized correctly", first.getTimeInMillis()+DateUtils.MILLIS_PER_DAY, actual.getTimeInMillis());
-	}
-
-	@Test
 	public void testWithTimezone() {
 		TimeZone tz = TimeZone.getTimeZone(ZoneId.of("Europe/Paris"));
 		RsDayBuilder b = $RsDay().withTimezone(tz);
@@ -85,19 +73,4 @@ public class RsDayBuilderTest {
 		assertEquals("RsDayBuilder not initialized correctly", tz, actual.getTimeZone());
 	}
 
-	@Test
-	public void testWithDay() {
-		RsDayBuilder b = $RsDay().withDay(1, 0, 2015);
-		RsDay actual = b.build();
-		assertEquals("RsDayBuilder not initialized correctly", "20150101", actual.getKey());
-	}
-
-	@Test
-	public void testList() {
-		Set<String> delivered = new HashSet<>();
-		for (RsDay s : listOf(100, $RsDay().withDayOffset(1))) {
-			assertFalse("RsDayBuilder does not produce unique dates", delivered.contains(s.getKey()));
-			delivered.add(s.getKey());
-		}
-	}
 }

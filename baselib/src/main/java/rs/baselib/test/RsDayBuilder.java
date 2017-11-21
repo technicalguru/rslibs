@@ -19,8 +19,6 @@ package rs.baselib.test;
 
 import java.util.TimeZone;
 
-import org.apache.commons.lang.time.DateUtils;
-
 import rs.baselib.util.RsDay;
 
 /**
@@ -36,38 +34,13 @@ public class RsDayBuilder implements Builder<RsDay>{
 	private Long time = null;
 	/** the time builder to be used */
 	private Builder<Long> timeBuilder = null;
-	/** the day to be used */
-	private Integer day = null;
-	/** the month to be used */
-	private Integer month = null;
-	/** the year to be used */
-	private Integer year = null;
 	/** the timezone to be used */
 	private TimeZone timezone = null;
-	/** the time offset to be used with each build */
-	private Long dayOffset = null;
-	/** the counter for offsetting the time */
-	private int count;
 
 	/**
 	 * Constructor.
 	 */
 	public RsDayBuilder() {
-		this.count = 0;
-	}
-
-	/**
-	 * Create the day with given values.
-	 * @param day - day to be used
-	 * @param month - month to be used (0-based)
-	 * @param year - year to be used
-	 * @return the builder for concatenation
-	 */
-	public RsDayBuilder withDay(int day, int month, int year) {
-		this.day   = day;
-		this.month = month;
-		this.year  = year;
-		return this;
 	}
 
 	/**
@@ -101,45 +74,19 @@ public class RsDayBuilder implements Builder<RsDay>{
 	}
 
 	/**
-	 * Create each day with another day offset.
-	 * @param day - number of days to offset
-	 * @return the builder for concatenation
-	 */
-	public RsDayBuilder withDayOffset(int days) {
-		this.dayOffset = days*DateUtils.MILLIS_PER_DAY;
-		return this;
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public RsDay build() {
 		RsDay rc = null;
-		if (timeBuilder != null) {
+		if (this.time != null) {
+			rc = new RsDay(this.time);
+		} else if (timeBuilder != null) {
 			rc = new RsDay(timeBuilder.build());
 		} else {
-			if (this.time != null) {
-				long time = this.time.longValue();
-				rc = new RsDay(time);
-				if (timezone != null) rc.setTimeZone(timezone);
-			} else {
-				if (day != null) {
-					if (timezone != null) rc = new RsDay(timezone, day, month, year);
-					else rc = new RsDay(day, month, year);
-				} else {
-					rc = new RsDay();
-					if (timezone != null) rc.setTimeZone(timezone);
-				}
-			}
-			if (dayOffset != null) {
-				long time = rc.getBegin().getTimeInMillis();
-				time += count*dayOffset;
-				rc.setTimeInMillis(time);
-				if (this.time == null) this.time = Long.valueOf(time);
-				count++;
-			}
+			rc = new RsDay();
 		}
+		if (timezone != null) rc.setTimeZone(timezone);
 		return rc;
 	}
 }

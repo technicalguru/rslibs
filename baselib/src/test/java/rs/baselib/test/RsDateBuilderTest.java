@@ -70,14 +70,6 @@ public class RsDateBuilderTest {
 	}
 
 	@Test
-	public void testWithTimeOffset() {
-		RsDateBuilder b = $RsDate().withTimeOffset(100000L);
-		RsDate first = b.build();
-		RsDate actual = b.build();
-		assertEquals("RsDateBuilder not initialized correctly", first.getTimeInMillis()+100000L, actual.getTimeInMillis());
-	}
-
-	@Test
 	public void testWithTimezone() {
 		TimeZone tz = TimeZone.getTimeZone(ZoneId.of("Europe/Paris"));
 		RsDateBuilder b = $RsDate().withTimezone(tz);
@@ -88,7 +80,7 @@ public class RsDateBuilderTest {
 	@Test
 	public void testList() {
 		Set<RsDate> delivered = new HashSet<>();
-		for (RsDate s : listOf(100, $RsDate().withTimeOffset(1L))) {
+		for (RsDate s : listOf(100, $RsDate().withTime($Long().withOffset(1000L)))) {
 			assertFalse("RsDateBuilder does not produce unique dates", delivered.contains(s));
 			delivered.add(s);
 		}

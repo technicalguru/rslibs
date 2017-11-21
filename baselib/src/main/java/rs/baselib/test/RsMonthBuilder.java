@@ -34,10 +34,6 @@ public class RsMonthBuilder implements Builder<RsMonth>{
 	private Long time = null;
 	/** the time builder to be used */
 	private Builder<Long> timeBuilder = null;
-	/** the month to be used */
-	private Integer month = null;
-	/** the year to be used */
-	private Integer year = null;
 	/** the timezone to be used */
 	private TimeZone timezone = null;
 	/** the month offset to be used with each build */
@@ -50,18 +46,6 @@ public class RsMonthBuilder implements Builder<RsMonth>{
 	 */
 	public RsMonthBuilder() {
 		this.count = 0;
-	}
-
-	/**
-	 * Create the month with given values.
-	 * @param month - month to be used
-	 * @param year - year to be used
-	 * @return the builder for concatenation
-	 */
-	public RsMonthBuilder withMonth(int month, int year) {
-		this.month = month;
-		this.year  = year;
-		return this;
 	}
 
 	/**
@@ -116,14 +100,10 @@ public class RsMonthBuilder implements Builder<RsMonth>{
 			if (this.time != null) {
 				long time = this.time.longValue();
 				rc = new RsMonth(time);
-				if (timezone != null) rc.setTimeZone(timezone);
-			} else if (month != null) {
-				if (timezone != null) rc = new RsMonth(timezone, month, year);
-				else rc = new RsMonth(month, year);
 			} else {
 				rc = new RsMonth();
-				if (timezone != null) rc.setTimeZone(timezone);
 			}
+			if (timezone != null) rc.setTimeZone(timezone);
 			if (monthOffset != null) {
 				for (int i=0; i<count; i++) {
 					if (monthOffset < 0) {

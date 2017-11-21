@@ -18,18 +18,14 @@
 package rs.baselib.test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static rs.baselib.test.BuilderUtils.$Long;
 import static rs.baselib.test.BuilderUtils.$Int;
+import static rs.baselib.test.BuilderUtils.$Long;
 import static rs.baselib.test.BuilderUtils.$RsYear;
-import static rs.baselib.test.BuilderUtils.listOf;
 
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.TimeZone;
 
 import org.apache.commons.lang.time.DateUtils;
@@ -74,15 +70,6 @@ public class RsYearBuilderTest {
 	}
 
 	@Test
-	public void testWithTimeOffset() {
-		RsYearBuilder b = $RsYear().withYearOffset(1);
-		RsYear first = b.build();
-		int year = first.getIntKey();
-		RsYear actual = b.build();
-		assertEquals("RsYearBuilder not initialized correctly", year+1, actual.getIntKey());
-	}
-
-	@Test
 	public void testWithTimezone() {
 		TimeZone tz = TimeZone.getTimeZone(ZoneId.of("Europe/Paris"));
 		RsYearBuilder b = $RsYear().withTimezone(tz);
@@ -106,12 +93,4 @@ public class RsYearBuilderTest {
 		assertEquals("RsYearBuilder not initialized correctly", "2017", actual.getKey());
 	}
 
-	@Test
-	public void testList() {
-		Set<String> delivered = new HashSet<>();
-		for (RsYear s : listOf(100, $RsYear().withYearOffset(1))) {
-			assertFalse("RsYearBuilder does not produce unique dates", delivered.contains(s.getKey()));
-			delivered.add(s.getKey());
-		}
-	}
 }

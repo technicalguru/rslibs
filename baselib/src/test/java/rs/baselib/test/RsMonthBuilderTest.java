@@ -18,17 +18,13 @@
 package rs.baselib.test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static rs.baselib.test.BuilderUtils.$Long;
 import static rs.baselib.test.BuilderUtils.$RsMonth;
-import static rs.baselib.test.BuilderUtils.listOf;
 
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.TimeZone;
 
 import org.apache.commons.lang.time.DateUtils;
@@ -89,19 +85,4 @@ public class RsMonthBuilderTest {
 		assertEquals("RsMonthBuilder not initialized correctly", tz, actual.getTimeZone());
 	}
 
-	@Test
-	public void testWithMonth() {
-		RsMonthBuilder b = $RsMonth().withMonth(0, 2015);
-		RsMonth actual = b.build();
-		assertEquals("RsMonthBuilder not initialized correctly", "201501", actual.getKey());
-	}
-
-	@Test
-	public void testList() {
-		Set<String> delivered = new HashSet<>();
-		for (RsMonth s : listOf(100, $RsMonth().withMonthOffset(1))) {
-			assertFalse("RsMonthBuilder does not produce unique dates", delivered.contains(s.getKey()));
-			delivered.add(s.getKey());
-		}
-	}
 }
