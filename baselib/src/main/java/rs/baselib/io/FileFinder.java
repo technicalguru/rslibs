@@ -30,6 +30,7 @@ import rs.baselib.util.CommonUtils;
 
 /**
  * Utility to find a file on disk.
+ * @see #find(Class, String)
  * @author RalphSchuster
  *
  */
@@ -41,6 +42,7 @@ public class FileFinder {
 	 * Tries to find the file specified from filesystem or classpath.
 	 * @param name - name of file, can be fully qualified
 	 * @return URL to the file
+	 * @see #find(Class, String)
 	 */
 	public static URL find(String name) {
 		return find(null, name);
@@ -48,6 +50,16 @@ public class FileFinder {
 	
 	/**
 	 * Tries to find the file specified from filesystem or classpath.
+	 * <p>The file will be searched based on the following procedure:</p>
+	 * <ul>
+	 * <li>Try to find the file in current working dir (unless absolute path is given).</li>
+	 * <li>Try to fine the file in package of the class given as argument using the default class loader</li>
+	 * <li>Try to find the file in parent packages of the class given as argument using the default class loader</li>
+	 * <li>Try to fine the file in package of the class given as argument using the context class loader</li>
+	 * <li>Try to find the file in parent packages of the class given as argument using the context class loader</li>
+	 * <li>Repeat the procedure by trying to find the file with a prepended slash.</li>
+	 * </ul>
+	 * 
 	 * @param name - name of file, can be fully qualified
 	 * @param clazz class to get the class loader from
 	 * @return URL to the file
@@ -98,7 +110,7 @@ public class FileFinder {
 	}
 	
 	/**
-	 * Find the resource suing the given class loader.
+	 * Find the resource using the given class loader.
 	 * @param classLoader the loader to be used
 	 * @param dirs the directory parts (e.g. from package name)
 	 * @param name the name of the resource
@@ -140,6 +152,7 @@ public class FileFinder {
 	 * @param name - name of file, can be fully qualified
 	 * @param clazz class to get the class loader from
 	 * @return stream to the file
+	 * @see #find(Class, String)
 	 */
 	public static InputStream open(Class<?> clazz, String name) throws IOException {
 		// try to find as simple file in file system
@@ -153,6 +166,7 @@ public class FileFinder {
 	 * Finds and loads a file.
 	 * @param name - name of file
 	 * @return contents of file
+	 * @see #find(Class, String)
 	 */
 	public static String load(String name) throws IOException {
 		return load(null, name);
@@ -162,6 +176,7 @@ public class FileFinder {
 	 * Finds and loads a file.
 	 * @param name - name of file
 	 * @param clazz class to get the class loader from
+	 * @see #find(Class, String)
 	 * @return contents of file
 	 */
 	public static String load(Class<?> clazz, String name) throws IOException {
