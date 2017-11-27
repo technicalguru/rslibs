@@ -75,6 +75,9 @@ public class HibernateDaoMaster extends AbstractDaoMaster {
 	
 	/**
 	 * {@inheritDoc}
+	 * <p>{@code hbmconfig-file} and {@code dbconfig-file} properties will support the {@code env:} syntax for
+	 * evaluating environment values, and {@code class:} for programmatic configuration.</p>
+	 * <p>db config file supports the {@code $ENV{name}} syntax in its properties.
 	 */
 	@Override
 	public void configure(Configuration cfg) throws ConfigurationException {

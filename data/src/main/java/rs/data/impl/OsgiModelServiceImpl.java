@@ -36,6 +36,11 @@ import rs.data.api.IOsgiModelService;
 
 /**
  * Singleton service for models.
+ * <p>This implementation looks for the DAO configuration in following sequence:</p>
+ * <ul>
+ * <li>location as given in {@code DAO_CONFIG_URL} location</li>
+ * <li>{@link FileFinder#find(Class, String)} process of locating {@code dao-config.xml} file</li>
+ * </ul>
  * @author ralph
  *
  */
@@ -93,7 +98,14 @@ public class OsgiModelServiceImpl implements IOsgiModelService {
 	public HierarchicalConfiguration getConfiguration() {
 		if (this.daoConfig == null) {
 			try {
-				URL url = FileFinder.find(getClass(), "dao-config.xml");
+				String envLocation = System.getenv("DAO_CONFIG_URL");
+				URL url = null;
+				if (envLocation != null) {
+					if (envLocation.indexOf("://") > 0) url = new URL(envLocation);
+					else url = FileFinder.find(getClass(), envLocation);
+				} else {
+					url = FileFinder.find(getClass(), "dao-config.xml");
+				}
 				if (url == null) throw new NullPointerException("Cannot find dao-config.xml");
 				daoConfig = new XMLConfiguration(url);
 			} catch (Exception e) {

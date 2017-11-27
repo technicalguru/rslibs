@@ -129,6 +129,8 @@ public abstract class AbstractDaoMaster implements IDaoMaster, IConfigurable {
 			} catch (Exception e) {
 				LoggerFactory.getLogger(getClass()).error("Cannot create UrlTransformer from "+value, e);
 			}
+		} else if (value.toLowerCase().startsWith("env:")) {
+			value = System.getenv(value.substring(4));
 		}
 		if (transformer == null) getFactory().getUrlTransformer();
 		if (transformer != null) return transformer.toURL(value);
