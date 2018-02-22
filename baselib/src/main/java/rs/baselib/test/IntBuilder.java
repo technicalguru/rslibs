@@ -17,6 +17,8 @@
  */
 package rs.baselib.test;
 
+import org.apache.commons.lang.math.RandomUtils;
+
 /**
  * An Integer builder.
  * @author ralph
@@ -28,7 +30,11 @@ public class IntBuilder implements Builder<Integer> {
 	private int count;
 	/** the offset */
 	private int offset;
-	
+	/** end number (for random only) */
+	private int end;
+	/** whether to create random numbers */
+	private boolean random = false;
+
 	/**
 	 * Constructor.
 	 */
@@ -56,12 +62,35 @@ public class IntBuilder implements Builder<Integer> {
 	}
 
 	/**
+	 * Set a given max number (for random numbers only).
+	 * @param end - the max number to use
+	 */
+	public IntBuilder withEnd(int end) {
+		this.end   = end;
+		return this;
+	}
+
+	/**
+	 * Set random creation.
+	 * @param end - the max number to use
+	 */
+	public IntBuilder withRandom() {
+		this.random   = true;
+		return this;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public Integer build() {
-		Integer rc = Integer.valueOf(count);
-		count += offset;
+		Integer rc =  0;
+		if (random) {
+			rc = Integer.valueOf(count);
+			count += offset;
+		} else {
+			rc = Integer.valueOf(RandomUtils.nextInt(end-count)+count);
+		}
 		return rc;
 	}
 

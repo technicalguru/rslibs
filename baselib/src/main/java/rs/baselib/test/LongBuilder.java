@@ -17,6 +17,8 @@
  */
 package rs.baselib.test;
 
+import org.apache.commons.lang.math.RandomUtils;
+
 /**
  * A Long builder.
  * @author ralph
@@ -28,7 +30,11 @@ public class LongBuilder implements Builder<Long> {
 	private long count;
 	/** the offset */
 	private long offset;
-	
+	/** end number (for random only) */
+	private long end;
+	/** whether to create random numbers */
+	private boolean random = false;
+
 	/**
 	 * Constructor.
 	 */
@@ -56,14 +62,41 @@ public class LongBuilder implements Builder<Long> {
 	}
 
 	/**
+	 * Set a given max number (for random numbers only).
+	 * @param end - the max number to use
+	 */
+	public LongBuilder withEnd(long end) {
+		this.end   = end;
+		return this;
+	}
+
+	/**
+	 * Set random creation.
+	 * @param end - the max number to use
+	 */
+	public LongBuilder withRandom() {
+		this.random   = true;
+		return this;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public Long build() {
-		Long rc = Long.valueOf(count);
-		count += offset;
+		Long rc = 0L;
+		if (random) {
+			rc = Long.valueOf(count);
+			count += offset;
+		} else {
+			long l = RandomUtils.nextLong()+count;
+			while (l > end) {
+				l = RandomUtils.nextLong()+count;
+			}
+			rc = Long.valueOf(l);
+		}
 		return rc;
 	}
 
-	
+
 }
