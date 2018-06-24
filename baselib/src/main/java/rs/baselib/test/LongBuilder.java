@@ -85,7 +85,7 @@ public class LongBuilder implements Builder<Long> {
 	@Override
 	public Long build() {
 		Long rc = 0L;
-		if (random) {
+		if (!random) {
 			rc = Long.valueOf(count);
 			count += offset;
 		} else {

@@ -85,7 +85,7 @@ public class IntBuilder implements Builder<Integer> {
 	@Override
 	public Integer build() {
 		Integer rc =  0;
-		if (random) {
+		if (!random) {
 			rc = Integer.valueOf(count);
 			count += offset;
 		} else {
