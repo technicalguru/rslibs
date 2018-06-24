@@ -70,7 +70,7 @@ public abstract class AbstractGeneralDAO<K extends Serializable, B extends Abstr
 	@Override
 	protected C _newInstance() {
 		try {
-			return (C)getBoImplementationClass().newInstance();
+			return (C)getBoImplementationClass().getConstructor().newInstance();
 		} catch (Exception e) {
 			throw new RuntimeException("Cannot create Business Object", e);
 		}

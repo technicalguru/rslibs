@@ -307,7 +307,7 @@ public class DefaultCryptingDelegateFactory implements ICryptingDelegateFactory 
 		if (cryptingDelegate != null) return;
 		try {
 			Class<? extends ICryptingDelegate> clazz = (Class<? extends ICryptingDelegate>)LangUtils.forName(getDelegateClassName());
-			cryptingDelegate = clazz.newInstance();
+			cryptingDelegate = clazz.getConstructor().newInstance();
 			cryptingDelegate.init(this);
 		} catch (Exception e) {
 			throw new RuntimeException("Cannot create crypting delegate", e);

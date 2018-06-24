@@ -104,7 +104,7 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	@SuppressWarnings("unchecked")
 	protected C _newInstance(T transferObject) {
 		try {
-			B rc = getBoImplementationClass().newInstance();
+			B rc = getBoImplementationClass().getConstructor().newInstance();
 			rc.setTransferObject(transferObject);
 			return (C)rc;
 		} catch (Exception e) {
@@ -160,7 +160,7 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	 */
 	protected T newTransferObject() {
 		try {
-			return getTransferClass().newInstance();
+			return getTransferClass().getConstructor().newInstance();
 		} catch (Exception e) {
 			throw new RuntimeException("Cannot create Transfer Object", e);
 		}

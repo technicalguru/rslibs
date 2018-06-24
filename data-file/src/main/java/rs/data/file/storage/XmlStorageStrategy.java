@@ -144,7 +144,7 @@ public class XmlStorageStrategy<K extends Serializable, T extends IGeneralBO<K>>
 	 */
 	@SuppressWarnings("unchecked")
 	protected Collection<?> loadCollection(Class<?> clazz, HierarchicalConfiguration cfg) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-		Collection<Object> collection = (Collection<Object>)clazz.newInstance();
+		Collection<Object> collection = (Collection<Object>)clazz.getConstructor().newInstance();
 		for (HierarchicalConfiguration subConfig : cfg.configurationsAt("item")) {
 			collection.add(loadValue(subConfig));
 		}
@@ -174,7 +174,7 @@ public class XmlStorageStrategy<K extends Serializable, T extends IGeneralBO<K>>
 	 * @return the loaded bean
 	 */
 	protected IBean loadBean(Class<?> clazz, HierarchicalConfiguration cfg) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-		IBean bean = (IBean)clazz.newInstance();
+		IBean bean = (IBean)clazz.getConstructor().newInstance();
 		for (String name : getBeanPropertyNames(clazz)) {
 			bean.set(name, loadValue(cfg.configurationAt(name+"(0)")));
 		}

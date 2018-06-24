@@ -71,7 +71,7 @@ public class ConfigurationUtils {
 	@SuppressWarnings("unchecked")
 	public static <T> T load(Class<T> clazz, Configuration config, boolean configure) {
 		try {
-			Object rc = clazz.newInstance();
+			Object rc = clazz.getConstructor().newInstance();
 			if (configure && (rc instanceof IConfigurable)) {
 				configure((IConfigurable)rc, config);
 			}

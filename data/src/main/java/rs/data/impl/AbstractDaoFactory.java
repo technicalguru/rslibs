@@ -191,7 +191,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 		try {
 			String className = config.getString("[@class]");
 			Class<?> clazz = LangUtils.forName(className);
-			IDaoMaster rc = (IDaoMaster)clazz.newInstance();
+			IDaoMaster rc = (IDaoMaster)clazz.getConstructor().newInstance();
 			rc.setFactory(this);
 			if (rc instanceof IConfigurable) {
 				((IConfigurable)rc).configure(config);

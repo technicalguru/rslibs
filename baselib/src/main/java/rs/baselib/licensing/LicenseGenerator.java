@@ -75,7 +75,7 @@ public class LicenseGenerator {
 	 */
 	public String createLicenseKey(Class<? extends ILicense> licenseClass, ILicenseContext context) {
 		try {
-			ILicense license = licenseClass.newInstance();
+			ILicense license = licenseClass.getConstructor().newInstance();
 			license.init(context);
 			return createLicenseKey(context, license);
 		} catch (LicenseException e) {

@@ -67,7 +67,7 @@ public abstract class AbstractBO<K extends Serializable, T extends GeneralDTO<K>
 	public AbstractBO(T transferObject) {
 		init();
 		if (transferObject == null) try {
-			transferObject = getTransferClass().newInstance();
+			transferObject = getTransferClass().getConstructor().newInstance();
 		} catch (Exception e) {
 			throw new RuntimeException("Cannot create empty instance: ", e);
 		}

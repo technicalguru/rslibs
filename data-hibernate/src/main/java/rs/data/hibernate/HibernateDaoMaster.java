@@ -151,7 +151,7 @@ public class HibernateDaoMaster extends AbstractDaoMaster {
 	protected void loadDataSource(SubnodeConfiguration dbconfig) {
 		try {
 			Class<? extends DataSource> clazz = (Class<? extends DataSource>)LangUtils.forName(dbconfig.getString("[@class]"));
-			datasource = clazz.newInstance();
+			datasource = clazz.getConstructor().newInstance();
 			setProperty("datasource.class", datasource.getClass().getName());
 			int idx=0;
 			while (true) {

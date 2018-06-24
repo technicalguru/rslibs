@@ -19,6 +19,7 @@ package rs.baselib.security;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -85,7 +86,7 @@ public class TextFileAuthorizationCallback extends AbstractAuthorizationCallback
 	 */
 	public void configure(File file) throws ConfigurationException {
 		try {
-			String s = FileUtils.readFileToString(file);
+			String s = FileUtils.readFileToString(file, Charset.defaultCharset());
 			int pos = s.indexOf(':');
 			if (pos > 0) {
 				setName(s.substring(0, pos));

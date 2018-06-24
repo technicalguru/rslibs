@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -30,7 +31,6 @@ import java.util.Set;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.io.Charsets;
 
 import rs.baselib.bean.BeanSupport;
 import rs.baselib.lang.LangUtils;
@@ -132,7 +132,7 @@ public abstract class AbstractStorageStrategy<K extends Serializable, T extends 
 			if (isClean) {
 				return value.toString();
 			}
-			return "BASE64:"+new String(Base64.encodeBase64(((String) value).getBytes(getEncoding())), Charsets.UTF_8);
+			return "BASE64:"+new String(Base64.encodeBase64(((String) value).getBytes(getEncoding())), StandardCharsets.UTF_8);
 		} else if (value instanceof Serializable) {
 			return "BASE64:"+LangUtils.serializeBase64(value);
 		}

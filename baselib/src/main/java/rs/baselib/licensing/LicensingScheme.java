@@ -84,7 +84,7 @@ public enum LicensingScheme implements ILicensingScheme {
 	 */
 	protected <T> T create(Class<T> clazz) {
 		try {
-			return clazz.newInstance();
+			return clazz.getConstructor().newInstance();
 		} catch (Throwable t) {
 			throw new LicenseException("Cannot create instance of "+clazz.getName(), t);
 		}

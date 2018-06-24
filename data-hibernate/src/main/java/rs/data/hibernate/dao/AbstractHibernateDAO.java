@@ -568,14 +568,15 @@ public abstract class AbstractHibernateDAO<K extends Serializable, T extends Gen
 			}
 		}
 
-		/**
+		/*
 		 * Finalizes this object by calling close().
 		 * @see java.lang.Object#finalize()
-		 */
+		 * Deprecated since 1.9
 		@Override
 		protected void finalize() throws Throwable {
 			close();
 			super.finalize();
 		}
+		*/
 	}		
 }

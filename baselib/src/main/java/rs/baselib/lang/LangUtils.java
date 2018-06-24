@@ -95,7 +95,7 @@ public class LangUtils {
 	 * @throws IllegalAccessException when constructor cannot be called
 	 * @throws InstantiationException when constructor throws errors
 	 */
-	public static Object newInstance(String className) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+	public static Object newInstance(String className) throws ReflectiveOperationException {
 		return newInstance(className, null);
 	}
 	
@@ -109,9 +109,9 @@ public class LangUtils {
 	 * @throws IllegalAccessException when constructor cannot be called
 	 * @throws InstantiationException when constructor throws errors
 	 */
-	public static Object newInstance(String className, ClassLoader classLoader) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+	public static Object newInstance(String className, ClassLoader classLoader) throws ReflectiveOperationException {
 		Class<?> clazz = forName(className, classLoader);
-		return clazz.newInstance();
+		return clazz.getConstructor().newInstance();
 	}
 	
 	/**
