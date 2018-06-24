@@ -228,6 +228,7 @@ public class DefaultCryptingDelegateFactory implements ICryptingDelegateFactory 
 	/**
 	 * Returns the key store.
 	 * @return the key store
+	 * @throws IOException when key store cannot be opened
 	 */
 	protected KeyStore getKeyStore() throws IOException {
 		String path = getKeyStorePath();

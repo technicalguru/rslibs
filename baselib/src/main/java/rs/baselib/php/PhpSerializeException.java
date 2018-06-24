@@ -38,7 +38,7 @@ public class PhpSerializeException extends RuntimeException {
 
 	/**
 	 * Constructor.
-	 * @param message
+	 * @param message error message
 	 */
 	public PhpSerializeException(String message) {
 		super(message);

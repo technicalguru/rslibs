@@ -27,7 +27,7 @@ import java.sql.SQLException;
  * <p>
  * Clients of <code>IJdbcConnectionProvider</code> simply call
  * {@link #getConnection(String, String, String, String, String, String...)} in order
- * to get a valid driver URL constructed and passed to {@link java.sql.DriverManagerer}.
+ * to get a valid driver URL constructed and passed to {@link java.sql.DriverManager}.
  * </p>
  * @author ralph
  *

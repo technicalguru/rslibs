@@ -26,7 +26,7 @@ public interface Builder<T> {
 
 	/**
 	 * Build the previously configured object.
-	 * @return
+	 * @return the built object
 	 */
 	public T build();
 	

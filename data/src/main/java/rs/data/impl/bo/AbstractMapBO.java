@@ -43,6 +43,7 @@ public abstract class AbstractMapBO<K extends Serializable> extends AbstractBO<K
 
 	/**
 	 * Constructor.
+	 * @param transferObject - the transfer object to be used
 	 */
 	public AbstractMapBO(GeneralDTO<K> transferObject) {
 		super(transferObject);

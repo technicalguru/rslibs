@@ -32,6 +32,8 @@ public abstract class AbstractLangEncryptionType extends AbstractEncryptionType 
 	
 	/**
 	 * Constructor.
+	 * @param objectType - The object type of the simple type
+	 * @param simpleType - the simple type
 	 */
 	public AbstractLangEncryptionType(Class<?> objectType, Class<?> simpleType) {
 		this.objectType = objectType;

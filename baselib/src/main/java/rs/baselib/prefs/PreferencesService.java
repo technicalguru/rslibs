@@ -252,6 +252,7 @@ public class PreferencesService extends AbstractPreferencesService {
 
 	/**
 	 * Returns the application's preferences file of the user.
+	 * @param applicationName name of the application
 	 * @return the preferences file
 	 */
 	protected synchronized File getUserPreferencesFile(String applicationName) {
@@ -282,6 +283,7 @@ public class PreferencesService extends AbstractPreferencesService {
 
 	/**
 	 * Returns the application's preferences file of the system.
+	 * @param applicationName name of the application
 	 * @return the preferences file
 	 */
 	protected synchronized File getSystemPreferencesFile(String applicationName) {

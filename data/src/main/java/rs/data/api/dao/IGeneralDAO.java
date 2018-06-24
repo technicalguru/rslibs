@@ -44,7 +44,7 @@ public interface IGeneralDAO<K extends Serializable, B extends IGeneralBO<K>> {
 	
 	/**
 	 * Sets the factory.
-	 * @param factory
+	 * @param factory - the factory this DAO belongs to
 	 */
 	public void setFactory(IDaoFactory factory);
 	
@@ -84,7 +84,7 @@ public interface IGeneralDAO<K extends Serializable, B extends IGeneralBO<K>> {
 	
 	/**
 	 * Returns status of caching mechanism.
-	 * @returns {@code true} when cache shall be enabled.
+	 * @return {@code true} when cache shall be enabled.
 	 */
 	public boolean isCacheEnabled();
 	
@@ -151,7 +151,7 @@ public interface IGeneralDAO<K extends Serializable, B extends IGeneralBO<K>> {
 	
 	/**
 	 * Refresh the given object.
-	 * <p>The method will throw an {@link ObjectDeletedException} when the underlying
+	 * <p>The method will throw an {@link rs.data.util.ObjectDeletedException ObjectDeletedException} when the underlying
 	 * persistence store does not have this object anymore.</p>
 	 * @param object object to be refreshed
 	 */
@@ -187,7 +187,9 @@ public interface IGeneralDAO<K extends Serializable, B extends IGeneralBO<K>> {
 
 	/**
 	 * Returns domain objects with default criteria.
-	 * A default criteria could hide objects not needed regulary (e.g. deleted objects)
+	 * A default criteria could hide objects not needed regulary (e.g. deleted objects).
+	 * @param firstResult - the first result to be returned
+	 * @param maxResults - the number of results returned at most
 	 * @return list of all objects
 	 */
 	public List<B> findDefaultAll(int firstResult, int maxResults);

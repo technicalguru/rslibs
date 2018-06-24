@@ -46,6 +46,7 @@ public class LongBuilder implements Builder<Long> {
 	/**
 	 * Start the build with a given long.
 	 * @param start - the first number to produce
+	 * @return this builder for concatenation
 	 */
 	public LongBuilder withStart(long start) {
 		this.count   = start;
@@ -55,6 +56,7 @@ public class LongBuilder implements Builder<Long> {
 	/**
 	 * Set a given increment/decrement for each build.
 	 * @param offset - the increment/decrement to produce
+	 * @return this builder for concatenation
 	 */
 	public LongBuilder withOffset(long offset) {
 		this.offset   = offset;
@@ -64,6 +66,7 @@ public class LongBuilder implements Builder<Long> {
 	/**
 	 * Set a given max number (for random numbers only).
 	 * @param end - the max number to use
+	 * @return this builder for concatenation
 	 */
 	public LongBuilder withEnd(long end) {
 		this.end   = end;
@@ -72,7 +75,7 @@ public class LongBuilder implements Builder<Long> {
 
 	/**
 	 * Set random creation.
-	 * @param end - the max number to use
+	 * @return this builder for concatenation
 	 */
 	public LongBuilder withRandom() {
 		this.random   = true;

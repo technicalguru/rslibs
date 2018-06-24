@@ -66,9 +66,11 @@ public class RsaLicenseCreator implements ILicenseCreator {
 
 	/**
 	 * Encrypts the given bytes.
+	 * @param context the licensing context
 	 * @param bytes the plain bytes
 	 * @return the bytes encrypted
-	 * @throws EncryptionException
+	 * @throws IOException when encryption fails
+	 * @throws GeneralSecurityException when cipher is invalid
 	 */
 	protected byte[] encrypt(ILicenseContext context, byte bytes[]) throws GeneralSecurityException, IOException {
 		Cipher cipher = context.get(Cipher.class);

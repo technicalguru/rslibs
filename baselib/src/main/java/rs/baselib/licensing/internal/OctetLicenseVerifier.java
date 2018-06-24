@@ -100,9 +100,9 @@ public class OctetLicenseVerifier implements ILicenseVerifier {
 	 * @param license the license to be checked against
 	 * @param context the context
 	 * @return <code>true</code> when signature is ok
-	 * @throws DecryptionException
-	 * @throws SigningException
-	 * @throws UnsupportedEncodingException
+	 * @throws DecryptionException - when decryption fails
+	 * @throws SigningException - when signing verification fails
+	 * @throws UnsupportedEncodingException - when the encoding is not supported
 	 */
 	protected boolean verify(byte signature[], SimpleLicense license, ILicenseContext context) throws DecryptionException, SigningException, UnsupportedEncodingException {
 		DataSigner signer = context.get(DataSigner.class);

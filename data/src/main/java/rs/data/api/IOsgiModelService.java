@@ -73,6 +73,7 @@ public interface IOsgiModelService {
 	/**
 	 * Returns the factory of the given type.
 	 * @param clazz clazz of factory to be returned
+	 * @param <T> the DAO factory class
 	 * @return the factory
 	 */
 	public <T extends IDaoFactory> T getFactory(Class<T> clazz);

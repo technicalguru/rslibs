@@ -171,6 +171,7 @@ public abstract class AbstractBean implements IBean {
 	 * @param propertyName name of property
 	 * @param oldValue old value
 	 * @param newValue new value
+	 * @param makeDirty {@code true} when the object shall be marked dirty
 	 * @return <code>true</code> when the event was fired (because values were not equal)
 	 */
 	protected boolean firePropertyChange(String propertyName, int oldValue, int newValue, boolean makeDirty) {
@@ -194,6 +195,7 @@ public abstract class AbstractBean implements IBean {
 	 * @param propertyName name of property
 	 * @param oldValue old value
 	 * @param newValue new value
+	 * @param makeDirty {@code true} when the object shall be marked dirty
 	 * @return <code>true</code> when the event was fired (because values were not equal)
 	 */
 	protected boolean firePropertyChange(String propertyName, boolean oldValue, boolean newValue, boolean makeDirty) {
@@ -216,6 +218,7 @@ public abstract class AbstractBean implements IBean {
 	 * @param propertyName name of property
 	 * @param oldValue old value
 	 * @param newValue new value
+	 * @param makeDirty {@code true} when the object shall be marked dirty
 	 * @return <code>true</code> when the event was fired (because values were not equal)
 	 */
 	public boolean firePropertyChange(String propertyName, float oldValue, float newValue, boolean makeDirty) {
@@ -234,6 +237,7 @@ public abstract class AbstractBean implements IBean {
 	/**
 	 * Fires a change event.
 	 * @param event event to be fired
+	 * @param makeDirty {@code true} when the object shall be marked dirty
 	 * @return <code>true</code> when the event was fired (because values were not equal)
 	 */
 	protected boolean firePropertyChange(PropertyChangeEvent event, boolean makeDirty) {
@@ -426,6 +430,7 @@ public abstract class AbstractBean implements IBean {
 	 * <p>
 	 * This method relies on the {@link NoCopy} and {@link Transient} annotations on read methods.
 	 * </p>
+	 * @param descriptor the descriptor of th eproperty to be checked
 	 * @return <code>true</code> when copy is allowed
 	 * @see BeanSupport#isCopyForbidden(Class, String)
 	 */
@@ -438,6 +443,7 @@ public abstract class AbstractBean implements IBean {
 	 * <p>
 	 * This method relies on the {@link NoCopy} and {@link Transient} annotations on read methods.
 	 * </p>
+	 * @param name - the name of the property to be checked
 	 * @return <code>true</code> when copy is allowed
 	 * @see BeanSupport#isCopyForbidden(Class, String)
 	 */

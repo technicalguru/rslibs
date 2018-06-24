@@ -264,6 +264,7 @@ public class ConverterUtils {
 	 * Converts the given parameter to its byte representation.
 	 * @param param parameter
 	 * @return byte reresentation
+	 * @throws UnsupportedEncodingException when character encoding is invalid
 	 */
 	public static byte[] toBytes(Character param) throws UnsupportedEncodingException {
 		if (param == null) return null;
@@ -274,6 +275,7 @@ public class ConverterUtils {
 	 * Converts the given bytes to char.
 	 * @param bytes bytes
 	 * @return char value
+	 * @throws UnsupportedEncodingException when character encoding is invalid
 	 */
 	public static char toChar(byte bytes[]) throws UnsupportedEncodingException {
 		ByteBuffer b = ByteBuffer.wrap(bytes);
@@ -284,6 +286,7 @@ public class ConverterUtils {
 	 * Converts the given bytes to Character.
 	 * @param bytes bytes
 	 * @return Character object
+	 * @throws UnsupportedEncodingException when character encoding is invalid
 	 */
 	public static Character toCharObject(byte bytes[]) throws UnsupportedEncodingException {
 		if (bytes == null) return null;
@@ -295,6 +298,7 @@ public class ConverterUtils {
 	 * Converts the given parameter to its byte representation.
 	 * @param param parameter
 	 * @return byte reresentation
+	 * @throws UnsupportedEncodingException when character encoding is invalid
 	 */
 	public static byte[] toBytes(char param[]) throws UnsupportedEncodingException {
 		return toBytes(new String(param));
@@ -304,6 +308,7 @@ public class ConverterUtils {
 	 * Converts the given bytes to float.
 	 * @param bytes bytes
 	 * @return float value
+	 * @throws UnsupportedEncodingException when character encoding is invalid
 	 */
 	public static char[] toCharArray(byte bytes[]) throws UnsupportedEncodingException {
 		return toString(bytes).toCharArray();
@@ -390,6 +395,7 @@ public class ConverterUtils {
 	 * Converts the given parameter (UTF8) to its byte representation.
 	 * @param param parameter
 	 * @return byte reresentation
+	 * @throws UnsupportedEncodingException when character encoding is invalid
 	 */
 	public static byte[] toBytes(String param) throws UnsupportedEncodingException {
 		if (param == null) return null;
@@ -400,6 +406,7 @@ public class ConverterUtils {
 	 * Converts the given bytes to string (UTF8).
 	 * @param bytes bytes
 	 * @return string value
+	 * @throws UnsupportedEncodingException when character encoding is invalid
 	 */
 	public static String toString(byte bytes[]) throws UnsupportedEncodingException {
 		return new String(bytes, "UTF8");
@@ -529,6 +536,7 @@ public class ConverterUtils {
 	 * Converts the given parameter to its byte representation.
 	 * @param param parameter
 	 * @return byte reresentation
+	 * @throws UnsupportedEncodingException when character encoding is invalid
 	 */
 	public static byte[] toBytes(Currency param) throws UnsupportedEncodingException {
 		if (param == null) return null;
@@ -539,6 +547,7 @@ public class ConverterUtils {
 	 * Converts the given bytes to Currency.
 	 * @param bytes bytes
 	 * @return Currency value
+	 * @throws UnsupportedEncodingException when character encoding is invalid
 	 */
 	public static Currency toCurrency(byte bytes[]) throws UnsupportedEncodingException {
 		if (bytes == null) return null;
@@ -570,6 +579,7 @@ public class ConverterUtils {
 	 * Converts the given parameter to its byte representation.
 	 * @param param parameter
 	 * @return byte reresentation
+	 * @throws UnsupportedEncodingException when character encoding is invalid
 	 */
 	public static byte[] toBytes(TimeZone param) throws UnsupportedEncodingException {
 		if (param == null) return null;
@@ -580,6 +590,7 @@ public class ConverterUtils {
 	 * Converts the given bytes to TimeZone.
 	 * @param bytes bytes
 	 * @return TimeZone value
+	 * @throws UnsupportedEncodingException when character encoding is invalid
 	 */
 	public static TimeZone toTimeZone(byte bytes[]) throws UnsupportedEncodingException {
 		if (bytes == null) return null;
@@ -590,6 +601,7 @@ public class ConverterUtils {
 	 * Converts the given parameter to its byte representation.
 	 * @param param parameter
 	 * @return byte reresentation
+	 * @throws UnsupportedEncodingException when character encoding is invalid
 	 */
 	public static byte[] toBytes(URL param) throws UnsupportedEncodingException {
 		if (param == null) return null;
@@ -600,6 +612,8 @@ public class ConverterUtils {
 	 * Converts the given bytes to URL.
 	 * @param bytes bytes
 	 * @return URL value
+	 * @throws UnsupportedEncodingException when character encoding is invalid
+	 * @throws MalformedURLException when URL is not valid
 	 */
 	public static URL toURL(byte bytes[]) throws UnsupportedEncodingException, MalformedURLException {
 		if (bytes == null) return null;
@@ -610,6 +624,7 @@ public class ConverterUtils {
 	 * Converts the given Serializable to its byte representation.
 	 * @param o serializable
 	 * @return byte reresentation
+	 * @throws IOException when serialization fails
 	 */
 	public static byte[] toBytes(Serializable o) throws IOException {
 		if (o == null) return null;
@@ -624,8 +639,8 @@ public class ConverterUtils {
 	 * Converts a byte array to a {@link Serializable}.
 	 * @param bytes the bytes from a serializable
 	 * @return the {@link Serializable}
-	 * @throws ClassNotFoundException
-	 * @throws IOException
+	 * @throws ClassNotFoundException when class cannot be found
+	 * @throws IOException when unserialization fails
 	 */
 	public static Object toObject(byte bytes[]) throws ClassNotFoundException, IOException {
 		ByteArrayInputStream bIn = new ByteArrayInputStream(bytes);

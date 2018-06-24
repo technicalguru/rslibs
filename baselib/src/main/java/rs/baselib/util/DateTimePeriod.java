@@ -43,6 +43,8 @@ public class DateTimePeriod implements Serializable {
 
 	/**
 	 * Constructor.
+	 * @param from - the begin of the period
+	 * @param duration - the duration of the period
 	 */
 	public DateTimePeriod(RsDate from, long duration) {
 		this(from, new RsDate(from.getTimeInMillis()+duration));
@@ -50,6 +52,8 @@ public class DateTimePeriod implements Serializable {
 
 	/**
 	 * Constructor.
+	 * @param from - the begin of the period
+	 * @param until - the end of the period
 	 */
 	public DateTimePeriod(RsDate from, RsDate until) {
 		if ((from != null) && (until != null) && from.after(until)) {

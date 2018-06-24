@@ -67,11 +67,13 @@ public class OctetLicenseCreator implements ILicenseCreator {
 	}
 
 	/**
-	 * Signes the given byte array.
-	 * @param bytes the bytes to be signed
+	 * Signs the given byte array.
+	 * @param context - the licensing context
+	 * @param bytes - the bytes to be signed
 	 * @return the signature
-	 * @throws SigningException
-	 * @throws NoSuchAlgorithmException
+	 * @throws SigningException - when signing fails
+	 * @throws NoSuchAlgorithmException - when the signing algorithm is invalid
+	 * @throws DecryptionException - when other signing error occur
 	 */
 	protected byte[] sign(ILicenseContext context, byte bytes[]) throws SigningException, NoSuchAlgorithmException, DecryptionException {
 		DataSigner signer = context.get(DataSigner.class);
@@ -87,7 +89,6 @@ public class OctetLicenseCreator implements ILicenseCreator {
 	 * @param prefix the integer prefix basically containing the expiry time in seconds since epoch time
 	 * @param signature teh signature
 	 * @return the combined byte array
-	 * @throws IOException
 	 */
 	protected byte[] combine(int prefix, byte signature[]) {
 		int len = signature.length+4;

@@ -145,7 +145,7 @@ public class HibernateDaoMaster extends AbstractDaoMaster {
 	
 	/**
 	 * Load the data source configuration and inject it for hibernate.
-	 * @param dbconfig
+	 * @param dbconfig - the subnode configuration for the db configuration
 	 */
 	@SuppressWarnings("unchecked")
 	protected void loadDataSource(SubnodeConfiguration dbconfig) {

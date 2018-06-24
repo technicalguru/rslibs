@@ -69,9 +69,11 @@ public class RsaLicenseVerifier implements ILicenseVerifier {
 
 	/**
 	 * Decrypts the bytes.
+	 * @param context the licensing context
 	 * @param bytes bytes to be decrypted
 	 * @return the plain message
-	 * @throws DecryptionException
+	 * @throws IOException when I/O problems occur with key
+	 * @throws GeneralSecurityException when decryprion problems occur
 	 */
 	protected byte[] decrypt(ILicenseContext context, byte bytes[]) throws GeneralSecurityException, IOException {
 		Cipher cipher = context.get(Cipher.class);

@@ -38,7 +38,9 @@ public interface IStorageStrategy<K extends Serializable, T extends IGeneralBO<K
 	/**
 	 * Populate the given business object using the specifier.
 	 * @param bo the Business Object to be loaded
+	 * @param id ID of object
 	 * @param specifier a specifier specific to the strategy
+	 * @throws IOException when a storage exception occurs
 	 */
 	public void load(T bo, K id, S specifier) throws IOException;
 	
@@ -46,6 +48,7 @@ public interface IStorageStrategy<K extends Serializable, T extends IGeneralBO<K
 	 * Save the given business object using the specifier.
 	 * @param bo the Business Object to be loaded
 	 * @param specifier a specifier specific to the strategy
+	 * @throws IOException when a storage exception occurs
 	 */
 	public void save(T bo, S specifier) throws IOException;
 	
@@ -53,6 +56,7 @@ public interface IStorageStrategy<K extends Serializable, T extends IGeneralBO<K
 	 * Refresh the given business object.
 	 * @param bo business object t be refreshed
 	 * @param specifier specifier for the strategy
+	 * @throws IOException when a storage exception occurs
 	 */
 	public void refresh(T bo, S specifier) throws IOException;
 	
@@ -60,6 +64,7 @@ public interface IStorageStrategy<K extends Serializable, T extends IGeneralBO<K
 	 * Returns the number of objects defined by given list of specifiers.
 	 * @param specifiers number of specifiers
 	 * @return number of objects that those specifiers define
+	 * @throws IOException when a storage exception occurs
 	 */
 	public int getObjectCount(Collection<S> specifiers) throws IOException;
 	
@@ -67,6 +72,7 @@ public interface IStorageStrategy<K extends Serializable, T extends IGeneralBO<K
 	 * Returns the number of default objects defined by given list of specifiers.
 	 * @param specifiers number of specifiers
 	 * @return number of default objects that those specifiers define
+	 * @throws IOException when a storage exception occurs
 	 */
 	public int getDefaultObjectCount(Collection<S> specifiers) throws IOException;
 	
@@ -74,6 +80,7 @@ public interface IStorageStrategy<K extends Serializable, T extends IGeneralBO<K
 	 * Returns the IDs for each specifier defined by given list of specifiers.
 	 * @param specifiers number of specifiers
 	 * @return map of keys (of all objects) with assigned specifier
+	 * @throws IOException when a storage exception occurs
 	 */
 	public Map<K, S> getList(Collection<S> specifiers) throws IOException;
 	
@@ -81,6 +88,7 @@ public interface IStorageStrategy<K extends Serializable, T extends IGeneralBO<K
 	 * Returns the default objects' IDs for each specifier defined by given list of specifiers.
 	 * @param specifiers number of specifiers
 	 * @return map of keys (of all default objects) with assigned specifier
+	 * @throws IOException when a storage exception occurs
 	 */
 	public Map<K, S> getDefaultList(Collection<S> specifiers) throws IOException;
 }

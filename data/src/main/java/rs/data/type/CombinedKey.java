@@ -42,13 +42,15 @@ public abstract class CombinedKey implements Serializable {
 
 	/**
 	 * Constructor.
+	 * @param keys - the keys this key is composed of
 	 */
 	public CombinedKey(Serializable ...keys) {
 		setKeys(keys);
 	}
 
 	/**
-	 * Constructor.
+	 * Sets the keys.
+	 * @param keys - the keys this key is composed of
 	 */
 	public void setKeys(Serializable ...keys) {
 		this.keys.clear();
@@ -97,6 +99,7 @@ public abstract class CombinedKey implements Serializable {
 	/**
 	 * Returns the key at given index
 	 * @param index the inndex
+	 * @param <T> the type of the key
 	 * @return the key
 	 */
 	@SuppressWarnings("unchecked")

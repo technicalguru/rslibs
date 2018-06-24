@@ -28,6 +28,8 @@ public class Preferences extends AbstractPreferences {
 
 	/**
 	 * Constructor.
+	 * @param parent the parent preferences
+	 * @param name the nam eof this preference object
 	 */
 	public Preferences(AbstractPreferences parent, String name) {
 		super(parent, name);

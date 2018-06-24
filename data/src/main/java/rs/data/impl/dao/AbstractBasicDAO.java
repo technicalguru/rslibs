@@ -241,6 +241,7 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 	/**
 	 * Returns an object from the cache.
 	 * @param cid CID of object
+	 * @return the cached object if found
 	 */
 	protected C getCached(CID cid) {
 		if (isCacheEnabled()) {

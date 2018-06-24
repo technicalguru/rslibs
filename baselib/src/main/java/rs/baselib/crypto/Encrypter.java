@@ -56,10 +56,7 @@ public class Encrypter {
 	 * Constructor from secret key.
 	 * @param key the secret key to be used
 	 * @param algorithm algorithm (key's algorithm will be used if NULL)
-	 * @throws NoSuchPaddingException when encrypting algorithm cannot be generated
-	 * @throws NoSuchAlgorithmException when encrypting algorithm cannot be generated
-	 * @throws InvalidKeyException when encrypting algorithm cannot be generated
-	 * @throws InvalidAlgorithmParameterException when encrypting algorithm cannot be generated
+	 * @throws EncryptionException when encrypting algorithm cannot be generated
 	 */
 	public Encrypter(Key key, String algorithm) throws EncryptionException {
 		this(key, algorithm, null);
@@ -70,10 +67,7 @@ public class Encrypter {
 	 * @param key the secret key to be used
 	 * @param algorithm algorithm (key's algorithm will be used if NULL)
 	 * @param paramSpec parameters to the encrypting algorithm (will be generated if NULL)
-	 * @throws NoSuchPaddingException when encrypting algorithm cannot be generated
-	 * @throws NoSuchAlgorithmException when encrypting algorithm cannot be generated
-	 * @throws InvalidKeyException when encrypting algorithm cannot be generated
-	 * @throws InvalidAlgorithmParameterException when encrypting algorithm cannot be generated
+	 * @throws EncryptionException when encrypting algorithm cannot be generated
 	 */
 	public Encrypter(Key key, String algorithm, AlgorithmParameterSpec paramSpec) throws EncryptionException {
 		init(key, algorithm, paramSpec);
@@ -85,10 +79,7 @@ public class Encrypter {
 	 * @param algorithm algorithm (key's algorithm will be used if NULL)
 	 * @param salt salt to be used
 	 * @param iterationCount number of iterations for encryption
-	 * @throws NoSuchPaddingException when encrypting algorithm cannot be generated
-	 * @throws NoSuchAlgorithmException when encrypting algorithm cannot be generated
-	 * @throws InvalidKeyException when encrypting algorithm cannot be generated
-	 * @throws InvalidAlgorithmParameterException when encrypting algorithm cannot be generated
+	 * @throws EncryptionException when encrypting algorithm cannot be generated
 	 */
 	public Encrypter(Key key, String algorithm, byte salt[], int iterationCount) throws EncryptionException {
 		init(key, algorithm, EncryptionUtils.generateParamSpec(salt, iterationCount));
@@ -100,6 +91,7 @@ public class Encrypter {
 	 * @param salt salt to be used
 	 * @param iterationCount number of iterations for encryption
 	 * @throws EncryptionException when encrypting algorithm cannot be generated
+	 * @throws UnsupportedEncodingException when encoding cannot be found
 	 */
 	public Encrypter(byte bytephrase[], byte salt[], int iterationCount) throws EncryptionException, UnsupportedEncodingException {
 		try {
@@ -129,6 +121,7 @@ public class Encrypter {
 	/**
 	 * Constructor from passphrase.
 	 * @param passphrase passphrase to be used
+	 * @param salt salt to be used
 	 * @throws EncryptionException when encrypting algorithm cannot be generated
 	 */
 	public Encrypter(char passphrase[], byte salt[]) throws EncryptionException {
@@ -147,6 +140,7 @@ public class Encrypter {
 	/**
 	 * Constructor from passphrase.
 	 * @param passphrase passphrase to be used
+	 * @param salt salt to be used
 	 * @throws EncryptionException when encrypting algorithm cannot be generated
 	 */
 	public Encrypter(String passphrase, byte salt[]) throws EncryptionException {
@@ -179,10 +173,7 @@ public class Encrypter {
 	 * @param key secret key
 	 * @param algorithm algorithm (key's algorithm will be used if NULL)
 	 * @param paramSpec parameters to the encrypting algorithm (will be generated if NULL)
-	 * @throws NoSuchPaddingException when encrypting algorithm cannot be generated
-	 * @throws NoSuchAlgorithmException when encrypting algorithm cannot be generated
-	 * @throws InvalidKeyException when encrypting algorithm cannot be generated
-	 * @throws InvalidAlgorithmParameterException when encrypting algorithm cannot be generated
+	 * @throws EncryptionException when encrypting algorithm cannot be generated
 	 */
 	private void init(Key key, String algorithm, AlgorithmParameterSpec paramSpec) throws EncryptionException {
 		try {
@@ -229,6 +220,7 @@ public class Encrypter {
      * of that string.
      * @param str string to be encrypted
      * @return <code>String</code> encrypted version of the provided String
+     * @throws EncryptionException when encryption fails
      */
     public String encrypt(String str) throws EncryptionException {
         try {
@@ -250,6 +242,7 @@ public class Encrypter {
      * Encrypt a byte array
      * @param bytes bytes to be encrypted
      * @return <code>byte</code> encrypted version of the provided array
+     * @throws EncryptionException when encryption fails
      */
     public byte[] encrypt(byte bytes[]) throws EncryptionException {
         try {

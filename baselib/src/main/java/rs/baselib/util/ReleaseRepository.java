@@ -355,6 +355,7 @@ public class ReleaseRepository {
 
 	/**
 	 * Returns all artifact versions.
+	 * @param groupId the groupId to check
 	 * @return collection with release information
 	 */
 	public Collection<ReleaseInformation> getArtifactInfos(String groupId) {
@@ -369,6 +370,8 @@ public class ReleaseRepository {
 
 	/**
 	 * Returns all artifact versions.
+	 * @param groupId the groupId to check
+	 * @param artifactId the artifactId to check
 	 * @return collection with release information
 	 */
 	public Collection<ReleaseInformation> getVersionInfos(String groupId, String artifactId) {

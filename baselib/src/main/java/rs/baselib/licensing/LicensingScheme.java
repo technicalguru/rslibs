@@ -79,8 +79,8 @@ public enum LicensingScheme implements ILicensingScheme {
 	/**
 	 * Creates instance of the given class.
 	 * @param clazz the class to be instantiated
+	 * @param <T> type of class
 	 * @return the instance
-	 * @throws LicenseException when instantiation fails
 	 */
 	protected <T> T create(Class<T> clazz) {
 		try {

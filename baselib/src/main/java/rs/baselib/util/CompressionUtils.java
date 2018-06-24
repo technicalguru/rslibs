@@ -30,7 +30,12 @@ import java.util.zip.Inflater;
  */
 public class CompressionUtils {
 
-	/** Compresses a byte array */
+	/** 
+	 * Compresses a byte array .
+	 * @param data data to be compressed
+	 * @return compressed version
+	 * @throws IOException when compression fails
+	 */
 	public static byte[] compress(byte[] data) throws IOException {  
 		Deflater deflater = new Deflater();  
 		deflater.setLevel(Deflater.BEST_COMPRESSION);
@@ -51,7 +56,12 @@ public class CompressionUtils {
 		return output;  
 	}
 
-	/** Uncompresses a byte array */
+	/** Uncompresses a byte array 
+	 * @param data data to be uncompressed
+	 * @return uncompressed version
+	 * @throws IOException when uncompression fails
+	 * @throws DataFormatException if compression format is invalid
+	 */
 	public static byte[] decompress(byte[] data) throws IOException, DataFormatException {  
 		Inflater inflater = new Inflater();   
 		inflater.setInput(data);  

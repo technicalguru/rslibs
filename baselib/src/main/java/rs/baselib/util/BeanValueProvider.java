@@ -37,6 +37,7 @@ public class BeanValueProvider implements IValueProvider {
 
 	/**
 	 * Constructor.
+	 * @param beanProperty the name of the bean property to return
 	 */
 	public BeanValueProvider(String beanProperty) {
 		setBeanProperty(beanProperty);

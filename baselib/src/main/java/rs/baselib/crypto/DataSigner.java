@@ -40,6 +40,7 @@ public class DataSigner {
 	
 	/**
 	 * Constructor.
+	 * @throws DecryptionException - when a problem occurs
 	 */
 	public DataSigner() throws DecryptionException {
 		this(null, null);
@@ -48,6 +49,7 @@ public class DataSigner {
 	/**
 	 * Constructor from key pair.
 	 * @param keyPair the key pair to be used
+	 * @throws DecryptionException - when a problem occurs
 	 */
 	public DataSigner(KeyPair keyPair) throws DecryptionException {
 		this(keyPair.getPrivate(), keyPair.getPublic());
@@ -57,6 +59,7 @@ public class DataSigner {
 	 * Constructor from key pair.
 	 * @param privateKey private key
 	 * @param publicKey public key
+	 * @throws DecryptionException - when a problem occurs
 	 */
 	public DataSigner(PrivateKey privateKey, PublicKey publicKey) throws DecryptionException {
 		setPublicKey(publicKey);
@@ -66,6 +69,7 @@ public class DataSigner {
 	/**
 	 * Constructor from private key.
 	 * @param privateKey the private key to be used
+	 * @throws DecryptionException - when a problem occurs
 	 */
 	public DataSigner(PrivateKey privateKey) throws DecryptionException {
         this(privateKey, null);
@@ -74,6 +78,7 @@ public class DataSigner {
 	/**
 	 * Constructor from public key.
 	 * @param publicKey the public key to be used
+	 * @throws DecryptionException - when a problem occurs
 	 */
 	public DataSigner(PublicKey publicKey) throws DecryptionException {
         this(null, publicKey);
@@ -98,6 +103,7 @@ public class DataSigner {
 	/**
 	 * Sets the privateKey.
 	 * @param privateKey the privateKey to set
+	 * @throws SigningException - when a problem occurs
 	 */
 	public void setPrivateKey(String privateKey) throws SigningException {
 		try {
@@ -126,6 +132,7 @@ public class DataSigner {
 	/**
 	 * Sets the publicKey.
 	 * @param publicKey the publicKey to set
+	 * @throws SigningException - when a problem occurs
 	 */
 	public void setPublicKey(String publicKey) throws SigningException {
 		try {
@@ -139,6 +146,7 @@ public class DataSigner {
      * Creates a signature for the given stream.
      * @param reader stream to be signed
      * @return signature of the provided stream
+	 * @throws SigningException - when a problem occurs
      */
 	public String sign(Reader reader) throws SigningException {
 		return Base64.encodeBase64String(getByteSignature(reader)).trim();
@@ -148,6 +156,7 @@ public class DataSigner {
      * Creates a signature for the given stream.
      * @param reader stream to be signed
      * @return signature of the provided stream
+	 * @throws SigningException - when a problem occurs
      */
 	public byte[] getByteSignature(Reader reader) throws SigningException {
 		try {
@@ -170,6 +179,7 @@ public class DataSigner {
      * Creates a signature for the given stream.
      * @param in stream to be signed
      * @return signature of the provided stream
+	 * @throws SigningException - when a problem occurs
      */
 	public String sign(InputStream in) throws SigningException {
 		return Base64.encodeBase64String(getByteSignature(in)).trim();
@@ -179,6 +189,7 @@ public class DataSigner {
      * Creates a signature for the given stream.
      * @param in stream to be signed
      * @return signature of the provided stream
+	 * @throws SigningException - when a problem occurs
      */
 	public byte[] getByteSignature(InputStream in) throws SigningException {
 		try {
@@ -202,6 +213,7 @@ public class DataSigner {
 	 * @param signature signature
 	 * @param in input stream
 	 * @throws SigningException when the stream cannot be signed
+	 * @throws SigningException - when a problem occurs
 	 */
 	public void update(Signature signature, InputStream in) throws SigningException {
 		try {

@@ -39,6 +39,7 @@ public class ReflectionUtils {
 	/**
 	 * Replacement for "instanceof" operator when it cannot be guaranteed that
 	 * the class is available in classpath at runtime.
+	 * @param o the object to be checked
 	 * @param className the complete class name
 	 * @return when the object is of that class
 	 */
@@ -100,6 +101,7 @@ public class ReflectionUtils {
 	 *
 	 * @param baseClass the base class
 	 * @param childClass the child class
+	 * @param <T> type of base class
 	 * @return a list of the raw classes for the actual type arguments.
 	 */
 	public static <T> List<Class<?>> getTypeArguments(Class<T> baseClass, Class<? extends T> childClass) {

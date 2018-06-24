@@ -34,6 +34,8 @@ public class JarDescriptor {
 	
 	/**
 	 * Constructor.
+	 * @param file the jar file
+	 * @throws IOException when Jar cannot be opened
 	 */
 	public JarDescriptor(File file) throws IOException {
 		setFile(file);
@@ -75,6 +77,7 @@ public class JarDescriptor {
 	/**
 	 * Returns the manifest.
 	 * @return the manifest.
+	 * @throws IOException when Manifest file cannot be opened
 	 */
 	public Manifest getManifest() throws IOException {
 		return jarFile.getManifest();
@@ -82,7 +85,7 @@ public class JarDescriptor {
 	
 	/**
 	 * Closes the file.
-	 * @throws IOException
+	 * @throws IOException when file cannot be closed
 	 */
 	public void close() throws IOException {
 		jarFile.close();
@@ -91,6 +94,7 @@ public class JarDescriptor {
 	/**
 	 * Returns the URL prefix for the JAR.
 	 * @return URL prefix
+	 * @throws IOException when file cannot be read
 	 */
 	public String getUrlPrefix() throws IOException {
 		return "jar:file:"+file.getCanonicalPath()+"!/";

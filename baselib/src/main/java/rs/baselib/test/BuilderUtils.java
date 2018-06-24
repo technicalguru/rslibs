@@ -31,6 +31,7 @@ public class BuilderUtils {
 	/**
 	 * Return any object.
 	 * @param builder the builder to be used
+	 * @param <T> type of object to be built
 	 * @return the object built
 	 */
 	public static <T> T some(Builder<T> builder) {
@@ -41,6 +42,7 @@ public class BuilderUtils {
 	 * Returns a list of objects.
 	 * @param count the number of objects to create
 	 * @param builder the builder to be used
+	 * @param <T> type of objects to be built
 	 * @return the list of objects built
 	 */
 	public static <T> List<T> listOf(int count, Builder<T> builder) {

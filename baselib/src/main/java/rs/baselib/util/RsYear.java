@@ -48,6 +48,7 @@ public class RsYear extends RsDate {
 
 	/**
 	 * Constructor.
+	 * @param timezone - init with timezone
 	 */
 	public RsYear(TimeZone timezone) {
 		setTimeZone(timezone != null ? timezone : TimeZone.getDefault());
@@ -56,6 +57,7 @@ public class RsYear extends RsDate {
 
 	/**
 	 * Constructor.
+	 * @param date - init with date
 	 */
 	public RsYear(Date date) {
 		super(date);
@@ -64,6 +66,7 @@ public class RsYear extends RsDate {
 
 	/**
 	 * Constructor.
+	 * @param timeInMillis - init with timestamp
 	 */
 	public RsYear(long timeInMillis) {
 		super(timeInMillis);
@@ -72,7 +75,7 @@ public class RsYear extends RsDate {
 
 	/**
 	 * Constructor.
-	 * @param calendar
+	 * @param calendar - init with calendar time
 	 */
 	public RsYear(Calendar calendar) {
 		super(calendar);
@@ -81,6 +84,7 @@ public class RsYear extends RsDate {
 
 	/**
 	 * Constructor.
+	 * @param year - year value
 	 */
 	public RsYear(int year) {
 		this(TimeZone.getDefault(), year);
@@ -88,6 +92,8 @@ public class RsYear extends RsDate {
 	
 	/**
 	 * Constructor.
+	 * @param timezone - init with timezone
+	 * @param year - year value
 	 * @since 1.2.8
 	 */
 	public RsYear(TimeZone timezone, int year) {

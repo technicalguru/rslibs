@@ -36,7 +36,10 @@ public interface IIdObject<T extends Serializable> {
 	 */
 	public static final String ID = "id";
 	
-	/** Returns the ID. */
+	/** 
+	 * Returns the ID.
+	 * @return the ID of the object 
+	 */
 	@Transient
 	public T getId();
 	

@@ -47,6 +47,8 @@ public abstract class AbstractLicense implements ILicense {
 
 	/**
 	 * Sets the property of the license.
+	 * @param key key of property
+	 * @param value value of property
 	 */
 	public void setProperty(String key, Object value) {
 		properties.put(key, value);
@@ -54,6 +56,8 @@ public abstract class AbstractLicense implements ILicense {
 
 	/**
 	 * Sets the property of the license.
+	 * @param key key of property
+	 * @return value of property
 	 */
 	public Object getProperty(String key) {
 		return properties.get(key);
@@ -61,13 +65,17 @@ public abstract class AbstractLicense implements ILicense {
 
 	/**
 	 * Returns whether the property is set.
+	 * @param key key of property
+	 * @return {@code true} when property exists
 	 */
 	public boolean hasProperty(String key) {
 		return properties.containsKey(key);
 	}
 	
 	/**
-	 * Sets the property of the license.
+	 * Removes the property of the license.
+	 * @param key key of property
+	 * @return value that was rmeoved
 	 */
 	public Object removeProperty(String key) {
 		return properties.remove(key);
@@ -75,6 +83,7 @@ public abstract class AbstractLicense implements ILicense {
 
 	/**
 	 * Returns all property names.
+	 * @return property names as iterable interface
 	 */
 	public Iterable<String> getPropertyNames() {
 		return Collections.unmodifiableSet(properties.keySet());

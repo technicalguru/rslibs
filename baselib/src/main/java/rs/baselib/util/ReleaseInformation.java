@@ -357,6 +357,7 @@ public class ReleaseInformation {
 	 * Sets the information with given key.
 	 * @param key key string
 	 * @param value value string (will be converted)
+	 * @throws ParseException when the information cannot be parsed
 	 */
 	public void set(String key, String value) throws ParseException {
 		if ((value != null) && value.startsWith("${")) value = null;

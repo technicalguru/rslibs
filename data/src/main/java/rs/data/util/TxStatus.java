@@ -86,6 +86,7 @@ public enum TxStatus {
 	 * Returns the status of the current transaction.
 	 * @param factory the factory holding the transaction
 	 * @return the status of the transaction as enum object
+	 * @throws SystemException - Thrown if the transaction manager encounters an unexpected error condition.
 	 */
 	public static TxStatus getStatus(IDaoFactory factory) throws SystemException {
 		if (factory != null) {
@@ -98,6 +99,7 @@ public enum TxStatus {
 	 * Returns the status of the current transaction.
 	 * @param manager TX manager holding the transaction
 	 * @return the status of the transaction as enum object
+	 * @throws SystemException - Thrown if the transaction manager encounters an unexpected error condition.
 	 */
 	public static TxStatus getStatus(TransactionManager manager) throws SystemException {
 		if (manager != null) {
@@ -110,6 +112,7 @@ public enum TxStatus {
 	 * Returns the status of the given transaction.
 	 * @param tx the transaction
 	 * @return the status of the transaction as enum object
+	 * @throws SystemException - Thrown if the transaction manager encounters an unexpected error condition.
 	 */
 	public static TxStatus getStatus(Transaction tx) throws SystemException {
 		if (tx != null) {

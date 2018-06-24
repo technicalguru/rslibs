@@ -42,6 +42,7 @@ public class SynchronizedQueue<E> {
 	 * Delivers the next object from the queue.
 	 * <p>The method will block when no object is available.</p>
 	 * <p>Used by the reader/consumer thread.</p>
+	 * @return next object in queue
 	 */
 	public synchronized E poll() {
 		E rc;
@@ -62,6 +63,7 @@ public class SynchronizedQueue<E> {
 	 * Adds a new object to the list of available objects.
 	 * <p>The method will block when the queue is full.</p>
 	 * <p>Used by the writer/producer thread.</p>
+	 * @param o - the object to be queued
 	 */
 	public synchronized void push(E o) {
 		while (available.size() >= capacity) {

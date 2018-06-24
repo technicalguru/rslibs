@@ -35,6 +35,7 @@ public class KeyGen {
 	/**
 	 * Main method for encryption on command line.
 	 * @param seed the seed for the random process
+	 * @return the key pair
 	 */
 	public static KeyPair generateKeyPair(String seed) {
 		try {

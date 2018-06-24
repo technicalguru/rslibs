@@ -794,6 +794,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 		 * Commits a transaction.
 		 * If the last call to {@link #begin()} did not start a new TX then
 		 * this method does nothing.
+		 * @return {@code true} when the commit was actually performed on DB and not nested
 		 */
 		public boolean commit() {
 			boolean rc = false;
@@ -849,6 +850,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 		 * Rolls back a transaction.
 		 * If the last call to {@link #begin()} did not start a new TX then
 		 * this method will just mark the transaction for rollback only.
+		 * @return {@code true} when the rollabck was actually performed on DB and not nested
 		 */
 		public boolean rollback() {
 			boolean rc = false;

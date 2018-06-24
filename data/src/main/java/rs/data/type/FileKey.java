@@ -35,6 +35,8 @@ public class FileKey<K extends Serializable> extends CombinedKey {
 
 	/**
 	 * Constructor.
+	 * @param file the file to be used
+	 * @param key the key of the object
 	 */
 	public FileKey(File file, K key) {
 		super(file, key);

@@ -45,6 +45,7 @@ public class JotmSupport {
 	
 	/**
 	 * Starts transaction support.
+	 * @throws NamingException - thrown if the transaction factory can't be bound or looked up in a registry
 	 */
 	public static synchronized void start() throws NamingException {
 		setDebugTransactions(LangUtils.getBoolean(System.getProperty("transaction.debug")));

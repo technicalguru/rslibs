@@ -74,6 +74,7 @@ public class CommonUtils {
 
 	/**
 	 * The formatter for dates (see {@link DateFormat#SHORT}).
+	 * @return the formatter
 	 */
 	public static DateFormat DATE_FORMATTER() {
 		return DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
@@ -81,6 +82,7 @@ public class CommonUtils {
 
 	/**
 	 * The formatter for dates incl. times (see {@link DateFormat#SHORT}).
+	 * @return the formatter
 	 */
 	public static DateFormat DATE_TIME_FORMATTER() {
 		return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault());
@@ -89,12 +91,16 @@ public class CommonUtils {
 
 	/**
 	 * Formatter for real numbers.
+	 * @return the formatter
 	 */
 	public static NumberFormat SIMPLE_NUMBER_FORMATTER() {
 		return NumberFormat.getNumberInstance(Locale.getDefault());
 	}
 
-	/** Formatter for integers. */
+	/** 
+	 * Formatter for integers. 
+	 * @return the formatter
+	 */
 	public static NumberFormat SIMPLE_INT_FORMATTER() {
 		return NumberFormat.getIntegerInstance(Locale.getDefault());
 	}
@@ -336,7 +342,7 @@ public class CommonUtils {
 	 * Compares software versions.
 	 * @param v1 - version 1 
 	 * @param v2 - version 2 
-	 * @return -1 if v1 < v2, 1 if v1 > v2, 0 if v1 = v2
+	 * @return -1 if v1 &lt; v2, 1 if v1 &gt; v2, 0 if v1 = v2
 	 */
 	public static int compareVersion(String v1, String v2) {
 		String v1Parts[] = ArrayUtils.EMPTY_STRING_ARRAY;
@@ -350,7 +356,7 @@ public class CommonUtils {
 	 * Compares versions.
 	 * @param v1 - version 1 divided into separate parts
 	 * @param v2 - version 2 divided into separate parts
-	 * @return -1 if v1 < v2, 1 if v1 > v2, 0 if v1 = v2
+	 * @return -1 if v1 &lt; v2, 1 if v1 &gt; v2, 0 if v1 = v2
 	 */
 	public static int compareVersion(String v1[], String v2[]) {
 		int maxCount = Math.max(v1.length, v2.length);
@@ -599,6 +605,7 @@ public class CommonUtils {
 	/**
 	 * Returns an iterable for the given iterator.
 	 * @param iterator the iterator to be wrapped
+	 * @param <T> type of objects in the iterator
 	 * @return the iterable.
 	 */
 	public static <T> Iterable<T> iterable(Iterator<T> iterator) {
@@ -656,6 +663,7 @@ public class CommonUtils {
 	/**
 	 * Dumps the stacktrace into the print stream.
 	 * @param out the stream to be used
+	 * @param ignoreLines the number of lines to be ignored at top of trace
 	 */
 	public static void printStackTrace(PrintStream out, int ignoreLines) {
 		for (String s : getStackTrace(ignoreLines+1)) {
@@ -707,6 +715,7 @@ public class CommonUtils {
 	 * Loads a property file.
 	 * @param file the file to load
 	 * @return the properties
+	 * @throws IOException when file cannot be loaded
 	 */
 	public static Properties loadProperties(File file) throws IOException {
 		Properties props = new Properties();
@@ -718,6 +727,7 @@ public class CommonUtils {
 	 * Loads a property file.
 	 * @param file the file to load
 	 * @return the properties
+	 * @throws IOException when file cannot be loaded
 	 */
 	public static Properties loadProperties(String file) throws IOException {
 		return loadProperties(new File(file));
@@ -727,6 +737,7 @@ public class CommonUtils {
 	 * Loads a property file.
 	 * @param props the properties object
 	 * @param file the file to load
+	 * @throws IOException when file cannot be loaded
 	 */
 	public static void loadProperties(Properties props, File file) throws IOException {
 		InputStream in = new FileInputStream(file);
@@ -741,6 +752,7 @@ public class CommonUtils {
 	 * Loads a property file.
 	 * @param props the properties object
 	 * @param file the file to load
+	 * @throws IOException when file cannot be loaded
 	 */
 	public static void loadProperties(Properties props, String file) throws IOException {
 		loadProperties(props, new File(file));
@@ -750,6 +762,7 @@ public class CommonUtils {
 	 * Stores a property file.
 	 * @param props the properties object
 	 * @param file the file to load
+	 * @throws IOException when file cannot be stored
 	 */
 	public static void storeProperties(Properties props, File file) throws IOException {
 		OutputStream out = new FileOutputStream(file);
@@ -764,6 +777,7 @@ public class CommonUtils {
 	 * Stores a property file.
 	 * @param props the properties object
 	 * @param file the file to load
+	 * @throws IOException when file cannot be stored
 	 */
 	public static void storeProperties(Properties props, String file) throws IOException {
 		storeProperties(props, new File(file));
@@ -1005,6 +1019,11 @@ public class CommonUtils {
 		return OS;
 	}
 
+	/**
+	 * The display of the object
+	 * @param o the object to be displayed
+	 * @return the display version
+	 */
 	public static String getDisplay(Object o) {
 		return getDisplay(o, Locale.getDefault());
 	}
@@ -1012,7 +1031,7 @@ public class CommonUtils {
 	/**
 	 * Returns the display string of an object.
 	 * The method detects {@link IDisplayable}, {@link IDisplayProvider} and {@link NamedObject}.
-	 * @param o
+	 * @param o the object to be displayed
 	 * @param locale Locale to be used for {@link IDisplayable}
 	 * @return a displayable string
 	 */
@@ -1143,7 +1162,7 @@ public class CommonUtils {
 	 * is the value of the getter method of the value object.</p>
 	 * @param template the template
 	 * @param prefix the marker prefix
-	 * @param values the object that contains values
+	 * @param valueObject the object that contains values
 	 * @return the template with markers replaced
 	 */
 	public static String setMarkers(String template, String prefix, Object valueObject) {

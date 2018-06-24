@@ -39,7 +39,7 @@ public abstract class AbstractHibernateStringBO<T extends GeneralDTO<String>> ex
 
 	/**
 	 * Constructor.
-	 * @param transferObject
+	 * @param transferObject - the transfer object to be used
 	 */
 	public AbstractHibernateStringBO(T transferObject) {
 		super(transferObject);

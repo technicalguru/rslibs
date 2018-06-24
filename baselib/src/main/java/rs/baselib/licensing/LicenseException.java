@@ -36,8 +36,8 @@ public class LicenseException extends RuntimeException {
 
 	/**
 	 * Constructor.
-	 * @param message
-	 * @param cause
+	 * @param message - error message
+	 * @param cause - cause of error
 	 */
 	public LicenseException(String message, Throwable cause) {
 		super(message, cause);
@@ -45,7 +45,7 @@ public class LicenseException extends RuntimeException {
 
 	/**
 	 * Constructor.
-	 * @param message
+	 * @param message - error message
 	 */
 	public LicenseException(String message) {
 		super(message);
@@ -53,7 +53,7 @@ public class LicenseException extends RuntimeException {
 
 	/**
 	 * Constructor.
-	 * @param cause
+	 * @param cause - cause of error
 	 */
 	public LicenseException(Throwable cause) {
 		super(cause);

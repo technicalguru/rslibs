@@ -36,6 +36,7 @@ public class LicenseManager {
 
 	/**
 	 * Constructor.
+	 * @param scheme - the licensing scheme
 	 */
 	public LicenseManager(ILicensingScheme scheme) {
 		this(scheme != null ? scheme.getLicenseVerifier() : LicensingScheme.RSA_LICENSE.getLicenseVerifier());
@@ -43,6 +44,7 @@ public class LicenseManager {
 
 	/**
 	 * Constructor.
+	 * @param licenseVerifier - the licensing verifier
 	 */
 	public LicenseManager(ILicenseVerifier licenseVerifier) {
 		this.licenseVerifier = licenseVerifier;
@@ -60,7 +62,7 @@ public class LicenseManager {
 	 * Verifies the given license string.
 	 * @param licenseKey the license string
 	 * @param context the context containing verification parameters
-	 * @throws LicenseException when the license is invalid
+	 * @return the license
 	 */
 	public ILicense verify(String licenseKey, ILicenseContext context) {
 		try {

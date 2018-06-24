@@ -67,6 +67,7 @@ public abstract class AbstractPreferences implements IPreferences, IPropertyChan
 	/**
 	 * Constructor.
 	 * @param parent the parent of this node
+	 * @param name the name of this preferences
 	 */
 	public AbstractPreferences(AbstractPreferences parent, String name) {
 		this.parent = parent;

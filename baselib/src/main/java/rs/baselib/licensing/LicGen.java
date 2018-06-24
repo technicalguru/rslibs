@@ -50,6 +50,9 @@ public class LicGen implements Runnable {
 	
 	/**
 	 * Constructor.
+	 * @param product - the name of the product
+	 * @param expirationTime - the time of license expiration
+	 * @param owner - the owner of the license
 	 */
 	public LicGen(String product, long expirationTime, String owner) {
 		this.product = product;
@@ -95,7 +98,7 @@ public class LicGen implements Runnable {
 
 	/**
 	 * CLI.
-	 * @param args
+	 * @param args - command line arguments
 	 */
 	public static void main(String[] args) {
 		Options options = getOptions();

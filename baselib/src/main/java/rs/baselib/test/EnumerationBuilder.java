@@ -13,6 +13,7 @@ public class EnumerationBuilder<T extends Enum<T>> implements Builder<T> {
 	
 	/**
 	 * Constructor.
+	 * @param clazz the enumeration class
 	 */
 	public EnumerationBuilder(Class<T> clazz) {
 		this.values = clazz.getEnumConstants();

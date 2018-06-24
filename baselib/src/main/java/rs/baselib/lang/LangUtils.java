@@ -129,6 +129,7 @@ public class LangUtils {
 	 *
 	 * @param baseClass the base class
 	 * @param childClass the child class
+	 * @param <T> type of base class
 	 * @return a list of the raw classes for the actual type arguments.
 	 * @deprecated see {@link ReflectionUtils#getTypeArguments(Class, Class)}
 	 */
@@ -554,6 +555,7 @@ public class LangUtils {
 	 * Serializes the given value into BASE64.
 	 * @param value value to be serialized
 	 * @return the serialized string
+	 * @throws IOException when serialization fails
 	 */
 	public static String serializeBase64(Object value) throws IOException {
 		return new String(Base64.encodeBase64(serialize(value)), java.nio.charset.StandardCharsets.UTF_8);
@@ -563,6 +565,7 @@ public class LangUtils {
 	 * Serializes the given value.
 	 * @param value value to be serialized
 	 * @return the serialized string
+	 * @throws IOException when serialization fails
 	 */
 	public static byte[] serialize(Object value) throws IOException {
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -576,6 +579,8 @@ public class LangUtils {
 	 * Unserializes the given value.
 	 * @param value the serialized string (BASE64 encoded)
 	 * @return the object (or null)
+	 * @throws ClassNotFoundException when class to be unserialized cannot be found
+	 * @throws IOException when unserialization fails
 	 */
 	public static Object unserialize(String value) throws ClassNotFoundException, IOException {
 		return unserialize(Base64.decodeBase64(value));
@@ -585,6 +590,8 @@ public class LangUtils {
 	 * Unserializes the given value.
 	 * @param bytes the bytes of serialized object
 	 * @return the object (or null)
+	 * @throws ClassNotFoundException when class to be unserialized cannot be found
+	 * @throws IOException when unserialization fails
 	 */
 	public static Object unserialize(byte bytes[]) throws ClassNotFoundException, IOException {
 		ByteArrayInputStream in = new ByteArrayInputStream(bytes);
@@ -661,6 +668,7 @@ public class LangUtils {
 	/**
 	 * Replacement for "instanceof" operator when it cannot be guaranteed that
 	 * the class is available in classpath at runtime.
+	 * @param o the object to be checked
 	 * @param className the complete class name
 	 * @return when the object is of that class
 	 * @deprecated see {@link ReflectionUtils#isInstanceOf(Object, String)}

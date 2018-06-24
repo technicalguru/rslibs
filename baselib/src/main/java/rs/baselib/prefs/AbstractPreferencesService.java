@@ -86,7 +86,7 @@ public abstract class AbstractPreferencesService implements IPreferencesService 
 	 * Returns the application preferences.
 	 * @param applicationName name of application
 	 * @return the root node for this application
-	 * @throws BackingStoreException
+	 * @throws BackingStoreException when the storage fails
 	 */
 	protected IPreferences getApplicationPreferences(String applicationName) throws BackingStoreException {
 		checkNodeName(applicationName);
@@ -174,6 +174,7 @@ public abstract class AbstractPreferencesService implements IPreferencesService 
 	 * Loads the user preferences into the given node.
 	 * @param node node that shall be populated
 	 * @param applicationName name of application to be loaded
+	 * @throws BackingStoreException when the storage fails
 	 */
 	protected abstract void loadUserPreferences(IPreferences node, String applicationName) throws BackingStoreException;
 
@@ -181,6 +182,7 @@ public abstract class AbstractPreferencesService implements IPreferencesService 
 	 * Loads the system preferences into the given node.
 	 * @param node node that shall be populated
 	 * @param applicationName name of application to be loaded
+	 * @throws BackingStoreException when the storage fails
 	 */
 	protected abstract void loadSystemPreferences(IPreferences node, String applicationName) throws BackingStoreException;
 
@@ -188,6 +190,7 @@ public abstract class AbstractPreferencesService implements IPreferencesService 
 	 * Flushes the user preferences from the given node.
 	 * @param node node that shall be flushed
 	 * @param applicationName name of application to be flushed
+	 * @throws BackingStoreException when the storage fails
 	 */
 	protected abstract void flushUserPreferences(IPreferences node, String applicationName) throws BackingStoreException;
 
@@ -195,6 +198,7 @@ public abstract class AbstractPreferencesService implements IPreferencesService 
 	 * Flushes the system preferences from the given node.
 	 * @param node node that shall be flushed
 	 * @param applicationName name of application to be flushed
+	 * @throws BackingStoreException when the storage fails
 	 */
 	protected abstract void flushSystemPreferences(IPreferences node, String applicationName) throws BackingStoreException;
 

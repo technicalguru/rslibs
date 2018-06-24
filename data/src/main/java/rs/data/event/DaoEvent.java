@@ -57,6 +57,8 @@ public class DaoEvent extends EventObject {
 	
 	/**
 	 * Constructor for DELETE_ALL events.
+	 * @param source - the source of the event
+	 * @param type - the type of event that is happening
 	 */
 	public DaoEvent(IGeneralDAO<?, ?> source, Type type) {
 		this(source, type, null);
@@ -64,6 +66,9 @@ public class DaoEvent extends EventObject {
 
 	/**
 	 * Constructor.
+	 * @param source - the source of the event
+	 * @param type - the type of event that is happening
+	 * @param object - the obbject that was affected
 	 */
 	public DaoEvent(IGeneralDAO<?, ?> source, Type type, IGeneralBO<?> object) {
 		super(source);

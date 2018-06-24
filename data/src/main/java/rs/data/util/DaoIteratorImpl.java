@@ -30,6 +30,7 @@ public class DaoIteratorImpl<E> implements IDaoIterator<E> {
 	
 	/**
 	 * Constructor.
+	 * @param iterator the iterator to be used in the background
 	 */
 	public DaoIteratorImpl(Iterator<E> iterator) {
 		this.iterator = iterator;

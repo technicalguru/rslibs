@@ -115,6 +115,7 @@ public class GeneralDTO<K extends Serializable> implements Serializable {
 	/**
 	 * Returns the property value.
 	 * @param name name of property
+	 * @param <T> the type of the value
 	 * @return the value of the property
 	 */
 	@SuppressWarnings("unchecked")

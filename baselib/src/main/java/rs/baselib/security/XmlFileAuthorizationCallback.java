@@ -60,7 +60,7 @@ public class XmlFileAuthorizationCallback extends DefaultAuthorizationCallback {
 	 * Configuration takes place from a XML file whose
 	 * path is contained within element &lt;File&gt;. The
 	 * XML file itself must contain two elements &lt;login&gt;
-	 * and &lt:password&gt;.
+	 * and &lt;password&gt;.
 	 * @param config - configuration object
 	 * @throws ConfigurationException - when configuration fails
 	 */
@@ -73,7 +73,7 @@ public class XmlFileAuthorizationCallback extends DefaultAuthorizationCallback {
 	/**
 	 * Configures the callback from the XML file.
 	 * @param file filename
-	 * @throws ConfigurationException
+	 * @throws ConfigurationException when object cannot be configured from file
 	 */
 	public void configure(String file) throws ConfigurationException {
 		configure(new File(file));
@@ -82,7 +82,7 @@ public class XmlFileAuthorizationCallback extends DefaultAuthorizationCallback {
 	/**
 	 * Configures the callback from the XML file.
 	 * @param file file
-	 * @throws ConfigurationException
+	 * @throws ConfigurationException when object cannot be configured from file
 	 */
 	public void configure(File file) throws ConfigurationException {
 		XMLConfiguration xmlConfig = new XMLConfiguration(file);

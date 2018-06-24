@@ -142,6 +142,7 @@ public class FileFinder {
 	 * Tries to find the file specified from filesystem or classpath.
 	 * @param name - name of file, can be fully qualified
 	 * @return stream to the file
+	 * @throws IOException when file cannot be opened
 	 */
 	public static InputStream open(String name) throws IOException {
 		return open(null, name);
@@ -153,6 +154,7 @@ public class FileFinder {
 	 * @param clazz class to get the class loader from
 	 * @return stream to the file
 	 * @see #find(Class, String)
+	 * @throws IOException when file cannot be opened
 	 */
 	public static InputStream open(Class<?> clazz, String name) throws IOException {
 		// try to find as simple file in file system
@@ -167,6 +169,7 @@ public class FileFinder {
 	 * @param name - name of file
 	 * @return contents of file
 	 * @see #find(Class, String)
+	 * @throws IOException when file cannot be opened
 	 */
 	public static String load(String name) throws IOException {
 		return load(null, name);
@@ -178,6 +181,7 @@ public class FileFinder {
 	 * @param clazz class to get the class loader from
 	 * @see #find(Class, String)
 	 * @return contents of file
+	 * @throws IOException when file cannot be opened
 	 */
 	public static String load(Class<?> clazz, String name) throws IOException {
 		InputStream in = open(clazz, name);

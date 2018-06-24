@@ -49,6 +49,9 @@ public class DefaultFilenameStrategy<K extends Serializable> implements IFilenam
 
 	/**
 	 * Constructor.
+	 * @param parentDir - the directory to store at
+	 * @param prefix - the file prefix to be used
+	 * @param suffix - the suffix to be used
 	 */
 	public DefaultFilenameStrategy(String parentDir, String prefix, String suffix) {
 		this(new File(parentDir), prefix, suffix);
@@ -56,6 +59,9 @@ public class DefaultFilenameStrategy<K extends Serializable> implements IFilenam
 
 	/**
 	 * Constructor.
+	 * @param parentDir - the directory to store at
+	 * @param prefix - the file prefix to be used
+	 * @param suffix - the suffix to be used
 	 */
 	public DefaultFilenameStrategy(File parentDir, String prefix, String suffix) {
 		setParentDir(parentDir);

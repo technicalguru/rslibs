@@ -133,7 +133,9 @@ public class SimpleLicense extends AbstractLicense {
 
 	/**
 	 * Serializes this license into bytes.
+	 * @param license the license to be serialized
 	 * @return the bytes representing this license.
+	 * @throws UnsupportedEncodingException when the license cannot be encoded
 	 */
 	public static byte[] serialize(SimpleLicense license) throws UnsupportedEncodingException {
 		byte p[] = ConverterUtils.toBytes(license.getProduct());

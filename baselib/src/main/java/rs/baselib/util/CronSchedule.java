@@ -363,7 +363,7 @@ public class CronSchedule implements Serializable {
 	/**
 	 * Constructor with cron-style string initialization.
 	 * The cron style is: $minute $hour $dayOfMonth $month $dayOfWeek
-	 * @param schedule
+	 * @param schedule the crontab schedule
 	 */
 	public CronSchedule(String schedule) {
 		set(schedule);

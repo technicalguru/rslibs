@@ -39,7 +39,7 @@ public abstract class AbstractHibernateLongBO<T extends GeneralDTO<Long>> extend
 
 	/**
 	 * Constructor.
-	 * @param transferObject
+	 * @param transferObject - the transfer object to be used
 	 */
 	public AbstractHibernateLongBO(T transferObject) {
 		super(transferObject);

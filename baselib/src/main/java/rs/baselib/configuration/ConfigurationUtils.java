@@ -66,6 +66,7 @@ public class ConfigurationUtils {
 	 * @param clazz the class to be instantiated
 	 * @param config the configuration to apply
 	 * @param configure whether the object shall be configured (if it is a {@link IConfigurable}).
+	 * @param <T> the type of the object to be instantiated
 	 * @return the object
 	 */
 	@SuppressWarnings("unchecked")

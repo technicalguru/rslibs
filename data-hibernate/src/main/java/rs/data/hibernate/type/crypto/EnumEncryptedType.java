@@ -71,8 +71,7 @@ public class EnumEncryptedType extends AbstractEncryptionType {
 	}
 
 	/**
-	 * Sets the default value from HBM config parameters.
-	 * @param parameters
+	 * {@inheritDoc}
 	 */
 	 @SuppressWarnings({ "unchecked", "rawtypes" })
 	 public void setParameterValues(Properties parameters) {

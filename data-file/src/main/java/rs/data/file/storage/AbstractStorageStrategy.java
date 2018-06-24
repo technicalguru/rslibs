@@ -58,6 +58,7 @@ public abstract class AbstractStorageStrategy<K extends Serializable, T extends 
 	
 	/**
 	 * Constructor.
+	 * @param daoFactory - the responsible DAO factory
 	 */
 	public AbstractStorageStrategy(IDaoFactory daoFactory) {
 		setDaoFactory(daoFactory);
@@ -112,6 +113,7 @@ public abstract class AbstractStorageStrategy<K extends Serializable, T extends 
 	 * @param value value to be serialized
 	 * @return the serialized string or null if it cannot be serialized safely. Values encoded in BASE64 are
 	 *    prefixed with <code>"BASE64"</code>.
+	 * @throws IOException - the I/O exception when operating on a filesystem
 	 */
 	protected String serialize(Object value) throws IOException {
 		if (value instanceof Number) {
@@ -145,6 +147,12 @@ public abstract class AbstractStorageStrategy<K extends Serializable, T extends 
 	 * @param className the expected class to be produced
 	 * @param value the serialized string. Values encoded in BASE64 must be prefixed with <code>"BASE64"</code>.
 	 * @return the object (or null)
+	 * @throws IOException - the I/O exception when operating on a filesystem
+	 * @throws ClassNotFoundException - when class could not be found
+	 * @throws InstantiationException - when object cannot be instantiated
+	 * @throws IllegalAccessException - when constructor is not accessible
+	 * @throws InvocationTargetException - when constructor threw an exception
+	 * @throws NoSuchMethodException - when constructor does not exist
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected Object unserialize(String className, String value) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {

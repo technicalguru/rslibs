@@ -47,6 +47,7 @@ public class RsMonth extends RsDate {
 
 	/**
 	 * Constructor.
+	 * @param timezone - init with this timezone
 	 * @since 1.2.8
 	 */
 	public RsMonth(TimeZone timezone) {
@@ -56,6 +57,7 @@ public class RsMonth extends RsDate {
 
 	/**
 	 * Constructor.
+	 * @param date - init with date
 	 */
 	public RsMonth(Date date) {
 		super(date);
@@ -64,6 +66,7 @@ public class RsMonth extends RsDate {
 
 	/**
 	 * Constructor.
+	 * @param timeInMillis - init with timestamp
 	 */
 	public RsMonth(long timeInMillis) {
 		super(timeInMillis);
@@ -72,7 +75,7 @@ public class RsMonth extends RsDate {
 
 	/**
 	 * Constructor.
-	 * @param calendar
+	 * @param calendar - init with calendar value
 	 */
 	public RsMonth(Calendar calendar) {
 		super(calendar);
@@ -81,6 +84,8 @@ public class RsMonth extends RsDate {
 
 	/**
 	 * Constructor.
+	 * @param month month value (0-11)
+	 * @param year year value
 	 */
 	public RsMonth(int month, int year) {
 		this(TimeZone.getDefault(), month, year);
@@ -88,6 +93,9 @@ public class RsMonth extends RsDate {
 
 	/**
 	 * Constructor.
+	 * @param timezone - init with this timezone
+	 * @param month month value (0-11)
+	 * @param year year value
 	 * @since 1.2.8
 	 */
 	public RsMonth(TimeZone timezone, int month, int year) {

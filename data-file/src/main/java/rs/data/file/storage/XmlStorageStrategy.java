@@ -52,6 +52,7 @@ public class XmlStorageStrategy<K extends Serializable, T extends IGeneralBO<K>>
 
 	/**
 	 * Constructor.
+	 * @param daoFactory - the DAO factory this strategy belongs to
 	 */
 	public XmlStorageStrategy(IDaoFactory daoFactory) {
 		super(daoFactory);
@@ -92,6 +93,12 @@ public class XmlStorageStrategy<K extends Serializable, T extends IGeneralBO<K>>
 	 * @see #loadMap(Class, HierarchicalConfiguration)
 	 * @see #loadBean(Class, HierarchicalConfiguration)
 	 * @see #loadSerialized(Class, HierarchicalConfiguration)
+	 * @throws IOException - the I/O exception when operating on a filesystem
+	 * @throws ClassNotFoundException - when class could not be found
+	 * @throws InstantiationException - when object cannot be instantiated
+	 * @throws IllegalAccessException - when constructor is not accessible
+	 * @throws InvocationTargetException - when constructor threw an exception
+	 * @throws NoSuchMethodException - when constructor does not exist
 	 */
 	protected Object loadValue(HierarchicalConfiguration cfg) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		String className = cfg.getString("[@class]");
@@ -124,6 +131,12 @@ public class XmlStorageStrategy<K extends Serializable, T extends IGeneralBO<K>>
 	 * @param clazz class to be loaded
 	 * @param cfg configuration of class
 	 * @return the loaded object
+	 * @throws IOException - the I/O exception when operating on a filesystem
+	 * @throws ClassNotFoundException - when class could not be found
+	 * @throws InstantiationException - when object cannot be instantiated
+	 * @throws IllegalAccessException - when constructor is not accessible
+	 * @throws InvocationTargetException - when constructor threw an exception
+	 * @throws NoSuchMethodException - when constructor does not exist
 	 */
 	@SuppressWarnings("unchecked")
 	protected IGeneralBO<?> loadBusinessObject(Class<?> clazz, HierarchicalConfiguration cfg) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
@@ -141,6 +154,12 @@ public class XmlStorageStrategy<K extends Serializable, T extends IGeneralBO<K>>
 	 * @param clazz class to be loaded
 	 * @param cfg configuration of class
 	 * @return the loaded collection
+	 * @throws IOException - the I/O exception when operating on a filesystem
+	 * @throws ClassNotFoundException - when class could not be found
+	 * @throws InstantiationException - when object cannot be instantiated
+	 * @throws IllegalAccessException - when constructor is not accessible
+	 * @throws InvocationTargetException - when constructor threw an exception
+	 * @throws NoSuchMethodException - when constructor does not exist
 	 */
 	@SuppressWarnings("unchecked")
 	protected Collection<?> loadCollection(Class<?> clazz, HierarchicalConfiguration cfg) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
@@ -156,6 +175,12 @@ public class XmlStorageStrategy<K extends Serializable, T extends IGeneralBO<K>>
 	 * @param clazz class to be loaded
 	 * @param cfg configuration of class
 	 * @return the loaded map
+	 * @throws IOException - the I/O exception when operating on a filesystem
+	 * @throws ClassNotFoundException - when class could not be found
+	 * @throws InstantiationException - when object cannot be instantiated
+	 * @throws IllegalAccessException - when constructor is not accessible
+	 * @throws InvocationTargetException - when constructor threw an exception
+	 * @throws NoSuchMethodException - when constructor does not exist
 	 */
 	protected Map<?,?> loadMap(Class<?> clazz, HierarchicalConfiguration cfg) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		Map<Object,Object> map = new HashMap<Object, Object>();
@@ -172,6 +197,12 @@ public class XmlStorageStrategy<K extends Serializable, T extends IGeneralBO<K>>
 	 * @param clazz class to be loaded
 	 * @param cfg configuration of class
 	 * @return the loaded bean
+	 * @throws IOException - the I/O exception when operating on a filesystem
+	 * @throws ClassNotFoundException - when class could not be found
+	 * @throws InstantiationException - when object cannot be instantiated
+	 * @throws IllegalAccessException - when constructor is not accessible
+	 * @throws InvocationTargetException - when constructor threw an exception
+	 * @throws NoSuchMethodException - when constructor does not exist
 	 */
 	protected IBean loadBean(Class<?> clazz, HierarchicalConfiguration cfg) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		IBean bean = (IBean)clazz.getConstructor().newInstance();
@@ -186,6 +217,12 @@ public class XmlStorageStrategy<K extends Serializable, T extends IGeneralBO<K>>
 	 * @param clazz class to be loaded
 	 * @param cfg configuration of class
 	 * @return the loaded object
+	 * @throws IOException - the I/O exception when operating on a filesystem
+	 * @throws ClassNotFoundException - when class could not be found
+	 * @throws InstantiationException - when object cannot be instantiated
+	 * @throws IllegalAccessException - when constructor is not accessible
+	 * @throws InvocationTargetException - when constructor threw an exception
+	 * @throws NoSuchMethodException - when constructor does not exist
 	 */
 	protected Object loadSerialized(Class<?> clazz, HierarchicalConfiguration cfg) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		String valueString = cfg.getString(""); // ?
@@ -226,6 +263,12 @@ public class XmlStorageStrategy<K extends Serializable, T extends IGeneralBO<K>>
 	 * @param indent the indentation to be used
 	 * @param value the value to be written
 	 * @param tagName the tag name to be used
+	 * @throws IOException - the I/O exception when operating on a filesystem
+	 * @throws ClassNotFoundException - when class could not be found
+	 * @throws InstantiationException - when object cannot be instantiated
+	 * @throws IllegalAccessException - when constructor is not accessible
+	 * @throws InvocationTargetException - when constructor threw an exception
+	 * @throws NoSuchMethodException - when constructor does not exist
 	 */
 	protected void writeValue(Writer out, int indent, Object value, String tagName) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		StringBuilder foo = new StringBuilder();
@@ -288,7 +331,7 @@ public class XmlStorageStrategy<K extends Serializable, T extends IGeneralBO<K>>
 	/**
 	 * Returns whether the string is XML compatible.
 	 * @param s string to be evaluated
-	 * @return <code>true</code when string can be used as content in XML
+	 * @return <code>true</code> when string can be used as content in XML
 	 */
 	protected boolean isXmlCompatible(String s) {
 		return (s.indexOf("&") < 0) && (s.indexOf(">") < 0) && (s.indexOf("<") < 0);

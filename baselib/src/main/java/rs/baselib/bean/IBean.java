@@ -50,6 +50,7 @@ public interface IBean extends IPropertyChangeProvider, IDirtyable {
 	/**
 	 * Gets the property with given name
 	 * @param name property name
+	 * @return the value of the property
 	 */
 	public Object get(String name);
 

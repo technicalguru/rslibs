@@ -52,8 +52,6 @@ public abstract class AbstractBO<K extends Serializable, T extends GeneralDTO<K>
 	
 	/**
 	 * Constructor.
-	 * @throws IllegalAccessException 
-	 * @throws InstantiationException 
 	 */
 	public AbstractBO() {
 		this(null);
@@ -61,8 +59,7 @@ public abstract class AbstractBO<K extends Serializable, T extends GeneralDTO<K>
 
 	/**
 	 * Constructor.
-	 * @throws IllegalAccessException 
-	 * @throws InstantiationException 
+	 * @param transferObject - the DTO to be used
 	 */
 	public AbstractBO(T transferObject) {
 		init();
@@ -186,6 +183,9 @@ public abstract class AbstractBO<K extends Serializable, T extends GeneralDTO<K>
 	/**
 	 * Fetches the BO from the DAO factory.
 	 * @param dto the DTO
+	 * @param <X> - key class of object
+	 * @param <Y> - DTO class of object
+	 * @param <Z> - BO class of object
 	 * @return the BO
 	 */
 	@SuppressWarnings("unchecked")
@@ -199,6 +199,8 @@ public abstract class AbstractBO<K extends Serializable, T extends GeneralDTO<K>
 	/**
 	 * Returns the DTO from that BO (or null).
 	 * @param o the BO
+	 * @param <X> - key class of object
+	 * @param <Y> - DTO class of object
 	 * @return the DTO underneath
 	 */
 	public <X extends Serializable, Y extends GeneralDTO<X>> Y getTransferObject(AbstractBO<X,Y> o) {
@@ -209,6 +211,7 @@ public abstract class AbstractBO<K extends Serializable, T extends GeneralDTO<K>
 	/**
 	 * Returns the property of given name.
 	 * @param name name of property
+	 * @param <X> the type of the value
 	 * @return value of property
 	 * @since 1.2.9
 	 */
@@ -220,9 +223,10 @@ public abstract class AbstractBO<K extends Serializable, T extends GeneralDTO<K>
 	 * Standard implementation of setter method.
 	 * <p>The method retrieves the old value via {@link #getProperty(String)} and sets
 	 * the new value through {@link GeneralDTO#setProperty(String, Object)}. Afterwards
-	 * it fires a {@link PropertyChangeEvent} for this property name.</p>
-	 * @param name name of DTO property and name to be used in {@link PropertyChangeEvent}
+	 * it fires a {@link java.beans.PropertyChangeEvent PropertyChangeEvent} for this property name.</p>
+	 * @param name name of DTO property and name to be used in {@link java.beans.PropertyChangeEvent PropertyChangeEvent}
 	 * @param value value of property
+	 * @param <X> the type of the value
 	 * @since 1.2.9
 	 */
 	public <X> void setProperty(String name, X value) {
@@ -233,10 +237,11 @@ public abstract class AbstractBO<K extends Serializable, T extends GeneralDTO<K>
 	 * Standard implementation of setter method.
 	 * <p>The method retrieves the old value via {@link #getProperty(String)} and sets
 	 * the new value through {@link GeneralDTO#setProperty(String, Object)}. Afterwards
-	 * it fires a {@link PropertyChangeEvent} with parameter firePropertyName.</p>
+	 * it fires a {@link java.beans.PropertyChangeEvent PropertyChangeEvent} with parameter firePropertyName.</p>
 	 * @param name name of DTO property 
-	 * @param firePropertyName name to be used in {@link PropertyChangeEvent}
+	 * @param firePropertyName name to be used in {@link java.beans.PropertyChangeEvent PropertyChangeEvent}
 	 * @param value new value of property
+	 * @param <X> the type of the value
 	 * @since 1.2.9
 	 */
 	public <X> void setProperty(String name, String firePropertyName, X value) {

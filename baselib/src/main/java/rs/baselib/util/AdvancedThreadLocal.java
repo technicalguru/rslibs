@@ -105,6 +105,7 @@ public class AdvancedThreadLocal<T> {
 	 * Most subclasses will have no need to override this method, relying solely on the 
 	 * {@link ThreadLocal#initialValue()} method to set the values of thread-locals.
 	 * @param value the value to be stored in the current thread's copy of this thread-local.
+	 * @return the old value
 	 * @see java.lang.ThreadLocal#set(java.lang.Object)
 	 */
 	public T set(T value) {
@@ -122,6 +123,7 @@ public class AdvancedThreadLocal<T> {
 	 * invoking its initialValue method, unless its value is set by the current thread in the 
 	 * interim. This may result in multiple invocations of the initialValue method in the 
 	 * current thread.
+	 * @return value removed
 	 * @see java.lang.ThreadLocal#remove()
 	 */
 	public T remove() {

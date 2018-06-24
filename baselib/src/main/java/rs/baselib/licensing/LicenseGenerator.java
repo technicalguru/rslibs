@@ -31,6 +31,7 @@ public class LicenseGenerator {
 
 	/**
 	 * Constructor.
+	 * @throws DecryptionException when the license scheme cannot be created
 	 */
 	public LicenseGenerator() throws DecryptionException {
 		this((ILicensingScheme)null);
@@ -38,6 +39,8 @@ public class LicenseGenerator {
 
 	/**
 	 * Constructor.
+	 * @param scheme - the licensing scheme to use
+	 * @throws DecryptionException when the license scheme cannot be created
 	 */
 	public LicenseGenerator(ILicensingScheme scheme) throws DecryptionException {
 		this(scheme != null ? scheme.getLicenseCreator() : LicensingScheme.RSA_LICENSE.getLicenseCreator());
@@ -45,6 +48,8 @@ public class LicenseGenerator {
 
 	/**
 	 * Constructor.
+	 * @param licenseCreator the creator for licenses
+	 * @throws DecryptionException when the license scheme cannot be created
 	 */
 	public LicenseGenerator(ILicenseCreator licenseCreator) throws DecryptionException {
 		this.licenseCreator = licenseCreator;

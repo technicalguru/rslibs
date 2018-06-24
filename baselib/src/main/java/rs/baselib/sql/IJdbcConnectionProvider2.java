@@ -304,12 +304,14 @@ public interface IJdbcConnectionProvider2 extends IJdbcConnectionProvider {
 	
 	/**
 	 * Returns the default additional argument to be used when it is disabled or actual value is empty.
+	 * @param index index of additional argument
 	 * @return default value
 	 */
 	public String getDefaultAdditionalArgument(int index);
 	
 	/**
 	 * Sets the default additional argument to be used when it is disabled or actual value is empty.
+	 * @param index index of additional argument
 	 * @param s default value
 	 */
 	public void setDefaultAdditionalArgument(int index, String s);

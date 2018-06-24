@@ -31,6 +31,7 @@ public interface IUrlTransformer {
 	 * Converts the given string to a URL.
 	 * @param url url
 	 * @return URL
+	 * @throws MalformedURLException when the URL cannot be created
 	 */
 	public URL toURL(String url) throws MalformedURLException;
 	

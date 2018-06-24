@@ -293,6 +293,7 @@ public abstract class AbstractHibernateDAO<K extends Serializable, T extends Gen
 
 	/**
 	 * Builds an Hibernate criteria with unlimited result count.
+	 * @param forClass - the class to create the criteria for
 	 * @param firstResult index of first result returned
 	 * @param maxResults maximum number of results returned
 	 * @param criterion list of criterions to be added.

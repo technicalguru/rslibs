@@ -90,7 +90,10 @@ public class EncryptionUtils {
 	
 	/**
 	 * Creates a key specification.
+	 * @param key the key 
 	 * @return the PBE param spec
+	 * @throws InvalidKeySpecException when the key spec is invalid
+	 * @throws NoSuchAlgorithmException when the algorithm is invalid
 	 */
 	public static KeySpec getKeySpec(Key key) throws InvalidKeySpecException, NoSuchAlgorithmException {
 		KeyFactory fact = KeyFactory.getInstance(key.getAlgorithm());
@@ -213,8 +216,8 @@ public class EncryptionUtils {
 	 * Generates a public/private key pair.
 	 * @param seed seed to be used.
 	 * @return key pair
-	 * @throws NoSuchProviderException
-	 * @throws NoSuchAlgorithmException
+	 * @throws NoSuchProviderException when the algorithm provider does not exist
+	 * @throws NoSuchAlgorithmException when the algorithm does not exist
 	 */
 	public static KeyPair generateKey(String seed) throws NoSuchProviderException, NoSuchAlgorithmException {
 		return generateKey(seed, null);
@@ -225,8 +228,8 @@ public class EncryptionUtils {
 	 * @param seed seed to be used.
 	 * @param charset the charset to be used for string encoding (<code>null</code> for {@link Charset#defaultCharset() default charset})
 	 * @return key pair
-	 * @throws NoSuchProviderException
-	 * @throws NoSuchAlgorithmException
+	 * @throws NoSuchProviderException when the algorithm provider does not exist
+	 * @throws NoSuchAlgorithmException when the algorithm does not exist
 	 * @since 1.2.5
 	 */
 	public static KeyPair generateKey(String seed, Charset charset) throws NoSuchProviderException, NoSuchAlgorithmException {
@@ -238,8 +241,8 @@ public class EncryptionUtils {
 	 * Generates a public/private key pair.
 	 * @param seed seed to be used.
 	 * @return key pair
-	 * @throws NoSuchProviderException
-	 * @throws NoSuchAlgorithmException
+	 * @throws NoSuchProviderException when the algorithm provider does not exist
+	 * @throws NoSuchAlgorithmException when the algorithm does not exist
 	 */
 	public static KeyPair generateKey(byte seed[]) throws NoSuchProviderException, NoSuchAlgorithmException {
 		if (seed == null) seed = generateSalt();
@@ -254,7 +257,7 @@ public class EncryptionUtils {
 	/**
 	 * Generates a 512 byte RSA key pair.
 	 * @return the key pair
-	 * @throws NoSuchAlgorithmException
+	 * @throws NoSuchAlgorithmException when the algorithm does not exist
 	 */
 	public static KeyPair generateKey() throws NoSuchAlgorithmException {
 		return generateKey("RSA", 512);
@@ -264,7 +267,7 @@ public class EncryptionUtils {
 	 * Generates a RSA key pair of given size 
 	 * @param keySize the key size
 	 * @return the key pair
-	 * @throws NoSuchAlgorithmException
+	 * @throws NoSuchAlgorithmException when the algorithm does not exist
 	 */
 	public static KeyPair generateKey(int keySize) throws NoSuchAlgorithmException {
 		return generateKey("RSA", keySize);
@@ -275,7 +278,7 @@ public class EncryptionUtils {
 	 * @param algorithm algorithm, e.g. "RSA"
 	 * @param keySize teh key size
 	 * @return the key pair
-	 * @throws NoSuchAlgorithmException
+	 * @throws NoSuchAlgorithmException when the algorithm does not exist
 	 */
 	public static KeyPair generateKey(String algorithm, int keySize) throws NoSuchAlgorithmException {
 		KeyPairGenerator keyGen = KeyPairGenerator.getInstance(algorithm);
@@ -335,8 +338,8 @@ public class EncryptionUtils {
 	 * Decodes a public key (DSA) from the BASE64 representation.
 	 * @param s BASE64 representation
 	 * @return public DSA key
-	 * @throws InvalidKeySpecException
-	 * @throws NoSuchAlgorithmException
+	 * @throws InvalidKeySpecException - when the key spec is invalid
+	 * @throws NoSuchAlgorithmException - when the algorithm is invalid
 	 */
 	public static PublicKey decodeBase64PublicKey(String s) throws InvalidKeySpecException, NoSuchAlgorithmException {
 		return decodeBase64PublicKey(s, "DSA");
@@ -345,9 +348,10 @@ public class EncryptionUtils {
 	/**
 	 * Decodes a public key from the BASE64 representation.
 	 * @param s BASE64 representation
+	 * @param algorithm name of algorithm
 	 * @return public key
-	 * @throws InvalidKeySpecException
-	 * @throws NoSuchAlgorithmException
+	 * @throws InvalidKeySpecException - when the key spec is invalid
+	 * @throws NoSuchAlgorithmException - when the algorithm is invalid
 	 */
 	public static PublicKey decodeBase64PublicKey(String s, String algorithm) throws InvalidKeySpecException, NoSuchAlgorithmException {
 		X509EncodedKeySpec keySpec = new X509EncodedKeySpec(decodeBase64(s));
@@ -359,8 +363,8 @@ public class EncryptionUtils {
 	 * Decodes a private DSA key from the BASE64 representation.
 	 * @param s BASE64 representation
 	 * @return public key
-	 * @throws InvalidKeySpecException
-	 * @throws NoSuchAlgorithmException
+	 * @throws InvalidKeySpecException - when the key spec is invalid
+	 * @throws NoSuchAlgorithmException - when the algorithm is invalid
 	 */
 	public static PrivateKey decodeBase64PrivateKey(String s) throws InvalidKeySpecException, NoSuchAlgorithmException {
 		return decodeBase64PrivateKey(s, "DSA");
@@ -369,9 +373,10 @@ public class EncryptionUtils {
 	/**
 	 * Decodes a private key from the BASE64 representation.
 	 * @param s BASE64 representation
+	 * @param algorithm name of algorithm
 	 * @return public key
-	 * @throws InvalidKeySpecException
-	 * @throws NoSuchAlgorithmException
+	 * @throws InvalidKeySpecException - when the key spec is invalid
+	 * @throws NoSuchAlgorithmException - when the algorithm is invalid
 	 */
 	public static PrivateKey decodeBase64PrivateKey(String s, String algorithm) throws InvalidKeySpecException, NoSuchAlgorithmException {
 		PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(decodeBase64(s));
@@ -394,7 +399,7 @@ public class EncryptionUtils {
 	 * Decodes a BASE64 string and generates the original
 	 * string from the result.
 	 * @param s BASE64 encoded string
-	 * @param charset the chracter set to be used for constructing the string (can be <code>null</code> for default charset)
+	 * @param charset the character set to be used for constructing the string (can be <code>null</code> for default charset)
 	 * @return original string
 	 * @see #encodeBase64(String)
 	 * @since 1.2.5
@@ -452,6 +457,7 @@ public class EncryptionUtils {
 	 * @param filename filename
 	 * @param password password
 	 * @return the key store loaded
+	 * @throws IOException when the key store cannot be opened
 	 */
 	public static KeyStore getKeyStore(String filename, char password[]) throws IOException {
 		return getKeyStore(KeyStore.getDefaultType(), new FileInputStream(filename), password);
@@ -459,9 +465,11 @@ public class EncryptionUtils {
 
 	/**
 	 * Load the default keystore type.
+	 * @param type type of key store
 	 * @param filename filename
 	 * @param password password
 	 * @return the key store loaded
+	 * @throws IOException when the key store cannot be opened
 	 */
 	public static KeyStore getKeyStore(String type, String filename, char password[]) throws IOException {
 		log.debug("Reading "+type+" keystore: "+filename);
@@ -473,6 +481,7 @@ public class EncryptionUtils {
 	 * @param in input stream
 	 * @param password password
 	 * @return the key store loaded
+	 * @throws IOException when the key store cannot be opened
 	 */
 	public static KeyStore getKeyStore(InputStream in, char password[]) throws IOException {
 		return getKeyStore(KeyStore.getDefaultType(), in, password);
@@ -484,6 +493,7 @@ public class EncryptionUtils {
 	 * @param in input stream
 	 * @param password password
 	 * @return the key store loaded
+	 * @throws IOException when the key store cannot be opened
 	 */
 	public static KeyStore getKeyStore(String type, InputStream in, char password[]) throws IOException {
 		try {
@@ -507,6 +517,8 @@ public class EncryptionUtils {
 	 * @param bytes bytes to crypt
 	 * @param cipher crypt alorithm used
 	 * @return crypted bytes
+	 * @throws IOException when crypting cannot be performed due to I/O problems
+	 * @throws GeneralSecurityException when crypting cannot be performed due security problems
 	 */
 	public static byte[] crypt(byte bytes[], Cipher cipher) throws IOException, GeneralSecurityException {
 		return crypt(bytes, cipher, 0);
@@ -519,6 +531,8 @@ public class EncryptionUtils {
 	 * @param cipher crypt alorithm used
 	 * @param blockSize block size to be applied (or 0 if none)
 	 * @return crypted bytes
+	 * @throws IOException when crypting cannot be performed due to I/O problems
+	 * @throws GeneralSecurityException when crypting cannot be performed due security problems
 	 */
 	public static byte[] crypt(byte bytes[], Cipher cipher, int blockSize) throws IOException, GeneralSecurityException {
 		if ((blockSize == 0) || (bytes.length <= blockSize)) {
@@ -578,6 +592,9 @@ public class EncryptionUtils {
 	 * @param file file where private key is stored in BASE64 PKCS8 encoding 
 	 * @param algorithm algorithm that the key used
 	 * @return the private key
+	 * @throws NoSuchAlgorithmException - when algorithm does not exist
+	 * @throws InvalidKeySpecException - when key spec cannot be created
+	 * @throws IOException - when file cannot be opened
 	 */
 	public static PrivateKey loadPrivateKey(File file, String algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
 		return decodeBase64PrivateKey(CommonUtils.loadContent(file), algorithm);
@@ -588,6 +605,9 @@ public class EncryptionUtils {
 	 * @param filename file where private key is stored in BASE64 PKCS8 encoding 
 	 * @param algorithm algorithm that the key used
 	 * @return the private key
+	 * @throws NoSuchAlgorithmException - when algorithm does not exist
+	 * @throws InvalidKeySpecException - when key spec cannot be created
+	 * @throws IOException - when file cannot be opened
 	 */
 	public static PrivateKey loadPrivateKey(String filename, String algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
 		return decodeBase64PrivateKey(CommonUtils.loadContent(filename), algorithm);
@@ -598,6 +618,9 @@ public class EncryptionUtils {
 	 * @param url URL where private key is stored in BASE64 PKCS8 encoding 
 	 * @param algorithm algorithm that the key used
 	 * @return the private key
+	 * @throws NoSuchAlgorithmException - when algorithm does not exist
+	 * @throws InvalidKeySpecException - when key spec cannot be created
+	 * @throws IOException - when file cannot be opened
 	 */
 	public static PrivateKey loadPrivateKey(URL url, String algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
 		return decodeBase64PrivateKey(CommonUtils.loadContent(url), algorithm);
@@ -608,6 +631,9 @@ public class EncryptionUtils {
 	 * @param in stream where private key is stored in BASE64 PKCS8 encoding 
 	 * @param algorithm algorithm that the key used
 	 * @return the private key
+	 * @throws NoSuchAlgorithmException - when algorithm does not exist
+	 * @throws InvalidKeySpecException - when key spec cannot be created
+	 * @throws IOException - when file cannot be opened
 	 */
 	public static PrivateKey loadPrivateKey(InputStream in, String algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
 		return decodeBase64PrivateKey(CommonUtils.loadContent(in), algorithm);
@@ -618,6 +644,9 @@ public class EncryptionUtils {
 	 * @param in reader where private key is stored in BASE64 PKCS8 encoding 
 	 * @param algorithm algorithm that the key used
 	 * @return the private key
+	 * @throws NoSuchAlgorithmException - when algorithm does not exist
+	 * @throws InvalidKeySpecException - when key spec cannot be created
+	 * @throws IOException - when file cannot be opened
 	 */
 	public static PrivateKey loadPrivateKey(Reader in, String algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
 		return decodeBase64PrivateKey(CommonUtils.loadContent(in), algorithm);
@@ -628,6 +657,9 @@ public class EncryptionUtils {
 	 * @param file file where private key is stored in BASE64 X.509 encoding 
 	 * @param algorithm algorithm that the key used
 	 * @return the public key
+	 * @throws NoSuchAlgorithmException - when algorithm does not exist
+	 * @throws InvalidKeySpecException - when key spec cannot be created
+	 * @throws IOException - when file cannot be opened
 	 */
 	public static PublicKey loadPublicKey(File file, String algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
 		return decodeBase64PublicKey(CommonUtils.loadContent(file), algorithm);
@@ -638,6 +670,9 @@ public class EncryptionUtils {
 	 * @param filename name of file where private key is stored in BASE64 X.509 encoding 
 	 * @param algorithm algorithm that the key used
 	 * @return the public key
+	 * @throws NoSuchAlgorithmException - when algorithm does not exist
+	 * @throws InvalidKeySpecException - when key spec cannot be created
+	 * @throws IOException - when file cannot be opened
 	 */
 	public static PublicKey loadPublicKey(String filename, String algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
 		return decodeBase64PublicKey(CommonUtils.loadContent(filename), algorithm);
@@ -648,6 +683,9 @@ public class EncryptionUtils {
 	 * @param url URL where private key is stored in BASE64 X.509 encoding 
 	 * @param algorithm algorithm that the key used
 	 * @return the public key
+	 * @throws NoSuchAlgorithmException - when algorithm does not exist
+	 * @throws InvalidKeySpecException - when key spec cannot be created
+	 * @throws IOException - when file cannot be opened
 	 */
 	public static PublicKey loadPublicKey(URL url, String algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
 		return decodeBase64PublicKey(CommonUtils.loadContent(url), algorithm);
@@ -658,6 +696,9 @@ public class EncryptionUtils {
 	 * @param in stream where private key is stored in BASE64 X.509 encoding 
 	 * @param algorithm algorithm that the key used
 	 * @return the public key
+	 * @throws NoSuchAlgorithmException - when algorithm does not exist
+	 * @throws InvalidKeySpecException - when key spec cannot be created
+	 * @throws IOException - when file cannot be opened
 	 */
 	public static PublicKey loadPublicKey(InputStream in, String algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
 		return decodeBase64PublicKey(CommonUtils.loadContent(in), algorithm);
@@ -668,6 +709,9 @@ public class EncryptionUtils {
 	 * @param in reader where private key is stored in BASE64 X.509 encoding 
 	 * @param algorithm algorithm that the key used
 	 * @return the public key
+	 * @throws NoSuchAlgorithmException - when algorithm does not exist
+	 * @throws InvalidKeySpecException - when key spec cannot be created
+	 * @throws IOException - when file cannot be opened
 	 */
 	public static PublicKey loadPublicKey(Reader in, String algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
 		return decodeBase64PublicKey(CommonUtils.loadContent(in), algorithm);

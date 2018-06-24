@@ -39,6 +39,7 @@ public interface IFilenameStrategy<K extends Serializable> {
 	 * Compute the filename from the key.
 	 * @param key key
 	 * @return filename for key
+	 * @throws IOException when the file cannot be read
 	 */
 	public File getFile(K key) throws IOException;
 	

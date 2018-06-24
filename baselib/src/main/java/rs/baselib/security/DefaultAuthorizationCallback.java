@@ -48,6 +48,8 @@ public class DefaultAuthorizationCallback extends SimpleAuthorizationCallback im
 
 	/**
 	 * Constructor.
+	 * @param name name or login name
+	 * @param password password for login
 	 */
 	public DefaultAuthorizationCallback(String name, String password) {
 		super(name, password);
@@ -56,7 +58,7 @@ public class DefaultAuthorizationCallback extends SimpleAuthorizationCallback im
 	/**
 	 * Configures the callback.
 	 * Configuration object must must contain two elements &lt;login&gt;
-	 * and &lt:password&gt;.
+	 * and &lt;password&gt;.
 	 * @param config - configuration object
 	 * @throws ConfigurationException - when configuration fails
 	 */

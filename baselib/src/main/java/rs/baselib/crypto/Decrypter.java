@@ -54,10 +54,7 @@ public class Decrypter {
 	 * Constructor from secret key.
 	 * @param key the secret key to be used
 	 * @param algorithm algorithm (key's algorithm will be used if NULL)
-	 * @throws NoSuchPaddingException when decrypting algorithm cannot be generated
-	 * @throws NoSuchAlgorithmException when decrypting algorithm cannot be generated
-	 * @throws InvalidKeyException when decrypting algorithm cannot be generated
-	 * @throws InvalidAlgorithmParameterException when decrypting algorithm cannot be generated
+	 * @throws DecryptionException when decrypting algorithm cannot be generated
 	 */
 	public Decrypter(Key key, String algorithm) throws DecryptionException {
 		this(key, algorithm, null);
@@ -68,10 +65,7 @@ public class Decrypter {
 	 * @param key the secret key to be used
 	 * @param algorithm algorithm (key's algorithm will be used if NULL)
 	 * @param paramSpec parameters to the decrypting algorithm (will be generated if NULL)
-	 * @throws NoSuchPaddingException when decrypting algorithm cannot be generated
-	 * @throws NoSuchAlgorithmException when decrypting algorithm cannot be generated
-	 * @throws InvalidKeyException when decrypting algorithm cannot be generated
-	 * @throws InvalidAlgorithmParameterException when decrypting algorithm cannot be generated
+	 * @throws DecryptionException when decrypting algorithm cannot be generated
 	 */
 	public Decrypter(Key key, String algorithm, AlgorithmParameterSpec paramSpec) throws DecryptionException {
 		init(key, algorithm, paramSpec);
@@ -83,10 +77,7 @@ public class Decrypter {
 	 * @param algorithm algorithm (key's algorithm will be used if NULL)
 	 * @param salt salt to be used
 	 * @param iterationCount number of iterations for decryption
-	 * @throws NoSuchPaddingException when decrypting algorithm cannot be generated
-	 * @throws NoSuchAlgorithmException when decrypting algorithm cannot be generated
-	 * @throws InvalidKeyException when decrypting algorithm cannot be generated
-	 * @throws InvalidAlgorithmParameterException when decrypting algorithm cannot be generated
+	 * @throws DecryptionException when decrypting algorithm cannot be generated
 	 */
 	public Decrypter(Key key, String algorithm, byte salt[], int iterationCount) throws DecryptionException {
 		init(key, algorithm, EncryptionUtils.generateParamSpec(salt, iterationCount));
@@ -97,11 +88,7 @@ public class Decrypter {
 	 * @param bytephrase bytephrase to be used
 	 * @param salt salt to be used
 	 * @param iterationCount number of iterations for decryption
-	 * @throws InvalidKeySpecException when key cannot be generated
-	 * @throws NoSuchPaddingException when decrypting algorithm cannot be generated
-	 * @throws NoSuchAlgorithmException when decrypting algorithm cannot be generated
-	 * @throws InvalidKeyException when decrypting algorithm cannot be generated
-	 * @throws InvalidAlgorithmParameterException when decrypting algorithm cannot be generated
+	 * @throws DecryptionException when decrypting algorithm cannot be generated
 	 */
 	public Decrypter(byte bytephrase[], byte salt[], int iterationCount) throws DecryptionException {
 		
@@ -132,6 +119,7 @@ public class Decrypter {
 	/**
 	 * Constructor from passphrase.
 	 * @param passPhrase passphrase to be used
+	 * @param salt salt to be used
 	 * @throws DecryptionException when decrypting algorithm cannot be generated
 	 */
 	public Decrypter(char passPhrase[], byte salt[]) throws DecryptionException {
@@ -150,6 +138,7 @@ public class Decrypter {
 	/**
 	 * Constructor from passphrase.
 	 * @param passPhrase passphrase to be used
+	 * @param salt salt to be used
 	 * @throws DecryptionException when decrypting algorithm cannot be generated
 	 */
 	public Decrypter(String passPhrase, byte salt[]) throws DecryptionException {
@@ -161,11 +150,7 @@ public class Decrypter {
 	 * @param passPhrase passphrase to be used
 	 * @param salt salt to be used
 	 * @param iterationCount number of iterations for decryption
-	 * @throws InvalidKeySpecException when key cannot be generated
-	 * @throws NoSuchPaddingException when decrypting algorithm cannot be generated
-	 * @throws NoSuchAlgorithmException when decrypting algorithm cannot be generated
-	 * @throws InvalidKeyException when decrypting algorithm cannot be generated
-	 * @throws InvalidAlgorithmParameterException when decrypting algorithm cannot be generated
+	 * @throws DecryptionException when decrypting algorithm cannot be generated
 	 */
 	public Decrypter(String passPhrase, byte salt[], int iterationCount) throws DecryptionException {
 		try {
@@ -186,10 +171,7 @@ public class Decrypter {
 	 * @param key secret key
 	 * @param algorithm algorithm (key's algorithm will be used if NULL)
 	 * @param paramSpec parameters to the decrypting algorithm (will be generated if NULL)
-	 * @throws NoSuchPaddingException when decrypting algorithm cannot be generated
-	 * @throws NoSuchAlgorithmException when decrypting algorithm cannot be generated
-	 * @throws InvalidKeyException when decrypting algorithm cannot be generated
-	 * @throws InvalidAlgorithmParameterException when decrypting algorithm cannot be generated
+	 * @throws DecryptionException when decrypting algorithm cannot be generated
 	 */
 	private void init(Key key, String algorithm, AlgorithmParameterSpec paramSpec) throws DecryptionException {
 		try {
@@ -235,6 +217,7 @@ public class Decrypter {
      * of that string.
      * @param str string to be decrypted
      * @return <code>string</code> decrypted version of the provided String
+	 * @throws DecryptionException when decrypting fails
      */
     public String decrypt(String str) throws DecryptionException {
         try {
@@ -255,6 +238,7 @@ public class Decrypter {
      * Decrypt a byte array
      * @param bytes bytes to be decrypted
      * @return <code>byte</code> decrypted version of the provided array
+	 * @throws DecryptionException when decrypting fails
      */
     public byte[] decrypt(byte bytes[]) throws DecryptionException {
         try {

@@ -69,6 +69,7 @@ public interface IDaoFactory {
 	 * Returns the factory parameter as a URL.
 	 * @param name name of parameter
 	 * @return value or NULL
+	 * @throws MalformedURLException when the parameter URL cannot be created
 	 */
 	public URL getParameterUrl(String name) throws MalformedURLException;
 
@@ -107,6 +108,8 @@ public interface IDaoFactory {
 	/**
 	 * Returns the correct DAO for the given transfer object.
 	 * @param o the object to look for
+	 * @param <K> the key class
+	 * @param<T> the transfer class
 	 * @return DAO or null if not found
 	 */
 	public <K extends Serializable, T extends GeneralDTO<K>> IGeneralDAO<K,?> getDaoFor(T o);
@@ -114,6 +117,7 @@ public interface IDaoFactory {
 	/**
 	 * Returns the correct DAO for the given business object.
 	 * @param o the object to look for
+	 * @param <B> the BO class
 	 * @return DAO or null if not found
 	 */
 	public <B extends IGeneralBO<?>> IGeneralDAO<?,B> getDaoFor(B o);
@@ -121,6 +125,7 @@ public interface IDaoFactory {
 	/**
 	 * Returns the correct DAO for the given business object class.
 	 * @param clazz the BO clazz to look for
+	 * @param <B> the BO class
 	 * @return DAO or null if not found
 	 */
 	public <B extends IGeneralBO<?>> IGeneralDAO<?,B> getDaoFor(Class<B> clazz);
@@ -144,6 +149,7 @@ public interface IDaoFactory {
 	 * <p>The method will try to return the DAO registered under the class name. If that cannopt be found then the
 	 * first object found being an instance of the class will be returned.</p>
 	 * @param clazz the class of the DAO to be returned
+	 * @param <X> the DAO class
 	 * @return the DAO or null if not registered
 	 */
 	public <X extends IGeneralDAO<?, ?>> X getDao(Class<X> clazz);
@@ -152,6 +158,7 @@ public interface IDaoFactory {
 	 * Returns a registered DAO of given class.
 	 * @param name the name of the registration
 	 * @param clazz the class of the DAO to be returned
+	 * @param <X> the DAO class
 	 * @return the DAO or null if not registered
 	 * @throws ClassCastException when the registered object is not an instance of the given class.
 	 * @since 1.2.7

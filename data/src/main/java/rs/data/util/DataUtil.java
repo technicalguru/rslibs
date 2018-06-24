@@ -35,6 +35,7 @@ public class DataUtil {
 	/**
 	 * Returns the IDs of all objects as a list.
 	 * @param businessObjects collection of business objects.
+	 * @param <K> the key class of the objects
 	 * @return list of IDs.
 	 */
 	public static <K extends Serializable> List<K> idList(Collection<? extends IIdObject<K>> businessObjects) {
@@ -50,6 +51,8 @@ public class DataUtil {
 	/**
 	 * Returns the IDs of all objects as a list.
 	 * @param businessObjects collection of business objects.
+	 * @param keyClass the key class of the objects
+	 * @param <K> the key class of the objects
 	 * @return list of IDs.
 	 */
 	@SuppressWarnings("unchecked")

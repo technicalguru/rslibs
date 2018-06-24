@@ -32,6 +32,9 @@ public class SimpleAuthorizationCallback extends AbstractAuthorizationCallback {
 
 	/**
 	 * Constructor.
+	 * @param name login name
+	 * @param password password
+	 * 
 	 */
 	public SimpleAuthorizationCallback(String name, String password) {
 		setName(name);

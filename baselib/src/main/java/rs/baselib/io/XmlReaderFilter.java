@@ -28,7 +28,7 @@ public class XmlReaderFilter extends AbstractReaderFilter {
 
 	/**
 	 * Constructor.
-	 * @param in
+	 * @param in - the underlying reader
 	 */
 	public XmlReaderFilter(Reader in) {
 		super(in);

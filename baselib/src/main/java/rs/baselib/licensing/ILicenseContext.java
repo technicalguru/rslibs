@@ -35,6 +35,7 @@ public interface ILicenseContext {
 	 * Returns the property of given class.
 	 * The class parameter will be the key of the property. 
 	 * @param clazz type of property
+	 * @param <T> type of value
 	 * @return the value or <code>null</code> if the property doesn't exist
 	 */
 	public <T> T get(Class<T> clazz);
@@ -65,6 +66,7 @@ public interface ILicenseContext {
 	 * The property key will be the name of the class parameter.
 	 * @param clazz class of property
 	 * @param value value
+	 * @param <T> type of value
 	 */
 	public <T> void set(Class<T> clazz, T value);
 	
@@ -80,6 +82,7 @@ public interface ILicenseContext {
 	 * The key of the removed property is the class parameter name.
 	 * @param clazz class of property
 	 * @return the value that was removed
+	 * @param <T> type of value
 	 */
 	public <T> T remove(Class<T> clazz);
 	

@@ -32,14 +32,16 @@ public interface IPreferencesService {
 	/**
 	 * Returns the user preferences for the given application.
 	 * @param applicationName name of application
-	 * @throws BackingStoreException
+	 * @return the preferences object
+	 * @throws BackingStoreException when the storage fails
 	 */
 	public IPreferences getUserPreferences(String applicationName) throws BackingStoreException;
 
 	/**
 	 * Returns the system preferences for the given application.
 	 * @param applicationName name of application
-	 * @throws BackingStoreException
+	 * @return the preferences object
+	 * @throws BackingStoreException when the storage fails
 	 */
 	public IPreferences getSystemPreferences(String applicationName) throws BackingStoreException;
 	

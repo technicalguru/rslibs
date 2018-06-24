@@ -152,6 +152,7 @@ public abstract class AbstractEncryptionType implements UserType, ParameterizedT
 	 * Subclasses must return the correct object from the byte representation. 
 	 * @param bytes byte representation of object
 	 * @return object
+	 * @throws Exception - any exception that occurs while conversion
 	 */
 	protected abstract Object convert(byte bytes[]) throws Exception;
 	
@@ -197,6 +198,7 @@ public abstract class AbstractEncryptionType implements UserType, ParameterizedT
 	 * Subclasses must return the byte representation of the value.
 	 * @param value value object (can be null)
 	 * @return byte representation
+	 * @throws Exception - any exception that occurs while conversion
 	 */
 	protected abstract byte[] convert(Object value) throws Exception;
 	

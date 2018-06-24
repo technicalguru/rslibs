@@ -37,10 +37,10 @@ import java.lang.annotation.RetentionPolicy;
  * The annotation can hold strings that identify certain types within your unit test. This allows to
  * selectively ignore specific types of tests.
  * </p>
- * <b>Examples:</b><br/>
- * <code>@IgnoreTest</code> - will ignore all tests.<br/>
- * <code>@IgnoreTest("getter")</code> - will ignore only those tests that care about getters.<br/>
- * <code>@IgnoreTest({"getter", "setter"})</code> - will ignore only those tests that care about getters and setters.<br/>
+ * <b>Examples:</b><br>
+ * <code>@IgnoreTest</code> - will ignore all tests.<br>
+ * <code>@IgnoreTest("getter")</code> - will ignore only those tests that care about getters.<br>
+ * <code>@IgnoreTest({"getter", "setter"})</code> - will ignore only those tests that care about getters and setters.<br>
  * <p>
  * Please notice that ignoring tests must be implemented in your unit tests. The annotation can be 
  * checked through {@link IgnoreChecks#ignoreTest(java.lang.reflect.AnnotatedElement, String...)}.
@@ -52,6 +52,9 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface IgnoreTest {
 
-	/** The type of tests that the annotated object will be ignored for */
+	/** 
+	 * The type of tests that the annotated object will be ignored for.
+	 * @return the type of methods to be ignored
+	 */
 	String[] value() default {};
 }

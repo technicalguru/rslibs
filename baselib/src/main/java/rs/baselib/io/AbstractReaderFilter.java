@@ -34,6 +34,7 @@ public abstract class AbstractReaderFilter extends FilterReader {
 
 	/**
 	 * Constructor.
+	 * @param in - the underlying reader
 	 */
 	public AbstractReaderFilter(Reader in) {
 		super(in);

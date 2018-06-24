@@ -35,6 +35,8 @@ public class UrlKey<K extends Serializable> extends CombinedKey {
 
 	/**
 	 * Constructor.
+	 * @param url the URL of the object
+	 * @param key the key of the object
 	 */
 	public UrlKey(URL url, K key) {
 		super(url, key);

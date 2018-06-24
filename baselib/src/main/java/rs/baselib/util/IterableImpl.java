@@ -29,11 +29,16 @@ public class IterableImpl<T> implements Iterable<T> {
 	private Iterator<T> iterator;
 	/**
 	 * Constructor.
+	 * @param iterator - the underlying iterator
 	 */
 	public IterableImpl(Iterator<T> iterator) {
 		this.iterator = iterator;
 	}
 
+	/**
+	 *  
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Iterator<T> iterator() {
 		return iterator;

@@ -126,7 +126,9 @@ public interface IGeneralBO<K extends Serializable> extends Serializable, IBean,
 	@Transient
 	public LockInformation getLockInformation();
 	
-	/** Sets the ID. */
+	/** Sets the ID. 
+	 * @param id the key of the object
+	 */
 	public void setId(K id);
 
 	/**

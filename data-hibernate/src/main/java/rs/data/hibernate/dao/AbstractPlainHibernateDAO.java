@@ -37,7 +37,7 @@ import rs.data.util.IDaoIterator;
 import rs.data.util.ObjectDeletedException;
 
 /**
- * Abstract implementation of DAO using {@link AbstractPlainBO}s as transfer objects
+ * Abstract implementation of DAO using {@link AbstractPlainHibernateBO}s as transfer objects
  * between HMB store and application.
  * <p>Please notice that caching mechanism is disabled for this DAO and cannot be enabled.</p>
  * @author ralph
@@ -274,6 +274,7 @@ public abstract class AbstractPlainHibernateDAO<K extends Serializable, B extend
 
 	/**
 	 * Builds an Hibernate criteria with unlimited result count.
+	 * @param forClass - the class to create the criteria for
 	 * @param firstResult index of first result returned
 	 * @param maxResults maximum number of results returned
 	 * @param criterion list of criterions to be added.

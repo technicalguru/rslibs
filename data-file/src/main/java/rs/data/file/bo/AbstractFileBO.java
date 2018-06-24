@@ -46,6 +46,7 @@ public abstract class AbstractFileBO<K extends Serializable> extends AbstractBO<
 
 	/**
 	 * Constructor.
+	 * @param dto - transfer file to be used
 	 */
 	public AbstractFileBO(GeneralDTO<K> dto) {
 		super(dto);

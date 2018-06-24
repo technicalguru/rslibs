@@ -44,6 +44,7 @@ public class RsDate extends GregorianCalendar {
 
 	/**
 	 * Constructor.
+	 * @param timezone - the timezone for this date
 	 * @since 1.2.8
 	 */
 	public RsDate(TimeZone timezone) {
@@ -52,6 +53,7 @@ public class RsDate extends GregorianCalendar {
 
 	/**
 	 * Constructor.
+	 * @param date - init with this date
 	 */
 	public RsDate(Date date) {
 		if (date != null) setTimeInMillis(date.getTime());
@@ -60,6 +62,7 @@ public class RsDate extends GregorianCalendar {
 
 	/**
 	 * Constructor.
+	 * @param timeInMillis - init with this timestamp
 	 */
 	public RsDate(long timeInMillis) {
 		setTimeInMillis(timeInMillis);
@@ -67,6 +70,7 @@ public class RsDate extends GregorianCalendar {
 
 	/**
 	 * Constructor.
+	 * @param calendar - init with calendar time
 	 */
 	public RsDate(Calendar calendar) {
 		setTimeInMillis(calendar.getTimeInMillis());

@@ -70,7 +70,7 @@ public class PropertiesFileAuthorizationCallback extends DefaultAuthorizationCal
 	/**
 	 * Configures the callback from the properties file.
 	 * @param file filename
-	 * @throws ConfigurationException
+	 * @throws ConfigurationException when configuration fails
 	 */
 	public void configure(String file) throws ConfigurationException {
 		configure(new File(file));
@@ -79,7 +79,7 @@ public class PropertiesFileAuthorizationCallback extends DefaultAuthorizationCal
 	/**
 	 * Configures the callback from the properties file.
 	 * @param file file
-	 * @throws ConfigurationException
+	 * @throws ConfigurationException when configuration fails
 	 */
 	public void configure(File file) throws ConfigurationException {
 		PropertiesConfiguration pConfig = new PropertiesConfiguration(file);

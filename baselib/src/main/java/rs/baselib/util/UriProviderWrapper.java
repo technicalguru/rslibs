@@ -35,6 +35,7 @@ public class UriProviderWrapper implements IUrlTransformer {
 	
 	/**
 	 * Constructor.
+	 * @param provider the actual URI provider
 	 */
 	public UriProviderWrapper(IUriProvider provider) {
 		this.provider = provider;

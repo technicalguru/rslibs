@@ -121,6 +121,7 @@ public abstract class AbstractPlainBO<K extends Serializable> extends AbstractGe
 	/**
 	 * Returns the property of given name.
 	 * @param name name of property
+	 * @param <X> the type of the value
 	 * @return value of property
 	 * @since 1.2.9
 	 */
@@ -139,10 +140,11 @@ public abstract class AbstractPlainBO<K extends Serializable> extends AbstractGe
 	/**
 	 * Standard implementation of setter method.
 	 * <p>The method retrieves the old value via {@link #getProperty(String)} and sets
-	 * the new value through {@link GeneralDTO#setProperty(String, Object)}. Afterwards
-	 * it fires a {@link PropertyChangeEvent} for this property name.</p>
-	 * @param name name of DTO property and name to be used in {@link PropertyChangeEvent}
+	 * the new value through {@link rs.data.impl.dto.GeneralDTO#setProperty(String, Object) GeneralDTO#setProperty(String, Object)}. Afterwards
+	 * it fires a {@link java.beans.PropertyChangeEvent PropertyChangeEvent} for this property name.</p>
+	 * @param name name of DTO property and name to be used in {@link java.beans.PropertyChangeEvent PropertyChangeEvent}
 	 * @param value value of property
+	 * @param <X> the type of the value
 	 * @since 1.2.9
 	 */
 	public <X> void setProperty(String name, X value) {
@@ -152,11 +154,12 @@ public abstract class AbstractPlainBO<K extends Serializable> extends AbstractGe
 	/**
 	 * Standard implementation of setter method.
 	 * <p>The method retrieves the old value via {@link #getProperty(String)} and sets
-	 * the new value through {@link GeneralDTO#setProperty(String, Object)}. Afterwards
-	 * it fires a {@link PropertyChangeEvent} with parameter firePropertyName.</p>
+	 * the new value through {@link rs.data.impl.dto.GeneralDTO#setProperty(String, Object) GeneralDTO#setProperty(String, Object)}. Afterwards
+	 * it fires a {@link java.beans.PropertyChangeEvent PropertyChangeEvent} with parameter firePropertyName.</p>
 	 * @param name name of DTO property 
-	 * @param firePropertyName name to be used in {@link PropertyChangeEvent}
+	 * @param firePropertyName name to be used in {@link java.beans.PropertyChangeEvent PropertyChangeEvent}
 	 * @param value new value of property
+	 * @param <X> the type of the value
 	 * @since 1.2.9
 	 */
 	public <X> void setProperty(String name, String firePropertyName, X value) {

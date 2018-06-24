@@ -114,6 +114,8 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	
 	/**
 	 * Returns the business objects for the transfer object.
+	 * @param object the transfer object of the business object
+	 * @return the business object for the DTO
 	 */
 	@SuppressWarnings("unchecked")
 	public C getBusinessObject(T object) {

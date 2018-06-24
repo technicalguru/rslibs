@@ -34,6 +34,7 @@ public class LockInformation {
 	
 	/**
 	 * Constructor.
+	 * @param lockObject the BO that is locked
 	 */
 	public LockInformation(IGeneralBO<?> lockObject) {
 		this.lockObject = lockObject;

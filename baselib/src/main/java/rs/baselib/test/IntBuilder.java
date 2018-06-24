@@ -46,6 +46,7 @@ public class IntBuilder implements Builder<Integer> {
 	/**
 	 * Start the build with a given integer.
 	 * @param start - the first number to produce
+	 * @return this builder for concatenation
 	 */
 	public IntBuilder withStart(int start) {
 		this.count   = start;
@@ -55,6 +56,7 @@ public class IntBuilder implements Builder<Integer> {
 	/**
 	 * Set a given increment/decrement for each build.
 	 * @param offset - the increment/decrement to use
+	 * @return this builder for concatenation
 	 */
 	public IntBuilder withOffset(int offset) {
 		this.offset   = offset;
@@ -64,6 +66,7 @@ public class IntBuilder implements Builder<Integer> {
 	/**
 	 * Set a given max number (for random numbers only).
 	 * @param end - the max number to use
+	 * @return this builder for concatenation
 	 */
 	public IntBuilder withEnd(int end) {
 		this.end   = end;
@@ -72,7 +75,7 @@ public class IntBuilder implements Builder<Integer> {
 
 	/**
 	 * Set random creation.
-	 * @param end - the max number to use
+	 * @return this builder for concatenation
 	 */
 	public IntBuilder withRandom() {
 		this.random   = true;

@@ -45,17 +45,32 @@ public final class HashCodeUtil {
 	 */
 	public static final int SEED = 23;
 
-	/** booleans.  */
+	/** 
+	 * Hash booleans.  
+	 * @param aSeed - a previous seed
+	 * @param aBoolean - the value to combine in hash
+	 * @return the combined hash code
+	 */
 	public static int hash(int aSeed, boolean aBoolean) {
 		return firstTerm( aSeed ) + (aBoolean ? 1 : 0);
 	}
 
-	/*** chars.  */
+	/** 
+	 * Hash chars.  
+	 * @param aSeed - a previous seed
+	 * @param aChar - the value to combine in hash
+	 * @return the combined hash code
+	 */
 	public static int hash(int aSeed, char aChar) {
 		return firstTerm(aSeed) + (int)aChar;
 	}
 
-	/** ints.  */
+	/** 
+	 * Hash ints.  
+	 * @param aSeed - a previous seed
+	 * @param aInt - the value to combine in hash
+	 * @return the combined hash code
+	 */
 	public static int hash(int aSeed , int aInt) {
 		/*
 		 * Implementation Note
@@ -65,17 +80,32 @@ public final class HashCodeUtil {
 		return firstTerm(aSeed) + aInt;
 	}
 
-	/** longs.  */
+	/** 
+	 * Hash longs.  
+	 * @param aSeed - a previous seed
+	 * @param aLong - the value to combine in hash
+	 * @return the combined hash code
+	 */
 	public static int hash(int aSeed , long aLong) {
 		return firstTerm(aSeed)  + (int)(aLong ^ (aLong >>> 32));
 	}
 
-	/** floats.  */
+	/** 
+	 * Hash floats.  
+	 * @param aSeed - a previous seed
+	 * @param aFloat - the value to combine in hash
+	 * @return the combined hash code
+	 */
 	public static int hash(int aSeed , float aFloat) {
 		return hash(aSeed, Float.floatToIntBits(aFloat));
 	}
 
-	/** doubles. */
+	/** 
+	 * Hash doubles. 
+	 * @param aSeed - a previous seed
+	 * @param aDouble - the value to combine in hash
+	 * @return the combined hash code
+	 */
 	public static int hash(int aSeed , double aDouble) {
 		return hash( aSeed, Double.doubleToLongBits(aDouble) );
 	}
@@ -85,6 +115,9 @@ public final class HashCodeUtil {
 	 *
 	 * If <tt>aObject</tt> is an array, then each element may be a primitive
 	 * or a possibly-null object.
+	 * @param aSeed - a previous seed
+	 * @param aObject - the value to combine in hash
+	 * @return the combined hash code
 	 */
 	public static int hash(int aSeed , Object aObject) {
 		int result = aSeed;

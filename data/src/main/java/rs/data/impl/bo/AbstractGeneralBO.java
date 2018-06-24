@@ -59,8 +59,6 @@ public abstract class AbstractGeneralBO<K extends Serializable> extends Abstract
 	
 	/**
 	 * Constructor.
-	 * @throws IllegalAccessException 
-	 * @throws InstantiationException 
 	 */
 	public AbstractGeneralBO() {
 		init();

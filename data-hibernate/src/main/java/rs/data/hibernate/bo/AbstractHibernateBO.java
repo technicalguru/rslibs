@@ -51,6 +51,7 @@ public abstract class AbstractHibernateBO<K extends Serializable, T extends Gene
 
 	/**
 	 * Constructor.
+	 * @param transferObject - the transfer object to be used
 	 */
 	public AbstractHibernateBO(T transferObject) {
 		super(transferObject);
@@ -133,6 +134,7 @@ public abstract class AbstractHibernateBO<K extends Serializable, T extends Gene
 
 	/**
 	 * Initializes the DTO.
+	 * @return the transfer object for this BO
 	 */
 	@SuppressWarnings("unchecked")
 	protected T initialize() {

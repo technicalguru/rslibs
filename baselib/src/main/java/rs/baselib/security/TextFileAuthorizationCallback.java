@@ -73,7 +73,7 @@ public class TextFileAuthorizationCallback extends AbstractAuthorizationCallback
 	/**
 	 * Configures the callback from the text file.
 	 * @param file filename
-	 * @throws ConfigurationException
+	 * @throws ConfigurationException when object cannot be configured from file
 	 */
 	public void configure(String file) throws ConfigurationException {
 		configure(new File(file));
@@ -82,7 +82,7 @@ public class TextFileAuthorizationCallback extends AbstractAuthorizationCallback
 	/**
 	 * Configures the callback from the text file.
 	 * @param file file
-	 * @throws ConfigurationException
+	 * @throws ConfigurationException when object cannot be configured from file
 	 */
 	public void configure(File file) throws ConfigurationException {
 		try {

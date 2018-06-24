@@ -94,6 +94,7 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	/**
 	 * Sets the {@link #filenameStrategy}.
 	 * The method instantiates a {@link DefaultFilenameStrategy} with properties from the DAO Master.
+	 * @return filename strategy for this DAO
 	 * @see #PROPERTY_DATA_DIR
 	 * @see #PROPERTY_DATA_PREFIX
 	 * @see #PROPERTY_DATA_SUFFIX
@@ -219,6 +220,7 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	 * Returns the file that shall have the object with given key.
 	 * @param key key of business object
 	 * @return the file for this object
+	 * @throws IOException the I/O exception when creating the file
 	 */
 	protected File getFile(K key) throws IOException {
 		// Forward to filename strategy
@@ -279,6 +281,7 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 
 	/**
 	 * Loads the business object from the given file.
+	 * @param id - the ID of the object to load
 	 * @param file file to load from
 	 * @return the business object
 	 */

@@ -54,6 +54,7 @@ public class DaoFactoryEvent extends EventObject {
 	/**
 	 * Constructor.
 	 * @param source factory
+	 * @param type the type of the event
 	 */
 	public DaoFactoryEvent(IDaoFactory source, Type type) {
 		super(source);

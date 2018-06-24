@@ -28,6 +28,7 @@ public class DaoCollectionIterator<E> extends DaoIteratorImpl<E> {
 
 	/**
 	 * Constructor.
+	 * @param collection - the collection to iterate over
 	 */
 	public DaoCollectionIterator(Collection<E> collection) {
 		super(collection.iterator());

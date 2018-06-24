@@ -47,6 +47,7 @@ public class RsDay extends RsDate {
 
 	/**
 	 * Constructor.
+	 * @param timezone - init with this timezone
 	 * @since 1.2.8
 	 */
 	public RsDay(TimeZone timezone) {
@@ -56,6 +57,7 @@ public class RsDay extends RsDate {
 
 	/**
 	 * Constructor.
+	 * @param date - init with this date
 	 */
 	public RsDay(Date date) {
 		super(date);
@@ -64,6 +66,7 @@ public class RsDay extends RsDate {
 
 	/**
 	 * Constructor.
+	 * @param timeInMillis - init with this timestamp
 	 */
 	public RsDay(long timeInMillis) {
 		super(timeInMillis);
@@ -81,6 +84,9 @@ public class RsDay extends RsDate {
 
 	/**
 	 * Constructor.
+	 * @param day day of month value (1-31)
+	 * @param month month value (0-11)
+	 * @param year year value
 	 * @since 1.2.7
 	 */
 	public RsDay(int day, int month, int year) {
@@ -89,6 +95,10 @@ public class RsDay extends RsDate {
 
 	/**
 	 * Constructor.
+	 * @param timezone - init with this timezone
+	 * @param day day of month value (1-31)
+	 * @param month month value (0-11)
+	 * @param year year value
 	 * @since 1.2.8
 	 */
 	public RsDay(TimeZone timezone, int day, int month, int year) {
