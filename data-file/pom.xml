@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>eu.ralph-schuster</groupId>
 		<artifactId>libs</artifactId>
-		<version>1.3.2-SNAPSHOT</version>
+		<version>1.3.1-SNAPSHOT</version>
 	</parent>
 
 	<properties>
@@ -11,7 +11,7 @@
 	</properties>
 	
 	<artifactId>data-file</artifactId>
-  <version> 1.3.2-SNAPSHOT</version>
+  <version> 1.3.1-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 	<name>${project.groupId}.${project.artifactId}</name>
 	<description>Library for file-based data access</description>
