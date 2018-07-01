@@ -33,6 +33,7 @@ public interface NamedObject {
 	 * Property name of name.
 	 * @deprecated As of release 1.2.9, replaced by {@link #NAME}.
 	 */
+	@Deprecated
 	public static final String PROPERTY_NAME = NAME;
 	
 	/**

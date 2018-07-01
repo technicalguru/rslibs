@@ -3,11 +3,12 @@
 	<parent>
 		<groupId>eu.ralph-schuster</groupId>
 		<artifactId>pom-oss</artifactId>
-		<version>1.5.0</version>
+		<version>1.5.1</version>
 	</parent>
 
 	<properties>
 		<project.home>http://techblog.ralph-schuster.eu/rs-library/</project.home>
+		<maven.bundle.version>3.5.1</maven.bundle.version>
 	</properties>
 
 	<artifactId>libs</artifactId>
@@ -75,19 +76,4 @@
 		</repository>
 	</repositories>
 
-	<build>
-		<plugins>
-			<!-- Compile for Java 1.8 -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.5.1</version>
-				<configuration>
-					<source>1.8</source> 
-					<target>1.8</target>
-					<showDeprecation>true</showDeprecation>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 </project>

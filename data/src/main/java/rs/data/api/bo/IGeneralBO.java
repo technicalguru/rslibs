@@ -51,12 +51,13 @@ public interface IGeneralBO<K extends Serializable> extends Serializable, IBean,
 	 * Property name of creationDate.
 	 * @deprecated As of release 1.2.9, replaced by {@link #CREATION_DATE}.
 	 */
+	@Deprecated
 	public static final String PROPERTY_CREATION_DATE = CREATION_DATE;
 	/** 
 	 * Property name of changeDate.
 	 * @deprecated As of release 1.2.9, replaced by {@link #CHANGE_DATE}.
-	 * @since 1.2.9 
 	 */
+	@Deprecated
 	public static final String PROPERTY_CHANGE_DATE = CHANGE_DATE;
 	
 	/**

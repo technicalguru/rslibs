@@ -120,6 +120,7 @@ public class LangUtils {
 	 * @return the underlying class
 	 * @deprecated see {@link ReflectionUtils#getClass(Type)}
 	 */
+	@Deprecated
 	public static Class<?> getClass(Type type) {
 		return ReflectionUtils.getClass(type);
 	}
@@ -133,6 +134,7 @@ public class LangUtils {
 	 * @return a list of the raw classes for the actual type arguments.
 	 * @deprecated see {@link ReflectionUtils#getTypeArguments(Class, Class)}
 	 */
+	@Deprecated
 	public static <T> List<Class<?>> getTypeArguments(Class<T> baseClass, Class<? extends T> childClass) {
 		return ReflectionUtils.getTypeArguments(baseClass, childClass);
 	}
@@ -673,6 +675,7 @@ public class LangUtils {
 	 * @return when the object is of that class
 	 * @deprecated see {@link ReflectionUtils#isInstanceOf(Object, String)}
 	 */
+	@Deprecated
 	public static boolean isInstanceOf(Object o, String className) {
 		return ReflectionUtils.isInstanceOf(o, className);
 	}
@@ -685,6 +688,7 @@ public class LangUtils {
 	 * @return when the inspected class implements or derived from the class with given name
 	 * @deprecated see {@link ReflectionUtils#isInstanceOf(Class, String)}
 	 */
+	@Deprecated
 	public static boolean isInstanceOf(Class<?> inspectedClass, String className) {
 		return ReflectionUtils.isInstanceOf(inspectedClass, className);
 	}
