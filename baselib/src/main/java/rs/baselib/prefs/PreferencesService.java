@@ -236,6 +236,11 @@ public class PreferencesService extends AbstractPreferencesService {
 	 */
 	@Override
 	public File getUserPreferencesHome(String applicationName) {
+		String env = System.getenv(applicationName.toUpperCase()+"_PREFERENCES_HOME");
+		if (env != null) {
+			File f = new File(env);
+			if (f.exists() && f.isDirectory()) return f;
+		}
 		return new File(getUserHome(), "."+applicationName);
 	}
 
@@ -258,7 +263,12 @@ public class PreferencesService extends AbstractPreferencesService {
 	protected synchronized File getUserPreferencesFile(String applicationName) {
 		File rc = userHomes.get(applicationName);
 		if (rc == null) {
-			rc = new File(getUserPreferencesHome(applicationName), "user.prefs");
+			String env = System.getenv(applicationName.toUpperCase()+"_PREFERENCES_FILE");
+			if (env != null) {
+				rc = new File(env);
+				if (!rc.exists() || !rc.isFile()) rc = null;
+			}
+			if (rc == null) rc = new File(getUserPreferencesHome(applicationName), "user.prefs");
 			userHomes.put(applicationName, rc);
 		}
 		return rc;
