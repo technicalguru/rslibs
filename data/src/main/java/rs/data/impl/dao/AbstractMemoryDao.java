@@ -76,6 +76,7 @@ public abstract class AbstractMemoryDao<K extends Serializable, B extends Abstra
 
 	/**
 	 * {@inheritDoc}
+	 * <p>The sortBy argument will be ignored</p>
 	 */
 	@Override
 	public List<C> findAll(int firstResult, int maxResults, String sortBy) {
@@ -93,6 +94,7 @@ public abstract class AbstractMemoryDao<K extends Serializable, B extends Abstra
 
 	/**
 	 * {@inheritDoc}
+	 * <p>The sortBy argument will be ignored</p>
 	 */
 	@Override
 	public List<C> findDefaultAll(int firstResult, int maxResults, String sortBy) {
@@ -101,6 +103,7 @@ public abstract class AbstractMemoryDao<K extends Serializable, B extends Abstra
 
 	/**
 	 * {@inheritDoc}
+	 * <p>The sortBy argument will be ignored</p>
 	 */
 	@Override
 	public IDaoIterator<C> iterateAll(int firstResult, int maxResults, String sortBy) {
@@ -109,6 +112,7 @@ public abstract class AbstractMemoryDao<K extends Serializable, B extends Abstra
 
 	/**
 	 * {@inheritDoc}
+	 * <p>The sortBy argument will be ignored</p>
 	 */
 	@Override
 	public IDaoIterator<C> iterateDefaultAll(int firstResult, int maxResults, String sortBy) {

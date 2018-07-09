@@ -298,6 +298,7 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 
 	/**
 	 * {@inheritDoc}
+	 * <p>The sortBy argument will be ignored</p>
 	 */
 	@Override
 	public List<C> findAll(int firstResult, int maxResults, String sortBy) {
@@ -310,6 +311,7 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 
 	/**
 	 * {@inheritDoc}
+	 * <p>The sortBy argument will be ignored</p>
 	 */
 	@Override
 	public List<C> findDefaultAll(int firstResult, int maxResults, String sortBy) {
@@ -325,6 +327,8 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	 * @param files files to be loaded
 	 * @param firstResult first result index (-1 for not set)
 	 * @param maxResults maximum number of results (-1 for not limited)
+	 * @param sortBy - the order clauses, e.g. {@code column1 ASC, column2, column3 DESC}
+	 * <p>The sortBy argument will be ignored</p>
 	 * @return loaded objects
 	 */
 	protected List<C> load(Map<K, File> files, int firstResult, int maxResults, String sortBy) {
@@ -343,6 +347,7 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 
 	/**
 	 * {@inheritDoc}
+	 * <p>The sortBy argument will be ignored</p>
 	 */
 	@Override
 	public IDaoIterator<C> iterateAll(int firstResult, int maxResults, String sortBy) {
@@ -355,6 +360,7 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 
 	/**
 	 * {@inheritDoc}
+	 * <p>The sortBy argument will be ignored</p>
 	 */
 	@Override
 	public IDaoIterator<C> iterateDefaultAll(int firstResult, int maxResults, String sortBy) {
@@ -466,6 +472,8 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	 * @param files files to be delivered
 	 * @param firstResult first index to be returned
 	 * @param maxResults max number of results
+	 * @param sortBy - the order clauses, e.g. {@code column1 ASC, column2, column3 DESC}
+	 * <p>The sortBy argument will be ignored</p>
 	 * @return iterator
 	 */
 	protected IDaoIterator<C> iterate(Map<K, File> files, int firstResult, int maxResults, String sortBy) {
@@ -484,6 +492,7 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 		/** Maximum number of files to be returned */
 		private int maxResults;
 		/** Sort by string */
+		@SuppressWarnings("unused")
 		private String sortBy;
 		/** Number of files already returned */
 		private int delivered;
@@ -493,6 +502,8 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 		 * @param files files to iterate over
 		 * @param firstResult first index to be returned
 		 * @param maxResults max number of results
+		 * @param sortBy - the order clauses, e.g. {@code column1 ASC, column2, column3 DESC}
+		 * <p>The sortBy argument will be ignored</p>
 		 */
 		public FileDaoIterator(Map<K, File> files, int firstResult, int maxResults, String sortBy) {
 			this.files      = files.entrySet().iterator();
