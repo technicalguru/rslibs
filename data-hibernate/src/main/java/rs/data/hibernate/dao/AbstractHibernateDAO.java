@@ -53,6 +53,8 @@ import rs.data.util.ObjectDeletedException;
  */
 public abstract class AbstractHibernateDAO<K extends Serializable, T extends GeneralDTO<K>, B extends AbstractHibernateBO<K, T>, C extends IGeneralBO<K>> extends AbstractDAO<K, T, B, C> {
 
+	private ThreadLocal<Integer> lastTotals = new ThreadLocal<>();
+	
 	/**
 	 * Constructor.
 	 */
@@ -324,11 +326,37 @@ public abstract class AbstractHibernateDAO<K extends Serializable, T extends Gen
 	 * @return limited criteria.
 	 */
 	protected Criteria filterResult(Criteria crit, int firstResult, int maxResults) {
+		int total = getTotal(crit);		 
+		lastTotals.set(total);
 		if (firstResult > 0) crit.setFirstResult(firstResult);
 		if (maxResults > 0) crit.setMaxResults(maxResults);
 		return crit;
 	}
 
+	/**
+	 * Returns the number of records of the last retrieval without pagination.
+	 * @return number of rows in last query
+	 * @since 1.3.2
+	 */
+	public int getLastTotal() {
+		Integer rc = lastTotals.get();
+		if (rc != null) return rc.intValue();
+		return 0;
+	}
+	
+	/**
+	 * Get the total number of records in this criteria.
+	 * @param crit - criteria (before applying pagination)
+	 * @return number of records
+	 */
+	protected int getTotal(Criteria crit) {
+		ScrollableResults results = crit.scroll();
+		results.last();
+		int total = results.getRowNumber() + 1;
+		results.close();
+		return total;
+	}
+	
 	/**
 	 * Finds all DTOs matching the Hibernate criteria.
 	 * @param crit Hibernate criteria
@@ -338,7 +366,6 @@ public abstract class AbstractHibernateDAO<K extends Serializable, T extends Gen
 	protected List<T> _findByCriteria(Criteria crit) {
 		if (crit == null) crit = buildCriteria();
 		List<T> rc = crit.list();
-
 		return rc;
 	}
 
@@ -583,6 +610,6 @@ public abstract class AbstractHibernateDAO<K extends Serializable, T extends Gen
 			close();
 			super.finalize();
 		}
-		*/
+		 */
 	}		
 }

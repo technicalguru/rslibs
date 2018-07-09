@@ -46,6 +46,8 @@ import rs.data.util.ObjectDeletedException;
  */
 public abstract class AbstractPlainHibernateDAO<K extends Serializable, B extends AbstractPlainHibernateBO<K>, C extends IGeneralBO<K>> extends AbstractPlainDAO<K, C, B> {
 
+	private ThreadLocal<Integer> lastTotals = new ThreadLocal<>();
+
 	/**
 	 * Constructor.
 	 */
@@ -328,6 +330,31 @@ public abstract class AbstractPlainHibernateDAO<K extends Serializable, B extend
 	}
 
 	/**
+	 * Get the total number of records in this criteria.
+	 * @param crit - criteria (before applying pagination)
+	 * @return number of records
+	 */
+	protected int getTotal(Criteria crit) {
+		ScrollableResults results = crit.scroll();
+		results.last();
+		int total = results.getRowNumber() + 1;
+		results.close();
+		return total;
+	}
+	
+	/**
+	 * Returns the number of records of the last retrieval without pagination.
+	 * @return number of rows in last query
+	 * @since 1.3.2
+	 */
+	public int getLastTotal() {
+		Integer rc = lastTotals.get();
+		if (rc != null) return rc.intValue();
+		return 0;
+	}
+	
+
+	/**
 	 * Applies the result count limitation to the Hibernate criteria.
 	 * @param crit criteria to be limited
 	 * @param firstResult index of first result returned
@@ -335,6 +362,8 @@ public abstract class AbstractPlainHibernateDAO<K extends Serializable, B extend
 	 * @return limited criteria.
 	 */
 	protected Criteria filterResult(Criteria crit, int firstResult, int maxResults) {
+		int total = getTotal(crit);		 
+		lastTotals.set(total);
 		if (firstResult > 0) crit.setFirstResult(firstResult);
 		if (maxResults > 0) crit.setMaxResults(maxResults);
 		return crit;
