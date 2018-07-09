@@ -427,6 +427,7 @@ public class ConverterUtils {
 	 * Converts the given parameter to its byte representation.
 	 * @param param parameter
 	 * @return byte reresentation
+	 * @throws UnsupportedEncodingException when character encoding is invalid
 	 * @since 1.3.2
 	 */
 	public static byte[] toBytes(BigDecimal param) throws UnsupportedEncodingException {
@@ -488,6 +489,7 @@ public class ConverterUtils {
 	 * Converts the given bytes to a BigDecimal.
 	 * @param bytes bytes
 	 * @return BigDecimal value
+	 * @throws UnsupportedEncodingException when character encoding is invalid
 	 * @since 1.3.2
 	 */
 	public static BigDecimal toBigDecimal(byte bytes[]) throws UnsupportedEncodingException {
