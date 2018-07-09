@@ -25,6 +25,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
@@ -285,6 +286,42 @@ public class LangUtils {
 		
 		try {
 			return Float.parseFloat(o.toString());
+		} catch (Exception e) {
+			// ignore
+		}
+		return defaultValue;
+	}
+
+	/**
+	 * Converts the object to a BigDecimal.
+	 * @param o object to be converted
+	 * @return {@link BigDecimal#ZERO} if o is null or cannot be parsed, BigDecimal value of object otherwise
+	 * @since 1.3.2
+	 */
+	public static BigDecimal getBigDecimal(Object o) {
+		return getBigDecimal(o, BigDecimal.ZERO);
+	}
+	
+	/**
+	 * Converts the object to a BigDecimal.
+	 * @param o object to be converted
+	 * @param defaultValue the default value to return
+	 * @return default if object is null or cannot be parsed, BigDecimal value of object otherwise
+	 * @since 1.3.2
+	 */
+	public static BigDecimal getBigDecimal(Object o, BigDecimal defaultValue) {
+		if (o == null) return defaultValue;
+		
+		if (o instanceof BigDecimal) {
+			return (BigDecimal)o;
+		}
+		
+		if (o instanceof Number) {
+			return new BigDecimal(((Number)o).doubleValue());
+		}
+		
+		try {
+			return BigDecimal.valueOf(Double.parseDouble(o.toString()));
 		} catch (Exception e) {
 			// ignore
 		}

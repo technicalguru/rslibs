@@ -300,9 +300,9 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<C> findAll(int firstResult, int maxResults) {
+	public List<C> findAll(int firstResult, int maxResults, String sortBy) {
 		try {
-			return load(getStorageStrategy().getList(getFilenameStrategy().getFiles()), firstResult, maxResults);
+			return load(getStorageStrategy().getList(getFilenameStrategy().getFiles()), firstResult, maxResults, sortBy);
 		} catch (IOException e) {
 			throw new RuntimeException("Cannot load objects", e);
 		}
@@ -312,9 +312,9 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<C> findDefaultAll(int firstResult, int maxResults) {
+	public List<C> findDefaultAll(int firstResult, int maxResults, String sortBy) {
 		try {
-			return load(getStorageStrategy().getDefaultList(getFilenameStrategy().getFiles()), firstResult, maxResults);
+			return load(getStorageStrategy().getDefaultList(getFilenameStrategy().getFiles()), firstResult, maxResults, sortBy);
 		} catch (IOException e) {
 			throw new RuntimeException("Cannot load objects", e);
 		}
@@ -327,7 +327,7 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	 * @param maxResults maximum number of results (-1 for not limited)
 	 * @return loaded objects
 	 */
-	protected List<C> load(Map<K, File> files, int firstResult, int maxResults) {
+	protected List<C> load(Map<K, File> files, int firstResult, int maxResults, String sortBy) {
 		List<C> rc = new ArrayList<C>();
 		int i = 0;
 		for (Map.Entry<K, File> entry : files.entrySet()) {
@@ -345,9 +345,9 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	 * {@inheritDoc}
 	 */
 	@Override
-	public IDaoIterator<C> iterateAll(int firstResult, int maxResults) {
+	public IDaoIterator<C> iterateAll(int firstResult, int maxResults, String sortBy) {
 		try {
-			return iterate(getStorageStrategy().getList(getFilenameStrategy().getFiles()), firstResult, maxResults);
+			return iterate(getStorageStrategy().getList(getFilenameStrategy().getFiles()), firstResult, maxResults, sortBy);
 		} catch (IOException e) {
 			throw new RuntimeException("Cannot load objects", e);
 		}
@@ -357,9 +357,9 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	 * {@inheritDoc}
 	 */
 	@Override
-	public IDaoIterator<C> iterateDefaultAll(int firstResult, int maxResults) {
+	public IDaoIterator<C> iterateDefaultAll(int firstResult, int maxResults, String sortBy) {
 		try {
-			return iterate(getStorageStrategy().getDefaultList(getFilenameStrategy().getFiles()), firstResult, maxResults);
+			return iterate(getStorageStrategy().getDefaultList(getFilenameStrategy().getFiles()), firstResult, maxResults, sortBy);
 		} catch (IOException e) {
 			throw new RuntimeException("Cannot load objects", e);
 		}
@@ -468,8 +468,8 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	 * @param maxResults max number of results
 	 * @return iterator
 	 */
-	protected IDaoIterator<C> iterate(Map<K, File> files, int firstResult, int maxResults) {
-		return new FileDaoIterator(files, firstResult, maxResults);
+	protected IDaoIterator<C> iterate(Map<K, File> files, int firstResult, int maxResults, String sortBy) {
+		return new FileDaoIterator(files, firstResult, maxResults, sortBy);
 	}
 
 	/**
@@ -483,6 +483,8 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 		private Iterator<Map.Entry<K, File>> files;
 		/** Maximum number of files to be returned */
 		private int maxResults;
+		/** Sort by string */
+		private String sortBy;
 		/** Number of files already returned */
 		private int delivered;
 
@@ -492,10 +494,11 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 		 * @param firstResult first index to be returned
 		 * @param maxResults max number of results
 		 */
-		public FileDaoIterator(Map<K, File> files, int firstResult, int maxResults) {
-			this.files = files.entrySet().iterator();
+		public FileDaoIterator(Map<K, File> files, int firstResult, int maxResults, String sortBy) {
+			this.files      = files.entrySet().iterator();
 			this.maxResults = maxResults;
-
+			this.sortBy     = sortBy;
+			
 			// Skip results
 			while ((firstResult > 0) && this.files.hasNext()) {
 				this.files.next();

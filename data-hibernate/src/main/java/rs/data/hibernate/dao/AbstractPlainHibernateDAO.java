@@ -32,6 +32,7 @@ import org.hibernate.criterion.Projections;
 import rs.data.api.bo.IGeneralBO;
 import rs.data.hibernate.HibernateDaoMaster;
 import rs.data.hibernate.bo.AbstractPlainHibernateBO;
+import rs.data.hibernate.util.HbmUtils;
 import rs.data.impl.dao.AbstractPlainDAO;
 import rs.data.util.IDaoIterator;
 import rs.data.util.ObjectDeletedException;
@@ -137,7 +138,16 @@ public abstract class AbstractPlainHibernateDAO<K extends Serializable, B extend
 	 */
 	@Override
 	public List<C> findAll(int firstResult, int maxResults) {
+		return findAll(firstResult, maxResults, null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<C> findAll(int firstResult, int maxResults, String sortBy) {
 		Criteria criteria = buildCriteria(firstResult, maxResults);
+		HbmUtils.addSortClauses(criteria, sortBy); 
 		return findByCriteria(criteria);
 	}
 
@@ -146,8 +156,17 @@ public abstract class AbstractPlainHibernateDAO<K extends Serializable, B extend
 	 */
 	@Override
 	public List<C> findDefaultAll(int firstResult, int maxResults) {
+		return findDefaultAll(firstResult, maxResults, null);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<C> findDefaultAll(int firstResult, int maxResults, String sortBy) {
 		Criteria criteria = getDefaultCriteria();
 		if (criteria == null) criteria = buildCriteria();
+		HbmUtils.addSortClauses(criteria, sortBy); 
 		return findByCriteria(filterResult(criteria, firstResult, maxResults));
 	}
 
@@ -156,16 +175,33 @@ public abstract class AbstractPlainHibernateDAO<K extends Serializable, B extend
 	 */
 	@Override
 	public IDaoIterator<C> iterateAll(int firstResult, int maxResults) {
-		return iterateByCriteria(null, null, firstResult, maxResults);
+		return iterateAll(firstResult, maxResults, null);
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public IDaoIterator<C> iterateAll(int firstResult, int maxResults, String sortBy) {
+		Order orders[] = HbmUtils.getOrderClauses(sortBy);
+		return iterateByCriteria(null, orders, firstResult, maxResults);
+	}
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public IDaoIterator<C> iterateDefaultAll(int firstResult, int maxResults) {
+		return iterateDefaultAll(firstResult, maxResults, null);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public IDaoIterator<C> iterateDefaultAll(int firstResult, int maxResults, String sortBy) {
 		Criterion criterions[] = getDefaultCriterions();
-		return iterateByCriteria(criterions, null, firstResult, maxResults);
+		Order orders[] = HbmUtils.getOrderClauses(sortBy);
+		return iterateByCriteria(criterions, orders, firstResult, maxResults);
 	}
 
 	/**************************** CREATE ***********************/
@@ -290,7 +326,6 @@ public abstract class AbstractPlainHibernateDAO<K extends Serializable, B extend
 		}
 		return filterResult(crit, firstResult, maxResults);
 	}
-
 
 	/**
 	 * Applies the result count limitation to the Hibernate criteria.

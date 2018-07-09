@@ -32,6 +32,7 @@ import java.io.Reader;
 import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -206,7 +207,12 @@ public class CommonUtils {
 	 */
 	public static boolean equals(Object o1, Object o2) {
 		if ((o1 == null) && (o2 == null)) return true;
-		if ((o1 != null) && (o2 != null)) return o1.equals(o2);
+		if ((o1 != null) && (o2 != null)) {
+			if ((o1 instanceof BigDecimal) && (o2 instanceof BigDecimal)) {
+				return ((BigDecimal)o1).compareTo((BigDecimal)o2) == 0;
+			}
+			return o1.equals(o2);
+		}
 		return false;
 	}
 

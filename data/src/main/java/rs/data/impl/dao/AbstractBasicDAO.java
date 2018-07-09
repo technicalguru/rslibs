@@ -368,7 +368,6 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 
 	/************************* FINDING ************************/
 
-
 	/**
 	 * {@inheritDoc}
 	 * <p>
@@ -378,6 +377,18 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 	 */
 	@Override
 	public List<C> findBy(Collection<K> ids) {
+		return findBy(ids, null);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * <p>
+	 * This implementation calls {@link #findBy(Serializable)} for each key.
+	 * Descendants shall override when there are more efficient ways for
+	 * finding multiple objects via their ID.
+	 */
+	@Override
+	public List<C> findBy(Collection<K> ids, String sortBy) {
 		List<C> rc = new ArrayList<C>();
 		for (K id : ids) {
 			C c = findBy(id);
@@ -402,7 +413,23 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 	 */
 	@Override
 	public List<C> findAll() {
-		return findAll(-1, -1);
+		return findAll(-1, -1, null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<C> findAll(String sortBy) {
+		return findAll(-1, -1, sortBy);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<C> findAll(int firstResult, int maxResults) {
+		return findAll(firstResult, maxResults, null);
 	}
 
 	/**
@@ -410,7 +437,23 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 	 */
 	@Override
 	public List<C> findDefaultAll() {
-		return findDefaultAll(-1, -1);
+		return findDefaultAll(-1, -1, null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<C> findDefaultAll(String sortBy) {
+		return findDefaultAll(-1, -1, sortBy);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<C> findDefaultAll(int firstResult, int maxResults) {
+		return findDefaultAll(firstResult, maxResults, null);
 	}
 
 	/**
@@ -418,7 +461,23 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 	 */
 	@Override
 	public IDaoIterator<C> iterateAll() {
-		return iterateAll(-1, -1);
+		return iterateAll(-1, -1, null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public IDaoIterator<C> iterateAll(int firstResult, int maxResults) {
+		return iterateAll(firstResult, maxResults, null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public IDaoIterator<C> iterateAll(String sortBy) {
+		return iterateAll(-1, -1, sortBy);
 	}
 
 	/**
@@ -426,7 +485,23 @@ public abstract class AbstractBasicDAO<K extends Serializable, C extends IGenera
 	 */
 	@Override
 	public IDaoIterator<C> iterateDefaultAll() {
-		return iterateDefaultAll(-1, -1);
+		return iterateDefaultAll(-1, -1, null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public IDaoIterator<C> iterateDefaultAll(String sortBy) {
+		return iterateDefaultAll(-1, -1, sortBy);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public IDaoIterator<C> iterateDefaultAll(int firstResult, int maxResults) {
+		return iterateDefaultAll(firstResult, maxResults, null);
 	}
 
 	/********************** UPDATING ********************/

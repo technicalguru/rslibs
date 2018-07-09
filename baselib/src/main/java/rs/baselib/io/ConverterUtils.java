@@ -24,6 +24,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.ByteBuffer;
@@ -426,6 +427,17 @@ public class ConverterUtils {
 	 * Converts the given parameter to its byte representation.
 	 * @param param parameter
 	 * @return byte reresentation
+	 * @since 1.3.2
+	 */
+	public static byte[] toBytes(BigDecimal param) throws UnsupportedEncodingException {
+		if (param == null) return null;
+		return toBytes(param.toString());
+	}
+
+	/**
+	 * Converts the given parameter to its byte representation.
+	 * @param param parameter
+	 * @return byte reresentation
 	 */
 	public static byte[] toBytes(RsDate param) {
 		if (param == null) return null;
@@ -470,6 +482,17 @@ public class ConverterUtils {
 	public static Date toDate(byte bytes[]) {
 		if (bytes == null) return null;
 		return new Date(toLong(bytes));
+	}
+
+	/**
+	 * Converts the given bytes to a BigDecimal.
+	 * @param bytes bytes
+	 * @return BigDecimal value
+	 * @since 1.3.2
+	 */
+	public static BigDecimal toBigDecimal(byte bytes[]) throws UnsupportedEncodingException {
+		if (bytes == null) return null;
+		return new BigDecimal(toString(bytes));
 	}
 
 	/**

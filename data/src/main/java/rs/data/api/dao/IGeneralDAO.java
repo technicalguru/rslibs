@@ -165,10 +165,25 @@ public interface IGeneralDAO<K extends Serializable, B extends IGeneralBO<K>> {
 	public List<B> findBy(Collection<K> ids);
 	
 	/**
+	 * Find the given objects in model.
+	 * @param ids ids of objects
+	 * @return object
+	 */
+	public List<B> findBy(Collection<K> ids, String sortBy);
+	
+	/**
 	 * Returns all domain objects.
 	 * @return list of all objects
 	 */
 	public List<B> findAll();
+	
+	/**
+	 * Returns all domain objects.
+	 * @return list of all objects
+	 * @param sortBy - the order clauses, e.g. {@code column1 ASC, column2, column3 DESC}
+	 * @since 1.3.2
+	 */
+	public List<B> findAll(String sortBy);
 	
 	/**
 	 * Returns a subset of all objects.
@@ -179,11 +194,30 @@ public interface IGeneralDAO<K extends Serializable, B extends IGeneralBO<K>> {
 	public List<B> findAll(int firstResult, int maxResults);
 
 	/**
+	 * Returns a subset of all objects.
+	 * @param firstResult index of first result
+	 * @param maxResults maximum number of results to return
+	 * @param sortBy - the order clauses, e.g. {@code column1 ASC, column2, column3 DESC}
+	 * @return list of objects
+	 * @since 1.3.2
+	 */
+	public List<B> findAll(int firstResult, int maxResults, String sortBy);
+
+	/**
 	 * Returns domain objects with default criteria.
 	 * A default criteria could hide objects not needed regulary (e.g. deleted objects)
 	 * @return list of all objects
 	 */
 	public List<B> findDefaultAll();
+
+	/**
+	 * Returns domain objects with default criteria.
+	 * A default criteria could hide objects not needed regulary (e.g. deleted objects)
+	 * @param sortBy - the order clauses, e.g. {@code column1 ASC, column2, column3 DESC}
+	 * @return list of all objects
+	 * @since 1.3.2
+	 */
+	public List<B> findDefaultAll(String sortBy);
 
 	/**
 	 * Returns domain objects with default criteria.
@@ -195,10 +229,29 @@ public interface IGeneralDAO<K extends Serializable, B extends IGeneralBO<K>> {
 	public List<B> findDefaultAll(int firstResult, int maxResults);
 	
 	/**
+	 * Returns domain objects with default criteria.
+	 * A default criteria could hide objects not needed regulary (e.g. deleted objects).
+	 * @param firstResult - the first result to be returned
+	 * @param maxResults - the number of results returned at most
+	 * @param sortBy - the order clauses, e.g. {@code column1 ASC, column2, column3 DESC}
+	 * @return list of all objects
+	 * @since 1.3.2
+	 */
+	public List<B> findDefaultAll(int firstResult, int maxResults, String sortBy);
+	
+	/**
 	 * Returns all domain objects.
 	 * @return list of all objects
 	 */
 	public IDaoIterator<B> iterateAll();
+	
+	/**
+	 * Returns all domain objects.
+	 * @param sortBy - the order clauses, e.g. {@code column1 ASC, column2, column3 DESC}
+	 * @return list of all objects
+	 * @since 1.3.2
+	 */
+	public IDaoIterator<B> iterateAll(String sortBy);
 	
 	/**
 	 * Returns a subset of all objects
@@ -209,11 +262,30 @@ public interface IGeneralDAO<K extends Serializable, B extends IGeneralBO<K>> {
 	public IDaoIterator<B> iterateAll(int firstResult, int maxResults);
 	
 	/**
+	 * Returns a subset of all objects
+	 * @param firstResult index of first result
+	 * @param maxResults maximum number of results to return
+	 * @param sortBy - the order clauses, e.g. {@code column1 ASC, column2, column3 DESC}
+	 * @return iterator of BO
+	 * @since 1.3.2
+	 */
+	public IDaoIterator<B> iterateAll(int firstResult, int maxResults, String sortBy);
+	
+	/**
 	 * Returns domain objects with default criteria.
 	 * A default criteria could hide objects not needed regulary (e.g. deleted objects)
 	 * @return list of all objects
 	 */
 	public IDaoIterator<B> iterateDefaultAll();
+	
+	/**
+	 * Returns domain objects with default criteria.
+	 * A default criteria could hide objects not needed regulary (e.g. deleted objects)
+	 * @param sortBy - the order clauses, e.g. {@code column1 ASC, column2, column3 DESC}
+	 * @return list of all objects
+	 * @since 1.3.2
+	 */
+	public IDaoIterator<B> iterateDefaultAll(String sortBy);
 	
 	/**
 	 * Returns a subset of domain objects with default criteria.
@@ -223,6 +295,17 @@ public interface IGeneralDAO<K extends Serializable, B extends IGeneralBO<K>> {
 	 * @return list of all objects
 	 */
 	public IDaoIterator<B> iterateDefaultAll(int firstResult, int maxResults);
+	
+	/**
+	 * Returns a subset of domain objects with default criteria.
+	 * A default criteria could hide objects not needed regulary (e.g. deleted objects)
+	 * @param firstResult index of first result
+	 * @param maxResults maximum number of results to return
+	 * @param sortBy - the order clauses, e.g. {@code column1 ASC, column2, column3 DESC}
+	 * @return list of all objects
+	 * @since 1.3.2
+	 */
+	public IDaoIterator<B> iterateDefaultAll(int firstResult, int maxResults, String sortBy);
 	
 	/********************** UPDATING ********************/
 	

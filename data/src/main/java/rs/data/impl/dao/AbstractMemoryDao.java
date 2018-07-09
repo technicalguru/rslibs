@@ -78,7 +78,7 @@ public abstract class AbstractMemoryDao<K extends Serializable, B extends Abstra
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<C> findAll(int firstResult, int maxResults) {
+	public List<C> findAll(int firstResult, int maxResults, String sortBy) {
 		List<C> rc = new ArrayList<C>();
 		for (C c : objects.values()) {
 			if (firstResult >= 0) {
@@ -95,24 +95,24 @@ public abstract class AbstractMemoryDao<K extends Serializable, B extends Abstra
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<C> findDefaultAll(int firstResult, int maxResults) {
-		return findAll();
+	public List<C> findDefaultAll(int firstResult, int maxResults, String sortBy) {
+		return findAll(sortBy);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public IDaoIterator<C> iterateAll(int firstResult, int maxResults) {
-		return new DaoIteratorImpl<C>(findAll(firstResult, maxResults).iterator());
+	public IDaoIterator<C> iterateAll(int firstResult, int maxResults, String sortBy) {
+		return new DaoIteratorImpl<C>(findAll(firstResult, maxResults, sortBy).iterator());
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public IDaoIterator<C> iterateDefaultAll(int firstResult, int maxResults) {
-		return iterateAll(firstResult, maxResults);
+	public IDaoIterator<C> iterateDefaultAll(int firstResult, int maxResults, String sortBy) {
+		return iterateAll(firstResult, maxResults, sortBy);
 	}
 
 	/**

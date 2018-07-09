@@ -200,7 +200,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	 * @return {@code true} when value is a positive number
 	 */
 	public boolean isPositive() {
-		return amount.compareTo(BigDecimal.ZERO) > 0;
+		return amount.signum() > 0;
 	}
 
 	/**
@@ -208,7 +208,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	 * @return {@code true} when value is a negative number
 	 */
 	public boolean isNegative() {
-		return amount.compareTo(BigDecimal.ZERO) < 0;
+		return amount.signum() < 0;
 	}
 
 	/**
@@ -216,7 +216,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	 * @return {@code true} when value is a positive number
 	 */
 	public boolean isZero() {
-		return amount.compareTo(BigDecimal.ZERO) == 0;
+		return amount.signum() == 0;
 	}
 
 	/**

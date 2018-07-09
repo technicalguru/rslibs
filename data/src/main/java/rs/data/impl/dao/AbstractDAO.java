@@ -202,9 +202,9 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<C> findBy(Collection<K> ids) {
+	public List<C> findBy(Collection<K> ids, String sortBy) {
 		List<C> rc = new ArrayList<C>();
-		wrap(rc, _findBy(ids));
+		wrap(rc, _findBy(ids, sortBy));
 		return rc;
 	}
 
@@ -223,7 +223,7 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	 * @param ids ids of objects
 	 * @return DTOs found
 	 */
-	protected List<T> _findBy(Collection<K> ids) {
+	protected List<T> _findBy(Collection<K> ids, String sortBy) {
 		List<T> rc = new ArrayList<T>();
 		for (K id : ids) {
 			T t = _findBy(id);
@@ -236,8 +236,8 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<C> findAll(int firstResult, int maxResults) {
-		List<T> result = _findAll(firstResult, maxResults);
+	public List<C> findAll(int firstResult, int maxResults, String sortBy) {
+		List<T> result = _findAll(firstResult, maxResults, sortBy);
 		List<C> rc = new ArrayList<C>();
 		wrap(rc, result);
 		return rc;
@@ -249,14 +249,14 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	 * @param maxResults maximum number of results to return
 	 * @return list of DTO
 	 */
-	protected abstract List<T> _findAll(int firstResult, int maxResults);
+	protected abstract List<T> _findAll(int firstResult, int maxResults, String sortBy);
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<C> findDefaultAll(int firstResult, int maxResults) {
-		List<T> result = _findDefaultAll(firstResult, maxResults);
+	public List<C> findDefaultAll(int firstResult, int maxResults, String sortBy) {
+		List<T> result = _findDefaultAll(firstResult, maxResults, sortBy);
 		List<C> rc = new ArrayList<C>();
 		wrap(rc, result);
 		return rc;
@@ -269,14 +269,14 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	 * @param maxResults maximum number of results to return
 	 * @return list of all DTO
 	 */
-	protected abstract List<T> _findDefaultAll(int firstResult, int maxResults);
+	protected abstract List<T> _findDefaultAll(int firstResult, int maxResults, String sortBy);
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public IDaoIterator<C> iterateAll(int firstResult, int maxResults) {
-		return wrap(_iterateAll(firstResult, maxResults));
+	public IDaoIterator<C> iterateAll(int firstResult, int maxResults, String sortBy) {
+		return wrap(_iterateAll(firstResult, maxResults, sortBy));
 	}
 
 	/**
@@ -285,14 +285,14 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	 * @param maxResults maximum number of results to return
 	 * @return iterator of DTO
 	 */
-	protected abstract Iterator<T> _iterateAll(int firstResult, int maxResults);
+	protected abstract Iterator<T> _iterateAll(int firstResult, int maxResults, String sortBy);
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public IDaoIterator<C> iterateDefaultAll(int firstResult, int maxResults) {
-		return wrap(_iterateDefaultAll(firstResult, maxResults));
+	public IDaoIterator<C> iterateDefaultAll(int firstResult, int maxResults, String sortBy) {
+		return wrap(_iterateDefaultAll(firstResult, maxResults, sortBy));
 	}
 
 	/**
@@ -302,7 +302,7 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	 * @param maxResults maximum number of results to return
 	 * @return list of all objects
 	 */
-	protected abstract Iterator<T> _iterateDefaultAll(int firstResult, int maxResults);
+	protected abstract Iterator<T> _iterateDefaultAll(int firstResult, int maxResults, String sortBy);
 
 	/********************** UPDATING ********************/
 

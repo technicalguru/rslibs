@@ -36,6 +36,7 @@ import org.hibernate.criterion.Restrictions;
 import rs.data.api.bo.IGeneralBO;
 import rs.data.hibernate.HibernateDaoMaster;
 import rs.data.hibernate.bo.AbstractHibernateBO;
+import rs.data.hibernate.util.HbmUtils;
 import rs.data.impl.dao.AbstractDAO;
 import rs.data.impl.dto.GeneralDTO;
 import rs.data.util.IDaoIterator;
@@ -132,8 +133,9 @@ public abstract class AbstractHibernateDAO<K extends Serializable, T extends Gen
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected List<T> _findAll(int firstResult, int maxResults) {
+	protected List<T> _findAll(int firstResult, int maxResults, String sortBy) {
 		Criteria criteria = buildCriteria(firstResult, maxResults);
+		HbmUtils.addSortClauses(criteria, sortBy); 
 		return _findByCriteria(criteria);
 	}
 
@@ -141,9 +143,10 @@ public abstract class AbstractHibernateDAO<K extends Serializable, T extends Gen
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected List<T> _findDefaultAll(int firstResult, int maxResults) {
+	protected List<T> _findDefaultAll(int firstResult, int maxResults, String sortBy) {
 		Criteria criteria = getDefaultCriteria();
 		if (criteria == null) criteria = buildCriteria();
+		HbmUtils.addSortClauses(criteria, sortBy); 
 		return _findByCriteria(filterResult(criteria, firstResult, maxResults));
 	}
 
@@ -151,17 +154,19 @@ public abstract class AbstractHibernateDAO<K extends Serializable, T extends Gen
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected Iterator<T> _iterateAll(int firstResult, int maxResults) {
-		return _iterateByCriteria(null, null, firstResult, maxResults);
+	protected Iterator<T> _iterateAll(int firstResult, int maxResults, String sortBy) {
+		Order orders[] = HbmUtils.getOrderClauses(sortBy);
+		return _iterateByCriteria(null, orders, firstResult, maxResults);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected Iterator<T> _iterateDefaultAll(int firstResult, int maxResults) {
+	protected Iterator<T> _iterateDefaultAll(int firstResult, int maxResults, String sortBy) {
 		Criterion criterions[] = getDefaultCriterions();
-		return _iterateByCriteria(criterions, null, firstResult, maxResults);
+		Order orders[] = HbmUtils.getOrderClauses(sortBy);
+		return _iterateByCriteria(criterions, orders, firstResult, maxResults);
 	}
 
 	/******************************** CREATE ***************************/
