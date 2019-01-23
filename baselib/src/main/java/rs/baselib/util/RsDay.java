@@ -51,7 +51,7 @@ public class RsDay extends RsDate {
 	 * @since 1.2.8
 	 */
 	public RsDay(TimeZone timezone) {
-		setTimeZone(timezone != null ? timezone : TimeZone.getDefault());
+		super(timezone);
 		ensureBegin();
 	}
 
@@ -66,10 +66,30 @@ public class RsDay extends RsDate {
 
 	/**
 	 * Constructor.
+	 * @param timezone - init with this timezone
+	 * @param date - init with this date
+	 */
+	public RsDay(TimeZone timezone, Date date) {
+		super(timezone, date);
+		ensureBegin();
+	}
+
+	/**
+	 * Constructor.
 	 * @param timeInMillis - init with this timestamp
 	 */
 	public RsDay(long timeInMillis) {
 		super(timeInMillis);
+		ensureBegin();
+	}
+
+	/**
+	 * Constructor.
+	 * @param timezone - init with this timezone
+	 * @param timeInMillis - init with this timestamp
+	 */
+	public RsDay(TimeZone timezone, long timeInMillis) {
+		super(timezone, timeInMillis);
 		ensureBegin();
 	}
 
@@ -102,8 +122,7 @@ public class RsDay extends RsDate {
 	 * @since 1.2.8
 	 */
 	public RsDay(TimeZone timezone, int day, int month, int year) {
-		super(0);
-		setTimeZone(timezone != null ? timezone : TimeZone.getDefault());
+		super(timezone, 0);
 		set(DAY_OF_MONTH, day);
 		set(MONTH, month);
 		set(YEAR, year);
@@ -133,7 +152,7 @@ public class RsDay extends RsDate {
 	 * @return begin of month
 	 */
 	public RsDate getBegin() {
-		RsDate rc = new RsDate(getTimeInMillis());
+		RsDate rc = new RsDate(getTimeZone(), getTimeInMillis());
 		rc.set(HOUR_OF_DAY, 0);
 		rc.set(MINUTE, 0);
 		rc.set(SECOND, 0);
@@ -146,7 +165,7 @@ public class RsDay extends RsDate {
 	 * @return begin of month
 	 */
 	public RsDate getEnd() {
-		RsDate rc = new RsDate(getTimeInMillis());
+		RsDate rc = new RsDate(getTimeZone(), getTimeInMillis());
 		rc.set(HOUR_OF_DAY, rc.getActualMaximum(HOUR_OF_DAY));
 		rc.set(MINUTE, rc.getActualMaximum(MINUTE));
 		rc.set(SECOND, rc.getActualMaximum(SECOND));
@@ -159,7 +178,7 @@ public class RsDay extends RsDate {
 	 * @return next month
 	 */
 	public RsDay getNext() {
-		RsDay rc = new RsDay(getTimeInMillis());
+		RsDay rc = new RsDay(getTimeZone(), getTimeInMillis());
 		rc.add(DAY_OF_MONTH, 1);
 		return rc;
 	}
@@ -169,7 +188,7 @@ public class RsDay extends RsDate {
 	 * @return previous month
 	 */
 	public RsDay getPrevious() {
-		RsDay rc = new RsDay(getTimeInMillis());
+		RsDay rc = new RsDay(getTimeZone(), getTimeInMillis());
 		rc.add(DAY_OF_MONTH, -1);
 		return rc;
 	}
