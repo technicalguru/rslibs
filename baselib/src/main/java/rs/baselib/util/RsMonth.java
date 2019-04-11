@@ -51,7 +51,7 @@ public class RsMonth extends RsDate {
 	 * @since 1.2.8
 	 */
 	public RsMonth(TimeZone timezone) {
-		setTimeZone(timezone != null ? timezone : TimeZone.getDefault());
+		super(timezone != null ? timezone : TimeZone.getDefault());
 		ensureBegin();
 	}
 
@@ -66,10 +66,30 @@ public class RsMonth extends RsDate {
 
 	/**
 	 * Constructor.
+	 * @param timezone - init with this timezone
+	 * @param date - init with date
+	 */
+	public RsMonth(TimeZone timezone, Date date) {
+		super(timezone, date);
+		ensureBegin();
+	}
+
+	/**
+	 * Constructor.
 	 * @param timeInMillis - init with timestamp
 	 */
 	public RsMonth(long timeInMillis) {
 		super(timeInMillis);
+		ensureBegin();
+	}
+
+	/**
+	 * Constructor.
+	 * @param timezone - init with this timezone
+	 * @param timeInMillis - init with timestamp
+	 */
+	public RsMonth(TimeZone timezone, long timeInMillis) {
+		super(timezone, timeInMillis);
 		ensureBegin();
 	}
 
@@ -99,8 +119,7 @@ public class RsMonth extends RsDate {
 	 * @since 1.2.8
 	 */
 	public RsMonth(TimeZone timezone, int month, int year) {
-		super(0);
-		setTimeZone(timezone != null ? timezone : TimeZone.getDefault());
+		super(timezone, 0);
 		set(MONTH, month);
 		set(YEAR, year);
 		ensureBegin();
@@ -130,7 +149,7 @@ public class RsMonth extends RsDate {
 	 * @return begin of month
 	 */
 	public RsDate getBegin() {
-		RsDate rc = new RsDate(getTimeInMillis());
+		RsDate rc = new RsDate(getTimeZone(), getTimeInMillis());
 		rc.set(DAY_OF_MONTH, 1);
 		rc.set(HOUR_OF_DAY, 0);
 		rc.set(MINUTE, 0);
@@ -144,7 +163,7 @@ public class RsMonth extends RsDate {
 	 * @return begin of month
 	 */
 	public RsDate getEnd() {
-		RsDate rc = new RsDate(getTimeInMillis());
+		RsDate rc = new RsDate(getTimeZone(), getTimeInMillis());
 		rc.set(DAY_OF_MONTH, rc.getActualMaximum(DAY_OF_MONTH));
 		rc.set(HOUR_OF_DAY, rc.getActualMaximum(HOUR_OF_DAY));
 		rc.set(MINUTE, rc.getActualMaximum(MINUTE));
@@ -158,7 +177,7 @@ public class RsMonth extends RsDate {
 	 * @return next month
 	 */
 	public RsMonth getNext() {
-		RsMonth rc = new RsMonth(getTimeInMillis());
+		RsMonth rc = new RsMonth(getTimeZone(), getTimeInMillis());
 		rc.add(MONTH, 1);
 		return rc;
 	}
@@ -168,7 +187,7 @@ public class RsMonth extends RsDate {
 	 * @return previous month
 	 */
 	public RsMonth getPrevious() {
-		RsMonth rc = new RsMonth(getTimeInMillis());
+		RsMonth rc = new RsMonth(getTimeZone(), getTimeInMillis());
 		rc.add(MONTH, -1);
 		return rc;
 	}

@@ -48,7 +48,7 @@ public class RsDate extends GregorianCalendar {
 	 * @since 1.2.8
 	 */
 	public RsDate(TimeZone timezone) {
-		setTimeZone(timezone != null ? timezone : TimeZone.getDefault());
+		super(timezone != null ? timezone : TimeZone.getDefault());
 	}
 
 	/**
@@ -56,6 +56,16 @@ public class RsDate extends GregorianCalendar {
 	 * @param date - init with this date
 	 */
 	public RsDate(Date date) {
+		this(TimeZone.getDefault(), date);
+	}
+
+	/**
+	 * Constructor.
+	 * @param timezone - the timezone for this date
+	 * @param date - init with this date
+	 */
+	public RsDate(TimeZone timezone, Date date) {
+		setTimeZone(timezone != null ? timezone : TimeZone.getDefault());
 		if (date != null) setTimeInMillis(date.getTime());
 		else setTimeInMillis(0);
 	}
@@ -65,6 +75,16 @@ public class RsDate extends GregorianCalendar {
 	 * @param timeInMillis - init with this timestamp
 	 */
 	public RsDate(long timeInMillis) {
+		this(TimeZone.getDefault(), timeInMillis);
+	}
+	
+	/**
+	 * Constructor.
+	 * @param timeInMillis - init with this timestamp
+	 * @param timezone - the timezone for this date
+	 */
+	public RsDate(TimeZone timezone, long timeInMillis) {
+		super(timezone != null ? timezone : TimeZone.getDefault());
 		setTimeInMillis(timeInMillis);
 	}
 
@@ -204,7 +224,7 @@ public class RsDate extends GregorianCalendar {
 	 * @return year
 	 */
 	public RsYear getYear() {
-		return new RsYear(getTimeInMillis());
+		return new RsYear(getTimeZone(), getTimeInMillis());
 	}
 	
 	/**
@@ -212,7 +232,7 @@ public class RsDate extends GregorianCalendar {
 	 * @return month
 	 */
 	public RsMonth getMonth() {
-		return new RsMonth(getTimeInMillis());
+		return new RsMonth(getTimeZone(), getTimeInMillis());
 	}
 	
 	/**
@@ -220,7 +240,7 @@ public class RsDate extends GregorianCalendar {
 	 * @return day
 	 */
 	public RsDay getDay() {
-		return new RsDay(getTimeInMillis());
+		return new RsDay(getTimeZone(), getTimeInMillis());
 	}
 	
 	/**

@@ -51,7 +51,7 @@ public class RsYear extends RsDate {
 	 * @param timezone - init with timezone
 	 */
 	public RsYear(TimeZone timezone) {
-		setTimeZone(timezone != null ? timezone : TimeZone.getDefault());
+		super(timezone != null ? timezone : TimeZone.getDefault());
 		ensureBegin();
 	}
 
@@ -66,10 +66,30 @@ public class RsYear extends RsDate {
 
 	/**
 	 * Constructor.
+	 * @param timezone - init with timezone
+	 * @param date - init with date
+	 */
+	public RsYear(TimeZone timezone, Date date) {
+		super(timezone, date);
+		ensureBegin();
+	}
+
+	/**
+	 * Constructor.
 	 * @param timeInMillis - init with timestamp
 	 */
 	public RsYear(long timeInMillis) {
 		super(timeInMillis);
+		ensureBegin();
+	}
+
+	/**
+	 * Constructor.
+	 * @param timezone - init with timezone
+	 * @param timeInMillis - init with timestamp
+	 */
+	public RsYear(TimeZone timezone, long timeInMillis) {
+		super(timezone, timeInMillis);
 		ensureBegin();
 	}
 
@@ -97,8 +117,7 @@ public class RsYear extends RsDate {
 	 * @since 1.2.8
 	 */
 	public RsYear(TimeZone timezone, int year) {
-		super(0);
-		setTimeZone(timezone != null ? timezone : TimeZone.getDefault());
+		super(timezone, 0);
 		set(YEAR, year);
 		ensureBegin();
 	}
@@ -136,7 +155,7 @@ public class RsYear extends RsDate {
 	 * @return begin of year
 	 */
 	public RsDate getBegin() {
-		RsDate rc = new RsDate(getTimeInMillis());
+		RsDate rc = new RsDate(getTimeZone(), getTimeInMillis());
 		rc.set(DAY_OF_MONTH, 1);
 		rc.set(MONTH, 0);
 		rc.set(HOUR_OF_DAY, 0);
@@ -151,7 +170,7 @@ public class RsYear extends RsDate {
 	 * @return begin of year
 	 */
 	public RsDate getEnd() {
-		RsDate rc = new RsDate(getTimeInMillis());
+		RsDate rc = new RsDate(getTimeZone(), getTimeInMillis());
 		rc.set(DAY_OF_MONTH, rc.getActualMaximum(DAY_OF_MONTH));
 		rc.set(MONTH, rc.getActualMaximum(MONTH));
 		rc.set(HOUR_OF_DAY, rc.getActualMaximum(HOUR_OF_DAY));
@@ -166,7 +185,7 @@ public class RsYear extends RsDate {
 	 * @return next year
 	 */
 	public RsYear getNext() {
-		RsYear rc = new RsYear(getTimeInMillis());
+		RsYear rc = new RsYear(getTimeZone(), getTimeInMillis());
 		rc.add(YEAR, 1);
 		return rc;
 	}
@@ -176,7 +195,7 @@ public class RsYear extends RsDate {
 	 * @return previous year
 	 */
 	public RsYear getPrevious() {
-		RsYear rc = new RsYear(getTimeInMillis());
+		RsYear rc = new RsYear(getTimeZone(), getTimeInMillis());
 		rc.add(YEAR, -1);
 		return rc;
 	}
