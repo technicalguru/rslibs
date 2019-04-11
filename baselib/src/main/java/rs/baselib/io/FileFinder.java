@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLConnection;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -159,7 +160,13 @@ public class FileFinder {
 	public static InputStream open(Class<?> clazz, String name) throws IOException {
 		// try to find as simple file in file system
 		URL url = find(clazz, name);
-		if (url != null) return url.openStream();
+		if (url != null) {
+			URLConnection con = url.openConnection();
+			con.setConnectTimeout(CommonUtils.getConnectTimeout());
+			con.setReadTimeout(CommonUtils.getReadTimeout());
+			InputStream in = con.getInputStream();
+			return in;
+		}
 		
 		return null;
 	}

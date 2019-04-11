@@ -35,6 +35,7 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.NumberFormat;
@@ -73,6 +74,14 @@ public class CommonUtils {
 	private static Pattern ENV_VAR_PATTERN     = Pattern.compile("\\$ENV\\{([^\\}]+)\\}");
 	private static Pattern RUNTIME_VAR_PATTERN = Pattern.compile("\\$RUNTIME\\{([^\\}]+)\\}");
 
+	/** Default timeout for connecting to URLs (10sec) */
+	public static int DEFAULT_CONNECT_TIMEOUT = 10000;
+	/** Default timeout for reading from URLs (20sec) */
+	public static int DEFAULT_READ_TIMEOUT    = 20000;
+	
+	private static int connectTimeout = DEFAULT_CONNECT_TIMEOUT;
+	private static int readTimeout    = DEFAULT_READ_TIMEOUT;
+	
 	/**
 	 * The formatter for dates (see {@link DateFormat#SHORT}).
 	 * @return the formatter
@@ -790,6 +799,38 @@ public class CommonUtils {
 	}
 
 	/**
+	 * Returns the URL connect timeout.
+	 * @return the connectTimeout
+	 */
+	public static int getConnectTimeout() {
+		return connectTimeout;
+	}
+
+	/**
+	 * Sets the URL connect timeout.
+	 * @param connectTimeout the connectTimeout to set
+	 */
+	public static void setConnectTimeout(int connectTimeout) {
+		CommonUtils.connectTimeout = connectTimeout;
+	}
+
+	/**
+	 * Returns the URL read timeout.
+	 * @return the readTimeout
+	 */
+	public static int getReadTimeout() {
+		return readTimeout;
+	}
+
+	/**
+	 * Sets the URL read timeout.
+	 * @param readTimeout the readTimeout to set
+	 */
+	public static void setReadTimeout(int readTimeout) {
+		CommonUtils.readTimeout = readTimeout;
+	}
+
+	/**
 	 * Loads the content of the URL as a string.
 	 * @param url URL to be loaded
 	 * @return the content of the URL
@@ -807,7 +848,20 @@ public class CommonUtils {
 	 * @throws IOException when content of URL cannot be loaded
 	 */
 	public static String loadContent(URL url, Charset charset) throws IOException {
-		return loadContent(url.openStream(), charset);
+		return loadContent(url.openConnection(), charset);
+	}
+
+	/**
+	 * Loads the content of the URL as a string.
+	 * @param url URL to be loaded
+	 * @param charset the charset of the content (<code>null</code> for {@link Charset#defaultCharset() default charset})
+	 * @return the content of the URL
+	 * @throws IOException when content of URL cannot be loaded
+	 */
+	public static String loadContent(URLConnection con, Charset charset) throws IOException {
+		con.setConnectTimeout(getConnectTimeout());
+		con.setReadTimeout(getReadTimeout());
+		return loadContent(con.getInputStream(), charset);
 	}
 
 	/**
