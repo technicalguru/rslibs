@@ -613,6 +613,41 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 		return getTransactionManager().getTransaction();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public long getTransactionStartTime() {
+		TransactionContext context = txContext.get();
+		if (context != null) {
+			return context.getTxStartTime();
+		}
+		return -1L;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public long getTransactionEndTime() {
+		TransactionContext context = txContext.get();
+		if (context != null) {
+			return context.getTxEndTime();
+		}
+		return -1L;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public long getTransactionDuration() {
+		TransactionContext context = txContext.get();
+		if (context != null) {
+			return context.getTxDuration();
+		}
+		return -1L;
+	}
 
 	/********************* PROPERTY CHANGES **********************************/
 
@@ -700,6 +735,8 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 	 */
 	public class TransactionContext {
 
+		private long txStartTime = -1L;
+		private long txEndTime   = -1L;
 		private int beginCount;
 		private boolean modelChanged;
 		private Logger log = LoggerFactory.getLogger(TransactionContext.class);
@@ -771,6 +808,8 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 					int seconds = (int)(timeout > 0 ? timeout/1000L : getDefaultTransactionTimeout()/1000L); 
 					getTransactionManager().setTransactionTimeout(seconds);
 					getTransactionManager().begin();
+					txStartTime = System.currentTimeMillis();
+					txEndTime   = -1L;
 					beginCount = 1;
 					modelChanged = false;
 					if (debugTransactions) {
@@ -812,6 +851,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 					if (!doRollback) {
 						if (isModelChanged()) fireDaoFactoryEvent(new DaoFactoryEvent(AbstractDaoFactory.this, Type.MODEL_CHANGED));
 						fireDaoFactoryEvent(new DaoFactoryEvent(AbstractDaoFactory.this, Type.TRANSACTION_COMMITTING));
+						txEndTime = System.currentTimeMillis();
 						getTransaction().commit();
 						if (debugTransactions) {
 							log.debug("Transaction committed: TX-"+Thread.currentThread().getId());
@@ -820,6 +860,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 						fireDaoFactoryEvent(new DaoFactoryEvent(AbstractDaoFactory.this, Type.TRANSACTION_COMMITTED));
 					} else {
 						fireDaoFactoryEvent(new DaoFactoryEvent(AbstractDaoFactory.this, Type.TRANSACTION_ROLLING_BACK));
+						txEndTime = System.currentTimeMillis();
 						rollback();
 						if (debugTransactions) {
 							log.debug("Transaction rolled back: TX-"+Thread.currentThread().getId());
@@ -862,6 +903,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 					rc = true;
 					Transaction tx = getTransaction();
 					if (tx != null) {
+						txEndTime = System.currentTimeMillis();
 						tx.rollback();
 					} else {
 						log.warn("No transaction found for rollback");
@@ -887,6 +929,41 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 			return rc;
 		}
 
+		
+		/**
+		 * Returns the txStartTime.
+		 * @return the txStartTime
+		 */
+		public long getTxStartTime() {
+			return txStartTime;
+		}
+
+		/**
+		 * Returns the txEndTime.
+		 * @return the txEndTime
+		 */
+		public long getTxEndTime() {
+			return txEndTime;
+		}
+
+		/**
+		 * Returns the duration of the current or last transaction.
+		 * @return the 
+		 */
+		public long getTxDuration() {
+			long rc = -1;
+			long start = getTxStartTime();
+			if (start > 0) {
+				long end = getTxEndTime();
+				if (end > 0) {
+					rc = end-start;
+				} else {
+					rc = System.currentTimeMillis()-start;
+				}
+			}
+			return rc;
+		}
+		
 		/**
 		 * Returns the modelChanged.
 		 * @return the modelChanged

@@ -29,6 +29,7 @@ import javax.transaction.TransactionManager;
 import rs.data.api.bo.IGeneralBO;
 import rs.data.api.dao.IGeneralDAO;
 import rs.data.event.IDaoFactoryListener;
+import rs.data.impl.AbstractDaoFactory.TransactionContext;
 import rs.data.impl.dto.GeneralDTO;
 import rs.baselib.util.IUrlTransformer;
 
@@ -246,6 +247,24 @@ public interface IDaoFactory {
 	 */
 	public Transaction getTransaction() throws SystemException;
 	
+	/**
+	 * Returns the start time of the current or last transaction in ms.
+	 * @return the start time in ms
+	 */
+	public long getTransactionStartTime();
+
+	/**
+	 * Returns the end time of the current or last transaction in ms.
+	 * @return the end time in ms
+	 */
+	public long getTransactionEndTime();
+
+	/**
+	 * Returns the duration of the current or last transaction in ms.
+	 * @return the duration in ms
+	 */
+	public long getTransactionDuration();
+
 	/**
 	 * Ensures that the current thread has no left-overs from last TX activity.
 	 * @since 1.2.9
