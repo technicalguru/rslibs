@@ -26,12 +26,11 @@ import javax.transaction.SystemException;
 import javax.transaction.Transaction;
 import javax.transaction.TransactionManager;
 
+import rs.baselib.util.IUrlTransformer;
 import rs.data.api.bo.IGeneralBO;
 import rs.data.api.dao.IGeneralDAO;
 import rs.data.event.IDaoFactoryListener;
-import rs.data.impl.AbstractDaoFactory.TransactionContext;
 import rs.data.impl.dto.GeneralDTO;
-import rs.baselib.util.IUrlTransformer;
 
 /**
  * A general interface describing a DAO factory.

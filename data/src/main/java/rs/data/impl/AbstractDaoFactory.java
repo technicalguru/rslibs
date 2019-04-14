@@ -649,6 +649,25 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 		return -1L;
 	}
 
+	public String getLastTxBeginStatus() {
+		TransactionContext context = txContext.get();
+		if (context != null) {
+			switch (context.getLastTxBeginStatus()) {
+			case Status.STATUS_ACTIVE:          return "TX_ACTIVE";
+			case Status.STATUS_COMMITTED:       return "TX_COMMITTED";
+			case Status.STATUS_COMMITTING:      return "TX_COMMITTING";
+			case Status.STATUS_MARKED_ROLLBACK: return "TX_MARKED_ROLLBACK";
+			case Status.STATUS_NO_TRANSACTION:  return "TX_NO_TRANSACTION";
+			case Status.STATUS_PREPARED:        return "TX_PREPARED";
+			case Status.STATUS_PREPARING:       return "TX_PREPARING";
+			case Status.STATUS_ROLLEDBACK:      return "TX_ROLLED_BACK";
+			case Status.STATUS_ROLLING_BACK:    return "TX_ROLLING_BACK";
+			case Status.STATUS_UNKNOWN:         return "TX_UNKNOWN";
+			}
+			return "NO_TRANSACTION";
+		}
+		return "NO_TRANSACTION_CONTEXT";
+	}
 	/********************* PROPERTY CHANGES **********************************/
 
 	/**
@@ -737,6 +756,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 
 		private long txStartTime = -1L;
 		private long txEndTime   = -1L;
+		private int txLastBeginStatus = -1;
 		private int beginCount;
 		private boolean modelChanged;
 		private Logger log = LoggerFactory.getLogger(TransactionContext.class);
@@ -798,9 +818,11 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 
 				Transaction tx = getTransaction();
 				if (tx != null) {
-					int txStatus = tx.getStatus();
+					txLastBeginStatus = tx.getStatus();
 					//log.debug("TX status: "+txStatus+ " count="+beginCount);
-					startTx = (txStatus != Status.STATUS_ACTIVE) && (txStatus != Status.STATUS_MARKED_ROLLBACK) && (txStatus != Status.STATUS_ROLLEDBACK);
+					startTx = (txLastBeginStatus != Status.STATUS_ACTIVE) && (txLastBeginStatus != Status.STATUS_MARKED_ROLLBACK) && (txLastBeginStatus != Status.STATUS_ROLLEDBACK);
+				} else {
+					txLastBeginStatus = -1;
 				}
 
 				// Start the TX if required
@@ -962,6 +984,14 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 				}
 			}
 			return rc;
+		}
+		
+		/**
+		 * Returns the transaction status at the last begin time (debugging).
+		 * @return the status of the transaction at last begin
+		 */
+		public int getLastTxBeginStatus() {
+			return txLastBeginStatus;
 		}
 		
 		/**
