@@ -96,6 +96,7 @@ public class RsMonthBuilder implements Builder<RsMonth>{
 		RsMonth rc = null;
 		if (timeBuilder != null) {
 			rc = new RsMonth(timeBuilder.build());
+			if (timezone != null) rc.setTimeZone(timezone);
 		} else {
 			if (this.time != null) {
 				long time = this.time.longValue();

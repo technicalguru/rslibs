@@ -18,6 +18,7 @@
 package rs.baselib.util;
 
 import java.sql.Timestamp;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -278,7 +279,7 @@ public class RsDate extends GregorianCalendar {
 	 */
 	@Override
 	public String toString() {
-		return "RsDate ["+getTime()+"]";
+		return "RsDate ["+toZonedDateTime().format(DateTimeFormatter.ISO_ZONED_DATE_TIME)+"]";
 	}
 	
 	
