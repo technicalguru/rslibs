@@ -96,6 +96,7 @@ public class RsDate extends GregorianCalendar {
 	public RsDate(Calendar calendar) {
 		setTimeInMillis(calendar.getTimeInMillis());
 		setTimeZone(calendar.getTimeZone());
+		get(DAY_OF_MONTH);
 	}
 
 	/**

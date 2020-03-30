@@ -20,11 +20,9 @@ package rs.baselib.util;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Calendar;
+import java.util.TimeZone;
 
 import org.junit.Test;
-
-import rs.baselib.util.RsDate;
-import rs.baselib.util.RsMonth;
 
 /**
  * Tests the {@link RsMonth} class.
@@ -35,6 +33,8 @@ public class RsMonthTest {
 
 	/** The reference value */
 	private static final long currentTime = System.currentTimeMillis();
+	/** The reference timezone */
+	private static final String timezone  = "Asia/Bangkok";
 	
 	/**
 	 * Test method for {@link rs.baselib.util.RsMonth#getEnd()}.
@@ -51,6 +51,18 @@ public class RsMonthTest {
 		assertEquals("Minute mismatch", 59, end.get(Calendar.MINUTE));
 		assertEquals("Second mismatch", 59, end.get(Calendar.SECOND));
 		assertEquals("Millisecond mismatch", 999L, end.get(Calendar.MILLISECOND));
+	}
+
+	/**
+	 * Test the constructor for Calendars.
+	 * <p>The timezone information must be equal.</p>
+	 */
+	@Test
+	public void testRsMonthCalendar() {
+		RsMonth original = new RsMonth(TimeZone.getTimeZone(timezone), currentTime);
+		RsMonth cloned   = new RsMonth(original);
+		assertEquals("Time is not equal via Calendar constructor", original.getTimeInMillis(), cloned.getTimeInMillis());
+		assertEquals("Timezone is not equal via Calendar constructor", original.getTimeZone(), cloned.getTimeZone());
 	}
 
 }

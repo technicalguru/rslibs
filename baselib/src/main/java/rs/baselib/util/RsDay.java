@@ -34,7 +34,7 @@ public class RsDay extends RsDate {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private static SimpleDateFormat KEY_FORMATTER() {
+	private static SimpleDateFormat KEY_PARSER() {
 		return new SimpleDateFormat("yyyyMMdd");
 	}
 	
@@ -137,6 +137,7 @@ public class RsDay extends RsDate {
 		set(MINUTE, 0);
 		set(SECOND, 0);
 		set(MILLISECOND, 0);
+		getKey();
 	}
 	
 	/**
@@ -144,7 +145,15 @@ public class RsDay extends RsDate {
 	 * @return the key of this day.
 	 */
 	public String getKey() {
-		return KEY_FORMATTER().format(getTime());
+		StringBuffer rc = new StringBuffer();
+		rc.append(get(YEAR));
+		int m = get(MONTH);
+		if (m < 9) rc.append('0');
+		rc.append(m+1);
+		int d = get(DAY_OF_MONTH);
+		if (d < 10) rc.append('0');
+		rc.append(d);
+		return rc.toString();
 	}
 	
 	/**
@@ -229,7 +238,7 @@ public class RsDay extends RsDate {
 	 */
 	public static RsDay getDay(String key) {
 		try {
-			return new RsDay(KEY_FORMATTER().parse(key));
+			return new RsDay(KEY_PARSER().parse(key));
 		} catch (Exception e) {
 			throw new RuntimeException("Cannot parse day: "+key, e);
 		}

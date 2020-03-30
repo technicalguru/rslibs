@@ -34,7 +34,7 @@ public class RsMonth extends RsDate {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private static SimpleDateFormat KEY_FORMATTER() {
+	private static SimpleDateFormat KEY_PARSER() {
 		return new SimpleDateFormat("yyyyMM");
 	}
 	
@@ -134,6 +134,7 @@ public class RsMonth extends RsDate {
 		set(MINUTE, 0);
 		set(SECOND, 0);
 		set(MILLISECOND, 0);
+		getKey();
 	}
 	
 	/**
@@ -141,7 +142,12 @@ public class RsMonth extends RsDate {
 	 * @return the key of this month
 	 */
 	public String getKey() {
-		return KEY_FORMATTER().format(getTime());
+		StringBuffer rc = new StringBuffer();
+		rc.append(get(YEAR));
+		int m = get(MONTH);
+		if (m < 9) rc.append('0');
+		rc.append(m+1);
+		return rc.toString();
 	}
 	
 	/**
@@ -228,7 +234,7 @@ public class RsMonth extends RsDate {
 	 */
 	public static RsMonth getMonth(String key) {
 		try {
-			return new RsMonth(KEY_FORMATTER().parse(key));
+			return new RsMonth(KEY_PARSER().parse(key));
 		} catch (Exception e) {
 			throw new RuntimeException("Cannot parse month: "+key, e);
 		}
