@@ -79,14 +79,17 @@ public class RsDayBuilder implements Builder<RsDay>{
 	@Override
 	public RsDay build() {
 		RsDay rc = null;
+		long t = System.currentTimeMillis();
 		if (this.time != null) {
-			rc = new RsDay(this.time);
+			t = this.time.longValue();
 		} else if (timeBuilder != null) {
-			rc = new RsDay(timeBuilder.build());
-		} else {
-			rc = new RsDay();
+			t = timeBuilder.build();
 		}
-		if (timezone != null) rc.setTimeZone(timezone);
+		if (timezone != null) {
+			rc = new RsDay(timezone, t);
+		} else {
+			rc = new RsDay(t);
+		}
 		return rc;
 	}
 }
