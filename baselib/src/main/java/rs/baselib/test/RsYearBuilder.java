@@ -103,18 +103,22 @@ public class RsYearBuilder implements Builder<RsYear>{
 	@Override
 	public RsYear build() {
 		RsYear rc = null;
-		if (this.time != null) {
-			rc = new RsYear(this.time);
-			if (timezone != null) rc.setTimeZone(timezone);
-		} else if (year != null) {
+		if (year != null) {
 			rc = timezone != null ? new RsYear(timezone, year) : new RsYear(year);
-		} else if (timeBuilder != null) {
-			rc = new RsYear(timeBuilder.build());
-			if (timezone != null) rc.setTimeZone(timezone);
 		} else if (yearBuilder != null) {
-			rc = new RsYear(yearBuilder.build());
+			rc = timezone != null ? new RsYear(timezone, yearBuilder.build()) : new RsYear(yearBuilder.build());
 		} else {
-			rc = timezone != null ? new RsYear(timezone) : new RsYear();
+			long t = System.currentTimeMillis();
+			if (this.time != null) {
+				t = this.time.longValue();
+			} else if (timeBuilder != null) {
+				t = timeBuilder.build();
+			}
+			if (timezone != null) {
+				rc = new RsYear(timezone, t);
+			} else {
+				rc = new RsYear(t);
+			}
 		}
 		return rc;
 	}

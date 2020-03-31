@@ -61,12 +61,17 @@ public class RsYearBuilderTest {
 	@Test
 	public void testWithTimeBuilder() {
 		// Get the number of days of current month first
-		int numDays = new RsDate().getActualMaximum(Calendar.DAY_OF_YEAR);
+		RsDate d = new RsDate();
+		int numDays = d.getActualMaximum(Calendar.DAY_OF_YEAR);
+		// Number of days still to go
+		numDays = numDays - d.get(Calendar.DAY_OF_YEAR) + 10;
 		LongBuilder builder = $Long().withStart(System.currentTimeMillis()).withOffset(numDays*DateUtils.MILLIS_PER_DAY);
 		RsYearBuilder b = $RsYear().withTime(builder);
 		RsDate first   = b.build().getBegin();
 		RsDate actual  = b.build().getBegin();
-		assertEquals("RsYearBuilder not initialized correctly", first.getTimeInMillis()+numDays*DateUtils.MILLIS_PER_DAY, actual.getTimeInMillis());
+		assertEquals("RsYearBuilder not initialized correctly", 0, actual.get(Calendar.MONTH));
+		assertEquals("RsYearBuilder not initialized correctly", 1, actual.get(Calendar.DAY_OF_MONTH));
+		assertEquals("RsYearBuilder not initialized correctly", first.get(Calendar.YEAR)+1, actual.get(Calendar.YEAR));
 	}
 
 	@Test
