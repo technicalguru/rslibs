@@ -95,16 +95,19 @@ public class RsMonthBuilder implements Builder<RsMonth>{
 	public RsMonth build() {
 		RsMonth rc = null;
 		if (timeBuilder != null) {
-			rc = new RsMonth(timeBuilder.build());
-			if (timezone != null) rc.setTimeZone(timezone);
-		} else {
-			if (this.time != null) {
-				long time = this.time.longValue();
-				rc = new RsMonth(time);
+			if (timezone != null) {
+				rc = new RsMonth(timezone, timeBuilder.build());
 			} else {
-				rc = new RsMonth();
+				rc = new RsMonth(timeBuilder.build());
 			}
-			if (timezone != null) rc.setTimeZone(timezone);
+		} else {
+			long t = System.currentTimeMillis();
+			if (this.time != null) t = this.time.longValue();
+			if (timezone != null) {
+				rc = new RsMonth(timezone, t);
+			} else {
+				rc = new RsMonth(t);
+			}
 			if (monthOffset != null) {
 				for (int i=0; i<count; i++) {
 					if (monthOffset < 0) {

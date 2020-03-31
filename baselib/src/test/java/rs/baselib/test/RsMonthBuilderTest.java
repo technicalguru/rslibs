@@ -60,23 +60,26 @@ public class RsMonthBuilderTest {
 	@Test
 	public void testWithTimeBuilder() {
 		// Get the number of days of current month first
-		int numDays = new RsDate().getActualMaximum(Calendar.DAY_OF_MONTH);
+		RsDate today = new RsDate();
+		int numDays = today.getActualMaximum(Calendar.DAY_OF_MONTH);
+		// Subtract the number of days still to go and add a few more
+		numDays = numDays - today.get(Calendar.DAY_OF_MONTH) + 10;
+		System.out.println(numDays);
 		LongBuilder builder = $Long().withStart(System.currentTimeMillis()).withOffset(numDays*DateUtils.MILLIS_PER_DAY);
 		RsMonthBuilder b = $RsMonth().withTimezone(TimeZone.getTimeZone("UTC")).withTime(builder);
 		RsDate first   = b.build().getBegin();
 		RsDate actual  = b.build().getBegin();
-		System.out.println("first="+first.toString());
-		System.out.println("actual="+actual.toString());
-		assertEquals("RsMonthBuilder not initialized correctly", first.getTimeInMillis()+numDays*DateUtils.MILLIS_PER_DAY, actual.getTimeInMillis());
+		assertEquals("RsMonthBuilder not initialized correctly", first.get(Calendar.MONTH)+1, actual.get(Calendar.MONTH));
+		assertEquals("RsMonthBuilder not initialized correctly", actual.get(Calendar.DAY_OF_MONTH), 1);
 	}
 
 	@Test
 	public void testWithTimeOffset() {
 		RsMonthBuilder b = $RsMonth().withTimezone(TimeZone.getTimeZone("UTC")).withMonthOffset(1);
 		RsMonth first = b.build();
-		int days = first.getActualMaximum(Calendar.DAY_OF_MONTH);
 		RsMonth actual = b.build();
-		assertEquals("RsMonthBuilder not initialized correctly", first.getBegin().getTimeInMillis()+days*DateUtils.MILLIS_PER_DAY, actual.getBegin().getTimeInMillis());
+		assertEquals("RsMonthBuilder not initialized correctly", first.get(Calendar.MONTH)+1, actual.get(Calendar.MONTH));
+		assertEquals("RsMonthBuilder not initialized correctly", actual.getBegin().get(Calendar.DAY_OF_MONTH), 1);
 	}
 
 	@Test
