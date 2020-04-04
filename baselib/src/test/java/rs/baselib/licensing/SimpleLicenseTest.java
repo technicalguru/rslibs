@@ -45,7 +45,7 @@ public class SimpleLicenseTest extends AbstractLicenseTest {
 	private static LicenseManager manager;
 	
 	/**
-	 * @throws java.lang.Exception
+	 * @throws java.lang.Exception when the DSA method cannot be set up
 	 */
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {

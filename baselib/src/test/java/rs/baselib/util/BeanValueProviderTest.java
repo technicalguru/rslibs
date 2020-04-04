@@ -37,7 +37,7 @@ public class BeanValueProviderTest {
 	
 	/**
 	 * Sets up a value provider
-	 * @throws java.lang.Exception
+	 * @throws java.lang.Exception - when the provider cannot be setup
 	 */
 	@Before
 	public void setUp() throws Exception {

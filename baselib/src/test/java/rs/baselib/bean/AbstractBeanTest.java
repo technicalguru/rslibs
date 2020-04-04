@@ -44,7 +44,7 @@ public class AbstractBeanTest {
 	
 	/**
 	 * Sets up the {@link TestBean}.
-	 * @throws java.lang.Exception
+	 * @throws java.lang.Exception when an error occurs
 	 */
 	@Before
 	public void setUp() throws Exception {
@@ -236,6 +236,8 @@ public class AbstractBeanTest {
 
 	/**
 	 * Test method for {@link rs.baselib.bean.AbstractBean#isCopyAllowed(java.beans.PropertyDescriptor)}.
+	 * 
+	 * @throws Exception - when an error occurs (test fails) 
 	 */
 	@Test
 	public void testIsCopyAllowed() throws Exception {

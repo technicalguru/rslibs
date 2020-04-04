@@ -129,6 +129,8 @@ public class ConverterUtilsTest {
 
 	/**
 	 * Test method for {@link ConverterUtils#toChar(byte[])}.
+	 * 
+	 * @throws UnsupportedEncodingException - when byte encoding fails
 	 */
 	@Test
 	public void testToChar() throws UnsupportedEncodingException {
@@ -138,6 +140,8 @@ public class ConverterUtilsTest {
 
 	/**
 	 * Test method for {@link ConverterUtils#toCharObject(byte[])}.
+	 * 
+	 * @throws UnsupportedEncodingException - when byte encoding fails
 	 */
 	@Test
 	public void testToCharObject() throws UnsupportedEncodingException {
@@ -147,6 +151,8 @@ public class ConverterUtilsTest {
 
 	/**
 	 * Test method for {@link ConverterUtils#toCharArray(byte[])}.
+	 * 
+	 * @throws UnsupportedEncodingException - when byte encoding fails
 	 */
 	@Test
 	public void testToCharArray() throws UnsupportedEncodingException {
@@ -156,6 +162,8 @@ public class ConverterUtilsTest {
 
 	/**
 	 * Test method for {@link ConverterUtils#toByte(byte[])}.
+	 * 
+	 * @throws UnsupportedEncodingException - when byte encoding fails
 	 */
 	@Test
 	public void testToByte() {
@@ -192,6 +200,8 @@ public class ConverterUtilsTest {
 
 	/**
 	 * Test method for {@link ConverterUtils#toString(byte[])}.
+	 * 
+	 * @throws UnsupportedEncodingException - when byte encoding fails
 	 */
 	@Test
 	public void testToString() throws UnsupportedEncodingException {
@@ -201,6 +211,8 @@ public class ConverterUtilsTest {
 
 	/**
 	 * Test method for {@link ConverterUtils#toDate(byte[])}.
+	 * 
+	 * @throws UnsupportedEncodingException - when byte encoding fails
 	 */
 	@Test
 	public void testToDate() {
@@ -219,6 +231,8 @@ public class ConverterUtilsTest {
 
 	/**
 	 * Test method for {@link ConverterUtils#toCurrency(byte[])}.
+	 * 
+	 * @throws UnsupportedEncodingException - when byte encoding fails
 	 */
 	@Test
 	public void testToCurrency() throws UnsupportedEncodingException {
@@ -228,7 +242,8 @@ public class ConverterUtilsTest {
 
 	/**
 	 * Test method for {@link ConverterUtils#toTimeZone(byte[])}.
-	 * @throws UnsupportedEncodingException 
+	 * 
+	 * @throws UnsupportedEncodingException - when byte encoding fails
 	 */
 	@Test
 	public void testToTimeZone() throws UnsupportedEncodingException {
@@ -238,8 +253,9 @@ public class ConverterUtilsTest {
 
 	/**
 	 * Test method for {@link ConverterUtils#toURL(byte[])}.
-	 * @throws MalformedURLException 
-	 * @throws UnsupportedEncodingException 
+	 * 
+	 * @throws MalformedURLException - when URL was invalid
+	 * @throws UnsupportedEncodingException - when byte encoding fails
 	 */
 	@Test
 	public void testToURL() throws MalformedURLException, UnsupportedEncodingException {

@@ -68,6 +68,8 @@ public class FileFinderTest {
 
 	/**
 	 * Test method for {@link FileFinder#open(String)}.
+	 * 
+	 * @throws IOException - when the test data cannot be loaded
 	 */
 	@Test
 	public void testOpenString() throws IOException {
@@ -85,6 +87,8 @@ public class FileFinderTest {
 
 	/**
 	 * Test method for {@link FileFinder#open(Class, String)}.
+	 * 
+	 * @throws IOException - when the test data cannot be loaded
 	 */
 	@Test
 	public void testOpenClassOfQString() throws IOException {
@@ -102,6 +106,8 @@ public class FileFinderTest {
 
 	/**
 	 * Test method for {@link FileFinder#load(String)}.
+	 * 
+	 * @throws IOException - when the test data cannot be loaded
 	 */
 	@Test
 	public void testLoadString() throws IOException {
@@ -111,6 +117,8 @@ public class FileFinderTest {
 
 	/**
 	 * Test method for {@link FileFinder#load(Class, String)}.
+	 * 
+	 * @throws IOException - when the test data cannot be loaded
 	 */
 	@Test
 	public void testLoadClassOfQString() throws IOException {

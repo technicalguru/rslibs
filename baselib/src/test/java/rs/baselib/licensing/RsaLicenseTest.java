@@ -40,7 +40,7 @@ public class RsaLicenseTest extends AbstractLicenseTest {
 	private static LicenseManager manager;
 	
 	/**
-	 * @throws java.lang.Exception
+	 * @throws java.lang.Exception - when the RSA method cannot be setup
 	 */
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {

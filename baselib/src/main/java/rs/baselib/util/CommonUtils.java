@@ -853,7 +853,7 @@ public class CommonUtils {
 
 	/**
 	 * Loads the content of the URL as a string.
-	 * @param url URL to be loaded
+	 * @param con URL connection to be used
 	 * @param charset the charset of the content (<code>null</code> for {@link Charset#defaultCharset() default charset})
 	 * @return the content of the URL
 	 * @throws IOException when content of URL cannot be loaded

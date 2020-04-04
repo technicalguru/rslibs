@@ -43,7 +43,7 @@ public class DefaultFilenameStrategyTest {
 	
 	/**
 	 * Creates the strategy with default parameters and 10 test files.
-	 * @throws java.lang.Exception
+	 * @throws java.lang.Exception - when the test data cannot be setup
 	 */
 	@Before
 	public void setUp() throws Exception {
@@ -70,6 +70,8 @@ public class DefaultFilenameStrategyTest {
 	
 	/**
 	 * Test method for {@link rs.data.file.util.DefaultFilenameStrategy#getParentDir()}.
+	 * 
+	 * @throws IOException when storag access fails
 	 */
 	@Test
 	public void testGetParentDir() throws IOException {
@@ -79,6 +81,8 @@ public class DefaultFilenameStrategyTest {
 
 	/**
 	 * Test method for {@link rs.data.file.util.DefaultFilenameStrategy#setParentDir(java.io.File)}.
+	 * 
+	 * @throws IOException when storag access fails
 	 */
 	@Test
 	public void testSetParentDir() throws IOException {
@@ -90,6 +94,8 @@ public class DefaultFilenameStrategyTest {
 
 	/**
 	 * Test method for {@link rs.data.file.util.DefaultFilenameStrategy#setPrefix(java.lang.String)}.
+	 * 
+	 * @throws IOException when storag access fails
 	 */
 	@Test
 	public void testSetPrefix() throws IOException {
@@ -100,6 +106,8 @@ public class DefaultFilenameStrategyTest {
 
 	/**
 	 * Test method for {@link rs.data.file.util.DefaultFilenameStrategy#setSuffix(java.lang.String)}.
+	 * 
+	 * @throws IOException when storag access fails
 	 */
 	@Test
 	public void testSetSuffix() throws IOException {
@@ -132,6 +140,8 @@ public class DefaultFilenameStrategyTest {
 
 	/**
 	 * Test method for {@link rs.data.file.util.DefaultFilenameStrategy#getFiles()}.
+	 * 
+	 * @throws IOException when storag access fails
 	 */
 	@Test
 	public void testGetFiles() throws IOException {

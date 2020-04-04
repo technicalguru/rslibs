@@ -75,6 +75,11 @@ public class EncrypterTest {
 
 	/**
 	 * Constructs the test with given parameters.
+	 * @param lineNo - line number to report
+	 * @param plainText - plain text to encrypt
+	 * @param salt - salt to be used
+	 * @param key - key to be used
+	 * @param encryptedText - expected crypted text
 	 */
 	public EncrypterTest(int lineNo, String plainText, String salt, String key, String encryptedText) {
 		this.lineNo = lineNo;
@@ -86,6 +91,8 @@ public class EncrypterTest {
 
 	/**
 	 * Test method for {@link Encrypter#encrypt(java.lang.String)}.
+	 * 
+	 * @throws Exception - when the encryption process fails
 	 */
 	@Test
 	public void testEncrypt() throws Exception {

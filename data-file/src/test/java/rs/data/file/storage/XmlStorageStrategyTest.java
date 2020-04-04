@@ -47,7 +47,8 @@ public class XmlStorageStrategyTest {
 	private Customer customer;
 	
 	/**
-	 * @throws java.lang.Exception
+	 * Setup test.
+	 * @throws java.lang.Exception when the customer cannot be setup
 	 */
 	@Before
 	public void setUp() throws Exception {

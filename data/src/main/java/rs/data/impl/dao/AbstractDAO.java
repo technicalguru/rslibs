@@ -221,6 +221,7 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	 * IDs. Descendants shall override when there are more efficient ways to return the
 	 * appropriate list. 
 	 * @param ids ids of objects
+	 * @param sortBy - the order clauses, e.g. {@code column1 ASC, column2, column3 DESC}
 	 * @return DTOs found
 	 */
 	protected List<T> _findBy(Collection<K> ids, String sortBy) {
@@ -247,6 +248,7 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	 * Returns a subset of all objects.
 	 * @param firstResult index of first result
 	 * @param maxResults maximum number of results to return
+	 * @param sortBy - the order clauses, e.g. {@code column1 ASC, column2, column3 DESC}
 	 * @return list of DTO
 	 */
 	protected abstract List<T> _findAll(int firstResult, int maxResults, String sortBy);
@@ -267,6 +269,7 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	 * A default criteria could hide objects not needed regulary (e.g. deleted objects)
 	 * @param firstResult index of first result
 	 * @param maxResults maximum number of results to return
+	 * @param sortBy - the order clauses, e.g. {@code column1 ASC, column2, column3 DESC}
 	 * @return list of all DTO
 	 */
 	protected abstract List<T> _findDefaultAll(int firstResult, int maxResults, String sortBy);
@@ -283,6 +286,7 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	 * Returns a subset of all objects
 	 * @param firstResult index of first result
 	 * @param maxResults maximum number of results to return
+	 * @param sortBy - the order clauses, e.g. {@code column1 ASC, column2, column3 DESC}
 	 * @return iterator of DTO
 	 */
 	protected abstract Iterator<T> _iterateAll(int firstResult, int maxResults, String sortBy);
@@ -300,6 +304,7 @@ public abstract class AbstractDAO<K extends Serializable, T extends GeneralDTO<K
 	 * A default criteria could hide objects not needed regulary (e.g. deleted objects)
 	 * @param firstResult index of first result
 	 * @param maxResults maximum number of results to return
+	 * @param sortBy - the order clauses, e.g. {@code column1 ASC, column2, column3 DESC}
 	 * @return list of all objects
 	 */
 	protected abstract Iterator<T> _iterateDefaultAll(int firstResult, int maxResults, String sortBy);

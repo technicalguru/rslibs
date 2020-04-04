@@ -147,7 +147,7 @@ public class FileDaoTest {
 		assertNull("Customer still exists in DAO", customer);
 	}
 	
-	/** Helper method */
+	/* Helper method */
 	protected Customer createCustomer() {
 		Customer customer = customerDao.newInstance();
 		setup(customer);

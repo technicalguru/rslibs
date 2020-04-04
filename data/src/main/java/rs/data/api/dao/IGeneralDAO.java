@@ -166,7 +166,8 @@ public interface IGeneralDAO<K extends Serializable, B extends IGeneralBO<K>> {
 	
 	/**
 	 * Find the given objects in model.
-	 * @param ids ids of objects
+	 * @param ids - ids of objects
+	 * @param sortBy - the order clauses, e.g. {@code column1 ASC, column2, column3 DESC}
 	 * @return object
 	 */
 	public List<B> findBy(Collection<K> ids, String sortBy);

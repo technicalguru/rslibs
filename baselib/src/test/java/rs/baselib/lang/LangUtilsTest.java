@@ -212,6 +212,9 @@ public class LangUtilsTest {
 
 	/**
 	 * Test method for {@link LangUtils#serializeBase64(Object)}.
+	 * 
+	 * @throws IOException - when the test data cannot be serialized
+	 * @throws ClassNotFoundException - when unserializing cannot find the test class
 	 */
 	@Test
 	public void testSerializeBase64() throws IOException, ClassNotFoundException {
@@ -221,6 +224,8 @@ public class LangUtilsTest {
 
 	/**
 	 * Test method for {@link LangUtils#serialize(Object)}.
+	 * @throws IOException - when the test data cannot be unserialized
+	 * @throws ClassNotFoundException - when serializing cannot find the test class
 	 */
 	@Test
 	public void testSerialize() throws IOException, ClassNotFoundException {
@@ -238,6 +243,10 @@ public class LangUtilsTest {
 
 	/**
 	 * Test method for {@link LangUtils#isTransient(PropertyDescriptor)}.
+	 * 
+	 * @throws NoSuchMethodException - when method cannot be found
+	 * @throws InvocationTargetException - when method throws an error
+	 * @throws IllegalAccessException - when method cannot be accessed
 	 */
 	@Test
 	public void testIsTransient() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
@@ -248,6 +257,10 @@ public class LangUtilsTest {
 
 	/**
 	 * Test method for {@link LangUtils#isNoCopy(PropertyDescriptor)}.
+	 * 
+	 * @throws NoSuchMethodException - when method cannot be found
+	 * @throws InvocationTargetException - when method throws an error
+	 * @throws IllegalAccessException - when method cannot be accessed
 	 */
 	@Test
 	public void testIsNoCopy() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {

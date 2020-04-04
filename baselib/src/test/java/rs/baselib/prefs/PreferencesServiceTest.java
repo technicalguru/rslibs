@@ -94,6 +94,8 @@ public class PreferencesServiceTest {
 	
 	/**
 	 * Test method for {@link PreferencesService#load(IPreferences, InputStream)}.
+	 * 
+	 * @throws BackingStoreException when the backing store fails
 	 */
 	@Test
 	public void testLoad() throws BackingStoreException {
@@ -109,6 +111,8 @@ public class PreferencesServiceTest {
 
 	/**
 	 * Test method for {@link PreferencesService#load(IPreferences, InputStream)}.
+	 * 
+	 * @throws BackingStoreException when the backing store fails
 	 */
 	@Test
 	public void testLoadIgnored() throws BackingStoreException {
@@ -127,7 +131,8 @@ public class PreferencesServiceTest {
 	 * @param node node to be tested
 	 * @param children child indices
 	 * @param keys key indices
-	 * @throws BackingStoreException
+	 * 
+	 * @throws BackingStoreException when the backing store fails
 	 */
 	protected void testNode(IPreferences node, int children[], int keys[]) throws BackingStoreException {
 		String childNames[] = node.childrenNames();
@@ -144,6 +149,9 @@ public class PreferencesServiceTest {
 	
 	/**
 	 * Test method for {@link PreferencesService#save(IPreferences, OutputStream)}.
+	 * 
+	 * @throws BackingStoreException - when the backing store fails
+	 * @throws UnsupportedEncodingException - when string encoding fails
 	 */
 	@Test
 	public void testSaveIPreferencesOutputStream() throws BackingStoreException, UnsupportedEncodingException {
@@ -172,6 +180,9 @@ public class PreferencesServiceTest {
 	
 	/**
 	 * Test method for {@link PreferencesService#getUserPreferencesFile(String)}.
+	 * 
+	 * @throws BackingStoreException - when the backing store fails
+	 * @throws IOException - when the file access fails
 	 */
 	@Test
 	public void testGetUserPreferencesFile() throws IOException, BackingStoreException {
@@ -193,6 +204,9 @@ public class PreferencesServiceTest {
 
 	/**
 	 * Test method for read and writes (high level tests)
+	 * 
+	 * @throws BackingStoreException - when the backing store fails
+	 * @throws IOException - when the file access fails
 	 */
 	@Test
 	public void testUserPreferences() throws BackingStoreException, IOException {
@@ -203,6 +217,9 @@ public class PreferencesServiceTest {
 
 	/**
 	 * Test method for read and writes (high level tests)
+	 * 
+	 * @throws BackingStoreException - when the backing store fails
+	 * @throws IOException - when the file access fails
 	 */
 	@Test
 	public void testSystemPreferences() throws BackingStoreException, IOException {

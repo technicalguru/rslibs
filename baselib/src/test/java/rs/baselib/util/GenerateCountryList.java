@@ -37,6 +37,8 @@ public class GenerateCountryList {
 
 	/**
 	 * Constructor.
+	 * 
+	 * @throws IOException - when the countries file cannot be loaded
 	 */
 	@Test
 	public void generateCountryList() throws IOException {

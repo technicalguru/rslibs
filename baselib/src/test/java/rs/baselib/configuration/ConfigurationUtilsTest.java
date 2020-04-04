@@ -41,7 +41,7 @@ public class ConfigurationUtilsTest {
 	
 	/**
 	 * Loads the configuration.
-	 * @throws java.lang.Exception
+	 * @throws java.lang.Exception when configuration cannot be found or read
 	 */
 	@BeforeClass
 	public static void setUpClass() throws Exception {
@@ -98,6 +98,8 @@ public class ConfigurationUtilsTest {
 
 	/**
 	 * Test method for {@link ConfigurationUtils#configure(IConfigurable, Configuration)}.
+	 * 
+	 * @throws ConfigurationException - when the configuration parsing fails
 	 */
 	@Test
 	public void testConfigure() throws ConfigurationException {
