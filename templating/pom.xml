@@ -7,11 +7,10 @@
 	</parent>
 
 	<properties>
-		<project.home>http://techblog.ralph-schuster.eu/rs-library/templating/</project.home>
+		<project.home>https://techblog.ralph-schuster.eu/rs-library/templating/</project.home>
 	</properties>
 	
 	<artifactId>templating</artifactId>
-  <version> 1.3.2-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 	<name>${project.groupId}.${project.artifactId}</name>
 	<description>Using Typo3 templates with Java</description>

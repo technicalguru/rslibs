@@ -8,12 +8,11 @@
 	</parent>
 
 	<properties>
-		<project.home>http://techblog.ralph-schuster.eu/rs-library/data-hibernate/</project.home>
-		<hibernate.version>4.2.18.Final</hibernate.version>
+		<project.home>https://techblog.ralph-schuster.eu/rs-library/data-hibernate/</project.home>
+		<hibernate.version>4.2.21.Final</hibernate.version>
 	</properties>
 
 	<artifactId>data-hibernate</artifactId>
-  <version> 1.3.2-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 	<name>${project.groupId}.${project.artifactId}</name>
 	<description>Hibernate extension for Data Access classes</description>
