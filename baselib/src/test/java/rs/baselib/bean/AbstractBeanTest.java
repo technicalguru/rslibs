@@ -273,11 +273,14 @@ public class AbstractBeanTest {
 		
 	}
 	
+	/**
+	 * Expected properties: dirty, propertyNames, changeDate, changes, name
+	 */
 	@Test
 	public void testGetProperties() {
 		Iterable<String> properties = bean.getPropertyNames();
-		int cnt = 0; for (@SuppressWarnings("unused") String s : properties) cnt++;
-		assertEquals("Not the correct number of properties", 6, cnt);
+		int cnt = 0; for (@SuppressWarnings("unused") String s : properties) { cnt++; }
+		assertEquals("Not the correct number of properties", 5, cnt);
 	}
 	
 }
