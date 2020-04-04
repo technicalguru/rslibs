@@ -21,8 +21,6 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 
-import rs.baselib.util.IUriProvider;
-
 /**
  * Wraps an {@link IUriProvider} into an {@link IUrlTransformer}.
  * 

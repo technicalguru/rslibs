@@ -26,8 +26,6 @@ import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 
-import rs.baselib.util.SoftMapCache;
-
 /**
  * Tests the {@link rs.baselib.util.SoftMapCache}.
  * @author ralph

@@ -24,8 +24,6 @@ import javax.transaction.Status;
 
 import org.junit.Test;
 
-import rs.data.util.TxStatus;
-
 /**
  * Test the {@link TxStatus} implementation.
  * @author ralph

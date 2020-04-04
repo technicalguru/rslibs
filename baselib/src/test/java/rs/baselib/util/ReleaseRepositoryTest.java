@@ -17,15 +17,13 @@
  */
 package rs.baselib.util;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Collection;
 
 import org.junit.Test;
-
-import rs.baselib.util.ReleaseInformation;
-import rs.baselib.util.ReleaseRepository;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertNotNull;
 
 /**
  * Tests the release information.

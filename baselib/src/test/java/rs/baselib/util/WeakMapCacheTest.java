@@ -26,8 +26,6 @@ import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 
-import rs.baselib.util.WeakMapCache;
-
 /**
  * Tests the {@link rs.baselib.util.WeakMapCache}.
  * @author ralph

@@ -20,8 +20,6 @@ package rs.baselib.util;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import rs.baselib.util.IUrlProvider;
-
 /**
  * Wraps an {@link IUrlProvider} into an {@link IUrlTransformer}.
  * 

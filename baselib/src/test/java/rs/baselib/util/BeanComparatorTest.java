@@ -17,19 +17,15 @@
  */
 package rs.baselib.util;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Comparator;
 
 import org.junit.Test;
 
 import rs.baselib.bean.impl.TestBean;
-import rs.baselib.util.BeanComparator;
-import rs.baselib.util.BeanValueProvider;
-import rs.baselib.util.DefaultComparator;
-import rs.baselib.util.IDirtyable;
-import rs.baselib.util.IValueProvider;
-import rs.baselib.util.RsDate;
 
 /**
  * Test for {@link BeanComparator}.

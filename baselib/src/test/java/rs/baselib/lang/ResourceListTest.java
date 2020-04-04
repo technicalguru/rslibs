@@ -17,6 +17,9 @@
  */
 package rs.baselib.lang;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.net.URL;
 import java.util.Collection;
 import java.util.Map;
@@ -26,10 +29,6 @@ import java.util.jar.Manifest;
 import java.util.regex.Pattern;
 
 import org.junit.Test;
-
-import rs.baselib.lang.ResourceList;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the resource list class
