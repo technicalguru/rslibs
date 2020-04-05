@@ -162,8 +162,6 @@ public class ConverterUtilsTest {
 
 	/**
 	 * Test method for {@link ConverterUtils#toByte(byte[])}.
-	 * 
-	 * @throws UnsupportedEncodingException - when byte encoding fails
 	 */
 	@Test
 	public void testToByte() {
@@ -211,8 +209,6 @@ public class ConverterUtilsTest {
 
 	/**
 	 * Test method for {@link ConverterUtils#toDate(byte[])}.
-	 * 
-	 * @throws UnsupportedEncodingException - when byte encoding fails
 	 */
 	@Test
 	public void testToDate() {
