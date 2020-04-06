@@ -326,7 +326,7 @@ public class DefaultCryptingDelegateFactory implements ICryptingDelegateFactory 
 				KeyStore ks = getKeyStore();
 				String keyAlias = getKeyAlias();
 				char keyPassword[] = getKeyPassword();
-				if ((keyAlias != null) && (keyPassword != null)) {
+				if ((ks != null) && (keyAlias != null) && (keyPassword != null)) {
 					PrivateKey privKey = (PrivateKey)ks.getKey(getKeyAlias(), getKeyPassword());
 					PublicKey pubKey = ks.getCertificate(getKeyAlias()).getPublicKey();
 					setKeyPair(new KeyPair(pubKey, privKey));

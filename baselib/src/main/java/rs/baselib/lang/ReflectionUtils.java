@@ -108,6 +108,8 @@ public class ReflectionUtils {
 		Map<Type, Type> resolvedTypes = new HashMap<Type, Type>();
 		Type type = childClass;
 		
+		if (childClass == null) return null;
+		
 		// start walking up the inheritance hierarchy until we hit baseClass
 		Class<?> typeClass = getClass(type);
 		while ((typeClass != null) && !typeClass.equals(baseClass)) {

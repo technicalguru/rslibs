@@ -65,7 +65,7 @@ public class AdvancedThreadLocalTest {
 		
 	}
 	
-	protected class LocalThread extends Thread {
+	protected static class LocalThread extends Thread {
 		
 		private AdvancedThreadLocal<String> map;
 		private int id;

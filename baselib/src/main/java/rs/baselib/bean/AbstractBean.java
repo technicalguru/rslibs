@@ -413,12 +413,13 @@ public abstract class AbstractBean implements IBean {
 		if (propertyNames == null) {
 			synchronized (this) {
 				if (propertyNames == null) {
-					propertyNames = new ArrayList<String>();
+					ArrayList<String> list = new ArrayList<String>();
 					PropertyDescriptor descriptors[] = PropertyUtils.getPropertyDescriptors(getClass());
 					for (PropertyDescriptor descriptor : descriptors) {
 						String name = descriptor.getName();
-						propertyNames.add(name);
+						list.add(name);
 					}
+					propertyNames = list;
 				}
 			}
 		}

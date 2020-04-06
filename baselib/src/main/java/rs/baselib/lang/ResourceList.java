@@ -66,7 +66,9 @@ public class ResourceList{
 	private static Manifest getManifest(File file) throws IOException {
 		@SuppressWarnings("resource")
 		JarFile jarFile = new JarFile(file);
-		return jarFile.getManifest();
+		Manifest rc = jarFile.getManifest();
+		jarFile.close();
+		return rc;
 	}
 
 	/**
@@ -152,17 +154,19 @@ public class ResourceList{
 		List<URL> rc = new ArrayList<URL>();
 		JarFile jarFile = new JarFile(file);
 
-		Enumeration<JarEntry> entries = jarFile.entries();
-		while (entries.hasMoreElements()) {
-			JarEntry entry = entries.nextElement();
-			String fileName = entry.getName();
-			boolean accept = pattern.matcher(fileName).matches();
-			if (accept) {
-				rc.add(new URL("jar:file:"+file.getCanonicalPath()+"!/"+fileName));
+		try {
+			Enumeration<JarEntry> entries = jarFile.entries();
+			while (entries.hasMoreElements()) {
+				JarEntry entry = entries.nextElement();
+				String fileName = entry.getName();
+				boolean accept = pattern.matcher(fileName).matches();
+				if (accept) {
+					rc.add(new URL("jar:file:"+file.getCanonicalPath()+"!/"+fileName));
+				}
 			}
+		} finally {
+			jarFile.close();
 		}
-
-		jarFile.close();
 		return rc;
 	}
 
