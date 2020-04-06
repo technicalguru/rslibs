@@ -7,7 +7,7 @@
 	</parent>
 
 	<properties>
-		<project.home>http://techblog.ralph-schuster.eu/rs-library/</project.home>
+		<project.home>https://techblog.ralph-schuster.eu/rs-library/</project.home>
 		<maven.bundle.version>3.5.1</maven.bundle.version>
 	</properties>
 
