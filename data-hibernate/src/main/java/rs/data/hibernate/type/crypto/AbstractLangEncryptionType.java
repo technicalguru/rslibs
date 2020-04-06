@@ -64,7 +64,7 @@ public abstract class AbstractLangEncryptionType extends AbstractEncryptionType 
 	public void setParameterValues(Properties parameters) {
 		super.setParameterValues(parameters);
 		String s = null;
-		if (parameters != null) parameters.getProperty("simple");
+		if (parameters != null) s = parameters.getProperty("simple");
 		if (s == null) s = "true";
 		simple = Boolean.parseBoolean(s);
 	}

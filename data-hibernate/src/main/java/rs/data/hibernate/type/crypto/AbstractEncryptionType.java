@@ -248,7 +248,7 @@ public abstract class AbstractEncryptionType implements UserType, ParameterizedT
 	@Override
 	public void setParameterValues(Properties parameters) {
 		String factoryClassName = null;
-		if (parameters != null) parameters.getProperty("cryptingDelegateFactoryClass");
+		if (parameters != null) factoryClassName = parameters.getProperty("cryptingDelegateFactoryClass");
 		if (factoryClassName == null) factoryClassName = DefaultCryptingDelegateFactory.class.getName();
 		try {
 			Class<?> factoryClass = LangUtils.forName(factoryClassName);

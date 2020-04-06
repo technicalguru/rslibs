@@ -78,10 +78,10 @@ public class CommonUtils {
 	public static int DEFAULT_CONNECT_TIMEOUT = 10000;
 	/** Default timeout for reading from URLs (20sec) */
 	public static int DEFAULT_READ_TIMEOUT    = 20000;
-	
+
 	private static int connectTimeout = DEFAULT_CONNECT_TIMEOUT;
 	private static int readTimeout    = DEFAULT_READ_TIMEOUT;
-	
+
 	/**
 	 * The formatter for dates (see {@link DateFormat#SHORT}).
 	 * @return the formatter
@@ -183,9 +183,12 @@ public class CommonUtils {
 	 * @return string representation (Hex)
 	 */
 	public static String toString(byte b[]) {
+		if (b == null) return "null";
 		StringBuilder buf = new StringBuilder();
-		for (int i=0; i<b.length; i++) {
-			buf.append(Integer.toString( ( b[i] & 0xff ) + 0x100, 16).substring( 1 ));
+		if (b != null) {
+			for (int i=0; i<b.length; i++) {
+				buf.append(Integer.toString( ( b[i] & 0xff ) + 0x100, 16).substring( 1 ));
+			}
 		}
 		return buf.toString();
 	}
@@ -1228,7 +1231,7 @@ public class CommonUtils {
 	public static String setMarkers(String template, String prefix, Object valueObject) {
 		if (valueObject == null) return template;
 		if (template == null) return null;
-		
+
 		Map<?,?> oValues = null;
 		if (valueObject instanceof Map) {
 			oValues = (Map<?,?>)valueObject;
