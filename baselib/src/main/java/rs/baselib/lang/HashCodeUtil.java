@@ -20,7 +20,7 @@ package rs.baselib.lang;
 import java.lang.reflect.Array;
 
 /**
- * Collected methods which allow easy implementation of <tt>hashCode</tt>.
+ * Collected methods which allow easy implementation of {@code hashCode}.
  * <p>Implementation is based on the recommendations of Effective Java, by Joshua Bloch.</p>
  * Example use case:
  * <pre>
@@ -39,8 +39,8 @@ import java.lang.reflect.Array;
 public final class HashCodeUtil {
 
 	/**
-	 * An initial value for a <tt>hashCode</tt>, to which is added contributions
-	 * from fields. Using a non-zero value decreases collisons of <tt>hashCode</tt>
+	 * An initial value for a {@code hashCode}, to which is added contributions
+	 * from fields. Using a non-zero value decreases collisons of {@code hashCode}
 	 * values.
 	 */
 	public static final int SEED = 23;
@@ -111,9 +111,9 @@ public final class HashCodeUtil {
 	}
 
 	/**
-	 * <tt>aObject</tt> is a possibly-null object field, and possibly an array.
+	 * {@code aObject} is a possibly-null object field, and possibly an array.
 	 *
-	 * If <tt>aObject</tt> is an array, then each element may be a primitive
+	 * If {@code aObject} is an array, then each element may be a primitive
 	 * or a possibly-null object.
 	 * @param aSeed - a previous seed
 	 * @param aObject - the value to combine in hash
