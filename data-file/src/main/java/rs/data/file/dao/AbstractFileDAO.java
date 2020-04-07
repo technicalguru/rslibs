@@ -111,7 +111,12 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 		}
 		if (dataDir == null) dataDir = IFilenameStrategy.DEFAULT_DATA_DIR;
 		if (suffix  == null) suffix  = IFilenameStrategy.DEFAULT_DATA_SUFFIX;
-		return new DefaultFilenameStrategy<K>(new File(dataDir, getBoInterfaceClass().getSimpleName()), prefix, suffix);
+		Class<C> ifClass = getBoInterfaceClass();
+		String simpleName = getClass().getSimpleName();
+		if (ifClass != null) {
+			simpleName = ifClass.getSimpleName();
+		}
+		return new DefaultFilenameStrategy<K>(new File(dataDir, simpleName), prefix, suffix);
 	}
 
 	/**

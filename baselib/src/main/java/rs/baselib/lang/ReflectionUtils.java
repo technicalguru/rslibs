@@ -48,7 +48,7 @@ public class ReflectionUtils {
 		Class<?> clazz = o.getClass();
 		return isInstanceOf(clazz, className);
 	}
-	
+
 	/**
 	 * Replacement for {@link Class#isAssignableFrom(Class)} when it cannot be guaranteed that
 	 * the class is available in classpath at runtime.
@@ -59,17 +59,17 @@ public class ReflectionUtils {
 	public static boolean isInstanceOf(Class<?> inspectedClass, String className) {
 		// Check type of class
 		if (inspectedClass.getName().equals(className)) return true;
-		
+
 		// Check all interfaces
 		for (Class<?> i : inspectedClass.getInterfaces()) {
 			boolean rc = isInstanceOf(i, className);
 			if (rc) return true;
 		}
-		
+
 		// check superclass
 		Class<?> parent = inspectedClass.getSuperclass();
 		if (parent != null) return isInstanceOf(parent, className);
-		
+
 		return false;
 	}
 
@@ -107,9 +107,9 @@ public class ReflectionUtils {
 	public static <T> List<Class<?>> getTypeArguments(Class<T> baseClass, Class<? extends T> childClass) {
 		Map<Type, Type> resolvedTypes = new HashMap<Type, Type>();
 		Type type = childClass;
-		
+
 		if (childClass == null) return null;
-		
+
 		// start walking up the inheritance hierarchy until we hit baseClass
 		Class<?> typeClass = getClass(type);
 		while ((typeClass != null) && !typeClass.equals(baseClass)) {
@@ -136,18 +136,20 @@ public class ReflectionUtils {
 		// finally, for each actual type argument provided to baseClass, determine (if possible)
 		// the raw class for that type argument.
 		Type[] actualTypeArguments;
-		if (type instanceof Class) {
-			actualTypeArguments = ((Class<?>) type).getTypeParameters();
-		} else {
-			actualTypeArguments = ((ParameterizedType) type).getActualTypeArguments();
-		}
 		List<Class<?>> typeArgumentsAsClasses = new ArrayList<Class<?>>();
-		// resolve types by chasing down type variables.
-		for (Type baseType: actualTypeArguments) {
-			while (resolvedTypes.containsKey(baseType)) {
-				baseType = resolvedTypes.get(baseType);
+		if (type != null) {
+			if (type instanceof Class) {
+				actualTypeArguments = ((Class<?>) type).getTypeParameters();
+			} else {
+				actualTypeArguments = ((ParameterizedType) type).getActualTypeArguments();
 			}
-			typeArgumentsAsClasses.add(getClass(baseType));
+			// resolve types by chasing down type variables.
+			for (Type baseType: actualTypeArguments) {
+				while (resolvedTypes.containsKey(baseType)) {
+					baseType = resolvedTypes.get(baseType);
+				}
+				typeArgumentsAsClasses.add(getClass(baseType));
+			}
 		}
 		return typeArgumentsAsClasses;
 	}
@@ -169,7 +171,7 @@ public class ReflectionUtils {
 	public static boolean isProtected(Member member) {
 		return (member.getModifiers() & Modifier.PROTECTED) != 0;
 	}
-	
+
 	/**
 	 * Returns whether member is declared private.
 	 * @param member member to be inspected
@@ -223,7 +225,7 @@ public class ReflectionUtils {
 	public static boolean isAbstract(Member member) {
 		return (member.getModifiers() & Modifier.ABSTRACT) != 0;
 	}
-	
+
 	/**
 	 * Returns whether member is declared native.
 	 * @param member member to be inspected
@@ -232,7 +234,7 @@ public class ReflectionUtils {
 	public static boolean isNative(Member member) {
 		return (member.getModifiers() & Modifier.NATIVE) != 0;
 	}
-	
+
 	/**
 	 * Returns whether member is declared transient.
 	 * @param member member to be inspected
@@ -241,7 +243,7 @@ public class ReflectionUtils {
 	public static boolean isTransient(Member member) {
 		return (member.getModifiers() & Modifier.TRANSIENT) != 0;
 	}
-	
+
 	/**
 	 * Returns whether member is declared strict.
 	 * @param member member to be inspected

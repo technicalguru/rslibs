@@ -66,8 +66,12 @@ public class ResourceList{
 	private static Manifest getManifest(File file) throws IOException {
 		@SuppressWarnings("resource")
 		JarFile jarFile = new JarFile(file);
-		Manifest rc = jarFile.getManifest();
-		jarFile.close();
+		Manifest rc = null;
+		try {
+			rc = jarFile.getManifest();
+		} finally {
+			jarFile.close();
+		}
 		return rc;
 	}
 
