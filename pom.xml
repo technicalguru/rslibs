@@ -35,12 +35,12 @@
 
 	<issueManagement>
 		<system>Jira</system>
-		<url>http://jira.ralph-schuster.eu/browse/RSLIBS</url>
+		<url>https://jira.ralph-schuster.eu/browse/RSLIBS</url>
 	</issueManagement>
 
 	<ciManagement>
 		<system>bamboo</system>
-		<url>http://bamboo.ralph-schuster.eu/browse/RSLIB</url>
+		<url>https://bamboo.ralph-schuster.eu/browse/RSLIB</url>
 	</ciManagement>
 
 	<developers>
