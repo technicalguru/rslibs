@@ -29,7 +29,7 @@
 	<distributionManagement>
 		<site>
 			<id>strato-server</id>
-			<url>scp://download.ralph-schuster.eu/var/www/ralph-schuster.eu/download/eu.ralph-schuster.libs/${project.version}</url>
+			<url>scp://download.ralph-schuster.eu/var/docker/download/eu.ralph-schuster.libs/${project.version}</url>
 		</site>
 	</distributionManagement>
 
