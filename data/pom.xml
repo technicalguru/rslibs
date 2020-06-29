@@ -48,6 +48,7 @@
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<configuration>
 					<header><![CDATA[<a href="${project.url}" target="_new">Visit the ${project.name} Homepage</a>]]></header>
+					<detectJavaApiLink>false</detectJavaApiLink>
 				</configuration>
 			</plugin>
 		</plugins>

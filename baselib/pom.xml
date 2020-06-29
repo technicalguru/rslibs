@@ -39,7 +39,7 @@
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>2.6</version>
+			<version>2.7</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-configuration</groupId>
@@ -64,7 +64,7 @@
 		<dependency>
 			<groupId>javax.persistence</groupId>
 			<artifactId>persistence-api</artifactId>
-			<version>1.0</version>
+			<version>1.0.2</version>
 		</dependency>
 	</dependencies>
 
@@ -86,6 +86,7 @@
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<configuration>
 					<header><![CDATA[<a href="${project.url}" target="_new">Visit the ${project.name} Homepage</a>]]></header>
+					<detectJavaApiLink>false</detectJavaApiLink>
 				</configuration>
 			</plugin>
 		</plugins>
