@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>eu.ralph-schuster</groupId>
 		<artifactId>pom-oss</artifactId>
-		<version>2.0.0</version>
+		<version>2.0.1</version>
 	</parent>
 
 	<properties>
@@ -23,7 +23,7 @@
 		<connection>scm:git:https://github.com/technicalguru/rslibs.git</connection>
 		<developerConnection>scm:git:https://github.com/technicalguru/rslibs.git</developerConnection>
 		<url>https://github.com/technicalguru/rslibs</url>
-	  <tag>HEAD</tag>
+	  <tag>v1.4.1</tag>
   </scm>
 
 	<distributionManagement>
@@ -35,12 +35,12 @@
 
 	<issueManagement>
 		<system>Jira</system>
-		<url>https://jira.ralph-schuster.eu/browse/RSLIBS</url>
+		<url>https://jira.ralph-schuster.eu:8443/browse/RSLIBS</url>
 	</issueManagement>
 
 	<ciManagement>
 		<system>bamboo</system>
-		<url>https://bamboo.ralph-schuster.eu/browse/RSLIB</url>
+		<url>https://bamboo.ralph-schuster.eu:8443/browse/RSLIB</url>
 	</ciManagement>
 
 	<developers>
