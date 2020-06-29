@@ -64,7 +64,6 @@ public class RsMonthBuilderTest {
 		int numDays = today.getActualMaximum(Calendar.DAY_OF_MONTH);
 		// Subtract the number of days still to go and add a few more
 		numDays = numDays - today.get(Calendar.DAY_OF_MONTH) + 10;
-		System.out.println(numDays);
 		LongBuilder builder = $Long().withStart(System.currentTimeMillis()).withOffset(numDays*DateUtils.MILLIS_PER_DAY);
 		RsMonthBuilder b = $RsMonth().withTimezone(TimeZone.getTimeZone("UTC")).withTime(builder);
 		RsDate first   = b.build().getBegin();
