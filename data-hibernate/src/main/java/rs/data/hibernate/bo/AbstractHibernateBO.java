@@ -21,6 +21,7 @@ import java.io.Serializable;
 
 import org.hibernate.Session;
 import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.LazyInitializer;
 
@@ -99,14 +100,13 @@ public abstract class AbstractHibernateBO<K extends Serializable, T extends Gene
 	 * Returns the session-attached transferObject.
 	 * @return the session attached transferObject
 	 */
-	@SuppressWarnings("unchecked")
 	public T getAttachedTransferObject() {
 		// First check whether T is still attached
 		T t = super.getTransferObject();
 		if (t instanceof HibernateProxy) {
 			LazyInitializer initializer = ((HibernateProxy)t).getHibernateLazyInitializer();
 			if (initializer != null) {
-				SessionImplementor session = initializer.getSession();
+				SharedSessionContractImplementor session = initializer.getSession();
 				if ((session != null) && !session.isOpen()) {
 					t = (T)getSession().get(getTransferClass(), getId());
 					setTransferObject(t);

@@ -26,7 +26,7 @@ import java.util.Properties;
 
 import org.hibernate.HibernateException;
 import org.hibernate.MappingException;
-import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.usertype.ParameterizedType;
 import org.hibernate.usertype.UserType;
 
@@ -75,7 +75,7 @@ public class EnumerationType implements UserType, ParameterizedType {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public Object nullSafeGet(ResultSet resultSet, String[] names, SessionImplementor session, Object owner) throws HibernateException, SQLException { 
+	public Object nullSafeGet(ResultSet resultSet, String[] names, SharedSessionContractImplementor session, Object owner) throws HibernateException, SQLException { 
 		Enum<?> result = null; 
 		Object value = resultSet.getObject(names[0]);
 		if (IIdObject.class.isAssignableFrom(clazz)) {
@@ -107,7 +107,7 @@ public class EnumerationType implements UserType, ParameterizedType {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void nullSafeSet(PreparedStatement preparedStatement, Object value, int index, SessionImplementor session) throws HibernateException, SQLException { 
+	public void nullSafeSet(PreparedStatement preparedStatement, Object value, int index, SharedSessionContractImplementor session) throws HibernateException, SQLException { 
 		if (null == value) { 
 			preparedStatement.setNull(index, Types.VARCHAR);
 		} else { 

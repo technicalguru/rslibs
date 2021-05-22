@@ -26,7 +26,7 @@ import java.util.Date;
 import java.util.Properties;
 
 import org.hibernate.HibernateException;
-import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.type.descriptor.sql.BasicBinder;
 import org.hibernate.type.descriptor.sql.BasicExtractor;
 import org.hibernate.usertype.ParameterizedType;
@@ -105,7 +105,7 @@ public class BooleanIntType implements UserType, ParameterizedType {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Object nullSafeGet(ResultSet rs, String names[], SessionImplementor session, Object owner) throws HibernateException, SQLException {
+	public Object nullSafeGet(ResultSet rs, String names[], SharedSessionContractImplementor session, Object owner) throws HibernateException, SQLException {
 		if (rs.getObject(names[0]) == null) {
 			if (logger2.isTraceEnabled()) logger2.trace("found [null] as column ["+names[0]+"]");
 			return null;
@@ -119,7 +119,7 @@ public class BooleanIntType implements UserType, ParameterizedType {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session) throws HibernateException, SQLException {
+	public void nullSafeSet(PreparedStatement st, Object value, int index, SharedSessionContractImplementor session) throws HibernateException, SQLException {
 		if ((value == null) && isNullable()) {
 			st.setObject(index, null, Types.INTEGER);
 			if (logger1.isTraceEnabled()) logger1.trace("binding parameter ["+index+"] as [INT] - null");

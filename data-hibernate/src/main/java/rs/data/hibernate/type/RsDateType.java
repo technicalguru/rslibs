@@ -26,7 +26,7 @@ import java.sql.Types;
 import java.util.Date;
 
 import org.hibernate.HibernateException;
-import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.type.descriptor.sql.BasicBinder;
 import org.hibernate.type.descriptor.sql.BasicExtractor;
 import org.hibernate.usertype.UserType;
@@ -104,7 +104,7 @@ public class RsDateType implements UserType {
 	 * {@inheritDoc}
 	 */
 	@Override
-    public Object nullSafeGet(ResultSet rs, String names[], SessionImplementor session, Object owner) throws HibernateException, SQLException {
+    public Object nullSafeGet(ResultSet rs, String names[], SharedSessionContractImplementor session, Object owner) throws HibernateException, SQLException {
     	Timestamp d = rs.getTimestamp(names[0]);
     	if (d == null) {
     		if (logger2.isTraceEnabled()) logger2.trace("found [null] as column ["+names[0]+"]");
@@ -120,7 +120,7 @@ public class RsDateType implements UserType {
 	 * {@inheritDoc}
 	 */
 	@Override
-    public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session) throws HibernateException, SQLException {
+    public void nullSafeSet(PreparedStatement st, Object value, int index, SharedSessionContractImplementor session) throws HibernateException, SQLException {
     	if (value == null) {
     		st.setTimestamp(index, null);
     		if (logger1.isTraceEnabled()) logger1.trace("binding parameter ["+index+"] as [TIMESTAMP] - null");
