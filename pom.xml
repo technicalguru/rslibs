@@ -12,7 +12,7 @@
 	</properties>
 
 	<artifactId>libs</artifactId>
-	<version>2.0.0-SNAPSHOT</version>
+	<version>2.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<url>https://download.ralph-schuster.eu/eu.ralph-schuster.libs/${project.version}</url>
