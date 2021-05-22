@@ -8,12 +8,12 @@ The Data Core Classes provide a basic infrastructure for a Data Factory – Data
 
 ## API Reference
 
-Javadoc API for latest stable version can be accessed [here](https://download.ralph-schuster.eu/eu.ralph-schuster.libs/STABLE/data/apidocs/index.html).
+Javadoc API for latest stable version can be accessed [here](https://www.javadoc.io/doc/eu.ralph-schuster/data).
 
 ## Contributions
 
- * [Project Homepage](https://techblog.ralph-schuster.eu/rs-library/data/)
- * [Issue Tracker](http://jira.ralph-schuster.eu/)
+ * [Project Homepage](https://github.com/technicalguru/rslibs/baselib)
+ * [Issue Tracker](https://github.com/technicalguru/rslibs/issues)
  
 ## License
 

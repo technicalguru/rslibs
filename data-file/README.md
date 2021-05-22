@@ -8,12 +8,12 @@ The Data File Library provides file-based infrastructure based on the
 
 ## API Reference
 
-Javadoc API for latest stable version can be accessed [here](https://download.ralph-schuster.eu/eu.ralph-schuster.libs/STABLE/data-file/apidocs/index.html).
+Javadoc API for latest stable version can be accessed [here](https://www.javadoc.io/doc/eu.ralph-schuster/data-file).
 
 ## Contributions
 
- * [Project Homepage](https://techblog.ralph-schuster.eu/rs-library/data-file/)
- * [Issue Tracker](http://jira.ralph-schuster.eu/)
+ * [Project Homepage](https://github.com/technicalguru/rslibs/data-file)
+ * [Issue Tracker](https://github.com/technicalguru/rslibs/issues)
  
 ## License
 
