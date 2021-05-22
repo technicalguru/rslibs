@@ -18,7 +18,6 @@
 package rs.data.hibernate;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
@@ -33,8 +32,6 @@ import org.apache.commons.configuration2.XMLConfiguration;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
-import org.hibernate.internal.SessionFactoryImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -215,6 +212,7 @@ public class HibernateDaoMaster extends AbstractDaoMaster {
 	public void shutdown() {
 		super.shutdown();
 		if (this.sessionFactory != null) {
+			/*
 			if (this.sessionFactory instanceof SessionFactoryImpl) {
 				SessionFactoryImpl sf = (SessionFactoryImpl)sessionFactory;
 				ConnectionProvider conn = sf.getConnectionProvider();
@@ -228,6 +226,7 @@ public class HibernateDaoMaster extends AbstractDaoMaster {
 					}
 				}
 			}
+			*/
 			this.sessionFactory.close();
 		}
 		this.sessionFactory = null;
@@ -330,7 +329,6 @@ public class HibernateDaoMaster extends AbstractDaoMaster {
 	 * @param config - Hibernate configuration
 	 * @return session factory
 	 */
-	@SuppressWarnings("deprecation")
 	public static SessionFactory createSessionFactory(org.hibernate.cfg.Configuration config) {
 		return config.buildSessionFactory();
 	}

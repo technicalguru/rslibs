@@ -25,7 +25,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 
 import org.hibernate.HibernateException;
-import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.usertype.UserType;
 
 import rs.baselib.type.MonetaryValue;
@@ -83,7 +83,7 @@ public class MonetaryValueType implements UserType {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session, Object owner) throws HibernateException, SQLException {
+	public Object nullSafeGet(ResultSet rs, String[] names, SharedSessionContractImplementor session, Object owner) throws HibernateException, SQLException {
 		BigDecimal d = rs.getBigDecimal(names[0]);
 		if (d == null) return null;
 		return new MonetaryValue(d);
@@ -93,7 +93,7 @@ public class MonetaryValueType implements UserType {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session) throws HibernateException, SQLException {
+	public void nullSafeSet(PreparedStatement st, Object value, int index, SharedSessionContractImplementor session) throws HibernateException, SQLException {
 		if (value == null) {
 			st.setBigDecimal(index, null);
 		} else {

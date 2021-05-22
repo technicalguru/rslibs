@@ -24,7 +24,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 
 import org.hibernate.HibernateException;
-import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.usertype.UserType;
 
 import rs.baselib.util.RsDay;
@@ -95,7 +95,7 @@ public class RsDayType implements UserType {
 	 * {@inheritDoc}
 	 */
 	@Override
-    public Object nullSafeGet(ResultSet rs, String names[], SessionImplementor session, Object owner) throws HibernateException, SQLException {
+    public Object nullSafeGet(ResultSet rs, String names[], SharedSessionContractImplementor session, Object owner) throws HibernateException, SQLException {
     	String key = rs.getString(names[0]);
     	if (key == null) return null;
     	return RsDay.getDay(key);
@@ -105,7 +105,7 @@ public class RsDayType implements UserType {
 	 * {@inheritDoc}
 	 */
 	@Override
-    public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session) throws HibernateException, SQLException {
+    public void nullSafeSet(PreparedStatement st, Object value, int index, SharedSessionContractImplementor session) throws HibernateException, SQLException {
     	if (value == null) {
     		st.setString(index, null);
     	} else {

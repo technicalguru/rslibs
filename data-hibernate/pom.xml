@@ -9,7 +9,7 @@
 
 	<properties>
 		<project.home>https://github.com/technicalguru/rslibs/data-hibernate</project.home>
-		<hibernate.version>4.3.11.Final</hibernate.version>
+		<hibernate.version>5.4.31.Final</hibernate.version>
 	</properties>
 
 	<artifactId>data-hibernate</artifactId>

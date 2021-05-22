@@ -27,7 +27,7 @@ import java.util.Properties;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.hibernate.HibernateException;
-import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.type.descriptor.sql.BasicBinder;
 import org.hibernate.type.descriptor.sql.BasicExtractor;
 import org.hibernate.usertype.ParameterizedType;
@@ -105,7 +105,7 @@ public class IntArrayType implements UserType, ParameterizedType {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Object nullSafeGet(ResultSet rs, String names[], SessionImplementor session, Object owner) throws HibernateException, SQLException {
+	public Object nullSafeGet(ResultSet rs, String names[], SharedSessionContractImplementor session, Object owner) throws HibernateException, SQLException {
 		String s = rs.getString(names[0]);
 		if ((s == null) || s.isEmpty()) {
 			if (logger2.isTraceEnabled()) logger2.trace("found [null] as column ["+names[0]+"]");
@@ -128,7 +128,7 @@ public class IntArrayType implements UserType, ParameterizedType {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session) throws HibernateException, SQLException {
+	public void nullSafeSet(PreparedStatement st, Object value, int index, SharedSessionContractImplementor session) throws HibernateException, SQLException {
 		int a[] = (int[])value;
 		if ((a == null) || (a.length == 0)) {
 			st.setString(index, null);
