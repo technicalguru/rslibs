@@ -22,8 +22,8 @@ import java.net.URL;
 import java.util.Iterator;
 import java.util.Properties;
 
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration2.Configuration;
+import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.slf4j.LoggerFactory;
 
 import rs.baselib.configuration.IConfigurable;
@@ -32,11 +32,11 @@ import rs.baselib.lang.LangUtils;
 import rs.baselib.util.CommonUtils;
 import rs.baselib.util.IUriProvider;
 import rs.baselib.util.IUrlProvider;
+import rs.baselib.util.IUrlTransformer;
 import rs.baselib.util.UriProviderWrapper;
 import rs.baselib.util.UrlProviderWrapper;
 import rs.data.api.IDaoFactory;
 import rs.data.api.IDaoMaster;
-import rs.baselib.util.IUrlTransformer;
 
 /**
  * Abstract implementation for DAO masters.

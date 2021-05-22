@@ -8,8 +8,8 @@
 	</parent>
 
 	<properties>
-		<project.home>https://techblog.ralph-schuster.eu/rs-library/data-hibernate/</project.home>
-		<hibernate.version>4.2.21.Final</hibernate.version>
+		<project.home>https://github.com/technicalguru/rslibs/data-hibernate</project.home>
+		<hibernate.version>4.3.11.Final</hibernate.version>
 	</properties>
 
 	<artifactId>data-hibernate</artifactId>

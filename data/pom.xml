@@ -8,7 +8,7 @@
 	</parent>
 
 	<properties>
-		<project.home>https://techblog.ralph-schuster.eu/rs-library/data/</project.home>
+		<project.home>https://github.com/technicalguru/rslibs/data</project.home>
 	</properties>
 	
 	<artifactId>data</artifactId>

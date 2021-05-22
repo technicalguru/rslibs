@@ -159,7 +159,7 @@ public class ConfigurationUtils {
 	public static PropertiesBuilderParameters createPropertiesBuilderParams(String encoding) {
 		Parameters params = new Parameters();
 		return params.properties()
-		    .setThrowExceptionOnMissing(true)
+		    .setThrowExceptionOnMissing(false)
 		    .setEncoding(encoding);
 	}
 		
@@ -224,7 +224,7 @@ public class ConfigurationUtils {
 	public static XMLBuilderParameters createXMLBuilderParams(String encoding) {
 		Parameters params = new Parameters();
 		return params.xml()
-		    .setThrowExceptionOnMissing(true)
+		    .setThrowExceptionOnMissing(false)
 		    .setValidating(false)
 		    .setEncoding(encoding);
 		    //.setExpressionEngine(new XPathExpressionEngine());

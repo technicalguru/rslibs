@@ -7,7 +7,7 @@
 	</parent>
 
 	<properties>
-		<project.home>https://techblog.ralph-schuster.eu/rs-library/templating/</project.home>
+		<project.home>https://github.com/technicalguru/rslibs/templating</project.home>
 	</properties>
 	
 	<artifactId>templating</artifactId>

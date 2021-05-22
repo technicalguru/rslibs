@@ -9,7 +9,7 @@
 	</parent>
 
 	<properties>
-		<project.home>https://techblog.ralph-schuster.eu/rs-library/baselib/</project.home>
+		<project.home>https://github.com/technicalguru/rslibs/baselib</project.home>
 	</properties>
 
 	<artifactId>baselib</artifactId>

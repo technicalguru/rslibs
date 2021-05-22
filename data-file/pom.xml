@@ -7,7 +7,7 @@
 	</parent>
 
 	<properties>
-		<project.home>https://techblog.ralph-schuster.eu/rs-library/data-file</project.home>
+		<project.home>https://github.com/technicalguru/rslibs/data-file</project.home>
 	</properties>
 	
 	<artifactId>data-file</artifactId>
