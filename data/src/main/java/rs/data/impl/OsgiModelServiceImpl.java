@@ -23,8 +23,7 @@ import java.util.Map;
 
 import javax.transaction.TransactionManager;
 
-import org.apache.commons.configuration.HierarchicalConfiguration;
-import org.apache.commons.configuration.XMLConfiguration;
+import org.apache.commons.configuration2.HierarchicalConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,7 +68,7 @@ public class OsgiModelServiceImpl implements IOsgiModelService {
 	/** All factories */
 	private Map<String,IDaoFactory> factories = new HashMap<String,IDaoFactory>();
 	/** The DAO configurations */
-	private HierarchicalConfiguration daoConfig;
+	private HierarchicalConfiguration<?> daoConfig;
 	/** TX Manager */
 	private TransactionManager txManager;
 	/** Already loaded? */
@@ -86,7 +85,7 @@ public class OsgiModelServiceImpl implements IOsgiModelService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setConfiguration(HierarchicalConfiguration config) {
+	public void setConfiguration(HierarchicalConfiguration<?> config) {
 		this.daoConfig = config;
 	}
 
@@ -95,7 +94,7 @@ public class OsgiModelServiceImpl implements IOsgiModelService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public HierarchicalConfiguration getConfiguration() {
+	public HierarchicalConfiguration<?> getConfiguration() {
 		if (this.daoConfig == null) {
 			try {
 				String envLocation = System.getenv("DAO_CONFIG_URL");
@@ -107,7 +106,7 @@ public class OsgiModelServiceImpl implements IOsgiModelService {
 					url = FileFinder.find(getClass(), "dao-config.xml");
 				}
 				if (url == null) throw new NullPointerException("Cannot find dao-config.xml");
-				daoConfig = new XMLConfiguration(url);
+				daoConfig = ConfigurationUtils.getXmlConfiguration(url);
 			} catch (Exception e) {
 				throw new RuntimeException("Cannot setup default configuration", e);
 			}
@@ -185,9 +184,9 @@ public class OsgiModelServiceImpl implements IOsgiModelService {
 			if (factoriesLoaded) return;
 			int i=0;
 			try {
-				HierarchicalConfiguration daoConfig = getConfiguration();
+				HierarchicalConfiguration<?> daoConfig = getConfiguration();
 				while (true) {
-					HierarchicalConfiguration subConfig = daoConfig.configurationAt("DaoFactory("+i+")");
+					HierarchicalConfiguration<?> subConfig = daoConfig.configurationAt("DaoFactory("+i+")");
 					String s = subConfig.getString("[@name]");
 					if (s == null) s = DEFAULT_NAME;
 

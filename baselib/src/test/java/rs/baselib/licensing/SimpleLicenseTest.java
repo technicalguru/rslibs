@@ -23,7 +23,7 @@ import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.apache.commons.lang.time.DateUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;

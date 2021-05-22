@@ -6,14 +6,24 @@ The Data Core Classes provide a basic infrastructure for a Data Factory – Data
 (DAO) – Business Object (BO) pattern. it is published under the 
 [GNU Lesser General Public License 3.0](http://www.gnu.org/licenses/lgpl-3.0.html).
 
+## Maven Coordinates
+
+```
+<dependency>
+	<groupId>eu.ralph-schuster</groupId>
+	<artifactId>data</artifactId>
+	<version>${version}</version>
+</dependency>
+```
+
 ## API Reference
 
-Javadoc API for latest stable version can be accessed [here](https://download.ralph-schuster.eu/eu.ralph-schuster.libs/STABLE/data/apidocs/index.html).
+Javadoc API for latest stable version can be accessed [here](https://www.javadoc.io/doc/eu.ralph-schuster/data).
 
 ## Contributions
 
- * [Project Homepage](https://techblog.ralph-schuster.eu/rs-library/data/)
- * [Issue Tracker](http://jira.ralph-schuster.eu/)
+ * [Project Homepage](https://github.com/technicalguru/rslibs/baselib)
+ * [Issue Tracker](https://github.com/technicalguru/rslibs/issues)
  
 ## License
 

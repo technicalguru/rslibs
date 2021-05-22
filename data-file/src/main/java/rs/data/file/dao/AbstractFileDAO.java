@@ -25,9 +25,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.HierarchicalConfiguration;
+import org.apache.commons.configuration2.Configuration;
+import org.apache.commons.configuration2.HierarchicalConfiguration;
+import org.apache.commons.configuration2.ex.ConfigurationException;
 
 import rs.baselib.configuration.ConfigurationUtils;
 import rs.data.api.IDaoFactory;
@@ -152,21 +152,21 @@ public abstract class AbstractFileDAO<K extends Serializable, B extends Abstract
 	public void configure(Configuration cfg) throws ConfigurationException {
 		super.configure(cfg);
 		try {
-			Configuration subConfig = ((HierarchicalConfiguration)cfg).configurationAt("keyGenerator(0)");
+			Configuration subConfig = ((HierarchicalConfiguration<?>)cfg).configurationAt("keyGenerator(0)");
 			setKeyGenerator((IKeyGenerator<K>)ConfigurationUtils.load(subConfig, true));
 		} catch (Exception e) {
 			// Ignore
 		}
 
 		try {
-			Configuration subConfig = ((HierarchicalConfiguration)cfg).configurationAt("filenameStrategy(0)");
+			Configuration subConfig = ((HierarchicalConfiguration<?>)cfg).configurationAt("filenameStrategy(0)");
 			setFilenameStrategy((IFilenameStrategy<K>)ConfigurationUtils.load(subConfig, true));
 		} catch (Exception e) {
 			// Ignore
 		}
 
 		try {
-			Configuration subConfig = ((HierarchicalConfiguration)cfg).configurationAt("storageStrategy(0)");
+			Configuration subConfig = ((HierarchicalConfiguration<?>)cfg).configurationAt("storageStrategy(0)");
 			setStorageStrategy((IStorageStrategy<K, C, File>)ConfigurationUtils.load(subConfig, true));
 		} catch (Exception e) {
 			// Ignore

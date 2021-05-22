@@ -32,10 +32,9 @@ import javax.transaction.SystemException;
 import javax.transaction.Transaction;
 import javax.transaction.TransactionManager;
 
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.HierarchicalConfiguration;
-import org.apache.commons.configuration.SubnodeConfiguration;
+import org.apache.commons.configuration2.Configuration;
+import org.apache.commons.configuration2.HierarchicalConfiguration;
+import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -128,7 +127,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 
 		// Load the URL transformer, if it exists:
 		try {
-			SubnodeConfiguration tCfg = ((HierarchicalConfiguration)cfg).configurationAt("UrlTransformer(0)");
+			HierarchicalConfiguration<?> tCfg = ((HierarchicalConfiguration<?>)cfg).configurationAt("UrlTransformer(0)");
 			setUrlTransformer((IUrlTransformer)ConfigurationUtils.load(tCfg, true));
 		} catch (Exception e) {
 			log.info("No URL Transformer loaded");
@@ -139,7 +138,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 			int index = 0;
 			while (index >= 0) {
 				try {
-					SubnodeConfiguration tCfg = ((HierarchicalConfiguration)cfg).configurationAt("DaoMaster("+index+")");
+					HierarchicalConfiguration<?> tCfg = ((HierarchicalConfiguration<?>)cfg).configurationAt("DaoMaster("+index+")");
 					IDaoMaster daoMaster = loadDaoMaster(tCfg);
 					String id = cfg.getString("DaoMaster("+index+")[@name]");
 					if (id == null) id = "default";
@@ -161,7 +160,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 			int index = 0;
 			while (index >= 0) {
 				try {
-					SubnodeConfiguration dCfg = ((HierarchicalConfiguration)cfg).configurationAt("Dao("+index+")");
+					HierarchicalConfiguration<?> dCfg = ((HierarchicalConfiguration<?>)cfg).configurationAt("Dao("+index+")");
 					IGeneralDAO<?, ?> dao = loadDao(dCfg);
 					getLog().debug("DAO: "+dao.getClass().getName());
 					index++;
@@ -182,7 +181,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 	 * @param config configuration
 	 * @return the object
 	 */
-	public IDaoMaster loadDaoMaster(SubnodeConfiguration config) {
+	public IDaoMaster loadDaoMaster(HierarchicalConfiguration<?> config) {
 		// Tweak the class loader to avoid some unexpected RCP problems
 		Thread thread = Thread.currentThread();
 		ClassLoader loader = thread.getContextClassLoader();
@@ -257,7 +256,7 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 	 * @return the object
 	 */
 	@SuppressWarnings("unchecked")
-	public IGeneralDAO<? extends Serializable,? extends IGeneralBO<? extends Serializable>> loadDao(HierarchicalConfiguration config) {
+	public IGeneralDAO<? extends Serializable,? extends IGeneralBO<? extends Serializable>> loadDao(HierarchicalConfiguration<?> config) {
 		// Tweak the class loader to avoid some unexpected RCP problems
 		Thread thread = Thread.currentThread();
 		ClassLoader loader = thread.getContextClassLoader();

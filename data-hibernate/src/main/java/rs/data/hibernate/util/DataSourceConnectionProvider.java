@@ -22,14 +22,14 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.hibernate.cfg.Environment;
-import org.hibernate.ejb.connection.InjectedDataSourceConnectionProvider;
+import org.hibernate.engine.jdbc.connections.internal.DatasourceConnectionProviderImpl;
 
 /**
  * Inject the data source
  * @author ralph
  *
  */
-public class DataSourceConnectionProvider extends InjectedDataSourceConnectionProvider {
+public class DataSourceConnectionProvider extends DatasourceConnectionProviderImpl {
 
 	/**
 	 * Serial UID.

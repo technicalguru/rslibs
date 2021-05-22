@@ -4,11 +4,11 @@
 	<parent>
 		<groupId>eu.ralph-schuster</groupId>
 		<artifactId>libs</artifactId>
-		<version>1.4.1</version>
+		<version>2.0.0</version>
 	</parent>
 
 	<properties>
-		<project.home>https://techblog.ralph-schuster.eu/rs-library/data/</project.home>
+		<project.home>https://github.com/technicalguru/rslibs/data</project.home>
 	</properties>
 	
 	<artifactId>data</artifactId>

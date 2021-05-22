@@ -3,16 +3,16 @@
 	<parent>
 		<groupId>eu.ralph-schuster</groupId>
 		<artifactId>pom-oss</artifactId>
-		<version>2.0.1</version>
+		<version>2.0.3</version>
 	</parent>
 
 	<properties>
-		<project.home>https://techblog.ralph-schuster.eu/rs-library/</project.home>
-		<maven.bundle.version>3.5.1</maven.bundle.version>
+		<project.home>https://github.com/technicalguru/rslibs</project.home>
+		<maven.bundle.version>5.1.2</maven.bundle.version>
 	</properties>
 
 	<artifactId>libs</artifactId>
-	<version>1.4.1</version>
+	<version>2.0.0</version>
 	<packaging>pom</packaging>
 
 	<url>https://download.ralph-schuster.eu/eu.ralph-schuster.libs/${project.version}</url>
@@ -23,7 +23,7 @@
 		<connection>scm:git:https://github.com/technicalguru/rslibs.git</connection>
 		<developerConnection>scm:git:https://github.com/technicalguru/rslibs.git</developerConnection>
 		<url>https://github.com/technicalguru/rslibs</url>
-	  <tag>libs-1.4.1</tag>
+	  <tag>libs-2.0.0</tag>
   </scm>
 
 	<distributionManagement>

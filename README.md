@@ -16,14 +16,32 @@ Most of this code was created when I faced specific problems in my professional 
 
 RS Library modules are maintained in the same Maven project and, hence, follow the same release cycle. That means that each modules will have the same version numbers and are published at the same time.
 
+## Latest Version
+Latest version is 2.0.0.
+
+## Upgrading v1 to v2
+V2 which has some minor compatibility breaks that result from upgrading [commons-configuration](https://commons.apache.org/proper/commons-configuration/) dependency:
+
+* Replace references to ``org.apache.commons.configuration.Configuration`` by ``org.apache.commons.configuration2.Configuration``
+* ``SubnodeConfiguration`` was removed in favour of ``HierarchicalConfiguration`` 
+* New utility methods for the ease of creating configurations from properties and XML files were added in [ConfigurationUtils](baselib/src/main/java/rs/baselib/configuration/ConfigurationUtils.java):
+    *  getXmlConfiguration() - will create a ``XMLConfiguration`` object from a given file or URL
+    *  getPropertiesConfiguration() - will create a ``PropertiesConfiguration`` object from a given file or URL
+
 ## API Reference
 
-Javadoc API for latest stable version can be accessed [here](https://download.ralph-schuster.eu/eu.ralph-schuster.libs/).
+Javadoc API for latest stable version can be accessed here:
+
+* [baselib](https://www.javadoc.io/doc/eu.ralph-schuster/baselib)
+* [data](https://www.javadoc.io/doc/eu.ralph-schuster/date)
+* [data-file](https://www.javadoc.io/doc/eu.ralph-schuster/data-file)
+* [data-hibernate](https://www.javadoc.io/doc/eu.ralph-schuster/data-hibernate)
+* [templating](https://www.javadoc.io/doc/eu.ralph-schuster/templating)
 
 ## Contributions
 
- * [Project Homepage](https://techblog.ralph-schuster.eu/rs-library/)
- * [Issue Tracker](http://jira.ralph-schuster.eu/)
+ * [Project Homepage](https://github.com/technicalguru/rslibs)
+ * [Issue Tracker](https://github.com/technicalguru/rslibs/issues)
  
 ## License
 

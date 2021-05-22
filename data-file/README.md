@@ -6,14 +6,24 @@ The Data File Library provides file-based infrastructure based on the
 [Data Core Classes](https://github.com/technicalguru/rslibs/data). It is published under the 
 [GNU Lesser General Public License 3.0](http://www.gnu.org/licenses/lgpl-3.0.html).
 
+## Maven Coordinates
+
+```
+<dependency>
+	<groupId>eu.ralph-schuster</groupId>
+	<artifactId>data-file</artifactId>
+	<version>${version}</version>
+</dependency>
+```
+
 ## API Reference
 
-Javadoc API for latest stable version can be accessed [here](https://download.ralph-schuster.eu/eu.ralph-schuster.libs/STABLE/data-file/apidocs/index.html).
+Javadoc API for latest stable version can be accessed [here](https://www.javadoc.io/doc/eu.ralph-schuster/data-file).
 
 ## Contributions
 
- * [Project Homepage](https://techblog.ralph-schuster.eu/rs-library/data-file/)
- * [Issue Tracker](http://jira.ralph-schuster.eu/)
+ * [Project Homepage](https://github.com/technicalguru/rslibs/data-file)
+ * [Issue Tracker](https://github.com/technicalguru/rslibs/issues)
  
 ## License
 
