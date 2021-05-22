@@ -17,9 +17,9 @@
  */
 package rs.baselib.type;
 
+import java.beans.Transient;
 import java.io.Serializable;
 
-import javax.persistence.Transient;
 
 /**
  * An object having an ID.

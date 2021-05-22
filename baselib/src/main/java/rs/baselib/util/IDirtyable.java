@@ -17,7 +17,7 @@
  */
 package rs.baselib.util;
 
-import javax.persistence.Transient;
+import java.beans.Transient;
 
 /**
  * Tells whether an object has changed or not.

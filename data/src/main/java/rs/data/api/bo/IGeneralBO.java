@@ -17,9 +17,8 @@
  */
 package rs.data.api.bo;
 
+import java.beans.Transient;
 import java.io.Serializable;
-
-import javax.persistence.Transient;
 
 import rs.baselib.bean.IBean;
 import rs.baselib.bean.NoCopy;
