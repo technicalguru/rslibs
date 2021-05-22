@@ -19,7 +19,7 @@ package rs.data.api;
 
 import javax.transaction.TransactionManager;
 
-import org.apache.commons.configuration.HierarchicalConfiguration;
+import org.apache.commons.configuration2.HierarchicalConfiguration;
 
 
 /**
@@ -36,13 +36,13 @@ public interface IOsgiModelService {
 	 * Sets the configuration with all {@link IDaoFactory} settings.
 	 * @param config the config to bet set
 	 */
-	public void setConfiguration(HierarchicalConfiguration config);
+	public void setConfiguration(HierarchicalConfiguration<?> config);
 	
 	/**
 	 * Returns the configuration with all {@link IDaoFactory} settings.
 	 * @return the main configuration
 	 */
-	public HierarchicalConfiguration getConfiguration();
+	public HierarchicalConfiguration<?> getConfiguration();
 
 	/**
 	 * Returns the {@link TransactionManager}.

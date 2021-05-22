@@ -22,9 +22,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.Objects;
 import java.util.Properties;
 
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.type.descriptor.sql.BasicBinder;
@@ -80,7 +81,7 @@ public class LongArrayType implements UserType, ParameterizedType {
 	 */
 	@Override
 	public boolean equals(Object x, Object y) {
-		return ArrayUtils.isEquals(x, y);
+		return Objects.deepEquals(x, y);
 	}
 
 	/**

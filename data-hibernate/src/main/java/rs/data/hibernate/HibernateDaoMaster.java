@@ -27,17 +27,18 @@ import java.util.Properties;
 import javax.sql.DataSource;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.SubnodeConfiguration;
-import org.apache.commons.configuration.XMLConfiguration;
+import org.apache.commons.configuration2.Configuration;
+import org.apache.commons.configuration2.HierarchicalConfiguration;
+import org.apache.commons.configuration2.XMLConfiguration;
+import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
 import org.hibernate.internal.SessionFactoryImpl;
-import org.hibernate.service.jdbc.connections.spi.ConnectionProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import rs.baselib.configuration.ConfigurationUtils;
 import rs.baselib.io.FileFinder;
 import rs.baselib.lang.LangUtils;
 import rs.baselib.lang.ReflectionUtils;
@@ -99,7 +100,7 @@ public class HibernateDaoMaster extends AbstractDaoMaster {
 		}
 
 		// Overload the properties from dbconfig
-		XMLConfiguration dbconfig = new XMLConfiguration(dbconfigFile);
+		XMLConfiguration dbconfig = ConfigurationUtils.getXmlConfiguration(dbconfigFile);
 		for (String key : DB_CONFIG_KEYS) {
 			try {
 				int idx = 0;
@@ -148,7 +149,7 @@ public class HibernateDaoMaster extends AbstractDaoMaster {
 	 * @param dbconfig - the subnode configuration for the db configuration
 	 */
 	@SuppressWarnings("unchecked")
-	protected void loadDataSource(SubnodeConfiguration dbconfig) {
+	protected void loadDataSource(HierarchicalConfiguration<?> dbconfig) {
 		try {
 			Class<? extends DataSource> clazz = (Class<? extends DataSource>)LangUtils.forName(dbconfig.getString("[@class]"));
 			datasource = clazz.getConstructor().newInstance();

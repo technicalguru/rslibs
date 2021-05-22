@@ -30,12 +30,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.configuration.HierarchicalConfiguration;
-import org.apache.commons.configuration.SubnodeConfiguration;
-import org.apache.commons.configuration.XMLConfiguration;
+import org.apache.commons.configuration2.HierarchicalConfiguration;
+import org.apache.commons.configuration2.XMLConfiguration;
 import org.apache.commons.io.Charsets;
 
 import rs.baselib.bean.IBean;
+import rs.baselib.configuration.ConfigurationUtils;
 import rs.baselib.lang.LangUtils;
 import rs.data.api.IDaoFactory;
 import rs.data.api.bo.IGeneralBO;
@@ -67,12 +67,11 @@ public class XmlStorageStrategy<K extends Serializable, T extends IGeneralBO<K>>
 		Collection<String> propertyNames = new ArrayList<String>(getPropertyNames(bo));
 		propertyNames.add("id");
 		try {
-			XMLConfiguration cfg = new XMLConfiguration();
-			cfg.setListDelimiter((char)0);
-			cfg.load(specifier);
+			XMLConfiguration cfg = ConfigurationUtils.getXmlConfiguration(specifier);
+			// Removed in 2.0: cfg.setListDelimiter((char)0);
 			for (String name : propertyNames) {
 				try {
-					SubnodeConfiguration subConfig = cfg.configurationAt(name+"(0)");
+					HierarchicalConfiguration<?> subConfig = cfg.configurationAt(name+"(0)");
 					bo.set(name, loadValue(subConfig));
 				} catch (IllegalArgumentException e) {
 					bo.set(name,  null);
@@ -100,7 +99,7 @@ public class XmlStorageStrategy<K extends Serializable, T extends IGeneralBO<K>>
 	 * @throws InvocationTargetException - when constructor threw an exception
 	 * @throws NoSuchMethodException - when constructor does not exist
 	 */
-	protected Object loadValue(HierarchicalConfiguration cfg) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+	protected Object loadValue(HierarchicalConfiguration<?> cfg) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		String className = cfg.getString("[@class]");
 		if ((className != null) && !className.isEmpty()) {
 			Class<?> clazz = LangUtils.forName(className);
@@ -139,7 +138,7 @@ public class XmlStorageStrategy<K extends Serializable, T extends IGeneralBO<K>>
 	 * @throws NoSuchMethodException - when constructor does not exist
 	 */
 	@SuppressWarnings("unchecked")
-	protected IGeneralBO<?> loadBusinessObject(Class<?> clazz, HierarchicalConfiguration cfg) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+	protected IGeneralBO<?> loadBusinessObject(Class<?> clazz, HierarchicalConfiguration<?> cfg) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		Serializable id = (Serializable)loadValue(cfg.configurationAt("refid(0)"));
 		IDaoFactory factory = getDaoFactory();
 		if (factory != null) {
@@ -162,9 +161,9 @@ public class XmlStorageStrategy<K extends Serializable, T extends IGeneralBO<K>>
 	 * @throws NoSuchMethodException - when constructor does not exist
 	 */
 	@SuppressWarnings("unchecked")
-	protected Collection<?> loadCollection(Class<?> clazz, HierarchicalConfiguration cfg) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+	protected Collection<?> loadCollection(Class<?> clazz, HierarchicalConfiguration<?> cfg) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		Collection<Object> collection = (Collection<Object>)clazz.getConstructor().newInstance();
-		for (HierarchicalConfiguration subConfig : cfg.configurationsAt("item")) {
+		for (HierarchicalConfiguration<?> subConfig : cfg.configurationsAt("item")) {
 			collection.add(loadValue(subConfig));
 		}
 		return collection;
@@ -182,9 +181,9 @@ public class XmlStorageStrategy<K extends Serializable, T extends IGeneralBO<K>>
 	 * @throws InvocationTargetException - when constructor threw an exception
 	 * @throws NoSuchMethodException - when constructor does not exist
 	 */
-	protected Map<?,?> loadMap(Class<?> clazz, HierarchicalConfiguration cfg) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+	protected Map<?,?> loadMap(Class<?> clazz, HierarchicalConfiguration<?> cfg) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		Map<Object,Object> map = new HashMap<Object, Object>();
-		for (HierarchicalConfiguration subConfig : cfg.configurationsAt("item")) {
+		for (HierarchicalConfiguration<?> subConfig : cfg.configurationsAt("item")) {
 			Object key = loadValue(subConfig.configurationAt("key(0)"));
 			Object value = loadValue(subConfig.configurationAt("value(0)"));
 			map.put(key, value);
@@ -204,7 +203,7 @@ public class XmlStorageStrategy<K extends Serializable, T extends IGeneralBO<K>>
 	 * @throws InvocationTargetException - when constructor threw an exception
 	 * @throws NoSuchMethodException - when constructor does not exist
 	 */
-	protected IBean loadBean(Class<?> clazz, HierarchicalConfiguration cfg) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+	protected IBean loadBean(Class<?> clazz, HierarchicalConfiguration<?> cfg) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		IBean bean = (IBean)clazz.getConstructor().newInstance();
 		for (String name : getBeanPropertyNames(clazz)) {
 			bean.set(name, loadValue(cfg.configurationAt(name+"(0)")));
@@ -224,7 +223,7 @@ public class XmlStorageStrategy<K extends Serializable, T extends IGeneralBO<K>>
 	 * @throws InvocationTargetException - when constructor threw an exception
 	 * @throws NoSuchMethodException - when constructor does not exist
 	 */
-	protected Object loadSerialized(Class<?> clazz, HierarchicalConfiguration cfg) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+	protected Object loadSerialized(Class<?> clazz, HierarchicalConfiguration<?> cfg) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		String valueString = cfg.getString(""); // ?
 		return unserialize(clazz.getName(), valueString);
 	}
@@ -355,16 +354,15 @@ public class XmlStorageStrategy<K extends Serializable, T extends IGeneralBO<K>>
 		// Read the ID of each file
 		for (File f : specifiers) {
 			try {
-				XMLConfiguration cfg = new XMLConfiguration();
-				cfg.setListDelimiter((char)0);
-				cfg.load(f);
-					try {
-						SubnodeConfiguration subConfig = cfg.configurationAt("id(0)");
-						K id = (K)loadValue(subConfig);
-						rc.put(id, f);
-					} catch (IllegalArgumentException e) {
-						// Ignore
-					}
+				XMLConfiguration cfg = ConfigurationUtils.getXmlConfiguration(f);
+				// Removed with 2.0: cfg.setListDelimiter((char)0);
+				try {
+					HierarchicalConfiguration<?> subConfig = cfg.configurationAt("id(0)");
+					K id = (K)loadValue(subConfig);
+					rc.put(id, f);
+				} catch (IllegalArgumentException e) {
+					// Ignore
+				}
 			} catch (Exception e) {
 				throw new IOException("Cannot load XML file", e);
 			}

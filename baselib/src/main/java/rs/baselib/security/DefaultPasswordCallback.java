@@ -17,9 +17,10 @@
  */
 package rs.baselib.security;
 
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.lang.ArrayUtils;
+
+import org.apache.commons.configuration2.Configuration;
+import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.apache.commons.lang3.ArrayUtils;
 
 import rs.baselib.configuration.IConfigurable;
 

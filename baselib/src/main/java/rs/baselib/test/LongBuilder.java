@@ -17,7 +17,7 @@
  */
 package rs.baselib.test;
 
-import org.apache.commons.lang.math.RandomUtils;
+import org.apache.commons.lang3.RandomUtils;
 
 /**
  * A Long builder.
@@ -92,9 +92,9 @@ public class LongBuilder implements Builder<Long> {
 			rc = Long.valueOf(count);
 			count += offset;
 		} else {
-			long l = RandomUtils.nextLong()+count;
+			long l = RandomUtils.nextLong(0, count);
 			while (l > end) {
-				l = RandomUtils.nextLong()+count;
+				l = RandomUtils.nextLong(0, count);
 			}
 			rc = Long.valueOf(l);
 		}

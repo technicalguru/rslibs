@@ -19,9 +19,11 @@ package rs.baselib.security;
 
 import java.io.File;
 
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.XMLConfiguration;
+import org.apache.commons.configuration2.Configuration;
+import org.apache.commons.configuration2.XMLConfiguration;
+import org.apache.commons.configuration2.ex.ConfigurationException;
+
+import rs.baselib.configuration.ConfigurationUtils;
 
 /**
  * Implements authorization information retrieval from a XML file.
@@ -85,7 +87,7 @@ public class XmlFileAuthorizationCallback extends DefaultAuthorizationCallback {
 	 * @throws ConfigurationException when object cannot be configured from file
 	 */
 	public void configure(File file) throws ConfigurationException {
-		XMLConfiguration xmlConfig = new XMLConfiguration(file);
+		XMLConfiguration xmlConfig = ConfigurationUtils.getXmlConfiguration(file);
 		super.configure(xmlConfig);
 	}
 }
