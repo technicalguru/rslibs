@@ -21,10 +21,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.SubnodeConfiguration;
-import org.apache.commons.configuration.XMLConfiguration;
+import org.apache.commons.configuration2.Configuration;
+import org.apache.commons.configuration2.HierarchicalConfiguration;
+import org.apache.commons.configuration2.SubnodeConfiguration;
+import org.apache.commons.configuration2.XMLConfiguration;
+import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.apache.commons.configuration2.tree.ImmutableNode;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -45,7 +47,7 @@ public class ConfigurationUtilsTest {
 	 */
 	@BeforeClass
 	public static void setUpClass() throws Exception {
-		config = new XMLConfiguration(FileFinder.find(ConfigurationUtilsTest.class, "test-config.xml"));
+		config = ConfigurationUtils.getXmlConfiguration(FileFinder.find(ConfigurationUtilsTest.class, "test-config.xml"));
 	}
 
 	/**
@@ -114,7 +116,8 @@ public class ConfigurationUtilsTest {
 	 */
 	@Test
 	public void testGetParam() {
-		SubnodeConfiguration cfg = ((XMLConfiguration)config).configurationAt("paramTest(0)");
+		XMLConfiguration xmlConfig = (XMLConfiguration)config;
+		HierarchicalConfiguration<ImmutableNode> cfg = xmlConfig.configurationAt("paramTest(0)");
 		assertEquals("aParameter1 is not correct", "value1", ConfigurationUtils.getParam(cfg, "aParameter1"));
 		assertEquals("aParameter2 is not correct", "value2", ConfigurationUtils.getParam(cfg, "aParameter2"));
 	}

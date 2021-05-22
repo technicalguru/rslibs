@@ -1,6 +1,6 @@
 package rs.baselib.test;
 
-import org.apache.commons.lang.math.RandomUtils;
+import org.apache.commons.lang3.RandomUtils;
 
 /**
  * Creates random number of values from a builder.
@@ -30,7 +30,7 @@ public class ArrayBuilder<T extends Object> implements Builder<T[]> {
 	 */
 	@Override
 	public T[] build() {
-		int n = RandomUtils.nextInt(max-min)+min;
+		int n = RandomUtils.nextInt(min, max);
 		@SuppressWarnings("unchecked")
 		T rc[] = (T[]) new Object[n];
 		for (int i=0; i<n; i++) rc[i] = builder.build();

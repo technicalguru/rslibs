@@ -1,6 +1,6 @@
 package rs.baselib.test;
 
-import org.apache.commons.lang.math.RandomUtils;
+import org.apache.commons.lang3.RandomUtils;
 
 /**
  * Selects values from an enumeration (randomly).
@@ -24,7 +24,7 @@ public class EnumerationBuilder<T extends Enum<T>> implements Builder<T> {
 	 */
 	@Override
 	public T build() {
-		return values[RandomUtils.nextInt(values.length)];
+		return values[RandomUtils.nextInt(0, values.length)];
 	}
 
 	

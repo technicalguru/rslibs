@@ -27,9 +27,9 @@ import java.security.spec.AlgorithmParameterSpec;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.SubnodeConfiguration;
-import org.apache.commons.configuration.XMLConfiguration;
+import org.apache.commons.configuration2.Configuration;
+import org.apache.commons.configuration2.SubnodeConfiguration;
+import org.apache.commons.configuration2.XMLConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,7 +56,7 @@ public class DefaultCryptingDelegateFactory implements ICryptingDelegateFactory 
 	private KeyPair keyPair = null;
 	private String algorithm;
 	private AlgorithmParameterSpec paramSpec;
-	private XMLConfiguration config;
+	private org.apache.commons.configuration2.XMLConfiguration config;
 	private Map<String, IPasswordCallback> passwordCallbacks;
 	private boolean specLoaded = false;
 
@@ -89,7 +89,7 @@ public class DefaultCryptingDelegateFactory implements ICryptingDelegateFactory 
 			URL configURL = FileFinder.find(configLocation);
 			log.info("Encryption configuration defined as: "+configLocation);
 			log.info("Encryption configuration found at: "+configURL);
-			config = new XMLConfiguration(configURL);
+			config = ConfigurationUtils.getXmlConfiguration(configURL);
 			
 			// Attention! Do not load here due to bootstrap issues
 			// Apply lazy load through loadSpec() method
@@ -157,7 +157,7 @@ public class DefaultCryptingDelegateFactory implements ICryptingDelegateFactory 
 		while (true) {
 			SubnodeConfiguration rc = null;
 			try {
-				rc = config.configurationAt("passwordCallback("+index+")");
+				rc = (SubnodeConfiguration) config.configurationAt("passwordCallback("+index+")");
 			} catch (IllegalArgumentException e) {
 				break;
 			}
@@ -218,7 +218,7 @@ public class DefaultCryptingDelegateFactory implements ICryptingDelegateFactory 
 	 */
 	protected SubnodeConfiguration getKeyStoreConfig() {
 		try {
-			return config.configurationAt("keystore(0)");
+			return (SubnodeConfiguration) config.configurationAt("keystore(0)");
 		} catch (IllegalArgumentException t) {
 			// No such config
 		}

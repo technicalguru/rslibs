@@ -17,7 +17,7 @@
  */
 package rs.baselib.test;
 
-import org.apache.commons.lang.math.RandomUtils;
+import org.apache.commons.lang3.RandomUtils;
 
 /**
  * An Integer builder.
@@ -92,7 +92,7 @@ public class IntBuilder implements Builder<Integer> {
 			rc = Integer.valueOf(count);
 			count += offset;
 		} else {
-			rc = Integer.valueOf(RandomUtils.nextInt(end-count)+count);
+			rc = Integer.valueOf(RandomUtils.nextInt(count, end));
 		}
 		return rc;
 	}

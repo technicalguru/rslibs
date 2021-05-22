@@ -17,9 +17,20 @@
  */
 package rs.baselib.configuration;
 
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.SubnodeConfiguration;
+import java.io.File;
+import java.net.URL;
+
+import org.apache.commons.configuration2.Configuration;
+import org.apache.commons.configuration2.HierarchicalConfiguration;
+import org.apache.commons.configuration2.PropertiesConfiguration;
+import org.apache.commons.configuration2.SubnodeConfiguration;
+import org.apache.commons.configuration2.XMLConfiguration;
+import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
+import org.apache.commons.configuration2.builder.fluent.Parameters;
+import org.apache.commons.configuration2.builder.fluent.PropertiesBuilderParameters;
+import org.apache.commons.configuration2.builder.fluent.XMLBuilderParameters;
+import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.apache.commons.configuration2.tree.ImmutableNode;
 
 import rs.baselib.lang.LangUtils;
 
@@ -104,7 +115,7 @@ public class ConfigurationUtils {
 		int index = 0;
 		while (true) {
 			try {
-				SubnodeConfiguration cfg = config.configurationAt("param("+index+")");
+				SubnodeConfiguration cfg = (SubnodeConfiguration) config.configurationAt("param("+index+")");
 				if (cfg == null) return null;
 				String n = cfg.getString("[@name]");
 				if (name.equals(n)) return config.getString("param("+index+")");
@@ -116,4 +127,159 @@ public class ConfigurationUtils {
 		return null;
 	}
 
+	/**
+	 * Returns the config parameter with given value for attribute name.
+	 * @param config config
+	 * @param name name of param
+	 * @return value of param
+	 */
+	public static String getParam(HierarchicalConfiguration<ImmutableNode> config, String name) {
+		if (config == null) return null;
+		
+		int index = 0;
+		while (true) {
+			try {
+				HierarchicalConfiguration<ImmutableNode> cfg = config.configurationAt("param("+index+")");
+				if (cfg == null) return null;
+				String n = cfg.getString("[@name]");
+				if (name.equals(n)) return config.getString("param("+index+")");
+				index++;
+			} catch (Exception e) {
+				break;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Creates the basic Properties Builder parameters
+	 * @param encoding - loading character encoding
+	 * @return basic builder params
+	 */
+	public static PropertiesBuilderParameters createPropertiesBuilderParams(String encoding) {
+		Parameters params = new Parameters();
+		return params.properties()
+		    .setThrowExceptionOnMissing(true)
+		    .setEncoding(encoding);
+	}
+		
+	/**
+	 * Creates the Properties configuration object based on the given parameters.
+	 * @param params - the Properties builder parameters
+	 * @return the Properties configuration 
+	 * @throws ConfigurationException when an error occurs
+	 */
+	public static PropertiesConfiguration getPropertiesConfiguration(PropertiesBuilderParameters params) throws ConfigurationException {
+		FileBasedConfigurationBuilder<PropertiesConfiguration> builder = new FileBasedConfigurationBuilder<PropertiesConfiguration>(PropertiesConfiguration.class).configure(params);			
+		return builder.getConfiguration();
+	}
+	
+	/**
+	 * Create a Properties configuration object with UTF-8.
+	 * @param file - file to load from
+	 * @return the configuration object
+	 * @throws ConfigurationException when an error occurs
+	 */
+	public static PropertiesConfiguration getPropertiesConfiguration(File file) throws ConfigurationException {
+		return getPropertiesConfiguration(file, "UTF-8");
+	}
+	
+	/**
+	 * Create a Properties configuration object.
+	 * @param file - file to load from
+	 * @param encoding - encoding, e.g. UTF-8
+	 * @return the configuration object
+	 * @throws ConfigurationException when an error occurs
+	 */
+	public static PropertiesConfiguration getPropertiesConfiguration(File file, String encoding) throws ConfigurationException {
+		return getPropertiesConfiguration(createPropertiesBuilderParams(encoding).setFile(file));
+	}
+
+	/**
+	 * Create a Properties configuration object with UTF-8.
+	 * @param url - URL to load from
+	 * @return the configuration object
+	 * @throws ConfigurationException when an error occurs
+	 */
+	public static PropertiesConfiguration getPropertiesConfiguration(URL url) throws ConfigurationException {
+		return getPropertiesConfiguration(url, "UTF-8");
+	}
+	
+	/**
+	 * Create a Properties configuration object.
+	 * @param url - URL to load from
+	 * @param encoding - encoding, e.g. UTF-8
+	 * @return the configuration object
+	 * @throws ConfigurationException when an error occurs
+	 */
+	public static PropertiesConfiguration getPropertiesConfiguration(URL url, String encoding) throws ConfigurationException {
+		return getPropertiesConfiguration(createPropertiesBuilderParams(encoding).setURL(url));
+	}
+
+	/**
+	 * Creates the basic XML Builder parameters
+	 * @param encoding - loading character encoding
+	 * @return basic builder params
+	 */
+	public static XMLBuilderParameters createXMLBuilderParams(String encoding) {
+		Parameters params = new Parameters();
+		return params.xml()
+		    .setThrowExceptionOnMissing(true)
+		    .setValidating(false)
+		    .setEncoding(encoding);
+		    //.setExpressionEngine(new XPathExpressionEngine());
+	}
+	
+	/**
+	 * Creates the XML configuration object based on the given parameters.
+	 * @param params - the XML builder parameters
+	 * @return the XML configuration 
+	 * @throws ConfigurationException when an error occurs
+	 */
+	public static XMLConfiguration getXmlConfiguration(XMLBuilderParameters params) throws ConfigurationException {
+		FileBasedConfigurationBuilder<XMLConfiguration> builder = new FileBasedConfigurationBuilder<XMLConfiguration>(XMLConfiguration.class).configure(params);			
+		return builder.getConfiguration();
+	}
+	
+	/**
+	 * Create a XML configuration object with UTF-8.
+	 * @param file - file to load from
+	 * @return the configuration object
+	 * @throws ConfigurationException when an error occurs
+	 */
+	public static XMLConfiguration getXmlConfiguration(File file) throws ConfigurationException {
+		return getXmlConfiguration(file, "UTF-8");
+	}
+	
+	/**
+	 * Create a XML configuration object.
+	 * @param file - file to load from
+	 * @param encoding - encoding, e.g. UTF-8
+	 * @return the configuration object
+	 * @throws ConfigurationException when an error occurs
+	 */
+	public static XMLConfiguration getXmlConfiguration(File file, String encoding) throws ConfigurationException {
+		return getXmlConfiguration(createXMLBuilderParams(encoding).setFile(file));
+	}
+
+	/**
+	 * Create a XML configuration object with UTF-8.
+	 * @param configUrl - URL to load from
+	 * @return the configuration object
+	 * @throws ConfigurationException when an error occurs
+	 */
+	public static XMLConfiguration getXmlConfiguration(URL configUrl) throws ConfigurationException {
+		return getXmlConfiguration(configUrl, "UTF-8");
+	}
+	
+	/**
+	 * Create a XML configuration object.
+	 * @param configUrl - URL to load from
+	 * @param encoding - encoding, e.g. UTF-8
+	 * @return the configuration object
+	 * @throws ConfigurationException when an error occurs
+	 */
+	public static XMLConfiguration getXmlConfiguration(URL configUrl, String encoding) throws ConfigurationException {
+		return getXmlConfiguration(createXMLBuilderParams(encoding).setURL(configUrl));
+	}
 }

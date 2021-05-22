@@ -3,7 +3,7 @@ package rs.baselib.test;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.math.RandomUtils;
+import org.apache.commons.lang3.RandomUtils;
 
 /**
  * Selects values from an enumeration (randomly)
@@ -34,7 +34,7 @@ public class ListBuilder<T> implements Builder<List<T>> {
 	@Override
 	public List<T> build() {
 		List<T> rc = new ArrayList<>();
-		int n = RandomUtils.nextInt(max-min)+min;
+		int n = RandomUtils.nextInt(min, max);
 		for (int i=0; i<n; i++) rc.add(builder.build());
 		return rc;
 	}
