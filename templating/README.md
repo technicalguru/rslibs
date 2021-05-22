@@ -17,6 +17,16 @@ any text
 
 The Templating class provides a method to extract this sub-template.
 
+## Maven Coordinates
+
+```
+<dependency>
+	<groupId>eu.ralph-schuster</groupId>
+	<artifactId>templating</artifactId>
+	<version>${version}</version>
+</dependency>
+```
+
 ## API Reference
 
 Javadoc API for latest stable version can be accessed [here](https://www.javadoc.io/doc/eu.ralph-schuster/templating).

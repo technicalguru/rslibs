@@ -6,6 +6,16 @@ The Base Library provide several useful classes and utilities that are used in o
 Of course, the library can be used in external projects as well, as it is published under the 
 [GNU Lesser General Public License 3.0](http://www.gnu.org/licenses/lgpl-3.0.html).
 
+## Maven Coordinates
+
+```
+<dependency>
+	<groupId>eu.ralph-schuster</groupId>
+	<artifactId>baselib</artifactId>
+	<version>${version}</version>
+</dependency>
+```
+
 ## API Reference
 
 Javadoc API for latest stable version can be accessed [here](https://www.javadoc.io/doc/eu.ralph-schuster/baselib).
