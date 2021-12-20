@@ -34,8 +34,8 @@
 	</distributionManagement>
 
 	<issueManagement>
-		<system>Jira</system>
-		<url>https://jira.ralph-schuster.eu:8443/browse/RSLIBS</url>
+		<system>GitHub</system>
+		<url>https://github.com/technicalguru/rslibs/issues</url>
 	</issueManagement>
 
 	<ciManagement>

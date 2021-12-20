@@ -330,6 +330,25 @@ public class HibernateDaoMaster extends AbstractDaoMaster {
 	 * @return session factory
 	 */
 	public static SessionFactory createSessionFactory(org.hibernate.cfg.Configuration config) {
+		/** TODO New bootstrap in HBM 5.x is:
+		StandardServiceRegistry standardRegistry = new StandardServiceRegistryBuilder()
+		    .configure( "org/hibernate/example/hibernate.cfg.xml" )
+		    .build();
+		
+		Metadata metadata = new MetadataSources( standardRegistry )
+		    .addAnnotatedClass( MyEntity.class )
+		    .addAnnotatedClassName( "org.hibernate.example.Customer" )
+		    .addResource( "org/hibernate/example/Order.hbm.xml" )
+		    .addResource( "org/hibernate/example/Product.orm.xml" )
+		    .getMetadataBuilder()
+		    .applyImplicitNamingStrategy( ImplicitNamingStrategyJpaCompliantImpl.INSTANCE )
+		    .build();
+		
+		SessionFactory sessionFactory = metadata.getSessionFactoryBuilder()
+		    .applyBeanManager( getBeanManager() )
+		    .build();
+		    
+		 */
 		return config.buildSessionFactory();
 	}
 	

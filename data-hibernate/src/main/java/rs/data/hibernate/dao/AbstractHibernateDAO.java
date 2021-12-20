@@ -23,6 +23,12 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import org.hibernate.Criteria;
 import org.hibernate.LockOptions;
 import org.hibernate.ScrollMode;
@@ -53,7 +59,7 @@ import rs.data.util.ObjectDeletedException;
  */
 public abstract class AbstractHibernateDAO<K extends Serializable, T extends GeneralDTO<K>, B extends AbstractHibernateBO<K, T>, C extends IGeneralBO<K>> extends AbstractDAO<K, T, B, C> {
 
-	private ThreadLocal<Integer> lastTotals = new ThreadLocal<>();
+	private ThreadLocal<Long> lastTotals = new ThreadLocal<>();
 	
 	/**
 	 * Constructor.
@@ -67,7 +73,6 @@ public abstract class AbstractHibernateDAO<K extends Serializable, T extends Gen
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	protected T _findBy(K id) {
 		T rc = (T) getSession().get(getTransferClass(), id);
@@ -223,7 +228,84 @@ public abstract class AbstractHibernateDAO<K extends Serializable, T extends Gen
 		return deleteByCriteria(null);
 	}
 
-	/************************************ Criteria stuff ******************************************/
+	/************************************ New Criteria stuff ******************************************/
+	
+	protected CriteriaBuilder getCriteriaBuilder() {
+		return getSession().getCriteriaBuilder();
+	}
+	
+	protected CriteriaQuery<T> getQuery() {
+		return getQuery(getTransferClass());
+	}
+	
+	protected <X> CriteriaQuery<X> getQuery(Class<X> clazz) {
+		return getCriteriaBuilder().createQuery(clazz);
+	}
+	
+	protected <X> TypedQuery<X> filterResult(CriteriaQuery<X> query, int firstResult, int maxResults) {
+		// TODO set the total
+		TypedQuery<X> rc = getSession().createQuery(query);
+		if (firstResult > 0) rc.setFirstResult(firstResult);
+		if (maxResults > 0)  rc.setMaxResults(maxResults);
+		return rc;
+	}
+	
+	protected List<C> findByQuery(TypedQuery<T> query) {
+		List<T> l = _findByQuery(query);
+		List<C> rc = new ArrayList<C>();
+		wrap(rc, l);
+		return rc;
+	}
+
+	protected List<T> _findByQuery(TypedQuery<T> query) {
+		if (query == null) query = buildQuery();
+		List<T> rc = query.getResultList();
+		return rc;
+	}
+
+	protected C findSingleByQuery(TypedQuery<T> query) {
+		T rc = _findSingleByQuery(query);
+		return getBusinessObject(rc);
+	}
+	
+	protected T _findSingleByQuery(TypedQuery<T> query) {
+		return query.getSingleResult();
+	}
+
+	protected TypedQuery<T> buildQuery(Predicate... predicates) {
+		return buildQuery(-1, -1, predicates);
+	}
+
+	protected TypedQuery<T> buildQuery(int firstResult, int maxResults, Predicate... predicates) {
+		return buildCustomQuery(getTransferClass(), firstResult, maxResults, predicates);
+	}
+
+	protected <X> TypedQuery<X> buildCustomQuery(Class<X> forClass, int firstResult, int maxResults, Predicate... predicates) {
+		if (forClass == null) return null;
+		CriteriaQuery<X> query = getQuery(forClass);
+		if (predicates != null) {
+			query.where(predicates);
+		}
+		lastTotals.set(getTotal(forClass, query));
+		return filterResult(query, firstResult, maxResults);
+	}
+
+	protected TypedQuery<T> getDefaultQuery() {
+		return buildQuery(getDefaultPredicates());
+	}
+
+	protected Predicate[] getDefaultPredicates() {
+		return null;
+	}
+
+	protected <X> long getTotal(Class<X> clazz, CriteriaQuery<X> query) {
+		CriteriaQuery<Long> cq = getQuery(Long.class);
+	    Root<X> root           = cq.from(clazz);
+	    cq.select(getCriteriaBuilder().count(root)).where(query.getRestriction());
+	    TypedQuery<Long> q = getSession().createQuery(cq);
+	    return q.getSingleResult();	    
+	}
+	
 	/**
 	 * Returns the Hibernate session. This method will start a new transaction
 	 * if required.
@@ -235,11 +317,24 @@ public abstract class AbstractHibernateDAO<K extends Serializable, T extends Gen
 	}
 
 	/**
+	 * Returns the number of records of the last retrieval without pagination.
+	 * @return number of rows in last query
+	 * @since 1.3.2
+	 */
+	public long getLastTotal() {
+		Long rc = lastTotals.get();
+		if (rc != null) return rc.intValue();
+		return 0;
+	}
+	
+	/************************************ Deprected Criteria stuff ******************************************/
+	/**
 	 * Returns a default Hibernate criteria for search.
 	 * This can be used to simplify queries when tables may contain soft-deleted objects.
 	 * This abstract implementation return null.
 	 * @return a default criteria to be used
 	 */
+	@Deprecated
 	protected Criteria getDefaultCriteria() {
 		return buildCriteria(getDefaultCriterions());
 	}
@@ -248,6 +343,7 @@ public abstract class AbstractHibernateDAO<K extends Serializable, T extends Gen
 	 * Returns the default criterions.
 	 * @return the default criterions for a query
 	 */
+	@Deprecated
 	protected Criterion[] getDefaultCriterions() {
 		return null;
 	}
@@ -259,6 +355,7 @@ public abstract class AbstractHibernateDAO<K extends Serializable, T extends Gen
 	 * @param criteria criteria for search
 	 * @return first object matching the criteria
 	 */
+	@Deprecated
 	protected T _findSingleByCriteria(Criteria criteria) {
 		criteria.setMaxResults(1);
 		List<T> l = _findByCriteria(criteria);
@@ -273,6 +370,7 @@ public abstract class AbstractHibernateDAO<K extends Serializable, T extends Gen
 	 * @param criteria criteria for search
 	 * @return first object matching the criteria
 	 */
+	@Deprecated
 	protected C findSingleByCriteria(Criteria criteria) {
 		T rc = _findSingleByCriteria(criteria);
 		return getBusinessObject(rc);
@@ -283,6 +381,7 @@ public abstract class AbstractHibernateDAO<K extends Serializable, T extends Gen
 	 * @param criterion list of criterions to be added.
 	 * @return the Hibernate criteria
 	 */
+	@Deprecated
 	protected Criteria buildCriteria(Criterion... criterion) {
 		return buildCriteria(-1, -1, criterion);
 	}
@@ -294,6 +393,7 @@ public abstract class AbstractHibernateDAO<K extends Serializable, T extends Gen
 	 * @param criterion list of criterions to be added.
 	 * @return the Hibernate criteria
 	 */
+	@Deprecated
 	protected Criteria buildCriteria(int firstResult, int maxResults, Criterion... criterion) {
 		return buildCustomCriteria(getTransferClass(), firstResult, maxResults, criterion);
 	}
@@ -306,6 +406,7 @@ public abstract class AbstractHibernateDAO<K extends Serializable, T extends Gen
 	 * @param criterion list of criterions to be added.
 	 * @return the Hibernate criteria
 	 */
+	@Deprecated
 	protected Criteria buildCustomCriteria(Class<?> forClass, int firstResult, int maxResults, Criterion... criterion) {
 		if (forClass == null) return null;
 		org.hibernate.Criteria crit = getSession().createCriteria(forClass);
@@ -317,7 +418,6 @@ public abstract class AbstractHibernateDAO<K extends Serializable, T extends Gen
 		return filterResult(crit, firstResult, maxResults);
 	}
 
-
 	/**
 	 * Applies the result count limitation to the Hibernate criteria.
 	 * @param crit criteria to be limited
@@ -325,8 +425,9 @@ public abstract class AbstractHibernateDAO<K extends Serializable, T extends Gen
 	 * @param maxResults maximum number of results returned
 	 * @return limited criteria.
 	 */
+	@Deprecated
 	protected Criteria filterResult(Criteria crit, int firstResult, int maxResults) {
-		int total = getTotal(crit);		 
+		long total = getTotal(crit);		 
 		lastTotals.set(total);
 		if (firstResult > 0) crit.setFirstResult(firstResult);
 		if (maxResults > 0) crit.setMaxResults(maxResults);
@@ -334,25 +435,15 @@ public abstract class AbstractHibernateDAO<K extends Serializable, T extends Gen
 	}
 
 	/**
-	 * Returns the number of records of the last retrieval without pagination.
-	 * @return number of rows in last query
-	 * @since 1.3.2
-	 */
-	public int getLastTotal() {
-		Integer rc = lastTotals.get();
-		if (rc != null) return rc.intValue();
-		return 0;
-	}
-	
-	/**
 	 * Get the total number of records in this criteria.
 	 * @param crit - criteria (before applying pagination)
 	 * @return number of records
 	 */
-	protected int getTotal(Criteria crit) {
+	@Deprecated
+	protected long getTotal(Criteria crit) {
 		ScrollableResults results = crit.scroll();
 		results.last();
-		int total = results.getRowNumber() + 1;
+		long total = results.getRowNumber() + 1;
 		results.close();
 		return total;
 	}
@@ -363,6 +454,7 @@ public abstract class AbstractHibernateDAO<K extends Serializable, T extends Gen
 	 * @return the list of objects matching the criteria
 	 */
 	@SuppressWarnings("unchecked")
+	@Deprecated
 	protected List<T> _findByCriteria(Criteria crit) {
 		if (crit == null) crit = buildCriteria();
 		List<T> rc = crit.list();
@@ -374,6 +466,7 @@ public abstract class AbstractHibernateDAO<K extends Serializable, T extends Gen
 	 * @param crit Hibernate criteria
 	 * @return the list of objects matching the criteria
 	 */
+	@Deprecated
 	protected List<C> findByCriteria(Criteria crit) {
 		List<T> l = _findByCriteria(crit);
 		List<C> rc = new ArrayList<C>();
@@ -388,6 +481,7 @@ public abstract class AbstractHibernateDAO<K extends Serializable, T extends Gen
 	 * @param crit Hibernate criteria
 	 * @return the list of objects matching the criteria
 	 */
+	@Deprecated
 	protected List<?> executeCriteria(Criteria crit) {
 		if (crit == null) crit = buildCriteria();
 		return crit.list();
@@ -447,6 +541,7 @@ public abstract class AbstractHibernateDAO<K extends Serializable, T extends Gen
 	 * @param crit Hibernate criteria
 	 * @return number of objects returned by the criteria
 	 */
+	@Deprecated
 	protected int getRowCount(Criteria crit) {
 		crit = crit.setProjection(Projections.rowCount());
 		crit.setReadOnly(true);
@@ -477,6 +572,7 @@ public abstract class AbstractHibernateDAO<K extends Serializable, T extends Gen
 	 * @param criteria Criteria for object (row) count
 	 * @return the row count.
 	 */
+	@Deprecated
 	protected int getObjectCount(Criteria criteria) {
 		if (criteria == null) criteria = buildCriteria();
 		criteria.setProjection(Projections.rowCount());
