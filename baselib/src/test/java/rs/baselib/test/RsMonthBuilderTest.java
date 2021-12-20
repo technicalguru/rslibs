@@ -68,7 +68,9 @@ public class RsMonthBuilderTest {
 		RsMonthBuilder b = $RsMonth().withTimezone(TimeZone.getTimeZone("UTC")).withTime(builder);
 		RsDate first   = b.build().getBegin();
 		RsDate actual  = b.build().getBegin();
-		assertEquals("RsMonthBuilder not initialized correctly", first.get(Calendar.MONTH)+1, actual.get(Calendar.MONTH));
+		int expected = first.get(Calendar.MONTH)+1;
+		if (expected > 11) expected = 0;
+		assertEquals("RsMonthBuilder not initialized correctly", expected, actual.get(Calendar.MONTH));
 		assertEquals("RsMonthBuilder not initialized correctly", actual.get(Calendar.DAY_OF_MONTH), 1);
 	}
 
@@ -77,7 +79,9 @@ public class RsMonthBuilderTest {
 		RsMonthBuilder b = $RsMonth().withTimezone(TimeZone.getTimeZone("UTC")).withMonthOffset(1);
 		RsMonth first = b.build();
 		RsMonth actual = b.build();
-		assertEquals("RsMonthBuilder not initialized correctly", first.get(Calendar.MONTH)+1, actual.get(Calendar.MONTH));
+		int expected = first.get(Calendar.MONTH)+1;
+		if (expected > 11) expected = 0;
+		assertEquals("RsMonthBuilder not initialized correctly", expected, actual.get(Calendar.MONTH));
 		assertEquals("RsMonthBuilder not initialized correctly", actual.getBegin().get(Calendar.DAY_OF_MONTH), 1);
 	}
 

@@ -18,6 +18,7 @@
 package rs.baselib.lang;
 
 import java.beans.PropertyDescriptor;
+import java.beans.Transient;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -31,8 +32,6 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
-import javax.persistence.Transient;
 
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;

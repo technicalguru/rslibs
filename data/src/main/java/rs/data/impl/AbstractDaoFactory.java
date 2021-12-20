@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -135,21 +136,17 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 
 		{
 			// Load DAO masters
-			int index = 0;
-			while (index >= 0) {
+			List<?> list = ((HierarchicalConfiguration<?>)cfg).configurationsAt("DaoMaster");
+			for (Object masterConfig : list) {
 				try {
-					HierarchicalConfiguration<?> tCfg = ((HierarchicalConfiguration<?>)cfg).configurationAt("DaoMaster("+index+")");
+					HierarchicalConfiguration<?> tCfg = (HierarchicalConfiguration<?>)masterConfig;
 					IDaoMaster daoMaster = loadDaoMaster(tCfg);
-					String id = cfg.getString("DaoMaster("+index+")[@name]");
+					String id = tCfg.getString("[@name]");
 					if (id == null) id = "default";
-					getLog().debug("DAO Master \""+id+"\": "+daoMaster.getClass().getName());
+					getLog().info("DAO Master \""+id+"\": "+daoMaster.getClass().getName());
 					setDaoMaster(id, daoMaster);
-					index++;
-				} catch (IllegalArgumentException e) {
-					index = -1;
 				} catch (Exception e) {
 					getLog().error("Cannot load DaoMaster: ", e);
-					index = -1;
 				}
 			}
 
@@ -157,18 +154,14 @@ public abstract class AbstractDaoFactory implements IDaoFactory, IConfigurable {
 
 		{
 			// Load DAOs
-			int index = 0;
-			while (index >= 0) {
+			List<?> list =  ((HierarchicalConfiguration<?>)cfg).configurationsAt("Dao");
+			for (Object daoConfig : list) {
 				try {
-					HierarchicalConfiguration<?> dCfg = ((HierarchicalConfiguration<?>)cfg).configurationAt("Dao("+index+")");
+					HierarchicalConfiguration<?> dCfg = (HierarchicalConfiguration<?>)daoConfig;
 					IGeneralDAO<?, ?> dao = loadDao(dCfg);
-					getLog().debug("DAO: "+dao.getClass().getName());
-					index++;
-				} catch (IllegalArgumentException e) {
-					index = -1;
+					getLog().info("DAO: "+dao.getClass().getName());
 				} catch (Exception e) {
 					getLog().error("Cannot load DAO: ", e);
-					index = -1;
 				}
 			}
 

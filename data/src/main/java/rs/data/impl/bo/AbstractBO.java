@@ -17,10 +17,9 @@
  */
 package rs.data.impl.bo;
 
+import java.beans.Transient;
 import java.io.Serializable;
 import java.util.List;
-
-import javax.persistence.Transient;
 
 import rs.baselib.bean.NamedObject;
 import rs.baselib.bean.NoCopy;
