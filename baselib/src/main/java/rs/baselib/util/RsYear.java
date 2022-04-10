@@ -18,6 +18,7 @@
 package rs.baselib.util;
 
 import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -123,6 +124,15 @@ public class RsYear extends RsDate {
 	}
 
 	/**
+	 * Constructor.
+	 * @param timestamp the zoned date time object from JavaTime API
+	 * @since 3.0.0
+	 */
+	public RsYear(ZonedDateTime timestamp) {
+		this(TimeZone.getTimeZone(timestamp.getZone()), timestamp.getYear());
+	}
+	
+	/**
 	 * Adjusts the time stamp to the start of the year.
 	 */
 	protected void ensureBegin() {
@@ -188,9 +198,17 @@ public class RsYear extends RsDate {
 	 * @return next year
 	 */
 	public RsYear getNext() {
-		RsYear rc = new RsYear(getTimeZone(), getTimeInMillis());
-		rc.add(YEAR, 1);
-		return rc;
+		return roll(1);
+	}
+	
+	/**
+	 * Returns the n-th next year.
+	 * @param n the number of years to roll
+	 * @return n-th next year
+	 * @since 3.0.0
+	 */
+	public RsYear getNext(int n) {
+		return roll(n);
 	}
 	
 	/**
@@ -198,8 +216,28 @@ public class RsYear extends RsDate {
 	 * @return previous year
 	 */
 	public RsYear getPrevious() {
+		return roll(-1);
+	}
+	
+	/**
+	 * Returns the n-th previous year.
+	 * @param n the number of years to roll
+	 * @return n-th previous year
+	 * @since 3.0.0
+	 */
+	public RsYear getPrevious(int n) {
+		return roll(-n);
+	}
+	
+	/**
+	 * Returns a year by rolling back or forth this year
+	 * @param years years to roll (can be negative)
+	 * @return the n-th year before or after this year
+	 * @since 3.0.0
+	 */
+	public RsYear roll(int years) {
 		RsYear rc = new RsYear(getTimeZone(), getTimeInMillis());
-		rc.add(YEAR, -1);
+		rc.add(YEAR, years);
 		return rc;
 	}
 	
@@ -245,6 +283,16 @@ public class RsYear extends RsDate {
 		}
 	}
 	
+	/**
+	 * Returns a year object for the given timestamp.
+	 * @param timestamp any timestamp of JavaTime API
+	 * @return year object
+	 * @since 3.0.0
+	 */
+	public static RsYear from(ZonedDateTime timestamp) {
+		return new RsYear(timestamp);
+	}
+
 	/**
 	 * Returns a year object for the given key.
 	 * @param year year number
