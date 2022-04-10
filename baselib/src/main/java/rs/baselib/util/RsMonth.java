@@ -18,6 +18,7 @@
 package rs.baselib.util;
 
 import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -126,6 +127,15 @@ public class RsMonth extends RsDate {
 	}
 
 	/**
+	 * Constructor.
+	 * @param timestamp the zoned date time object from JavaTime API
+	 * @since 3.0.0
+	 */
+	public RsMonth(ZonedDateTime timestamp) {
+		this(TimeZone.getTimeZone(timestamp.getZone()), timestamp.getMonthValue()-1, timestamp.getYear());
+	}
+	
+	/**
 	 * Adjusts the time stamp to the start of the month.
 	 */
 	protected void ensureBegin() {
@@ -183,9 +193,17 @@ public class RsMonth extends RsDate {
 	 * @return next month
 	 */
 	public RsMonth getNext() {
-		RsMonth rc = new RsMonth(getTimeZone(), getTimeInMillis());
-		rc.add(MONTH, 1);
-		return rc;
+		return roll(1);
+	}
+	
+	/**
+	 * Returns the n-th next month.
+	 * @param n the number of months to roll
+	 * @return n-th next month
+	 * @since 3.0.0
+	 */
+	public RsMonth getNext(int n) {
+		return roll(n);
 	}
 	
 	/**
@@ -193,8 +211,28 @@ public class RsMonth extends RsDate {
 	 * @return previous month
 	 */
 	public RsMonth getPrevious() {
+		return roll(-1);
+	}
+	
+	/**
+	 * Returns the n-th previous month.
+	 * @param n the number of months to roll
+	 * @return n-th previous month
+	 * @since 3.0.0
+	 */
+	public RsMonth getPrevious(int n) {
+		return roll(-n);
+	}
+	
+	/**
+	 * Returns a month by rolling back or forth this month
+	 * @param months months to roll (can be negative)
+	 * @return the n-th month before or after this month
+	 * @since 3.0.0
+	 */
+	public RsMonth roll(int months) {
 		RsMonth rc = new RsMonth(getTimeZone(), getTimeInMillis());
-		rc.add(MONTH, -1);
+		rc.add(MONTH, months);
 		return rc;
 	}
 	
@@ -239,4 +277,15 @@ public class RsMonth extends RsDate {
 			throw new RuntimeException("Cannot parse month: "+key, e);
 		}
 	}
+	
+	/**
+	 * Returns a month object for the given timestamp.
+	 * @param timestamp any timestamp of JavaTime API
+	 * @return month object
+	 * @since 3.0.0
+	 */
+	public static RsMonth from(ZonedDateTime timestamp) {
+		return new RsMonth(timestamp);
+	}
+
 }

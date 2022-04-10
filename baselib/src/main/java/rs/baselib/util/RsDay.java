@@ -18,6 +18,7 @@
 package rs.baselib.util;
 
 import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -130,6 +131,15 @@ public class RsDay extends RsDate {
 	}
 
 	/**
+	 * Constructor.
+	 * @param timestamp the zoned date time object from JavaTime API
+	 * @since 3.0.0
+	 */
+	public RsDay(ZonedDateTime timestamp) {
+		this(TimeZone.getTimeZone(timestamp.getZone()), timestamp.getDayOfMonth(), timestamp.getMonthValue()-1, timestamp.getYear());
+	}
+	
+	/**
 	 * Adjusts the time stamp to the start of the day.
 	 */
 	protected void ensureBegin() {
@@ -141,7 +151,7 @@ public class RsDay extends RsDate {
 	}
 	
 	/**
-	 * Returns the key of this month.
+	 * Returns the key of this day.
 	 * @return the key of this day.
 	 */
 	public String getKey() {
@@ -157,8 +167,8 @@ public class RsDay extends RsDate {
 	}
 	
 	/**
-	 * Returns the begin of this month.
-	 * @return begin of month
+	 * Returns the begin of this day.
+	 * @return begin of day
 	 */
 	public RsDate getBegin() {
 		RsDate rc = new RsDate(getTimeZone(), getTimeInMillis());
@@ -170,8 +180,8 @@ public class RsDay extends RsDate {
 	}
 	
 	/**
-	 * Returns the end of this month.
-	 * @return begin of month
+	 * Returns the end of this day.
+	 * @return begin of day
 	 */
 	public RsDate getEnd() {
 		RsDate rc = new RsDate(getTimeZone(), getTimeInMillis());
@@ -183,22 +193,51 @@ public class RsDay extends RsDate {
 	}
 	
 	/**
-	 * Returns the next month.
-	 * @return next month
+	 * Returns the next day.
+	 * @param count number of days to add
+	 * @return next day
 	 */
 	public RsDay getNext() {
-		RsDay rc = new RsDay(getTimeZone(), getTimeInMillis());
-		rc.add(DAY_OF_MONTH, 1);
-		return rc;
+		return roll(1);
 	}
 	
 	/**
-	 * Returns the previous month.
-	 * @return previous month
+	 * Returns the n-th day after this day.
+	 * @param count number of days to add
+	 * @return n-th day after
+	 * @since 3.0.0
+	 */
+	public RsDay getNext(int count) {
+		return roll(count);
+	}
+	
+	/**
+	 * Returns the previous day.
+	 * @return previous day
 	 */
 	public RsDay getPrevious() {
+		return roll(-1);
+	}
+	
+	/**
+	 * Returns the n-th day before this day.
+	 * @param count number of days to go back
+	 * @return n-th day before this day
+	 * @since 3.0.0
+	 */
+	public RsDay getPrevious(int count) {
+		return roll(-count);
+	}
+	
+	/**
+	 * Returns a day by rolling back or forth this day
+	 * @param days days to roll (can be negative)
+	 * @return the n-th day before or after this day
+	 * @since 3.0.0
+	 */
+	public RsDay roll(int days) {
 		RsDay rc = new RsDay(getTimeZone(), getTimeInMillis());
-		rc.add(DAY_OF_MONTH, -1);
+		rc.add(DAY_OF_MONTH, days);
 		return rc;
 	}
 	
@@ -222,7 +261,6 @@ public class RsDay extends RsDate {
 		return getKey().hashCode();
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -243,4 +281,15 @@ public class RsDay extends RsDate {
 			throw new RuntimeException("Cannot parse day: "+key, e);
 		}
 	}
+	
+	/**
+	 * Returns a day object for the given timestamp.
+	 * @param timestamp any timestamp of JavaTime API
+	 * @return day object
+	 * @since 3.0.0
+	 */
+	public static RsDay from(ZonedDateTime timestamp) {
+		return new RsDay(timestamp);
+	}
+	
 }

@@ -18,6 +18,7 @@
 package rs.baselib.util;
 
 import java.sql.Timestamp;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
@@ -224,6 +225,15 @@ public class RsDate extends GregorianCalendar {
 	}
 	
 	/**
+	 * Constructor.
+	 * @param timestamp the zoned date time object from JavaTime API
+	 * @since 3.0.0
+	 */
+	public RsDate(ZonedDateTime timestamp) {
+		this(TimeZone.getTimeZone(timestamp.getZone()), timestamp.getYear(), timestamp.getMonthValue()-1, timestamp.getDayOfMonth(), timestamp.getHour(), timestamp.getMinute(), timestamp.getSecond(), timestamp.getNano()/1000);
+	}
+	
+	/**
 	 * Returns the year object for this date.
 	 * @return year
 	 */
@@ -285,5 +295,15 @@ public class RsDate extends GregorianCalendar {
 		return "RsDate ["+toZonedDateTime().format(DateTimeFormatter.ISO_ZONED_DATE_TIME)+"]";
 	}
 	
+	/**
+	 * Returns a date object for the given timestamp.
+	 * @param timestamp any timestamp of JavaTime API
+	 * @return date object
+	 * @since 3.0.0
+	 */
+	public static RsDate from(ZonedDateTime timestamp) {
+		return new RsDate(timestamp);
+	}
 	
+
 }
