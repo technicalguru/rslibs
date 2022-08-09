@@ -14,7 +14,7 @@ Most of this code was created when I faced specific problems in my professional 
 RS Library modules are maintained in the same Maven project and, hence, follow the same release cycle. That means that each modules will have the same version numbers and are published at the same time.
 
 ## Latest Version
-Latest version is 3.0.0.
+Latest version is 3.0.2.
 
 ## Upgrading v2 to v3
 V3 is a major release that removes the Data APIs. They will not be maintained any longer - in favour of Spring Data Framework. Do not upgrade to this version when you need the Data API.
