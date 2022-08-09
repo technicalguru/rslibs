@@ -40,7 +40,7 @@
 
 	<ciManagement>
 		<system>bamboo</system>
-		<url>https://bamboo.ralph-schuster.eu:8443/browse/RSLIB</url>
+		<url>https://bamboo.ralph-schuster.eu/browse/RSLIB</url>
 	</ciManagement>
 
 	<developers>
