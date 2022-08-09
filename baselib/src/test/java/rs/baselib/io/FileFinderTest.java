@@ -40,7 +40,7 @@ public class FileFinderTest {
 	 * Test method for {@link FileFinder#find(String)}.
 	 */
 	@Test
-	public void testFindString() {
+	public void testFindFileString() {
 		URL url = FileFinder.find("finder-file1.txt");
 		assertNotNull("Cannot find file 1", url);
 		url = FileFinder.find("finder-file2.txt");
@@ -52,10 +52,19 @@ public class FileFinderTest {
 	}
 
 	/**
+	 * Test method for {@link FileFinder#findDir(String)}.
+	 */
+	@Test
+	public void testFindDirString() {
+		URL url = FileFinder.findDir("crypto");
+		assertNotNull("Cannot find dir crypto", url);
+	}
+	
+	/**
 	 * Test method for {@link FileFinder#find(Class, String)}.
 	 */
 	@Test
-	public void testFindClassOfQString() {
+	public void testFindFileClassOfQString() {
 		URL url = FileFinder.find(ConfigurationUtilsTest.class, "finder-file1.txt");
 		assertNull("Cannot find file 1", url);
 		url = FileFinder.find(ConfigurationUtilsTest.class, "finder-file2.txt");
@@ -66,6 +75,16 @@ public class FileFinderTest {
 		assertNotNull("Cannot find file 4", url);
 	}
 
+	/**
+	 * Test method for {@link FileFinder#find(Class, String)}.
+	 */
+	@Test
+	public void testFindDirClassOfQString() {
+		URL url = FileFinder.findDir(ConfigurationUtilsTest.class, "crypto");
+		assertNotNull("Cannot find dir crypto", url);
+	}
+	
+	
 	/**
 	 * Test method for {@link FileFinder#open(String)}.
 	 * 

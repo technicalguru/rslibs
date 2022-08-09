@@ -50,6 +50,16 @@ public class FileFinder {
 	}
 	
 	/**
+	 * Tries to find the directory specified from filesystem or classpath.
+	 * @param name - name of directory, can be fully qualified
+	 * @return URL to the directory
+	 * @see #findDir(Class, String)
+	 */
+	public static URL findDir(String name) {
+		return findDir(null, name);
+	}
+
+	/**
 	 * Tries to find the file specified from filesystem or classpath.
 	 * <p>The file will be searched based on the following procedure:</p>
 	 * <ul>
@@ -62,17 +72,58 @@ public class FileFinder {
 	 * </ul>
 	 * 
 	 * @param name - name of file, can be fully qualified
-	 * @param clazz class to get the class loader from
+	 * @param clazz - class to get the class loader from
 	 * @return URL to the file
 	 */
 	public static URL find(Class<?> clazz, String name) {
+		return find(clazz, name, true);
+	}
+	
+	/**
+	 * Tries to find the directory specified from filesystem or classpath.
+	 * <p>The directory will be searched based on the following procedure:</p>
+	 * <ul>
+	 * <li>Try to find the dir in current working dir (unless absolute path is given).</li>
+	 * <li>Try to fine the dir in package of the class given as argument using the default class loader</li>
+	 * <li>Try to find the dir in parent packages of the class given as argument using the default class loader</li>
+	 * <li>Try to fine the dir in package of the class given as argument using the context class loader</li>
+	 * <li>Try to find the dir in parent packages of the class given as argument using the context class loader</li>
+	 * <li>Repeat the procedure by trying to find the dir with a prepended slash.</li>
+	 * </ul>
+	 * 
+	 * @param name - name of dir, can be fully qualified
+	 * @param clazz - class to get the class loader from
+	 * @return URL to the dir
+	 */
+	public static URL findDir(Class<?> clazz, String name) {
+		return find(clazz, name, false);
+	}
+	
+	/**
+	 * Tries to find the file or directory specified from filesystem or classpath.
+	 * <p>The file/directory will be searched based on the following procedure:</p>
+	 * <ul>
+	 * <li>Try to find the file/dir in current working dir (unless absolute path is given).</li>
+	 * <li>Try to fine the file/dir in package of the class given as argument using the default class loader</li>
+	 * <li>Try to find the file/dir in parent packages of the class given as argument using the default class loader</li>
+	 * <li>Try to fine the file/dir in package of the class given as argument using the context class loader</li>
+	 * <li>Try to find the file/dir in parent packages of the class given as argument using the context class loader</li>
+	 * <li>Repeat the procedure by trying to find the file/dir with a prepended slash.</li>
+	 * </ul>
+	 * 
+	 * @param name - name of file or directory, can be fully qualified
+	 * @param clazz - class to get the class loader from
+	 * @param findFiles - {@code true} when files shall be found, {@code false} when directories are to be found
+	 * @return URL to the file or directory
+	 */
+	public static URL find(Class<?> clazz, String name, boolean findFiles) {
 		URL rc = null;
 		if (clazz == null) clazz = FileFinder.class;
 		
 		// try to find as simple file in file system
 		try {
 			File f = new File(name);
-			if (f.exists() && f.isFile() && f.canRead()) {
+			if (f.exists() && ((findFiles && f.isFile()) || (!findFiles && f.isDirectory())) && f.canRead()) {
 				rc = f.toURI().toURL();
 			}
 		} catch (Exception e) {
@@ -104,7 +155,7 @@ public class FileFinder {
 		if (rc == null) {
 			// Try with prepended slash if possible
 			if (!name.startsWith("/") && !name.startsWith(".")) {
-				rc = find(clazz, "/"+name);
+				rc = find(clazz, "/"+name, findFiles);
 			}
 		}
 		return rc;
@@ -112,9 +163,9 @@ public class FileFinder {
 	
 	/**
 	 * Find the resource using the given class loader.
-	 * @param classLoader the loader to be used
-	 * @param dirs the directory parts (e.g. from package name)
-	 * @param name the name of the resource
+	 * @param classLoader - the loader to be used
+	 * @param dirs - the directory parts (e.g. from package name)
+	 * @param name - the name of the resource
 	 * @return the URL of the resource if found
 	 */
 	private static URL find(ClassLoader classLoader, String dirs[], String name) {
