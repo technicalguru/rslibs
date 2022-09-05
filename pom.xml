@@ -15,7 +15,7 @@
 	<version>3.0.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<url>https://download.ralph-schuster.eu/eu.ralph-schuster.libs/${project.version}</url>
+	<url>https://github.com/technicalguru/rslibs</url>
 	<name>eu.ralph-schuster.libs</name>
 	<description>A collection of utilities</description>
 
@@ -25,13 +25,6 @@
 		<url>https://github.com/technicalguru/rslibs</url>
 	  <tag>v3.0.0</tag>
   </scm>
-
-	<distributionManagement>
-		<site>
-			<id>strato-server</id>
-			<url>scp://download.ralph-schuster.eu/var/docker/download/eu.ralph-schuster.libs/${project.version}</url>
-		</site>
-	</distributionManagement>
 
 	<issueManagement>
 		<system>GitHub</system>
