@@ -23,8 +23,8 @@
 		<connection>scm:git:https://github.com/technicalguru/rslibs.git</connection>
 		<developerConnection>scm:git:https://github.com/technicalguru/rslibs.git</developerConnection>
 		<url>https://github.com/technicalguru/rslibs</url>
-	  <tag>v3.0.0</tag>
-  </scm>
+		<tag>v3.0.0</tag>
+	</scm>
 
 	<issueManagement>
 		<system>GitHub</system>
