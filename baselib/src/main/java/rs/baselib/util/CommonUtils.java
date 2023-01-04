@@ -288,94 +288,6 @@ public class CommonUtils {
 	}
 
 	/**
-	 * Returns a list of options for display in default locale.
-	 * @param clazz enum class
-	 * @return list of display options
-	 */
-	public static String[] getOptions(Class<? extends Enum<?>> clazz) {
-		return getOptions(clazz, Locale.getDefault());
-	}
-
-	/**
-	 * Returns a list of options for display in given locale.
-	 * @param clazz enum class
-	 * @param locale locale
-	 * @return list of display options
-	 */
-	public static String[] getOptions(Class<? extends Enum<?>> clazz, Locale locale) {
-		Enum<?> enums[] = clazz.getEnumConstants();
-		if (enums != null) {
-			String rc[] = new String[enums.length];
-			for (int i=0; i<enums.length; i++) {
-				rc[i] = getDisplay(enums[i], locale);
-			}
-			return rc;
-		}
-		return new String[0];
-	}
-
-	/**
-	 * Returns a list of options from an enumeration class.
-	 * @param clazz enum class
-	 * @return list of display options
-	 */
-	public static List<Enum<?>> getOptionList(Class<? extends Enum<?>> clazz) {
-		Enum<?> arr[] = clazz.getEnumConstants();
-		List<Enum<?>> rc = new ArrayList<Enum<?>>();
-		if (arr != null) for (Enum<?> s: arr) rc.add(s);
-		return rc;
-	}
-
-	/**
-	 * Returns the display string for the default locale.
-	 * @param e enum value
-	 * @return display
-	 */
-	public static String getDisplay(Enum<?> e) {
-		return getDisplay(e, Locale.getDefault());
-	}
-
-	/**
-	 * Returns the display string for the given locale.
-	 * @param e enum value
-	 * @param locale locale
-	 * @return display
-	 */
-	public static String getDisplay(Enum<?> e, Locale locale) {
-		if (e instanceof ILocaleDisplayProvider) {
-			return ((ILocaleDisplayProvider)e).getDisplay(locale);
-		}
-		return e.name();
-	}
-
-	/**
-	 * Returns the enum constant for given display in default locale.
-	 * @param clazz enum class
-	 * @param display display of enum
-	 * @return enum constant
-	 */
-	public static Enum<?> getEnum(Class<? extends Enum<?>> clazz, String display) {
-		return getEnum(clazz, display, Locale.getDefault());
-	}
-
-	/**
-	 * Returns the enum constant for given display in given locale.
-	 * @param clazz enum class
-	 * @param display display of enum
-	 * @param locale locale
-	 * @return enum constant
-	 */
-	public static Enum<?> getEnum(Class<? extends Enum<?>> clazz, String display, Locale locale) {
-		Enum<?> arr[] = clazz.getEnumConstants();
-		if (arr != null) {
-			for (Enum<?> e : arr) {
-				if (display.equals(getDisplay(e, locale))) return e;
-			}
-		}
-		return null;
-	}
-
-	/**
 	 * Returns true if version is in range of minVersion and maxVersion.
 	 * Note that 1.2.0 is greater than 1.2
 	 * @param minVersion - minimum required version (can be null)
@@ -1321,31 +1233,6 @@ public class CommonUtils {
 	 */
 	public static String getOS() {
 		return OS;
-	}
-
-	/**
-	 * The display of the object
-	 * @param o the object to be displayed
-	 * @return the display version
-	 */
-	public static String getDisplay(Object o) {
-		return getDisplay(o, Locale.getDefault());
-	}
-
-	/**
-	 * Returns the display string of an object.
-	 * The method detects {@link IDisplayable}, {@link IDisplayProvider}.
-	 * @param o the object to be displayed
-	 * @param locale Locale to be used for {@link IDisplayable}
-	 * @return a displayable string
-	 */
-	public static String getDisplay(Object o, Locale locale) {
-		if (o == null) return "";
-		String rc = o.toString();
-
-		if (o instanceof IDisplayable) rc = ((IDisplayable)o).toString(locale);
-		else if (o instanceof IDisplayProvider) rc = ((IDisplayProvider)o).getDisplay();
-		return rc;
 	}
 
 	/**
