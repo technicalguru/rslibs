@@ -732,6 +732,10 @@ public class CommonUtils {
 
 	/**
 	 * Loads a property file.
+	 * <p>The URI resource is in a simple line-oriented format as specified in {@link Properties#load(Reader)} and is assumed to use
+	 * the ISO 8859-1 character encoding; that is each byte is one Latin1 character. Characters not in Latin1, and 
+	 * certain special characters, are represented in keys and elements using Unicode escapes as defined in
+	 * section {@jls 3.3} of The Java Language Specification.</p> 
 	 * @param uri the URI to load from
 	 * @return the properties
 	 * @throws IOException when file cannot be loaded
@@ -744,6 +748,10 @@ public class CommonUtils {
 
 	/**
 	 * Loads a property file.
+	 * <p>The URL resource is in a simple line-oriented format as specified in {@link Properties#load(Reader)} and is assumed to use
+	 * the ISO 8859-1 character encoding; that is each byte is one Latin1 character. Characters not in Latin1, and 
+	 * certain special characters, are represented in keys and elements using Unicode escapes as defined in
+	 * section {@jls 3.3} of The Java Language Specification.</p> 
 	 * @param url the URL to load from
 	 * @return the properties
 	 * @throws IOException when file cannot be loaded
@@ -756,6 +764,10 @@ public class CommonUtils {
 
 	/**
 	 * Loads a property file.
+	 * <p>The File resource is in a simple line-oriented format as specified in {@link Properties#load(Reader)} and is assumed to use
+	 * the ISO 8859-1 character encoding; that is each byte is one Latin1 character. Characters not in Latin1, and 
+	 * certain special characters, are represented in keys and elements using Unicode escapes as defined in
+	 * section {@jls 3.3} of The Java Language Specification.</p> 
 	 * @param file the file to load
 	 * @return the properties
 	 * @throws IOException when file cannot be loaded
@@ -768,6 +780,10 @@ public class CommonUtils {
 
 	/**
 	 * Loads a property file.
+	 * <p>The file resource is in a simple line-oriented format as specified in {@link Properties#load(Reader)} and is assumed to use
+	 * the ISO 8859-1 character encoding; that is each byte is one Latin1 character. Characters not in Latin1, and 
+	 * certain special characters, are represented in keys and elements using Unicode escapes as defined in
+	 * section {@jls 3.3} of The Java Language Specification.</p> 
 	 * @param file the file to load
 	 * @return the properties
 	 * @throws IOException when file cannot be loaded
@@ -778,6 +794,10 @@ public class CommonUtils {
 
 	/**
 	 * Loads a property file.
+	 * <p>The File resource is in a simple line-oriented format as specified in {@link Properties#load(Reader)} and is assumed to use
+	 * the ISO 8859-1 character encoding; that is each byte is one Latin1 character. Characters not in Latin1, and 
+	 * certain special characters, are represented in keys and elements using Unicode escapes as defined in
+	 * section {@jls 3.3} of The Java Language Specification.</p> 
 	 * @param props the properties object
 	 * @param file the file to load
 	 * @throws IOException when file cannot be loaded
@@ -788,6 +808,10 @@ public class CommonUtils {
 
 	/**
 	 * Loads a property file.
+	 * <p>The URI resource is in a simple line-oriented format as specified in {@link Properties#load(Reader)} and is assumed to use
+	 * the ISO 8859-1 character encoding; that is each byte is one Latin1 character. Characters not in Latin1, and 
+	 * certain special characters, are represented in keys and elements using Unicode escapes as defined in
+	 * section {@jls 3.3} of The Java Language Specification.</p> 
 	 * @param props the properties object
 	 * @param uri the uri to load
 	 * @throws IOException when file cannot be loaded
@@ -798,6 +822,10 @@ public class CommonUtils {
 
 	/**
 	 * Loads a property file.
+	 * <p>The URL resource is in a simple line-oriented format as specified in {@link Properties#load(Reader)} and is assumed to use
+	 * the ISO 8859-1 character encoding; that is each byte is one Latin1 character. Characters not in Latin1, and 
+	 * certain special characters, are represented in keys and elements using Unicode escapes as defined in
+	 * section {@jls 3.3} of The Java Language Specification.</p> 
 	 * @param props the properties object
 	 * @param uri the uri to load
 	 * @throws IOException when file cannot be loaded
@@ -808,6 +836,10 @@ public class CommonUtils {
 
 	/**
 	 * Loads a property file.
+	 * <p>The input stream is in a simple line-oriented format as specified in {@link Properties#load(Reader)} and is assumed to use
+	 * the ISO 8859-1 character encoding; that is each byte is one Latin1 character. Characters not in Latin1, and 
+	 * certain special characters, are represented in keys and elements using Unicode escapes as defined in
+	 * section {@jls 3.3} of The Java Language Specification.</p> 
 	 * @param props the properties object
 	 * @param inputStream the stream to load from
 	 * @throws IOException when file cannot be loaded
@@ -822,6 +854,10 @@ public class CommonUtils {
 
 	/**
 	 * Loads a property file.
+	 * <p>The file resource is in a simple line-oriented format as specified in {@link Properties#load(Reader)} and is assumed to use
+	 * the ISO 8859-1 character encoding; that is each byte is one Latin1 character. Characters not in Latin1, and 
+	 * certain special characters, are represented in keys and elements using Unicode escapes as defined in
+	 * section {@jls 3.3} of The Java Language Specification.</p> 
 	 * @param props the properties object
 	 * @param file the file to load
 	 * @throws IOException when file cannot be loaded
@@ -885,6 +921,27 @@ public class CommonUtils {
 	 */
 	public static void setReadTimeout(int readTimeout) {
 		CommonUtils.readTimeout = readTimeout;
+	}
+
+	/**
+	 * Loads the content of the URI as a string.
+	 * @param uri URI to be loaded
+	 * @return the content of the URI
+	 * @throws IOException when content of URI cannot be loaded
+	 */
+	public static String loadContent(URI uri) throws IOException {
+		return loadContent(uri, null);
+	}
+
+	/**
+	 * Loads the content of the URI as a string.
+	 * @param uri URI to be loaded
+	 * @param charset the charset of the content (<code>null</code> for {@link Charset#defaultCharset() default charset})
+	 * @return the content of the URI
+	 * @throws IOException when content of URI cannot be loaded
+	 */
+	public static String loadContent(URI uri, Charset charset) throws IOException {
+		return loadContent(uri.toURL(), charset);
 	}
 
 	/**
