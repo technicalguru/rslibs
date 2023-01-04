@@ -37,7 +37,6 @@ import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import rs.baselib.bean.NoCopy;
 import rs.baselib.util.RsDate;
 
 /**
@@ -393,7 +392,9 @@ public class LangUtils {
 	 * @param o object to be transformed
 	 * @param formats formats to be used
 	 * @return the date if it could be parsed or <code>null</code>
+	 * @deprecated - Use JavaTime interfaces instead
 	 */
+	@Deprecated
 	public static RsDate getRsDate(Object o, DateFormat formats[]) {
 		return getRsDate(o, formats, null);
 	}
@@ -404,7 +405,9 @@ public class LangUtils {
 	 * @param formats formats to be used
 	 * @param defaultValue value to be returned when object cannot be transformed.
 	 * @return the date if it could be parsed, the default value otherwise
+	 * @deprecated - Use JavaTime interfaces instead
 	 */
+	@Deprecated
 	public static RsDate getRsDate(Object o, DateFormat formats[], RsDate defaultValue) {
 		if (o == null) return defaultValue;
 		if (o instanceof RsDate) return (RsDate)o;
@@ -421,7 +424,9 @@ public class LangUtils {
 	 * Converts the object to a {@link RsDate}.
 	 * @param o object to be converted
 	 * @return {@link RsDate} value of object, <code>null</code> otherwise
+	 * @deprecated - Use JavaTime interfaces instead
 	 */
+	@Deprecated
 	public static RsDate getRsDate(Object o) {
 		return getRsDate(o, DateFormat.getDateTimeInstance(), null, true);
 	}
@@ -431,7 +436,9 @@ public class LangUtils {
 	 * @param o object to be converted
 	 * @param format format to be applied
 	 * @return {@link RsDate} value of object, <code>null</code> otherwise
+	 * @deprecated - Use JavaTime interfaces instead
 	 */
+	@Deprecated
 	public static RsDate getRsDate(Object o, DateFormat format) {
 		return getRsDate(o, format, null, true);
 	}
@@ -442,7 +449,9 @@ public class LangUtils {
 	 * @param format format to be applied
 	 * @param defaultValue value to be returned when object cannot be transformed.
 	 * @return {@link RsDate} value of object, the default value otherwise
+	 * @deprecated - Use JavaTime interfaces instead
 	 */
+	@Deprecated
 	public static RsDate getRsDate(Object o, DateFormat format, RsDate defaultValue) {
 		return getRsDate(o, format, defaultValue, true);
 	}
@@ -454,7 +463,9 @@ public class LangUtils {
 	 * @param defaultValue value to be returned when object cannot be transformed.
 	 * @param logError whether parsing error shall be logged
 	 * @return {@link RsDate} value of object, the default value otherwise
+	 * @deprecated - Use JavaTime interfaces instead
 	 */
+	@Deprecated
 	public static RsDate getRsDate(Object o, DateFormat format, RsDate defaultValue, boolean logError) {
 		if (o == null) return defaultValue;
 		if (o instanceof RsDate) return (RsDate)o;
@@ -674,20 +685,6 @@ public class LangUtils {
 		Method wm = desc.getWriteMethod();
 		if ((rm == null) || (wm == null)) return true;
 		return rm.isAnnotationPresent(Transient.class);
-	}
-
-	/**
-	 * Returns true when given property is not allowed to be copied with {@link rs.baselib.bean.IBean#copyTo(Object)}.
-	 * A {@link NoCopy} property has either a missing getter or setter or its getter is
-	 * marked with {@link NoCopy} annotation.
-	 * @param desc property descriptor
-	 * @return true when property is transient and must not be persisted
-	 */
-	public static boolean isNoCopy(PropertyDescriptor desc) {
-		Method rm = desc.getReadMethod();
-		Method wm = desc.getWriteMethod();
-		if ((rm == null) || (wm == null)) return true;
-		return rm.isAnnotationPresent(NoCopy.class);
 	}
 
 	/**

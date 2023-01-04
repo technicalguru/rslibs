@@ -34,32 +34,36 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import rs.baselib.bean.NamedObject;
 
 
 
@@ -141,7 +145,9 @@ public class CommonUtils {
 	 * Formats the given date.
 	 * @param date date to format
 	 * @return the formatted string (see {@link #DATE_TIME_FORMATTER})
+	 * @deprecated - Use JavaTime interfaces instead
 	 */
+	@Deprecated
 	public static String toString(RsDate date) {
 		if ((date == null) || (date.getTimeInMillis() == 0)) return "";
 		return DATE_TIME_FORMATTER().format(date.getTime());
@@ -245,96 +251,40 @@ public class CommonUtils {
 	 */
 	public static boolean isEmpty(String s, boolean trim) {
 		if (s == null) return true;
-		if (trim) s = s.trim();
+		if (trim) s = trim(s);
 		return s.length() == 0;
 	}
 
 	/**
-	 * Returns a list of options for display in default locale.
-	 * @param clazz enum class
-	 * @return list of display options
+	 * Trims the string by removing whitespaces and newlines from begin and end of the string.
+	 * @param s - the string to trim
+	 * @return the trimmed string ({@code null} if input was {@code null})
+	 * @since 3.1.0
 	 */
-	public static String[] getOptions(Class<? extends Enum<?>> clazz) {
-		return getOptions(clazz, Locale.getDefault());
-	}
-
-	/**
-	 * Returns a list of options for display in given locale.
-	 * @param clazz enum class
-	 * @param locale locale
-	 * @return list of display options
-	 */
-	public static String[] getOptions(Class<? extends Enum<?>> clazz, Locale locale) {
-		Enum<?> enums[] = clazz.getEnumConstants();
-		if (enums != null) {
-			String rc[] = new String[enums.length];
-			for (int i=0; i<enums.length; i++) {
-				rc[i] = getDisplay(enums[i], locale);
-			}
-			return rc;
+	public static String trim(String s) {
+		if (s == null) return null;
+		StringBuilder b = new StringBuilder(s);
+		
+		// Delete from beginning:
+		while (b.length() > 0 && !isAllowedTrimmingChar(b.charAt(0))) {
+			b.deleteCharAt(0);
 		}
-		return new String[0];
-	}
 
-	/**
-	 * Returns a list of options from an enumeration class.
-	 * @param clazz enum class
-	 * @return list of display options
-	 */
-	public static List<Enum<?>> getOptionList(Class<? extends Enum<?>> clazz) {
-		Enum<?> arr[] = clazz.getEnumConstants();
-		List<Enum<?>> rc = new ArrayList<Enum<?>>();
-		if (arr != null) for (Enum<?> s: arr) rc.add(s);
-		return rc;
-	}
-
-	/**
-	 * Returns the display string for the default locale.
-	 * @param e enum value
-	 * @return display
-	 */
-	public static String getDisplay(Enum<?> e) {
-		return getDisplay(e, Locale.getDefault());
-	}
-
-	/**
-	 * Returns the display string for the given locale.
-	 * @param e enum value
-	 * @param locale locale
-	 * @return display
-	 */
-	public static String getDisplay(Enum<?> e, Locale locale) {
-		if (e instanceof ILocaleDisplayProvider) {
-			return ((ILocaleDisplayProvider)e).getDisplay(locale);
+		// Delete from end
+		while (b.length() > 0 && !isAllowedTrimmingChar(b.charAt(b.length()-1))) {
+			b.deleteCharAt(b.length()-1);
 		}
-		return e.name();
+		return b.toString();
 	}
-
+	
 	/**
-	 * Returns the enum constant for given display in default locale.
-	 * @param clazz enum class
-	 * @param display display of enum
-	 * @return enum constant
+	 * Returns true when the given character shall be kept when trimming a string.
+	 * @param c - character to check
+	 * @return true when character is allowed
+	 * @since 3.1.0
 	 */
-	public static Enum<?> getEnum(Class<? extends Enum<?>> clazz, String display) {
-		return getEnum(clazz, display, Locale.getDefault());
-	}
-
-	/**
-	 * Returns the enum constant for given display in given locale.
-	 * @param clazz enum class
-	 * @param display display of enum
-	 * @param locale locale
-	 * @return enum constant
-	 */
-	public static Enum<?> getEnum(Class<? extends Enum<?>> clazz, String display, Locale locale) {
-		Enum<?> arr[] = clazz.getEnumConstants();
-		if (arr != null) {
-			for (Enum<?> e : arr) {
-				if (display.equals(getDisplay(e, locale))) return e;
-			}
-		}
-		return null;
+	public static boolean isAllowedTrimmingChar(char c) {
+		return !Character.isWhitespace(c) && !Character.isSpaceChar(c);
 	}
 
 	/**
@@ -515,6 +465,97 @@ public class CommonUtils {
 	}
 
 	/**
+	 * Splits the string using comma as separation char.
+	 * @param s - the string to split
+	 * @return collection of separated entries
+	 * @since 3.1.0
+	 */
+	public static Collection<String> split(String s) {
+		return split(s, ",", (List<String>)null);
+	}
+	
+	/**
+	 * 
+	 * Splits the string using comma as separation char.
+	 * @param s - the string to split
+	 * @param defaultCollection - the default collection when input is empty.
+	 * @return collection of separated entries or the default collection
+	 * @since 3.1.0
+	 */
+	public static Collection<String> split(String s, Collection<String> defaultCollection) {
+		return split(s, ",", defaultCollection);
+	}
+	
+	/**
+	 * Splits the string using comma as separation char.
+	 * @param s - the string to split
+	 * @param delim - the delimiter character
+	 * @param defaultCollection - the default collection when input is empty.
+	 * @return collection of separated entries or the default collection
+	 * @since 3.1.0
+	 */
+	public static Collection<String> split(String s, String delim, Collection<String> defaultCollection) {
+		if (isEmpty(s)) return defaultCollection;
+		return newList(s.split(delim));
+	}
+
+	/**
+	 * Splits the string and returns a collection of Enum values from specified class.
+	 * <p>Useful to convert a string into a collection of enum values.</p>
+	 * @param <T> - the Enum type
+	 * @param s - the string to split
+	 * @param enumClass - the Enum class
+	 * @return the list of Enum values
+	 * @since 3.1.0
+	 */
+	public static <T extends Enum<T>> Collection<T> split(String s, Class<T> enumClass) {
+		return split(s, ",", enumClass);
+	}
+	
+	/**
+	 * Splits the string (by commas) and returns a collection of Enum values from specified class.
+	 * <p>Useful to convert a string into a collection of enum values.</p>
+	 * @param <T> - the Enum type
+	 * @param s - the string to split
+	 * @param delim
+	 * @param enumClass - the Enum class
+	 * @return the list of Enum values
+	 * @since 3.1.0
+	 */
+	public static <T extends Enum<T>> Collection<T> split(String s, String delim, Class<T> enumClass) {
+		if (isEmpty(s)) return newList(enumClass.getEnumConstants());
+		return Arrays.stream(s.split(delim)).map(t -> Enum.valueOf(enumClass, t)).collect(Collectors.toList());
+	}
+	
+	/**
+	 * Creates a list from elements.
+	 * @param <T> - the element type
+	 * @param elems - the elements
+	 * @return new {@link List} of elements
+	 * @since 3.1.0
+	 */
+	@SafeVarargs
+	public static <T> List<T> newList(T ...elems) {
+		List<T> rc = new ArrayList<>();
+	    Collections.addAll(rc, elems);
+		return rc;
+	}
+	
+	/**
+	 * Creates a set from elements.
+	 * @param <T> - the element type
+	 * @param elems - the elements
+	 * @return new {@link Set} of elements
+	 * @since 3.1.0
+	 */
+	@SafeVarargs
+	public static <T> Set<T> newSet(T ...elems) {
+		Set<T> rc = new HashSet<>();
+	    Collections.addAll(rc, elems);
+		return rc;
+	}
+	
+	/**
 	 * Recursively debugs objects.
 	 * @param o object to debug
 	 * @return the debug string
@@ -606,7 +647,9 @@ public class CommonUtils {
 	 * Returns the given date as UNIX timestamp.
 	 * @param date date object.
 	 * @return time in seconds since January 1st, 1970, 00:00:00 UTC.
+	 * @deprecated - Use JavaTime interfaces instead
 	 */
+	@Deprecated
 	public static long getUnixTimestamp(RsDate date) {
 		return getUnixTimestamp(date.getTimeInMillis());
 	}
@@ -731,6 +774,42 @@ public class CommonUtils {
 
 	/**
 	 * Loads a property file.
+	 * <p>The URI resource is in a simple line-oriented format as specified in {@link Properties#load(Reader)} and is assumed to use
+	 * the ISO 8859-1 character encoding; that is each byte is one Latin1 character. Characters not in Latin1, and 
+	 * certain special characters, are represented in keys and elements using Unicode escapes as defined in
+	 * section {@jls 3.3} of The Java Language Specification.</p> 
+	 * @param uri the URI to load from
+	 * @return the properties
+	 * @throws IOException when file cannot be loaded
+	 */
+	public static Properties loadProperties(URI uri) throws IOException {
+		Properties props = new Properties();
+		loadProperties(props, uri);
+		return props;
+	}
+
+	/**
+	 * Loads a property file.
+	 * <p>The URL resource is in a simple line-oriented format as specified in {@link Properties#load(Reader)} and is assumed to use
+	 * the ISO 8859-1 character encoding; that is each byte is one Latin1 character. Characters not in Latin1, and 
+	 * certain special characters, are represented in keys and elements using Unicode escapes as defined in
+	 * section {@jls 3.3} of The Java Language Specification.</p> 
+	 * @param url the URL to load from
+	 * @return the properties
+	 * @throws IOException when file cannot be loaded
+	 */
+	public static Properties loadProperties(URL url) throws IOException {
+		Properties props = new Properties();
+		loadProperties(props, url);
+		return props;
+	}
+
+	/**
+	 * Loads a property file.
+	 * <p>The File resource is in a simple line-oriented format as specified in {@link Properties#load(Reader)} and is assumed to use
+	 * the ISO 8859-1 character encoding; that is each byte is one Latin1 character. Characters not in Latin1, and 
+	 * certain special characters, are represented in keys and elements using Unicode escapes as defined in
+	 * section {@jls 3.3} of The Java Language Specification.</p> 
 	 * @param file the file to load
 	 * @return the properties
 	 * @throws IOException when file cannot be loaded
@@ -743,6 +822,10 @@ public class CommonUtils {
 
 	/**
 	 * Loads a property file.
+	 * <p>The file resource is in a simple line-oriented format as specified in {@link Properties#load(Reader)} and is assumed to use
+	 * the ISO 8859-1 character encoding; that is each byte is one Latin1 character. Characters not in Latin1, and 
+	 * certain special characters, are represented in keys and elements using Unicode escapes as defined in
+	 * section {@jls 3.3} of The Java Language Specification.</p> 
 	 * @param file the file to load
 	 * @return the properties
 	 * @throws IOException when file cannot be loaded
@@ -753,21 +836,70 @@ public class CommonUtils {
 
 	/**
 	 * Loads a property file.
+	 * <p>The File resource is in a simple line-oriented format as specified in {@link Properties#load(Reader)} and is assumed to use
+	 * the ISO 8859-1 character encoding; that is each byte is one Latin1 character. Characters not in Latin1, and 
+	 * certain special characters, are represented in keys and elements using Unicode escapes as defined in
+	 * section {@jls 3.3} of The Java Language Specification.</p> 
 	 * @param props the properties object
 	 * @param file the file to load
 	 * @throws IOException when file cannot be loaded
 	 */
 	public static void loadProperties(Properties props, File file) throws IOException {
-		InputStream in = new FileInputStream(file);
+		loadProperties(props, new FileInputStream(file));
+	}
+
+	/**
+	 * Loads a property file.
+	 * <p>The URI resource is in a simple line-oriented format as specified in {@link Properties#load(Reader)} and is assumed to use
+	 * the ISO 8859-1 character encoding; that is each byte is one Latin1 character. Characters not in Latin1, and 
+	 * certain special characters, are represented in keys and elements using Unicode escapes as defined in
+	 * section {@jls 3.3} of The Java Language Specification.</p> 
+	 * @param props the properties object
+	 * @param uri the uri to load
+	 * @throws IOException when file cannot be loaded
+	 */
+	public static void loadProperties(Properties props, URI uri) throws IOException {
+		loadProperties(props, uri.toURL());
+	}
+
+	/**
+	 * Loads a property file.
+	 * <p>The URL resource is in a simple line-oriented format as specified in {@link Properties#load(Reader)} and is assumed to use
+	 * the ISO 8859-1 character encoding; that is each byte is one Latin1 character. Characters not in Latin1, and 
+	 * certain special characters, are represented in keys and elements using Unicode escapes as defined in
+	 * section {@jls 3.3} of The Java Language Specification.</p> 
+	 * @param props the properties object
+	 * @param uri the uri to load
+	 * @throws IOException when file cannot be loaded
+	 */
+	public static void loadProperties(Properties props, URL url) throws IOException {
+		loadProperties(props, url.openStream());
+	}
+
+	/**
+	 * Loads a property file.
+	 * <p>The input stream is in a simple line-oriented format as specified in {@link Properties#load(Reader)} and is assumed to use
+	 * the ISO 8859-1 character encoding; that is each byte is one Latin1 character. Characters not in Latin1, and 
+	 * certain special characters, are represented in keys and elements using Unicode escapes as defined in
+	 * section {@jls 3.3} of The Java Language Specification.</p> 
+	 * @param props the properties object
+	 * @param inputStream the stream to load from
+	 * @throws IOException when file cannot be loaded
+	 */
+	public static void loadProperties(Properties props, InputStream inputStream) throws IOException {
 		try {
-			props.load(in);
+			props.load(inputStream);
 		} finally {
-			in.close();
+			inputStream.close();
 		}
 	}
 
 	/**
 	 * Loads a property file.
+	 * <p>The file resource is in a simple line-oriented format as specified in {@link Properties#load(Reader)} and is assumed to use
+	 * the ISO 8859-1 character encoding; that is each byte is one Latin1 character. Characters not in Latin1, and 
+	 * certain special characters, are represented in keys and elements using Unicode escapes as defined in
+	 * section {@jls 3.3} of The Java Language Specification.</p> 
 	 * @param props the properties object
 	 * @param file the file to load
 	 * @throws IOException when file cannot be loaded
@@ -831,6 +963,27 @@ public class CommonUtils {
 	 */
 	public static void setReadTimeout(int readTimeout) {
 		CommonUtils.readTimeout = readTimeout;
+	}
+
+	/**
+	 * Loads the content of the URI as a string.
+	 * @param uri URI to be loaded
+	 * @return the content of the URI
+	 * @throws IOException when content of URI cannot be loaded
+	 */
+	public static String loadContent(URI uri) throws IOException {
+		return loadContent(uri, null);
+	}
+
+	/**
+	 * Loads the content of the URI as a string.
+	 * @param uri URI to be loaded
+	 * @param charset the charset of the content (<code>null</code> for {@link Charset#defaultCharset() default charset})
+	 * @return the content of the URI
+	 * @throws IOException when content of URI cannot be loaded
+	 */
+	public static String loadContent(URI uri, Charset charset) throws IOException {
+		return loadContent(uri.toURL(), charset);
 	}
 
 	/**
@@ -1080,32 +1233,6 @@ public class CommonUtils {
 	 */
 	public static String getOS() {
 		return OS;
-	}
-
-	/**
-	 * The display of the object
-	 * @param o the object to be displayed
-	 * @return the display version
-	 */
-	public static String getDisplay(Object o) {
-		return getDisplay(o, Locale.getDefault());
-	}
-
-	/**
-	 * Returns the display string of an object.
-	 * The method detects {@link IDisplayable}, {@link IDisplayProvider} and {@link NamedObject}.
-	 * @param o the object to be displayed
-	 * @param locale Locale to be used for {@link IDisplayable}
-	 * @return a displayable string
-	 */
-	public static String getDisplay(Object o, Locale locale) {
-		if (o == null) return "";
-		String rc = o.toString();
-
-		if (o instanceof IDisplayable) rc = ((IDisplayable)o).toString(locale);
-		else if (o instanceof IDisplayProvider) rc = ((IDisplayProvider)o).getDisplay();
-		else if (o instanceof NamedObject) rc = ((NamedObject)o).getName();
-		return rc;
 	}
 
 	/**

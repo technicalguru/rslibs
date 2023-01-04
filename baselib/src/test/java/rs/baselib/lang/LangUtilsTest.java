@@ -24,18 +24,14 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import org.apache.commons.beanutils.PropertyUtils;
 import org.junit.Test;
 
-import rs.baselib.bean.impl.TestBean;
-import rs.baselib.util.IDirtyable;
 import rs.baselib.util.RsDate;
 
 /**
@@ -231,42 +227,6 @@ public class LangUtilsTest {
 	public void testSerialize() throws IOException, ClassNotFoundException {
 		Long l = Long.valueOf(23L);
 		assertEquals("Cannot serialize/unserialize", l, LangUtils.unserialize(LangUtils.serialize(l)));
-	}
-
-	/**
-	 * Test method for {@link LangUtils#toString(String, Object[])}.
-	 */
-	@Test
-	public void testToStringStringObjectArray() {
-		assertEquals("Cannot format properly", "rs.baselib.bean.impl.TestBean[property1=value1;property2=null;property3=value3]", LangUtils.toString(TestBean.class.getName(), "property1", "value1", "property2", null, "property3", "value3"));	
-	}
-
-	/**
-	 * Test method for {@link LangUtils#isTransient(PropertyDescriptor)}.
-	 * 
-	 * @throws NoSuchMethodException - when method cannot be found
-	 * @throws InvocationTargetException - when method throws an error
-	 * @throws IllegalAccessException - when method cannot be accessed
-	 */
-	@Test
-	public void testIsTransient() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-		TestBean bean = new TestBean();
-		assertTrue("dirty was not recognized as transient", LangUtils.isTransient(PropertyUtils.getPropertyDescriptor(bean, IDirtyable.DIRTY)));
-		assertFalse("name was recognized as transient", LangUtils.isTransient(PropertyUtils.getPropertyDescriptor(bean, TestBean.NAME)));
-	}
-
-	/**
-	 * Test method for {@link LangUtils#isNoCopy(PropertyDescriptor)}.
-	 * 
-	 * @throws NoSuchMethodException - when method cannot be found
-	 * @throws InvocationTargetException - when method throws an error
-	 * @throws IllegalAccessException - when method cannot be accessed
-	 */
-	@Test
-	public void testIsNoCopy() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-		TestBean bean = new TestBean();
-		assertTrue("changeDate was not recognized as no copy", LangUtils.isNoCopy(PropertyUtils.getPropertyDescriptor(bean, TestBean.CHANGE_DATE)));
-		assertFalse("name was recognized as no copy", LangUtils.isNoCopy(PropertyUtils.getPropertyDescriptor(bean, TestBean.NAME)));
 	}
 
 	/**

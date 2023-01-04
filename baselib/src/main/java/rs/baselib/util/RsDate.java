@@ -28,8 +28,9 @@ import java.util.TimeZone;
 /**
  * A {@link Date} replacement object to allow better date computations.
  * @author ralph
- *
+ * @deprecated - Use JavaTime interfaces instead
  */
+@Deprecated
 public class RsDate extends GregorianCalendar {
 
 	/**

@@ -19,14 +19,12 @@ package rs.baselib.type;
 
 import java.io.Serializable;
 
-import rs.baselib.bean.AbstractBean;
-
 /**
  * A location address.
  * @author ralph
  *
  */
-public class Address extends AbstractBean implements Serializable {
+public class Address implements Serializable {
 
 	/** Serial UID */
 	private static final long serialVersionUID = 1L;
@@ -117,9 +115,7 @@ public class Address extends AbstractBean implements Serializable {
 	 * @param street1 the street1 to set
 	 */
 	public void setStreet1(String street1) {
-		String oldValue = getStreet1();
 		this.street1 = street1;
-		firePropertyChange(STREET1, oldValue, street1);
 	}
 
 	/**
@@ -135,9 +131,7 @@ public class Address extends AbstractBean implements Serializable {
 	 * @param street2 the street2 to set
 	 */
 	public void setStreet2(String street2) {
-		String oldValue = getStreet2();
 		this.street2 = street2;
-		firePropertyChange(STREET2, oldValue, street2);
 	}
 
 	/**
@@ -153,9 +147,7 @@ public class Address extends AbstractBean implements Serializable {
 	 * @param city the city to set
 	 */
 	public void setCity(String city) {
-		String oldValue = getCity();
 		this.city = city;
-		firePropertyChange(CITY, oldValue, city);
 	}
 
 	/**
@@ -171,9 +163,7 @@ public class Address extends AbstractBean implements Serializable {
 	 * @param zipCode the zipCode to set
 	 */
 	public void setZipCode(String zipCode) {
-		String oldValue = getZipCode();
 		this.zipCode = zipCode;
-		firePropertyChange(ZIP_CODE, oldValue, zipCode);
 	}
 
 	/**
@@ -189,9 +179,7 @@ public class Address extends AbstractBean implements Serializable {
 	 * @param state the state to set
 	 */
 	public void setState(String state) {
-		String oldValue = getState();
 		this.state = state;
-		firePropertyChange(STATE, oldValue, state);
 	}
 
 	/**
@@ -207,9 +195,7 @@ public class Address extends AbstractBean implements Serializable {
 	 * @param country the country to set
 	 */
 	public void setCountry(Country country) {
-		Country oldValue = getCountry();
 		this.country = country;
-		firePropertyChange(COUNTRY, oldValue, country);
 	}
 
 	/**

@@ -27,7 +27,6 @@ import java.util.prefs.BackingStoreException;
 
 import org.apache.commons.codec.binary.Base64;
 
-import rs.baselib.bean.IPropertyChangeProvider;
 import rs.baselib.lang.LangUtils;
 import rs.baselib.util.CommonUtils;
 
@@ -37,7 +36,7 @@ import rs.baselib.util.CommonUtils;
  * @author ralph
  *
  */
-public abstract class AbstractPreferences implements IPreferences, IPropertyChangeProvider {
+public abstract class AbstractPreferences implements IPreferences {
 
 	/** The parent node */
 	private AbstractPreferences parent;

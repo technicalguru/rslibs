@@ -3,11 +3,11 @@
 	<parent>
 		<groupId>eu.ralph-schuster</groupId>
 		<artifactId>libs</artifactId>
-		<version>3.0.1</version>
+		<version>4.0.0</version>
 	</parent>
 
 	<properties>
-		<project.home>https://github.com/technicalguru/rslibs/templating</project.home>
+		<project.home>https://github.com/technicalguru/rslibs</project.home>
 	</properties>
 	
 	<artifactId>templating</artifactId>

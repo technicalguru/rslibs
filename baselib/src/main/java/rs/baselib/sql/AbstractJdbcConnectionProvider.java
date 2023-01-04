@@ -28,7 +28,6 @@ import java.util.Set;
 
 import rs.baselib.lang.LangUtils;
 import rs.baselib.util.CommonUtils;
-import rs.baselib.util.IDisplayProvider;
 
 /**
  * Abstract implementation for JdbcConnectionProviders.
@@ -58,7 +57,7 @@ import rs.baselib.util.IDisplayProvider;
  * @author ralph
  *
  */
-public abstract class AbstractJdbcConnectionProvider implements IJdbcConnectionProvider2, IDisplayProvider, IDataSourceProvider, IHibernateDialectProvider {
+public abstract class AbstractJdbcConnectionProvider implements IJdbcConnectionProvider2, IDataSourceProvider, IHibernateDialectProvider {
 
 	/** driver class name */
 	private String dbDriverClassName;
@@ -158,14 +157,6 @@ public abstract class AbstractJdbcConnectionProvider implements IJdbcConnectionP
 		
 		// Connect
 		return DriverManager.getConnection(url, dbLogin, dbPassword);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getDisplay() {
-		return display;
 	}
 
 	/**

@@ -20,14 +20,14 @@ package rs.baselib.util;
 /**
  * A wrapper marker.
  * @author ralph
- *
+ * @param <T> the wrapped object type
  */
-public interface IWrapper {
+public interface IWrapper<T> {
 
 	/**
 	 * Returns the wrapped object. 
 	 * @return the wrapped object
 	 */
-	public Object getWrapped();
+	public T getWrapped();
 
 }

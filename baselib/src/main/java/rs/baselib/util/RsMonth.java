@@ -26,8 +26,9 @@ import java.util.TimeZone;
 /**
  * A month.
  * @author Ralph
- *
+ * @deprecated - Use JavaTime interfaces instead
  */
+@Deprecated
 public class RsMonth extends RsDate {
 
 	/**

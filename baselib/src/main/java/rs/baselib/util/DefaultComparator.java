@@ -18,7 +18,6 @@
 package rs.baselib.util;
 
 import java.util.Comparator;
-import java.util.Locale;
 
 /**
  * Default comparator for objects.
@@ -57,11 +56,6 @@ public class DefaultComparator implements Comparator<Object> {
 		String s1 = o1.toString();
 		String s2 = o2.toString();
 		
-		if (o1 instanceof IDisplayable) s1 = ((IDisplayable)o1).toString(Locale.getDefault());
-		if (o2 instanceof IDisplayable) s2 = ((IDisplayable)o2).toString(Locale.getDefault());
-		
-		if (o1 instanceof IDisplayProvider) s1 = ((IDisplayProvider)o1).getDisplay();
-		if (o2 instanceof IDisplayProvider) s2 = ((IDisplayProvider)o2).getDisplay();
 		return s1.compareToIgnoreCase(s2);
 	}
 

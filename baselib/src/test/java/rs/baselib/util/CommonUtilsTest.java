@@ -19,7 +19,6 @@ package rs.baselib.util;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -27,13 +26,11 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import org.junit.Test;
 
 import rs.baselib.io.FileFinder;
-import rs.baselib.type.Continent;
 
 /**
  * Test the utilities.
@@ -141,21 +138,6 @@ public class CommonUtilsTest {
 		assertFalse("equals(Object,Object) does not work correct", CommonUtils.equals(null, s2));
 		assertFalse("equals(Object,Object) does not work correct", CommonUtils.equals(s1, s2));
 		assertTrue("equals(Object,Object) does not work correct", CommonUtils.equals(s2, s3));
-	}
-
-	@Test
-	public void testGetOptionsClassOfQextendsEnumOfQLocale() {
-		List<Enum<?>> l = CommonUtils.getOptionList(Continent.class);
-		assertEquals("getOptions(Enum) does not work correctly", 8, l.size());
-	}
-
-	@Test
-	public void testGetOptionList() {
-		String l[] = CommonUtils.getOptions(Continent.class, Locale.getDefault());
-		assertEquals("getOptions(Enum) does not work correctly", 8, l.length);
-		for (String s : l) {
-			assertNotNull("getOptions(Enum) does not work correctly", Continent.valueOf(s));
-		}
 	}
 
 	@Test

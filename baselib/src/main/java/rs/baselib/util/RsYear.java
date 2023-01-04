@@ -26,8 +26,9 @@ import java.util.TimeZone;
 /**
  * A year.
  * @author Ralph
- *
+ * @deprecated - Use JavaTime interfaces instead
  */
+@Deprecated
 public class RsYear extends RsDate {
 
 	/**

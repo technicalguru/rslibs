@@ -22,8 +22,9 @@ import java.io.Serializable;
 /**
  * A period of time.
  * @author ralph
- *
+ * @deprecated - Use JavaTime interfaces instead
  */
+@Deprecated 
 public class DateTimePeriod implements Serializable {
 
 	/**
