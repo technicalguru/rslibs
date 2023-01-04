@@ -26,8 +26,9 @@ import java.util.TimeZone;
 /**
  * A day.
  * @author Ralph
- *
+ * @deprecated - Use JavaTime interfaces instead
  */
+@Deprecated
 public class RsDay extends RsDate {
 
 	/**

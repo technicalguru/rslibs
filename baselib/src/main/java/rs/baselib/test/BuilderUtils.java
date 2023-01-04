@@ -77,44 +77,5 @@ public class BuilderUtils {
 		return new LongBuilder();
 	}
 
-	/**
-	 * Returns the {@link rs.baselib.util.RsDate} Builder factory.
-	 * @return the builder for {@link rs.baselib.util.RsDate}
-	 */
-	public static RsDateBuilder $RsDate() {
-		return new RsDateBuilder();
-	}
-
-	/**
-	 * Returns the {@link rs.baselib.util.RsDay} Builder factory.
-	 * @return the builder for {@link rs.baselib.util.RsDay}
-	 */
-	public static RsDayBuilder $RsDay() {
-		return new RsDayBuilder();
-	}
-
-	/**
-	 * Returns the {@link rs.baselib.util.RsMonth} Builder factory.
-	 * @return the builder for {@link rs.baselib.util.RsMonth}
-	 */
-	public static RsMonthBuilder $RsMonth() {
-		return new RsMonthBuilder();
-	}
-
-	/**
-	 * Returns the {@link rs.baselib.util.RsYear} Builder factory.
-	 * @return the builder for {@link rs.baselib.util.RsYear}
-	 */
-	public static RsYearBuilder $RsYear() {
-		return new RsYearBuilder();
-	}
-
-	/**
-	 * Returns the {@link rs.baselib.util.DateTimePeriod} Builder factory.
-	 * @return the builder for {@link rs.baselib.util.DateTimePeriod}
-	 */
-	public static DateTimePeriodBuilder $DateTimePeriod() {
-		return new DateTimePeriodBuilder();
-	}
 
 }
