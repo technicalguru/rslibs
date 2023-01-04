@@ -1,39 +1,30 @@
-# RSLibs - Templating Library
-Java Library for Typo3-alike template replacements
+# RSLibs - Jackson Utilities
+Helper Library for Jackson-based serialization and deserialization from/to JSON and YAML.
+
+Two classes are provided for better access:
+
+  * [JsonUtils](https://www.javadoc.io/doc/eu.ralph-schuster/jackson/latest/rs/jackson/JsonUtils.html)
+  * [YamlUtils](https://www.javadoc.io/doc/eu.ralph-schuster/jackson/latest/rs/jackson/YamlUtils.html)
 
 ## Synopsis
-This Templating Package provides the Typo3-like template mechanism for Java. This package 
-provides a single class Templating. Your templates should contain markers enclosed by three 
-hash signs, e.g. ###MY_MARKER###. These markers will be replaces accordingly by values you 
-provide at runtime. Starting with version 1.2.0, Templating Java Package is part of the RS Library.
-
-The second feature of the package are sub-templates. You can define such sub-template by enclosing it in XML-style comments, e.g.
-
-```
-<!-- ###MY SUBSECTION### begin -->
-any text
-<!-- ###MY SUBSECTION### end -->
-```
-
-The Templating class provides a method to extract this sub-template.
-
+This Jackson Package 
 ## Maven Coordinates
 
 ```
 <dependency>
 	<groupId>eu.ralph-schuster</groupId>
-	<artifactId>templating</artifactId>
+	<artifactId>jackson</artifactId>
 	<version>${version}</version>
 </dependency>
 ```
 
 ## API Reference
 
-Javadoc API for latest stable version can be accessed [here](https://www.javadoc.io/doc/eu.ralph-schuster/templating).
+Javadoc API for latest stable version can be accessed [here](https://www.javadoc.io/doc/eu.ralph-schuster/jackson).
 
 ## Contributions
 
- * [Project Homepage](https://github.com/technicalguru/rslibs/templating)
+ * [Project Homepage](https://github.com/technicalguru/rslibs/jackson)
  * [Issue Tracker](https://github.com/technicalguru/rslibs/issues)
  
 ## License
