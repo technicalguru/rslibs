@@ -3,11 +3,12 @@
 	<parent>
 		<groupId>eu.ralph-schuster</groupId>
 		<artifactId>libs</artifactId>
-		<version>4.0.0</version>
+		<version>4.0.1</version>
 	</parent>
 
 	<properties>
 		<project.home>https://github.com/technicalguru/rslibs</project.home>
+		<jackson.version>2.14.1</jackson.version>
 	</properties>
 	
 	<artifactId>jackson</artifactId>
@@ -19,17 +20,17 @@
 		<dependency>
 		    <groupId>com.fasterxml.jackson.dataformat</groupId>
 			<artifactId>jackson-dataformat-xml</artifactId>
-			<version>2.13.4</version>
+			<version>${jackson.version}</version>
 		</dependency>
 		<dependency>
 		    <groupId>com.fasterxml.jackson.dataformat</groupId>
 			<artifactId>jackson-dataformat-yaml</artifactId>
-			<version>2.13.4</version>
+			<version>${jackson.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.datatype</groupId>
 			<artifactId>jackson-datatype-jsr310</artifactId>
-			<version>2.13.4</version>
+			<version>${jackson.version}</version>
 		</dependency>
 	<!--
 		<dependency>
