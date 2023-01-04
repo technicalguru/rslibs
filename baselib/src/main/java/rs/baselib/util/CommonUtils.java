@@ -34,6 +34,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
@@ -731,6 +732,30 @@ public class CommonUtils {
 
 	/**
 	 * Loads a property file.
+	 * @param uri the URI to load from
+	 * @return the properties
+	 * @throws IOException when file cannot be loaded
+	 */
+	public static Properties loadProperties(URI uri) throws IOException {
+		Properties props = new Properties();
+		loadProperties(props, uri);
+		return props;
+	}
+
+	/**
+	 * Loads a property file.
+	 * @param url the URL to load from
+	 * @return the properties
+	 * @throws IOException when file cannot be loaded
+	 */
+	public static Properties loadProperties(URL url) throws IOException {
+		Properties props = new Properties();
+		loadProperties(props, url);
+		return props;
+	}
+
+	/**
+	 * Loads a property file.
 	 * @param file the file to load
 	 * @return the properties
 	 * @throws IOException when file cannot be loaded
@@ -758,11 +783,40 @@ public class CommonUtils {
 	 * @throws IOException when file cannot be loaded
 	 */
 	public static void loadProperties(Properties props, File file) throws IOException {
-		InputStream in = new FileInputStream(file);
+		loadProperties(props, new FileInputStream(file));
+	}
+
+	/**
+	 * Loads a property file.
+	 * @param props the properties object
+	 * @param uri the uri to load
+	 * @throws IOException when file cannot be loaded
+	 */
+	public static void loadProperties(Properties props, URI uri) throws IOException {
+		loadProperties(props, uri.toURL());
+	}
+
+	/**
+	 * Loads a property file.
+	 * @param props the properties object
+	 * @param uri the uri to load
+	 * @throws IOException when file cannot be loaded
+	 */
+	public static void loadProperties(Properties props, URL url) throws IOException {
+		loadProperties(props, url.openStream());
+	}
+
+	/**
+	 * Loads a property file.
+	 * @param props the properties object
+	 * @param inputStream the stream to load from
+	 * @throws IOException when file cannot be loaded
+	 */
+	public static void loadProperties(Properties props, InputStream inputStream) throws IOException {
 		try {
-			props.load(in);
+			props.load(inputStream);
 		} finally {
-			in.close();
+			inputStream.close();
 		}
 	}
 
