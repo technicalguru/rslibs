@@ -53,6 +53,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Random;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
@@ -82,7 +83,17 @@ public class CommonUtils {
 	public static int DEFAULT_CONNECT_TIMEOUT = 10000;
 	/** Default timeout for reading from URLs (20sec) */
 	public static int DEFAULT_READ_TIMEOUT    = 20000;
-
+	/** alpha chars (uper and lower case letters) */
+	public static final String ALPHA_CHARS             = "ABCDEFGHIJKLMNOPQRSTUVWXYZabzdefghijklmnopqrstuvwxyz";
+	/** numeric chars (0-9) */
+	public static final String NUM_CHARS               = "0123456789";
+	/** special chars ({@code !\"&/()=?;*+'#;,:._-<>}) */
+	public static final String SPECIAL_CHARS           = "!\\\"&/()=?;*+'#;,:._-<>";
+	/** alpha and numeric chars */
+	public static final String ALPHA_NUM_CHARS         = ALPHA_CHARS+NUM_CHARS;
+	/** alpha and numeric and special chars */
+	public static final String ALPHA_NUM_SPECIAL_CHARS = ALPHA_CHARS+NUM_CHARS+SPECIAL_CHARS;
+	
 	private static int connectTimeout = DEFAULT_CONNECT_TIMEOUT;
 	private static int readTimeout    = DEFAULT_READ_TIMEOUT;
 
@@ -1390,4 +1401,58 @@ public class CommonUtils {
 
 		return template;
 	}
+	
+	/**
+	 * Generates a random string of length 10 with {@link #ALPHA_NUM_SPECIAL_CHARS}.
+	 * @return the generated random string
+	 * @since 4.0.2
+	 */
+	public static String generateRandomString() {
+		return generateRandomString(ALPHA_NUM_SPECIAL_CHARS, 10);
+	}
+	
+	/**
+	 * Generates a random string with {@link #ALPHA_NUM_SPECIAL_CHARS}.
+	 * @param length       - length of string (using 10 if less than 1)
+	 * @return the generated random string
+	 * @since 4.0.2
+	 */
+	public static String generateRandomString(int length) {
+		return generateRandomString(ALPHA_NUM_SPECIAL_CHARS, length);
+	}
+	
+	/**
+	 * Generates a random string of length 10.
+	 * @param allowedChars - allowed chars (using {@link #ALPHA_NUM_SPECIAL_CHARS} when {@code null})
+	 * @return the generated random string
+	 * @since 4.0.2
+	 */
+	public static String generateRandomString(String allowedChars) {
+		return generateRandomString(allowedChars, 10);
+	}
+
+	/**
+	 * Generates a random string.
+	 * @param allowedChars - allowed chars (using {@link #ALPHA_NUM_SPECIAL_CHARS} when {@code null})
+	 * @param length       - length of string (using 10 if less than 1)
+	 * @return the generated random string
+	 * @since 4.0.2
+	 */
+	public static String generateRandomString(String allowedChars, int length) {
+		if ((allowedChars == null) || (allowedChars.trim().length() == 0)) allowedChars = ALPHA_NUM_SPECIAL_CHARS;
+		long randomInit = System.currentTimeMillis();
+		if (length < 1) length = 10;
+
+		Random random = new Random(randomInit);
+
+		StringBuilder rc = new StringBuilder(length);
+		while (rc.length() < length) {
+			int n = random.nextInt(allowedChars.length());
+			char c = allowedChars.charAt(n);
+			if (!Character.isWhitespace(c)) rc.append(c);
+		}
+
+		return rc.toString();
+	}
+	
 }
