@@ -4,16 +4,17 @@
 package rs.otp;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.security.GeneralSecurityException;
 import java.util.Random;
 
 import org.junit.Test;
 
-import rs.otp.secret.OtpSecret;
+import rs.otp.secret.Base32Secret;
+import rs.otp.secret.HexSecret;
 
 /**
  * Test the OTP generation and verification.
@@ -37,7 +38,7 @@ public class OtpUtilsTest {
 
 	@Test
 	public void testVariusKnownSecretTimeCodes() throws GeneralSecurityException {
-		OtpUtils utils = new OtpUtils("NY4A5CPJZ46LXZCP", OtpSecret.BASE32);
+		OtpUtils utils = new OtpUtils(new Base32Secret("NY4A5CPJZ46LXZCP"));
 
 		testStringAndNumber(utils, 1000L, "748810");
 		testStringAndNumber(utils, 7451000L, "325893");
@@ -80,7 +81,7 @@ public class OtpUtilsTest {
 
 	@Test
 	public void testVerify() throws GeneralSecurityException {
-		OtpUtils utils = new OtpUtils("NY4A5CPJZ46LXZCP", OtpSecret.BASE32);
+		OtpUtils utils = new OtpUtils(new Base32Secret("NY4A5CPJZ46LXZCP"));
 		assertEquals("162123", utils.otpAt(7439999, OtpUtils.DEFAULT_TIME_STEP_SECONDS));
 		assertTrue(utils.verify("325893", 0, 7455000, OtpUtils.DEFAULT_TIME_STEP_SECONDS));
 		assertFalse(utils.verify("948323", 0, 7455000, OtpUtils.DEFAULT_TIME_STEP_SECONDS));
@@ -108,7 +109,7 @@ public class OtpUtilsTest {
 
 	@Test
 	public void testWindow() throws GeneralSecurityException {
-		OtpUtils utils = new OtpUtils(OtpSecret.BASE32.generate(), OtpSecret.BASE32);
+		OtpUtils utils = new OtpUtils(Base32Secret.generateSecret());
 		long window = 10000;
 		Random random = new Random();
 		for (int i = 0; i < 1000; i++) {
@@ -125,7 +126,7 @@ public class OtpUtilsTest {
 
 	@Test
 	public void testWindowStuff() throws GeneralSecurityException {
-		OtpUtils utils = new OtpUtils(OtpSecret.BASE32.generate(), OtpSecret.BASE32);
+		OtpUtils utils = new OtpUtils(Base32Secret.generateSecret());
 		long window = 10000;
 		long now = 5462669356666716002L;
 		String otp = utils.otpAt(now, OtpUtils.DEFAULT_TIME_STEP_SECONDS);
@@ -150,7 +151,7 @@ public class OtpUtilsTest {
 
 	@Test
 	public void testHexWindow() throws GeneralSecurityException {
-		OtpUtils utils = new OtpUtils(OtpSecret.HEX.generate(), OtpSecret.HEX);
+		OtpUtils utils = new OtpUtils(HexSecret.generateSecret());
 		long window = 10000;
 		Random random = new Random();
 		for (int i = 0; i < 1000; i++) {
@@ -167,7 +168,7 @@ public class OtpUtilsTest {
 
 	@Test
 	public void testCoverage() throws GeneralSecurityException {
-		OtpUtils utils = new OtpUtils("ny4A5CPJZ46LXZCP", OtpSecret.BASE32);
+		OtpUtils utils = new OtpUtils(new Base32Secret("ny4A5CPJZ46LXZCP"));
 		utils.verify("948323", 15000);
 		assertEquals(OtpUtils.DEFAULT_OTP_LENGTH, utils.current().length());
 
@@ -181,7 +182,7 @@ public class OtpUtilsTest {
 		num = Integer.parseInt(utils.current(3));
 		assertTrue(num >= 0 && num < 1000);
 
-		utils = new OtpUtils("0123456789abcdefABCDEF", OtpSecret.HEX);
+		utils = new OtpUtils(new HexSecret("0123456789abcdefABCDEF"));
 		num = Integer.parseInt(utils.current());
 		assertTrue(num >= 0 && num < 1000000);
 		num = Integer.parseInt(utils.current(3));

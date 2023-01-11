@@ -19,20 +19,28 @@ import org.apache.commons.codec.binary.Hex;
  */
 public class HexSecret extends AbstractSecret {
 
-//	private static final byte[] HEX_ARRAY = "0123456789ABCDEF".getBytes(StandardCharsets.US_ASCII);
-	
 	/**
-	 * Default Constructor.
+	 * Constructor with byte array of secret
+	 * @param bytes - the bytes of this secret.
 	 */
-	public HexSecret() {
-		super(32);
+	public HexSecret(byte[] bytes) {
+		super(bytes);
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Constructor.
+	 * @param s - the string representation of this secret.
 	 */
-	@Override
-	public String generate(int length) {
+	public HexSecret(String s) {
+		super(decode(s));
+	}
+
+	/**
+	 * Generates a secret of given length.
+	 * @param length - the length
+	 * @return the random secret of given length
+	 */
+	public static String generate(int length) {
 		StringBuilder sb = new StringBuilder(length);
 		Random random = new SecureRandom();
 		for (int i = 0; i < length; i++) {
@@ -47,63 +55,58 @@ public class HexSecret extends AbstractSecret {
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * Generates a secret of default length.
+	 * @return the random secret of default length
 	 */
-	@Override
-	public byte[] decode(String s) {
-		try {
-			return Hex.decodeHex(s);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot decode hex string");
-		}
-//		// each hex character encodes 4 bits
-//		int numBytes = ((s.length() * 4) + 7) / 8;
-//		byte[] result = new byte[numBytes];
-//		int resultIndex = 0;
-//		int which = 0;
-//		int working = 0;
-//		for (int i = 0; i < s.length(); i++) {
-//			char ch = s.charAt(i);
-//			int val;
-//			if (ch >= '0' && ch <= '9') {
-//				val = (ch - '0');
-//			} else if (ch >= 'a' && ch <= 'f') {
-//				val = 10 + (ch - 'a');
-//			} else if (ch >= 'A' && ch <= 'F') {
-//				val = 10 + (ch - 'A');
-//			} else {
-//				throw new IllegalArgumentException("Invalid hex character: " + ch);
-//			}
-//			/*
-//			 * There are probably better ways to do this but this seemed the most straightforward.
-//			 */
-//			if (which == 0) {
-//				// top 4 bits
-//				working = (val & 0xF) << 4;
-//				which = 1;
-//			} else {
-//				// lower 4 bits
-//				working |= (val & 0xF);
-//				result[resultIndex++] = (byte) working;
-//				which = 0;
-//			}
-//		}
-//		if (which != 0) {
-//			result[resultIndex++] = (byte) (working >> 4);
-//		}
-//		if (resultIndex != result.length) {
-//			// may not happen but let's be careful out there
-//			result = Arrays.copyOf(result, resultIndex);
-//		}
-//		return result;
+	public static String generate() {
+		return generate(32);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String encode(byte bytes[]) {
+	public String encode() {
+		return Hex.encodeHexString(getBytes());
+	}
+
+	/**
+	 * Encodes a secret of this type to a string representation.
+	 * @param bytes the bytes
+	 * @return the encoded secret
+	 */
+	public static String encode(byte[] bytes) {
 		return Hex.encodeHexString(bytes);
+	}
+	
+	/**
+	 * Decodes a encoded secret of this type to bytes.
+	 * @param s the encoded secret
+	 * @return the decoded secret
+	 */
+	public static byte[] decode(String s) {
+		try {
+			return Hex.decodeHex(s);
+		} catch (Throwable t) {
+			throw new RuntimeException("Cannot decode hex string");
+		}
+	}
+
+	/**
+	 * Returns a generated secret object of default length.
+	 * @return the generated secret
+	 */
+	public static HexSecret generateSecret() {
+		return generateSecret(16);
+	}
+
+	/**
+	 * Returns a generated secret object of specified length.
+	 * @param length - the length
+	 * @return the generated secret
+	 */
+	public static HexSecret generateSecret(int length) {
+		return new HexSecret(generate(length));
 	}
 
 }

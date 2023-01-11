@@ -23,9 +23,9 @@ public class HexSecretTest {
 
 	@Test
 	public void testGenerateSecret() {
-		assertEquals(32, new HexSecret().generate().length());
-		assertEquals(16, new HexSecret().generate(16).length());
-		assertEquals(1, new HexSecret().generate(1).length());
+		assertEquals(32, HexSecret.generate().length());
+		assertEquals(16, HexSecret.generate(16).length());
+		assertEquals(1, HexSecret.generate(1).length());
 	}
 
 	@Test
@@ -35,9 +35,9 @@ public class HexSecretTest {
 		for (int i = 0; i < 10000; i++) {
 			byte[] bytes = new byte[random.nextInt(10) + 1];
 			random.nextBytes(bytes);
-			String encoded = new HexSecret().encode(bytes);
+			String encoded = HexSecret.encode(bytes);
 			byte[] expected = Hex.decodeHex(encoded.toCharArray());
-			byte[] actual = new HexSecret().decode(encoded);
+			byte[] actual = HexSecret.decode(encoded);
 			assertArrayEquals(expected, actual);
 		}
 	}
@@ -45,28 +45,28 @@ public class HexSecretTest {
 	@Test
 	public void testCoverage() {
 		try {
-			new HexSecret().decode("z");
+			HexSecret.decode("z");
 			fail("Should have thrown");
 		} catch (Throwable iae) {
 			// expected
 		}
 	
 		try {
-			new HexSecret().decode("/");
+			HexSecret.decode("/");
 			fail("Should have thrown");
 		} catch (Throwable iae) {
 			// expected
 		}
 	
 		try {
-			new HexSecret().decode("^");
+			HexSecret.decode("^");
 			fail("Should have thrown");
 		} catch (Throwable iae) {
 			// expected
 		}
 	
 		try {
-			new HexSecret().decode("~");
+			HexSecret.decode("~");
 			fail("Should have thrown");
 		} catch (Throwable iae) {
 			// expected

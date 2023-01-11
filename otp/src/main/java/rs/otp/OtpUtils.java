@@ -9,7 +9,8 @@ import java.util.Arrays;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-import rs.otp.secret.OtpSecret;
+import rs.otp.secret.Base32Secret;
+import rs.otp.secret.ISecret;
 
 /**
  * Implementation of the Time-based One-Time Password (TOTP) two factor authentication algorithm. You need to:
@@ -60,13 +61,9 @@ public class OtpUtils {
 		blockOfZeros = new String(chars);
 	}
 
-	private byte[] secret;
+	private ISecret secret;
 
-	public OtpUtils(String secret, OtpSecret secretType) {
-		this(secretType.decode(secret));
-	}
-
-	public OtpUtils(byte[] secret) {
+	public OtpUtils(ISecret secret) {
 		this.secret = secret;
 	}
 
@@ -224,7 +221,7 @@ public class OtpUtils {
 		}
 
 		// encrypt the data with the key and return the SHA1 of it in hex
-		SecretKeySpec signKey = new SecretKeySpec(secret, "HmacSHA1");
+		SecretKeySpec signKey = new SecretKeySpec(secret.getBytes(), "HmacSHA1");
 		// if this is expensive, could put in a thread-local
 		Mac mac = Mac.getInstance("HmacSHA1");
 		mac.init(signKey);
@@ -333,7 +330,7 @@ public class OtpUtils {
 		if (args.length > 0) {
 			try {
 				String testSecret = args[0];
-				OtpUtils utils = new OtpUtils(testSecret, OtpSecret.BASE32);
+				OtpUtils utils = new OtpUtils(new Base32Secret(testSecret));
 				String currentOtp = null;
 				while (true) {
 					String otp = utils.current();

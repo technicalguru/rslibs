@@ -11,23 +11,29 @@ package rs.otp.secret;
  */
 public abstract class AbstractSecret implements ISecret {
 
-	private int defaultLength;
+	private byte[] bytes;
 	
 	/**
-	 * Constructor with a default length definition
-	 * @param defaultLength - the default length of secrets to be generated.
+	 * Constructor with byte array of secret
+	 * @param bytes - the bytes of this secret.
 	 */
-	protected AbstractSecret(int defaultLength) {
-		this.defaultLength = defaultLength;
+	public AbstractSecret(byte[] bytes) {
+		this.bytes = bytes;
 	}
 	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String generate() {
-		return generate(defaultLength);
+	public byte[] getBytes() {
+		return bytes;
 	}
-
 	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return encode();
+	}
 }

@@ -19,9 +19,9 @@ public class Base32SecretTest {
 
 	@Test
 	public void testGenerateSecret() {
-		assertEquals(16, new Base32Secret().generate().length());
-		assertEquals(16, new Base32Secret().generate(16).length());
-		assertEquals(1, new Base32Secret().generate(1).length());
+		assertEquals(16, Base32Secret.generate().length());
+		assertEquals(16, Base32Secret.generate(16).length());
+		assertEquals(1,  Base32Secret.generate(1).length());
 	}
 
 	@Test
@@ -34,7 +34,7 @@ public class Base32SecretTest {
 			random.nextBytes(bytes);
 			String encoded = base32.encodeAsString(bytes);
 			byte[] expected = base32.decode(encoded);
-			byte[] actual = new Base32Secret().decode(encoded);
+			byte[] actual = Base32Secret.decode(encoded);
 			assertArrayEquals(expected, actual);
 		}
 	}
@@ -44,9 +44,9 @@ public class Base32SecretTest {
 		String[] strings = new String[] { "A", "AB", "ABC", "ABCD", "ABCDE", "ABCDEF", "ABCDEFG", "ABCDEFGH", "ABCDEFGHI" };
 		Base32 base32 = new Base32();
 		for (String str : strings) {
-			byte[] decoded = new Base32Secret().decode(str);
+			byte[] decoded = Base32Secret.decode(str);
 			String encoded = base32.encodeAsString(decoded);
-			byte[] result = new Base32Secret().decode(encoded);
+			byte[] result = Base32Secret.decode(encoded);
 			// System.out.println(str + " becomes " + encoded);
 			assertArrayEquals(decoded, result);
 		}
@@ -55,41 +55,41 @@ public class Base32SecretTest {
 	@Test
 	public void testCoverage() {
 		try {
-			new Base32Secret().decode(".");
+			Base32Secret.decode(".");
 			fail("Should have thrown");
 		} catch (RuntimeException iae) {
 			// expected
 		}
 		try {
-			new Base32Secret().decode("^");
-			fail("Should have thrown");
-		} catch (RuntimeException iae) {
-			// expected
-		}
-
-		try {
-			new Base32Secret().decode("0");
+			Base32Secret.decode("^");
 			fail("Should have thrown");
 		} catch (RuntimeException iae) {
 			// expected
 		}
 
 		try {
-			new Base32Secret().decode("/");
+			Base32Secret.decode("0");
 			fail("Should have thrown");
 		} catch (RuntimeException iae) {
 			// expected
 		}
 
 		try {
-			new Base32Secret().decode("^");
+			Base32Secret.decode("/");
 			fail("Should have thrown");
 		} catch (RuntimeException iae) {
 			// expected
 		}
 
 		try {
-			new Base32Secret().decode("~");
+			Base32Secret.decode("^");
+			fail("Should have thrown");
+		} catch (RuntimeException iae) {
+			// expected
+		}
+
+		try {
+			Base32Secret.decode("~");
 			fail("Should have thrown");
 		} catch (RuntimeException iae) {
 			// expected
