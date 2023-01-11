@@ -9,7 +9,7 @@ package rs.otp.secret;
  * @author ralph
  *
  */
-public interface ISecretGenerator {
+public interface ISecret {
 
 	/**
 	 * Generates a secret of given length.
@@ -25,10 +25,17 @@ public interface ISecretGenerator {
 	public String generate();
 	
 	/**
-	 * Decode the given secret into bytes.
+	 * Decodes the given secret into bytes.
 	 * @param s the secret to be decoded
 	 * @return the decodes secret as bytes
 	 */
 	public byte[] decode(String s);
+	
+	/**
+	 * Encodes the given secret into string representation.
+	 * @param bytes the secret to be encoded
+	 * @return the encoded secret
+	 */
+	public String encode(byte bytes[]);
 	
 }

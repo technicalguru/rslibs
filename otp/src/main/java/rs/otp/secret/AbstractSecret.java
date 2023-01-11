@@ -9,7 +9,7 @@ package rs.otp.secret;
  * @author ralph
  *
  */
-public abstract class AbstractSecretGenerator implements ISecretGenerator {
+public abstract class AbstractSecret implements ISecret {
 
 	private int defaultLength;
 	
@@ -17,7 +17,7 @@ public abstract class AbstractSecretGenerator implements ISecretGenerator {
 	 * Constructor with a default length definition
 	 * @param defaultLength - the default length of secrets to be generated.
 	 */
-	protected AbstractSecretGenerator(int defaultLength) {
+	protected AbstractSecret(int defaultLength) {
 		this.defaultLength = defaultLength;
 	}
 	

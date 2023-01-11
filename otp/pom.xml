@@ -16,13 +16,11 @@
 	<description>Provides OTP</description>
 	
 	<dependencies>
-	<!--
 		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>baselib</artifactId>
-			<version>${project.version}</version>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.15</version>
 		</dependency>
-	-->
 	</dependencies>
 	
 	<build>

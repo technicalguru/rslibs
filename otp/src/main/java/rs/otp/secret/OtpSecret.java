@@ -11,12 +11,12 @@ package rs.otp.secret;
  */
 public enum OtpSecret {
 
-	BASE32(Base32Generator.class),
-	HEX(HexGenerator.class);
+	BASE32(Base32Secret.class),
+	HEX(HexSecret.class);
 	
-	private ISecretGenerator generator;
+	private ISecret generator;
 	
-	private OtpSecret(Class<? extends ISecretGenerator> generator) {
+	private OtpSecret(Class<? extends ISecret> generator) {
 		try {
 			this.generator = generator.getConstructor().newInstance();
 		} catch (Throwable t) {
