@@ -43,6 +43,7 @@
 		<module>baselib</module>
 		<module>templating</module>
 		<module>jackson</module>
+		<module>otp</module>
 	</modules>
 
 	<repositories>
