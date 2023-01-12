@@ -104,7 +104,7 @@ public abstract class AbstractJdbcConnectionProvider implements IJdbcConnectionP
 	 * Constructor.
 	 * Descendants must override {@link #getDbDriverClassName()} and {@link #getDriverUrl(String, String, String, String, String, String...)}
 	 * for a class.
-	 * @param display a name to be displayed to users (see {@link IDisplayProvider})
+	 * @param display a name to be displayed to users 
 	 */
 	public AbstractJdbcConnectionProvider(String display) {
 		this(display, null, null);
@@ -113,7 +113,7 @@ public abstract class AbstractJdbcConnectionProvider implements IJdbcConnectionP
 	/**
 	 * Constructor.
 	 * Descendants must override {@link #getDbDriverClassName()} for a working class.
-	 * @param display a name to be displayed to users (see {@link IDisplayProvider})
+	 * @param display a name to be displayed to users 
 	 * @param urlTemplate the URL template (see class description for details)
 	 */
 	public AbstractJdbcConnectionProvider(String display, String urlTemplate) {
@@ -122,7 +122,7 @@ public abstract class AbstractJdbcConnectionProvider implements IJdbcConnectionP
 
 	/**
 	 * Constructor.
-	 * @param display a name to be displayed to users (see {@link IDisplayProvider})
+	 * @param display a name to be displayed to users 
 	 * @param dbDriverClassName the name of the DB driver (can be <code>null</code> if you override {@link #getDbDriverClassName()})
 	 * @param urlTemplate the URL template (see class description for details)
 	 */
@@ -612,5 +612,21 @@ public abstract class AbstractJdbcConnectionProvider implements IJdbcConnectionP
 			rc.append(entry.getValue());
 		}
 		return rc.toString();
+	}
+	
+	
+	/**
+	 * Returns the display.
+	 * @return the display
+	 */
+	public String getDisplay() {
+		return display;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public String toString() {
+		return getDisplay();
 	}
 }

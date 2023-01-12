@@ -195,7 +195,6 @@ public class RsDay extends RsDate {
 	
 	/**
 	 * Returns the next day.
-	 * @param count number of days to add
 	 * @return next day
 	 */
 	public RsDay getNext() {
