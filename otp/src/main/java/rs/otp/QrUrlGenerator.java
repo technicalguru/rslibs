@@ -21,9 +21,11 @@ public class QrUrlGenerator {
 	 *            URL encoded.
 	 * @param secret
 	 *            Secret string that will be used when generating the current number.
+	 *            
+	 * @return the image URL
 	 */
 	public static String qrImageUrl(String keyId, String secret) {
-		return qrImageUrl(keyId, secret, OtpUtils.DEFAULT_OTP_LENGTH, DEFAULT_QR_DIMENSION);
+		return qrImageUrl(keyId, secret, OtpGen.DEFAULT_OTP_LENGTH, DEFAULT_QR_DIMENSION);
 	}
 
 	/**
@@ -37,6 +39,7 @@ public class QrUrlGenerator {
 	 *            Secret string that will be used when generating the current number.
 	 * @param numDigits
 	 *            The number of digits of the OTP.
+	 * @return the image URL
 	 */
 	public static String qrImageUrl(String keyId, String secret, int numDigits) {
 		return qrImageUrl(keyId, secret, numDigits, DEFAULT_QR_DIMENSION);
@@ -55,6 +58,7 @@ public class QrUrlGenerator {
 	 *            The number of digits of the OTP. Can be set to {@link #DEFAULT_OTP_LENGTH}.
 	 * @param imageDimension
 	 *            The dimension of the image, width and height. Can be set to {@link #DEFAULT_QR_DIMENSION}.
+	 * @return the image URL
 	 */
 	public static String qrImageUrl(String keyId, String secret, int numDigits, int imageDimension) {
 		StringBuilder sb = new StringBuilder(128);
@@ -73,9 +77,10 @@ public class QrUrlGenerator {
 	 *            URL encoded.
 	 * @param secret
 	 *            Secret string that will be used when generating the current number.
+	 * @return the otp-auth part for an image URL
 	 */
 	public static String generateOtpAuthUrl(String keyId, String secret) {
-		return generateOtpAuthUrl(keyId, secret, OtpUtils.DEFAULT_OTP_LENGTH);
+		return generateOtpAuthUrl(keyId, secret, OtpGen.DEFAULT_OTP_LENGTH);
 	}
 
 	/**
@@ -89,6 +94,7 @@ public class QrUrlGenerator {
 	 *            Secret string that will be used when generating the current number.
 	 * @param numDigits
 	 *            The number of digits" of the OTP.
+	 * @return the otp-auth part for an image URL
 	 */
 	public static String generateOtpAuthUrl(String keyId, String secret, int numDigits) {
 		StringBuilder sb = new StringBuilder(128);

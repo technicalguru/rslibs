@@ -44,7 +44,7 @@ import rs.otp.secret.ISecret;
  * @author graywatson
  * @author ralph
  */
-public class OtpUtils {
+public class OtpGen {
 
 	/** default number of digits in a OTP string */
 	public static int DEFAULT_OTP_LENGTH = 6;
@@ -63,7 +63,7 @@ public class OtpUtils {
 
 	private ISecret secret;
 
-	public OtpUtils(ISecret secret) {
+	public OtpGen(ISecret secret) {
 		this.secret = secret;
 	}
 
@@ -81,6 +81,7 @@ public class OtpUtils {
 	 *            Number of milliseconds that they are allowed to be off and still match. This checks before and after
 	 *            the current time to account for clock variance. Set to 0 for no window.
 	 * @return True if the OTP matched the calculated OTP within the specified window.
+	 * @throws GeneralSecurityException when the verification cannot be performed
 	 */
 	public boolean verify(String otp, long windowMillis) throws GeneralSecurityException {
 		return verify(otp, windowMillis, System.currentTimeMillis(), DEFAULT_TIME_STEP_SECONDS, DEFAULT_OTP_LENGTH);
@@ -102,16 +103,18 @@ public class OtpUtils {
 	 * @param timeStepSeconds
 	 *            Time step in seconds. The default value is 30 seconds here. See {@link #DEFAULT_TIME_STEP_SECONDS}.
 	 * @return True if the OTP matched the calculated OTP within the specified window.
+	 * @throws GeneralSecurityException when the verification cannot be performed
 	 */
 	protected boolean verify(String otp, long windowMillis, long timeInMillis, int timeStepSeconds) throws GeneralSecurityException {
 		return verify(otp, windowMillis, timeInMillis, timeStepSeconds, DEFAULT_OTP_LENGTH);
 	}
 
 	/**
-	 * Similar to {@link #validateCurrentNumber(String, int, int)} except exposes other parameters. Mostly for testing.
+	 * Validates an OTP. 
+	 * This allows you to set a window in milliseconds to account for people being close to the end of the time-step. 
+	 * For example, if windowMillis is 10000 then this method will check the OTP against the generated number from 
+	 * 10 seconds before now through 10 seconds after now.
 	 * 
-	 * @param base32Secret
-	 *            Secret string encoded using base-32 that was used to generate the QR code or shared with the user.
 	 * @param otp
 	 *            One time password provided by the user from their authenticator application.
 	 * @param windowMillis
@@ -124,6 +127,7 @@ public class OtpUtils {
 	 * @param numDigits
 	 *            The number of digits of the OTP.
 	 * @return True if the OTP matched the calculated OTP within the specified window.
+	 * @throws GeneralSecurityException when the verification cannot be performed
 	 */
 	protected boolean verify(String otp, long windowMillis, long timeInMillis, int timeStepSeconds, int numDigits) throws GeneralSecurityException {
 		return verifyOtp(otp, windowMillis, timeInMillis, timeStepSeconds, numDigits);
@@ -135,30 +139,33 @@ public class OtpUtils {
 	 * <p>WARNING: This requires a system clock that is in sync with the world.</p>
 	 * 
 	 * @return The OTP which should match the user's authenticator application output.
+	 * @throws GeneralSecurityException when the generation cannot be performed
 	 */
 	public String current() throws GeneralSecurityException {
 		return otpAt(System.currentTimeMillis(), DEFAULT_TIME_STEP_SECONDS, DEFAULT_OTP_LENGTH);
 	}
 
 	/**
-	 * Similar to {@link #generateCurrentNumberString(String, int)} but you specify the number of digits.
+	 * Returns the current OTP. 
 	 *
 	 * @param numDigits
 	 *            The number of digits of the OTP.
 	 * @param timeStepSeconds
 	 *            Time step in seconds. The default value is 30 seconds here. See {@link #DEFAULT_TIME_STEP_SECONDS}.
 	 * @return The OTP which should match the user's authenticator application output.
+	 * @throws GeneralSecurityException when the generation cannot be performed
 	 */
 	protected String current(int numDigits, int timeStepSeconds) throws GeneralSecurityException {
 		return otpAt(System.currentTimeMillis(), timeStepSeconds, numDigits);
 	}
 
 	/**
-	 * Similar to {@link #generateCurrentNumberString(String, int)} but you specify the number of digits.
+	 * Returns the current OTP. 
 	 *
 	 * @param numDigits
 	 *            The number of digits of the OTP.
 	 * @return The OTP which should match the user's authenticator application output.
+	 * @throws GeneralSecurityException when the generation cannot be performed
 	 */
 	public String current(int numDigits) throws GeneralSecurityException {
 		return otpAt(System.currentTimeMillis(), DEFAULT_TIME_STEP_SECONDS, numDigits);
@@ -166,22 +173,21 @@ public class OtpUtils {
 
 
 	/**
-	 * Similar to {@link #generateCurrentNumberString(String)} except exposes other parameters. Mostly for testing.
+	 * Returns an OTP at a given time. 
 	 * 
 	 * @param timeInMillis
 	 *            Time in milliseconds.
 	 * @param timeStepSeconds
 	 *            Time step in seconds. The default value is 30 seconds here. See {@link #DEFAULT_TIME_STEP_SECONDS}.
-	 * @param numDigits
-	 *            The number of digits of the OTP.
 	 * @return The OTP which should match the user's authenticator application output.
+	 * @throws GeneralSecurityException when the generation cannot be performed
 	 */
 	protected String otpAt(long timeInMillis, int timeStepSeconds) throws GeneralSecurityException {
 		return otpAt(timeInMillis, timeStepSeconds, DEFAULT_OTP_LENGTH);
 	}
 	
 	/**
-	 * Similar to {@link #generateCurrentNumberString(String)} except exposes other parameters. Mostly for testing.
+	 * Returns an OTP at a given time. 
 	 * 
 	 * @param timeInMillis
 	 *            Time in milliseconds.
@@ -190,6 +196,7 @@ public class OtpUtils {
 	 * @param numDigits
 	 *            The number of digits of the OTP.
 	 * @return The OTP which should match the user's authenticator application output.
+	 * @throws GeneralSecurityException when the generation cannot be performed
 	 */
 	protected String otpAt(long timeInMillis, int timeStepSeconds, int numDigits) throws GeneralSecurityException {
 		long timeIndex = getTimeIndex(timeInMillis, timeStepSeconds);
@@ -330,7 +337,7 @@ public class OtpUtils {
 		if (args.length > 0) {
 			try {
 				String testSecret = args[0];
-				OtpUtils utils = new OtpUtils(new Base32Secret(testSecret));
+				OtpGen utils = new OtpGen(new Base32Secret(testSecret));
 				String currentOtp = null;
 				while (true) {
 					String otp = utils.current();
