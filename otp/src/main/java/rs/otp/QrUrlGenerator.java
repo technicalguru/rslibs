@@ -55,7 +55,7 @@ public class QrUrlGenerator {
 	 * @param secret
 	 *            Secret string that will be used when generating the current number.
 	 * @param numDigits
-	 *            The number of digits of the OTP. Can be set to {@link #DEFAULT_OTP_LENGTH}.
+	 *            The number of digits of the OTP. Can be set to {@link OtpGen#DEFAULT_OTP_LENGTH}.
 	 * @param imageDimension
 	 *            The dimension of the image, width and height. Can be set to {@link #DEFAULT_QR_DIMENSION}.
 	 * @return the image URL
