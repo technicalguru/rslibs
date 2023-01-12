@@ -98,7 +98,7 @@ public enum SecretType {
 	 */
 	public String encode(byte[] bytes) {
 		try {
-			Method m = generator.getDeclaredMethod("encode", Byte.class.arrayType());
+			Method m = generator.getDeclaredMethod("encode", Byte[].class);
 			return (String)m.invoke(null, bytes);
 		} catch (Throwable t) {
 			throw new RuntimeException("Cannot encode a secret with "+generator.getName(), t);
@@ -126,7 +126,7 @@ public enum SecretType {
 	 */
 	public ISecret from(byte[] bytes) {
 		try {
-			Constructor<?> c = generator.getConstructor(Byte.class.arrayType());
+			Constructor<?> c = generator.getConstructor(Byte[].class);
 			return (ISecret)c.newInstance(bytes);
 		} catch (Throwable t) {
 			throw new RuntimeException("Cannot generate a secret with "+generator.getName(), t);
