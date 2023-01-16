@@ -46,7 +46,7 @@ import rs.otp.secret.ISecret;
  */
 public class OtpGen {
 
-	/** default number of digits in a OTP string */
+	/** default number of digits in a OTP string, 6 is default */
 	public static int DEFAULT_OTP_LENGTH = 6;
 	/** default time-step which is part of the spec, 30 seconds is default */
 	public static final int DEFAULT_TIME_STEP_SECONDS = 30;
@@ -170,7 +170,6 @@ public class OtpGen {
 	public String current(int numDigits) throws GeneralSecurityException {
 		return otpAt(System.currentTimeMillis(), DEFAULT_TIME_STEP_SECONDS, numDigits);
 	}
-
 
 	/**
 	 * Returns an OTP at a given time. 

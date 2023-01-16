@@ -11,34 +11,24 @@ package rs.otp.secret;
  */
 public interface ISecret {
 
+	/**
+	 * Returns the bytes of this secret.
+	 * @return the bytes.
+	 */
 	public byte[] getBytes();
+	
+	/**
+	 * Returns the encoded form of this secret.
+	 * @return encoded secret
+	 */
 	public String encode();
 
 	/**
-	 * Generates a secret of given length.
-	 * @param length - the length
-	 * @return the random secret of given length
+	 * Returns the otpauth URI scheme to be used e.g. for QR codes.
+	 * @param keyId - the key ID
+	 * @param numDigits - numbe rof digits.
+	 * @return the URI to be used when adding to external auth generators.
 	 */
-//	public String generate(int length);
-	
-	/**
-	 * Generates a secret of default length.
-	 * @return the random secret of default length
-	 */
-//	public String generate();
-	
-	/**
-	 * Decodes the given secret into bytes.
-	 * @param s the secret to be decoded
-	 * @return the decodes secret as bytes
-	 */
-//	public byte[] decode(String s);
-	
-	/**
-	 * Encodes the given secret into string representation.
-	 * @param bytes the secret to be encoded
-	 * @return the encoded secret
-	 */
-//	public String encode(byte bytes[]);
-	
+	public String getOtpAuthUri(String keyId, int numDigits);
+
 }

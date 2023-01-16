@@ -36,4 +36,14 @@ public abstract class AbstractSecret implements ISecret {
 	public String toString() {
 		return encode();
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getOtpAuthUri(String keyId, int numDigits) {
+		return "otpauth://totp/"+keyId+"?secret="+encode()+"&digits="+numDigits;
+	}
+
+
 }
