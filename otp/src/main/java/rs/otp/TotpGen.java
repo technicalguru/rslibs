@@ -3,11 +3,19 @@
  */
 package rs.otp;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import javax.xml.crypto.URIReferenceException;
 
 import rs.otp.secret.Base32Secret;
 import rs.otp.secret.ISecret;
@@ -44,14 +52,14 @@ import rs.otp.secret.ISecret;
  * @author graywatson
  * @author ralph
  */
-public class OtpGen {
+public class TotpGen {
 
 	/** default number of digits in a OTP string, 6 is default */
-	public static int DEFAULT_OTP_LENGTH = 6;
+	public static final int DEFAULT_OTP_LENGTH = 6;
 	/** default time-step which is part of the spec, 30 seconds is default */
 	public static final int DEFAULT_TIME_STEP_SECONDS = 30;
 	/** set to the number of digits to control 0 prefix, set to 0 for no prefix */
-	private static int MAX_NUM_DIGITS_OUTPUT = 100;
+	private static final int MAX_NUM_DIGITS_OUTPUT = 100;
 
 	private static final String blockOfZeros;
 
@@ -62,9 +70,151 @@ public class OtpGen {
 	}
 
 	private ISecret secret;
+	private int     numDigits;
+	private int     timeStepSeconds;
+	private String  issuer;
+	private String  account;
+	
+	/**
+	 * Creates the generator based on secret with 6 digits for the OTP and 30sec time step.
+	 * @param secret - the secret
+	 */
+	public TotpGen(ISecret secret) {
+		this(secret, DEFAULT_OTP_LENGTH, DEFAULT_TIME_STEP_SECONDS);
+	}
 
-	public OtpGen(ISecret secret) {
-		this.secret = secret;
+	/**
+	 * Creates the generator based on secret with the digits for the OTP.
+	 * @param secret - the secret
+	 * @param numDigits - the number of digits to produce
+	 */
+	public TotpGen(ISecret secret, int numDigits) {
+		this(secret, numDigits, DEFAULT_TIME_STEP_SECONDS);
+	}
+
+	/**
+	 * Creates the generator based on secret with the digits for the OTP.
+	 * @param secret - the secret
+	 * @param numDigits - the number of digits to produce
+	 * @param timeStepSeconds - the time step in seconds
+	 */
+	public TotpGen(ISecret secret, int numDigits, int timeStepSeconds) {
+		this.secret          = secret;
+		this.numDigits       = numDigits;
+		this.timeStepSeconds = timeStepSeconds;
+	}
+
+	/**
+	 * Returns the secret.
+	 * @return the secret
+	 */
+	public ISecret getSecret() {
+		return secret;
+	}
+
+	/**
+	 * Returns the number of digits to produce.
+	 * @return the number of digits to produce
+	 */
+	public int getNumDigits() {
+		return numDigits;
+	}
+
+	/**
+	 * Returns the time step in seconds.
+	 * @return the time step in seconds
+	 */
+	public int getTimeStepSeconds() {
+		return timeStepSeconds;
+	}
+
+	/**
+	 * Returns the issuer of this TOTP (info only). Can be {@code null} but must not contain colons.
+	 * @return the issuer
+	 */
+	public String getIssuer() {
+		return issuer;
+	}
+
+	/**
+	 * Sets the issuer of this TOTP (info only).
+	 * @param issuer the issuer of this TOTP (info only). Can be {@code null} but must not contain colons.
+	 */
+	public void setIssuer(String issuer) {
+		this.issuer = issuer;
+	}
+
+	/**
+	 * Sets the account of this TOTP (info only). Can be {@code null}.
+	 * @return the account
+	 */
+	public String getAccount() {
+		return account;
+	}
+
+	/**
+	 * Sets the account of this TOTP (info only).
+	 * @param account the account of this TOTP.  Can be {@code null}.
+	 */
+	public void setAccount(String account) {
+		this.account = account;
+	}
+
+	/**
+	 * Returns the otpauth URI scheme to be used e.g. for QR codes.
+	 * Uses the issuer and account strings of this generator, if set.
+	 * <p>Please refer to <a href="https://github.com/google/google-authenticator/wiki/Key-Uri-Format">otpauth URI scheme</a>.</p>
+	 * @return the URI to be used when adding to external auth generators.
+	 */
+	public URI getOtpAuthUri() {
+		return getOtpAuthUri(issuer, account);
+	}
+
+	/**
+	 * Returns the otpauth URI scheme to be used e.g. for QR codes.
+	 * Uses the issuer string of this generator, if set.
+	 * <p>Please refer to <a href="https://github.com/google/google-authenticator/wiki/Key-Uri-Format">otpauth URI scheme</a>.</p>
+	 * @param account - name of account
+	 * @return the URI to be used when adding to external auth generators.
+	 */
+	public URI getOtpAuthUri(String account) {
+		return getOtpAuthUri(issuer, account);
+	}
+
+	/**
+	 * Returns the otpauth URI scheme to be used e.g. for QR codes.
+	 * <p>Please refer to <a href="https://github.com/google/google-authenticator/wiki/Key-Uri-Format">otpauth URI scheme</a>.</p>
+	 * @param issuer - issuer of the key, may be {@code null} but must not contain colon
+	 * @param account - name of account
+	 * @return the URI to be used when adding to external auth generators.
+	 */
+	public URI getOtpAuthUri(String issuer, String account) {
+		if (account == null) account = this.account;
+		if (account == null) throw new RuntimeException("Cannot use empty account string");
+		StringBuilder rc = new StringBuilder();
+		rc.append("otpauth://totp/");
+		if (issuer != null) {
+			rc.append(URLEncoder.encode(issuer, StandardCharsets.UTF_8));
+			rc.append(":");
+		}
+		rc.append(account);
+		rc.append("?secret=");
+		rc.append(secret.encode());
+		rc.append("&digits=");
+		rc.append(numDigits);
+		if (timeStepSeconds != 30) {
+			rc.append("&period=");
+			rc.append(timeStepSeconds);
+		}
+		if (issuer != null) {
+			rc.append("&issuer=");
+			rc.append(URLEncoder.encode(issuer, StandardCharsets.UTF_8));
+		}
+		try {
+			return new URI(rc.toString());
+		} catch (URISyntaxException e) {
+			throw new RuntimeException("Cannot create URI: ", e);
+		}
 	}
 
 	/**
@@ -84,29 +234,7 @@ public class OtpGen {
 	 * @throws GeneralSecurityException when the verification cannot be performed
 	 */
 	public boolean verify(String otp, long windowMillis) throws GeneralSecurityException {
-		return verify(otp, windowMillis, System.currentTimeMillis(), DEFAULT_TIME_STEP_SECONDS, DEFAULT_OTP_LENGTH);
-	}
-
-	/**
-	 * Validates an OTP. 
-	 * This allows you to set a window in milliseconds to account for people being close to the end of the time-step. 
-	 * For example, if windowMillis is 10000 then this method will check the OTP against the generated number from 
-	 * 10 seconds before now through 10 seconds after now.
-	 * 
-	 * @param otp
-	 *            One time password provided by the user from their authenticator application.
-	 * @param windowMillis
-	 *            Number of milliseconds that they are allowed to be off and still match. This checks before and after
-	 *            the current time to account for clock variance. Set to 0 for no window.
-	 * @param timeInMillis
-	 *            Time in milliseconds.
-	 * @param timeStepSeconds
-	 *            Time step in seconds. The default value is 30 seconds here. See {@link #DEFAULT_TIME_STEP_SECONDS}.
-	 * @return True if the OTP matched the calculated OTP within the specified window.
-	 * @throws GeneralSecurityException when the verification cannot be performed
-	 */
-	protected boolean verify(String otp, long windowMillis, long timeInMillis, int timeStepSeconds) throws GeneralSecurityException {
-		return verify(otp, windowMillis, timeInMillis, timeStepSeconds, DEFAULT_OTP_LENGTH);
+		return verify(otp, windowMillis, System.currentTimeMillis(), timeStepSeconds, numDigits);
 	}
 
 	/**
@@ -142,47 +270,7 @@ public class OtpGen {
 	 * @throws GeneralSecurityException when the generation cannot be performed
 	 */
 	public String current() throws GeneralSecurityException {
-		return otpAt(System.currentTimeMillis(), DEFAULT_TIME_STEP_SECONDS, DEFAULT_OTP_LENGTH);
-	}
-
-	/**
-	 * Returns the current OTP. 
-	 *
-	 * @param numDigits
-	 *            The number of digits of the OTP.
-	 * @param timeStepSeconds
-	 *            Time step in seconds. The default value is 30 seconds here. See {@link #DEFAULT_TIME_STEP_SECONDS}.
-	 * @return The OTP which should match the user's authenticator application output.
-	 * @throws GeneralSecurityException when the generation cannot be performed
-	 */
-	protected String current(int numDigits, int timeStepSeconds) throws GeneralSecurityException {
 		return otpAt(System.currentTimeMillis(), timeStepSeconds, numDigits);
-	}
-
-	/**
-	 * Returns the current OTP. 
-	 *
-	 * @param numDigits
-	 *            The number of digits of the OTP.
-	 * @return The OTP which should match the user's authenticator application output.
-	 * @throws GeneralSecurityException when the generation cannot be performed
-	 */
-	public String current(int numDigits) throws GeneralSecurityException {
-		return otpAt(System.currentTimeMillis(), DEFAULT_TIME_STEP_SECONDS, numDigits);
-	}
-
-	/**
-	 * Returns an OTP at a given time. 
-	 * 
-	 * @param timeInMillis
-	 *            Time in milliseconds.
-	 * @param timeStepSeconds
-	 *            Time step in seconds. The default value is 30 seconds here. See {@link #DEFAULT_TIME_STEP_SECONDS}.
-	 * @return The OTP which should match the user's authenticator application output.
-	 * @throws GeneralSecurityException when the generation cannot be performed
-	 */
-	protected String otpAt(long timeInMillis, int timeStepSeconds) throws GeneralSecurityException {
-		return otpAt(timeInMillis, timeStepSeconds, DEFAULT_OTP_LENGTH);
 	}
 	
 	/**
@@ -332,11 +420,72 @@ public class OtpGen {
 		}
 	}
 
+	/**
+	 * Creates a generator from the given URI.
+	 * <p>Please refer to <a href="https://github.com/google/google-authenticator/wiki/Key-Uri-Format">otpauth URI scheme</a>.</p>
+	 * @param uri - the TOTP URI
+	 * @return the generator from this URI
+	 * @throws URISyntaxException when the URI is syntactically invalid
+	 * @throws URIReferenceException when the URI is semantically invalid
+	 */
+	public static TotpGen from(String uri) throws URISyntaxException, URIReferenceException {
+		return from(new URI(uri));
+	}
+	
+	/**
+	 * Creates a generator from the given URI.
+	 * <p>Please refer to <a href="https://github.com/google/google-authenticator/wiki/Key-Uri-Format">otpauth URI scheme</a>.</p>
+	 * @param uri - the TOTP URI
+	 * @return the generator from this URI
+	 * @throws URIReferenceException when the URI is semantically invalid
+	 */
+	public static TotpGen from(URI uri) throws URIReferenceException {
+		if (!"otpauth".equalsIgnoreCase(uri.getScheme())) {
+			throw new URIReferenceException("Not a otpauth:// URI.");
+		}
+		if (!"totp".equalsIgnoreCase(uri.getHost())) {
+			throw new URIReferenceException("Not a TOTP URI.");
+		}
+		String path = uri.getPath().substring(1);
+		String parts[] = path.split(":");
+		String issuer  = parts.length > 1 ? parts[0] : null;
+		String account = parts.length > 1 ? parts[1] : parts[0];
+		String query   = uri.getQuery();
+		Map<String,String> params = new HashMap<>();
+		try {
+			for (String part : query.split("&")) {
+				String kv[] = part.split("=");
+				params.put(URLDecoder.decode(kv[0], StandardCharsets.UTF_8), URLDecoder.decode(kv[1], StandardCharsets.UTF_8));
+			}
+		} catch (Throwable t) {
+			throw new URIReferenceException("No valid TOTP parameters");
+		}
+		if (!params.containsKey("secret")) {
+			throw new URIReferenceException("No valid TOTP parameters: secret missing");
+		}
+		ISecret secret = new Base32Secret(params.get("secret"));
+		int     digits = 6;  
+		if (params.containsKey("digits")) {
+			digits = Integer.parseInt(params.get("digits"));
+		}
+		if (params.containsKey("issuer")) {
+			issuer = params.get("issuer");
+		}
+		int period = 30;
+		if (params.containsKey("period")) {
+			period = Integer.parseInt(params.get("period"));
+		}
+		TotpGen rc = new TotpGen(secret, digits, period);
+		rc.setAccount(account);
+		rc.setIssuer(issuer);
+		return rc;
+	}
+	
 	public static void main(String args[]) {
 		if (args.length > 0) {
 			try {
 				String testSecret = args[0];
-				OtpGen utils = new OtpGen(new Base32Secret(testSecret));
+				TotpGen utils = new TotpGen(new Base32Secret(testSecret));
 				String currentOtp = null;
 				while (true) {
 					String otp = utils.current();

@@ -4,12 +4,15 @@
 package rs.otp;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-import rs.otp.secret.ISecret;
-
 /**
+ * Produces URLs to target Google API for QR images.
+ * <p><b>Warning!</b> It is not recommended to transfer secrets to third parties. Use a library instead to
+ * generate the QR yourself.</p>
+ * 
  * @author ralph
  *
  */
@@ -20,62 +23,85 @@ public class GoogleApiQrGenerator {
 
 	/**
 	 * Return the QR image url thanks to Google. This can be shown to the user and scanned by the authenticator program
-	 * as an easy way to enter the secret.
+	 * as an easy way to enter the secret. The image has the {@link #DEFAULT_QR_DIMENSION} size.
 	 * 
-	 * @param keyId
-	 *            Name of the key that you want to show up in the users authentication application. Should already be
-	 *            URL encoded.
-	 * @param secret
-	 *            Secret string that will be used when generating the current number.
-	 *            
+	 * @param generator - The OTP generator to create a QR image for.
+	 * @param issuer - issuer of the key, may be {@code null} but must not contain colon
+	 * @param account - name of account
 	 * @return the image URL
 	 * @throws UnsupportedEncodingException when the URL encoding fails
 	 */
-	public static String getQrImageUrl(String keyId, ISecret secret) throws UnsupportedEncodingException {
-		return getQrImageUrl(keyId, secret, OtpGen.DEFAULT_OTP_LENGTH, DEFAULT_QR_DIMENSION);
+	public static String getQrImageUrl(TotpGen generator, String issuer, String account) throws UnsupportedEncodingException {
+		return getQrImageUrl(generator.getOtpAuthUri(issuer, account), DEFAULT_QR_DIMENSION);
 	}
-
-	/**
-	 * Return the QR image url thanks to Google. This can be shown to the user and scanned by the authenticator program
-	 * as an easy way to enter the secret.
-	 *
-	 * @param keyId
-	 *            Name of the key that you want to show up in the users authentication application. Should already be
-	 *            URL encoded.
-	 * @param secret
-	 *            Secret string that will be used when generating the current number.
-	 * @param numDigits
-	 *            The number of digits of the OTP.
-	 * @return the image URL
-	 * @throws UnsupportedEncodingException when the URL encoding fails
-	 */
-	public static String getQrImageUrl(String keyId, ISecret secret, int numDigits) throws UnsupportedEncodingException {
-		return getQrImageUrl(keyId, secret, numDigits, DEFAULT_QR_DIMENSION);
-	}
-
+	
 	/**
 	 * Return the QR image url thanks to Google. This can be shown to the user and scanned by the authenticator program
 	 * as an easy way to enter the secret.
 	 * 
-	 * @param keyId
-	 *            Name of the key that you want to show up in the users authentication application. Should already be
-	 *            URL encoded.
-	 * @param secret
-	 *            Secret string that will be used when generating the current number.
-	 * @param numDigits
-	 *            The number of digits of the OTP. Can be set to {@link OtpGen#DEFAULT_OTP_LENGTH}.
-	 * @param imageDimension
-	 *            The dimension of the image, width and height. Can be set to {@link #DEFAULT_QR_DIMENSION}.
+	 * @param generator - The OTP generator to create a QR image for.
+	 * @param issuer - issuer of the key, may be {@code null} but must not contain colon
+	 * @param account - name of account
+	 * @param imageDimension - The dimension of the image, width and height. Can be set to {@link #DEFAULT_QR_DIMENSION}.
 	 * @return the image URL
 	 * @throws UnsupportedEncodingException when the URL encoding fails
 	 */
-	public static String getQrImageUrl(String keyId, ISecret secret, int numDigits, int imageDimension) throws UnsupportedEncodingException {
+	public static String getQrImageUrl(TotpGen generator, String issuer, String account, int imageDimension) throws UnsupportedEncodingException {
+		return getQrImageUrl(generator.getOtpAuthUri(issuer, account), imageDimension);
+	}
+	
+	/**
+	 * Return the QR image url thanks to Google. This can be shown to the user and scanned by the authenticator program
+	 * as an easy way to enter the secret. The image has the {@link #DEFAULT_QR_DIMENSION} size.
+	 * 
+	 * @param otpUri - the URI to be shown on the QR code
+	 * @return the image URL
+	 * @throws UnsupportedEncodingException when the URL encoding fails
+	 */
+	public static String getQrImageUrl(URI otpUri) throws UnsupportedEncodingException {
+		return getQrImageUrl(otpUri.toString(), DEFAULT_QR_DIMENSION);
+	}
+		
+	/**
+	 * Return the QR image url thanks to Google. This can be shown to the user and scanned by the authenticator program
+	 * as an easy way to enter the secret.
+	 * 
+	 * @param otpUri - the URI to be shown on the QR code
+	 * @param imageDimension - The dimension of the image, width and height. Can be set to {@link #DEFAULT_QR_DIMENSION}.
+	 * @return the image URL
+	 * @throws UnsupportedEncodingException when the URL encoding fails
+	 */
+	public static String getQrImageUrl(URI otpUri, int imageDimension) throws UnsupportedEncodingException {
+		return getQrImageUrl(otpUri.toString(), imageDimension);
+	}
+	
+	/**
+	 * Return the QR image url thanks to Google. This can be shown to the user and scanned by the authenticator program
+	 * as an easy way to enter the secret. The image has the {@link #DEFAULT_QR_DIMENSION} size.
+	 * 
+	 * @param otpUri - the URI to be shown on the QR code
+	 * @return the image URL
+	 * @throws UnsupportedEncodingException when the URL encoding fails
+	 */
+	public static String getQrImageUrl(String otpUri) throws UnsupportedEncodingException {
+		return getQrImageUrl(otpUri.toString(), DEFAULT_QR_DIMENSION);
+	}
+	
+	/**
+	 * Return the QR image url thanks to Google. This can be shown to the user and scanned by the authenticator program
+	 * as an easy way to enter the secret.
+	 * 
+	 * @param otpUri - the URI to be shown on the QR code
+	 * @param imageDimension - The dimension of the image, width and height. Can be set to {@link #DEFAULT_QR_DIMENSION}.
+	 * @return the image URL
+	 * @throws UnsupportedEncodingException when the URL encoding fails
+	 */
+	public static String getQrImageUrl(String otpUri, int imageDimension) throws UnsupportedEncodingException {
 		StringBuilder sb = new StringBuilder(128);
 		sb.append("https://chart.googleapis.com/chart?chs=" + imageDimension + "x" + imageDimension + "&cht=qr&chl="
 				+ imageDimension + "x" + imageDimension + "&chld=M|0&cht=qr&chl=");
-		sb.append(URLEncoder.encode(secret.getOtpAuthUri(keyId, numDigits), StandardCharsets.UTF_8));
-		System.out.println(sb.toString());
+		sb.append(URLEncoder.encode(otpUri, StandardCharsets.UTF_8));
 		return sb.toString();
 	}
-
+		
 }

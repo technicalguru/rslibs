@@ -23,12 +23,4 @@ public interface ISecret {
 	 */
 	public String encode();
 
-	/**
-	 * Returns the otpauth URI scheme to be used e.g. for QR codes.
-	 * @param keyId - the key ID
-	 * @param numDigits - numbe rof digits.
-	 * @return the URI to be used when adding to external auth generators.
-	 */
-	public String getOtpAuthUri(String keyId, int numDigits);
-
 }
