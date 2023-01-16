@@ -24,6 +24,33 @@ public class GoogleApiQrGenerator {
 	/**
 	 * Return the QR image url thanks to Google. This can be shown to the user and scanned by the authenticator program
 	 * as an easy way to enter the secret. The image has the {@link #DEFAULT_QR_DIMENSION} size.
+	 * <p>Issuer and account will be taken from the TOTP.</p>
+	 * 
+	 * @param generator - The OTP generator to create a QR image for.
+	 * @return the image URL
+	 * @throws UnsupportedEncodingException when the URL encoding fails
+	 */
+	public static String getQrImageUrl(TotpGen generator) throws UnsupportedEncodingException {
+		return getQrImageUrl(generator.getUri(), DEFAULT_QR_DIMENSION);
+	}
+	
+	/**
+	 * Return the QR image url thanks to Google. This can be shown to the user and scanned by the authenticator program
+	 * as an easy way to enter the secret.
+	 * <p>Issuer and account will be taken from the TOTP.</p>
+	 * 
+	 * @param generator - The OTP generator to create a QR image for.
+	 * @param imageDimension - The dimension of the image, width and height. Can be set to {@link #DEFAULT_QR_DIMENSION}.
+	 * @return the image URL
+	 * @throws UnsupportedEncodingException when the URL encoding fails
+	 */
+	public static String getQrImageUrl(TotpGen generator, int imageDimension) throws UnsupportedEncodingException {
+		return getQrImageUrl(generator.getUri(), imageDimension);
+	}
+	
+	/**
+	 * Return the QR image url thanks to Google. This can be shown to the user and scanned by the authenticator program
+	 * as an easy way to enter the secret. The image has the {@link #DEFAULT_QR_DIMENSION} size.
 	 * 
 	 * @param generator - The OTP generator to create a QR image for.
 	 * @param issuer - issuer of the key, may be {@code null} but must not contain colon
@@ -32,7 +59,7 @@ public class GoogleApiQrGenerator {
 	 * @throws UnsupportedEncodingException when the URL encoding fails
 	 */
 	public static String getQrImageUrl(TotpGen generator, String issuer, String account) throws UnsupportedEncodingException {
-		return getQrImageUrl(generator.getOtpAuthUri(issuer, account), DEFAULT_QR_DIMENSION);
+		return getQrImageUrl(generator.getUri(issuer, account), DEFAULT_QR_DIMENSION);
 	}
 	
 	/**
@@ -47,7 +74,7 @@ public class GoogleApiQrGenerator {
 	 * @throws UnsupportedEncodingException when the URL encoding fails
 	 */
 	public static String getQrImageUrl(TotpGen generator, String issuer, String account, int imageDimension) throws UnsupportedEncodingException {
-		return getQrImageUrl(generator.getOtpAuthUri(issuer, account), imageDimension);
+		return getQrImageUrl(generator.getUri(issuer, account), imageDimension);
 	}
 	
 	/**

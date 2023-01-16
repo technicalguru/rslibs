@@ -166,8 +166,8 @@ public class TotpGen {
 	 * <p>Please refer to <a href="https://github.com/google/google-authenticator/wiki/Key-Uri-Format">otpauth URI scheme</a>.</p>
 	 * @return the URI to be used when adding to external auth generators.
 	 */
-	public URI getOtpAuthUri() {
-		return getOtpAuthUri(issuer, account);
+	public URI getUri() {
+		return getUri(issuer, account);
 	}
 
 	/**
@@ -177,8 +177,8 @@ public class TotpGen {
 	 * @param account - name of account
 	 * @return the URI to be used when adding to external auth generators.
 	 */
-	public URI getOtpAuthUri(String account) {
-		return getOtpAuthUri(issuer, account);
+	public URI getUri(String account) {
+		return getUri(issuer, account);
 	}
 
 	/**
@@ -188,7 +188,7 @@ public class TotpGen {
 	 * @param account - name of account
 	 * @return the URI to be used when adding to external auth generators.
 	 */
-	public URI getOtpAuthUri(String issuer, String account) {
+	public URI getUri(String issuer, String account) {
 		if (account == null) account = this.account;
 		if (account == null) throw new RuntimeException("Cannot use empty account string");
 		StringBuilder rc = new StringBuilder();
@@ -215,6 +215,20 @@ public class TotpGen {
 		} catch (URISyntaxException e) {
 			throw new RuntimeException("Cannot create URI: ", e);
 		}
+	}
+
+	/**
+	 * Validates an OTP. 
+	 * 
+	 * <p>WARNING: This requires a system clock that is in sync with the world.</p>
+	 * 
+	 * @param otp
+	 *            One time password provided by the user from their authenticator application.
+	 * @return True if the OTP matches the calculated OTP at exactly this moment.
+	 * @throws GeneralSecurityException when the verification cannot be performed
+	 */
+	public boolean verify(String otp) throws GeneralSecurityException {
+		return verify(otp, 0L, System.currentTimeMillis(), timeStepSeconds, numDigits);
 	}
 
 	/**

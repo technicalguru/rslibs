@@ -10,10 +10,10 @@
 		<project.home>https://github.com/technicalguru/rslibs</project.home>
 	</properties>
 	
-	<artifactId>otp</artifactId>
+	<artifactId>totp</artifactId>
 	<packaging>bundle</packaging>
 	<name>${project.groupId}.${project.artifactId}</name>
-	<description>Provides OTP</description>
+	<description>Provides TOTP</description>
 	
 	<dependencies>
 		<dependency>
