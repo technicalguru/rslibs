@@ -22,10 +22,9 @@ import java.util.Comparator;
 /**
  * Default comparator for objects.
  * The comparator compares NULL-safe and evaluates interfaces that help
- * when comparing, such as {@link Comparable}, {@link IDisplayProvider}
- * and {@link IDisplayable}. If none of these interfaces are implemented
- * then the {@link Object#toString()} values will be ignore with
- * {@link String#compareToIgnoreCase(String)}.
+ * when comparing, such as {@link Comparable}. If none of these 
+ * interfaces are implemented then the {@link Object#toString()} 
+ * values will be ignore with {@link String#compareToIgnoreCase(String)}.
  * @author ralph
  *
  */
