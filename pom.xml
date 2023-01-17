@@ -13,7 +13,7 @@
 	</properties>
 
 	<artifactId>libs</artifactId>
-	<version>4.0.3-SNAPSHOT</version>
+	<version>4.0.3</version>
 	<packaging>pom</packaging>
 
 	<url>https://github.com/technicalguru/rslibs</url>
@@ -24,7 +24,7 @@
 		<connection>scm:git:https://github.com/technicalguru/rslibs.git</connection>
 		<developerConnection>scm:git:https://github.com/technicalguru/rslibs.git</developerConnection>
 		<url>https://github.com/technicalguru/rslibs</url>
-		<tag>v3.1.0</tag>
+		<tag>libs-4.0.3</tag>
 	</scm>
 
 	<issueManagement>
