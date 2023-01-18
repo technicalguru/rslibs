@@ -354,7 +354,7 @@ public class YamlUtils {
 	 * Parses multiple documents froma URL.
 	 * <p>It is expected that all documents are of the same class.</p>
 	 * @param <T> the class expected to be parsed
-	 * @param URL - the URL to read from
+	 * @param url - the URL to read from
 	 * @param clazz - the expected class of the documents
 	 * @return the list of documents parsed
 	 * @throws IOException - when the input cannot be read

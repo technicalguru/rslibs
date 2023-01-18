@@ -528,7 +528,7 @@ public class CommonUtils {
 	 * <p>Useful to convert a string into a collection of enum values.</p>
 	 * @param <T> - the Enum type
 	 * @param s - the string to split
-	 * @param delim
+	 * @param delim - the delimiter to split upon
 	 * @param enumClass - the Enum class
 	 * @return the list of Enum values
 	 * @since 3.1.0
