@@ -112,7 +112,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	 * @param roundingMode the rounding mode to be used
 	 * @param mathContext the {@link MathContext} to be used
 	 * @param scale the scale to be used
-	 * @deprecated use a specific currency {@link #MonetaryValue(BigDecimal, Currency, RoundingMode, mathContext, scale)}.
+	 * @deprecated use a specific currency {@link #MonetaryValue(BigDecimal, Currency, RoundingMode, MathContext, scale)}.
 	 */
 	@Deprecated
 	public MonetaryValue(BigDecimal value, RoundingMode roundingMode, MathContext mathContext, int scale) {
@@ -148,6 +148,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	/**
 	 * Constructor.
 	 * @param value the monetary value
+	 * @param currency the currency (can be null, default is currency of default locale)
 	 */
 	public MonetaryValue(CharSequence value, Currency currency) {
 		this(new BigDecimal(value.toString(), MATH_CONTEXT), currency);
@@ -165,6 +166,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	/**
 	 * Constructor.
 	 * @param value the monetary value
+	 * @param currency the currency (can be null, default is currency of default locale)
 	 */
 	public MonetaryValue(double value, Currency currency) {
 		this(new BigDecimal(value, MATH_CONTEXT), currency);
@@ -182,6 +184,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	/**
 	 * Constructor.
 	 * @param value the monetary value
+	 * @param currency the currency (can be null, default is currency of default locale)
 	 */
 	public MonetaryValue(BigInteger value, Currency currency) {
 		this(new BigDecimal(value, MATH_CONTEXT), currency);
@@ -199,6 +202,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	/**
 	 * Constructor.
 	 * @param value the monetary value
+	 * @param currency the currency (can be null, default is currency of default locale)
 	 */
 	public MonetaryValue(int value, Currency currency) {
 		this(new BigDecimal(value, MATH_CONTEXT), currency);
@@ -216,6 +220,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	/**
 	 * Constructor.
 	 * @param value the monetary value
+	 * @param currency the currency (can be null, default is currency of default locale)
 	 */
 	public MonetaryValue(long value, Currency currency) {
 		this(new BigDecimal(value, MATH_CONTEXT), currency);
