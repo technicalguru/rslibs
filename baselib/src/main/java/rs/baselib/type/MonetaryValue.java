@@ -112,7 +112,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	 * @param roundingMode the rounding mode to be used
 	 * @param mathContext the {@link MathContext} to be used
 	 * @param scale the scale to be used
-	 * @deprecated use a specific currency {@link #MonetaryValue(BigDecimal, Currency, RoundingMode, MathContext, scale)}.
+	 * @deprecated use a specific currency {@link #MonetaryValue(BigDecimal, Currency, RoundingMode, MathContext, int)}.
 	 */
 	@Deprecated
 	public MonetaryValue(BigDecimal value, RoundingMode roundingMode, MathContext mathContext, int scale) {
