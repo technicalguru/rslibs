@@ -13,7 +13,7 @@
 	</properties>
 
 	<artifactId>libs</artifactId>
-	<version>4.0.3-SNAPSHOT</version>
+	<version>4.0.4-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<url>https://github.com/technicalguru/rslibs</url>
