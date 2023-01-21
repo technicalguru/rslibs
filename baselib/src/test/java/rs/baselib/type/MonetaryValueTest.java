@@ -19,6 +19,8 @@ package rs.baselib.type;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Currency;
+
 import org.junit.Test;
 
 /**
@@ -30,81 +32,81 @@ public class MonetaryValueTest {
 
 	@Test
 	public void testToString1() {
-		MonetaryValue value = new MonetaryValue("12.23");
-		assertEquals("toString() does not work correctly", "12.23", value.toString());
+		MonetaryValue value = new MonetaryValue("12.23", Currency.getInstance("EUR"));
+		assertEquals("toString() does not work correctly", "12.23 €", value.toString());
 	}
 	
 	@Test
 	public void testToString2() {
-		MonetaryValue value = new MonetaryValue("12.233");
-		assertEquals("toString() does not work correctly", "12.23", value.toString());
+		MonetaryValue value = new MonetaryValue("12.233", Currency.getInstance("EUR"));
+		assertEquals("toString() does not work correctly", "12.23 €", value.toString());
 	}
 	
 	@Test
 	public void testToString3() {
-		MonetaryValue value = new MonetaryValue("-12.233");
-		assertEquals("toString() does not work correctly", "-12.23", value.toString());
+		MonetaryValue value = new MonetaryValue("-12.233", Currency.getInstance("EUR"));
+		assertEquals("toString() does not work correctly", "-12.23 €", value.toString());
 	}
 	
 	@Test
 	public void testToString4() {
-		MonetaryValue value = new MonetaryValue("-0.233");
-		assertEquals("toString() does not work correctly", "-0.23", value.toString());
+		MonetaryValue value = new MonetaryValue("-0.233", Currency.getInstance("EUR"));
+		assertEquals("toString() does not work correctly", "-0.23 €", value.toString());
 	}
 	
 	@Test
 	public void testToString5() {
-		MonetaryValue value = new MonetaryValue("0.00");
-		assertEquals("toString() does not work correctly", "0.00", value.toString());
+		MonetaryValue value = new MonetaryValue("0.00", Currency.getInstance("EUR"));
+		assertEquals("toString() does not work correctly", "0.00 €", value.toString());
 	}
 	
 	@Test
 	public void testToString6() {
-		MonetaryValue value = MonetaryValue.ZERO;
-		assertEquals("toString() does not work correctly", "0.00", value.toString());
+		MonetaryValue value = MonetaryValue.zero(Currency.getInstance("EUR"));
+		assertEquals("toString() does not work correctly", "0.00 €", value.toString());
 	}
 	
 	@Test
 	public void testToString7() {
-		MonetaryValue value = new MonetaryValue(3.0);
-		assertEquals("toString() does not work correctly", "3.00", value.toString());
+		MonetaryValue value = new MonetaryValue(3.0, Currency.getInstance("EUR"));
+		assertEquals("toString() does not work correctly", "3.00 €", value.toString());
 	}
 	
 	@Test
 	public void testToString8() {
-		MonetaryValue value = new MonetaryValue(-2.3);
-		assertEquals("toString() does not work correctly", "-2.30", value.toString());
+		MonetaryValue value = new MonetaryValue(-2.3, Currency.getInstance("EUR"));
+		assertEquals("toString() does not work correctly", "-2.30 €", value.toString());
 	}
 	
 	@Test
 	public void testToString9() {
-		MonetaryValue value = new MonetaryValue(-0.011);
-		assertEquals("toString() does not work correctly", "-0.01", value.toString());
+		MonetaryValue value = new MonetaryValue(-0.011, Currency.getInstance("EUR"));
+		assertEquals("toString() does not work correctly", "-0.01 €", value.toString());
 	}
 	
 	@Test
 	public void testAdd() {
-		MonetaryValue value = new MonetaryValue(5.23).add(0.005);
-		assertEquals("multiplication does not work correctly", new MonetaryValue(5.24), value);
+		MonetaryValue value = new MonetaryValue(5.23, Currency.getInstance("EUR")).add(0.005);
+		assertEquals("multiplication does not work correctly", new MonetaryValue(5.24, Currency.getInstance("EUR")), value);
 	}
 
 	
 	@Test
 	public void testSubtract() {
-		MonetaryValue value = new MonetaryValue(5.23).subtract(0.005);
-		assertEquals("multiplication does not work correctly", new MonetaryValue(5.22), value);
+		MonetaryValue value = new MonetaryValue(5.23, Currency.getInstance("EUR")).subtract(0.005);
+		assertEquals("multiplication does not work correctly", new MonetaryValue(5.22, Currency.getInstance("EUR")), value);
 	}
 
 	@Test
 	public void testMultiply() {
-		MonetaryValue value = new MonetaryValue(5.23).multiply(0.5);
-		assertEquals("multiplication does not work correctly", new MonetaryValue(2.62), value);
+		MonetaryValue value = new MonetaryValue(5.23, Currency.getInstance("EUR")).multiply(0.5);
+		assertEquals("multiplication does not work correctly", new MonetaryValue(2.62, Currency.getInstance("EUR")), value);
 	}
 
 	@Test
 	public void testDivide() {
-		MonetaryValue value = new MonetaryValue(5.23).divide(2);
-		assertEquals("multiplication does not work correctly", new MonetaryValue(2.62), value);
+		MonetaryValue value = new MonetaryValue(5.23, Currency.getInstance("EUR")).divide(2);
+		assertEquals("multiplication does not work correctly", new MonetaryValue(2.62, Currency.getInstance("EUR")), value);
 	}
 
 }
