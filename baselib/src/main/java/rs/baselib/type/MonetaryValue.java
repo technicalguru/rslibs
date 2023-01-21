@@ -129,7 +129,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	 */
 	public MonetaryValue(BigDecimal value, Currency currency, RoundingMode roundingMode, MathContext mathContext, int scale) {
 		this.amount = value.setScale(scale, roundingMode);
-		this.currency = currency != null ? currency : Currency.getInstance(Locale.getDefault());
+		this.currency = currency != null ? currency : (Locale.getDefault() != null ? Currency.getInstance(Locale.getDefault()) : Currency.getInstance("EUR"));
 		this.roundingMode = roundingMode;
 		this.scale = scale;
 		this.mathContext = mathContext;
@@ -255,7 +255,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	 * @param currency the currency (can be null, default is currency of default locale)
 	 */
 	public void setCurrency(Currency currency) {
-		this.currency = currency != null ? currency : Currency.getInstance(Locale.getDefault());
+		this.currency = currency != null ? currency : (Locale.getDefault() != null ? Currency.getInstance(Locale.getDefault()) : Currency.getInstance("EUR"));
 	}
 
 	/**
