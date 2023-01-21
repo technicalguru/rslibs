@@ -4,14 +4,17 @@
 package rs.jackson;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.net.URL;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 /**
@@ -21,6 +24,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
  */
 public class JsonUtils {
 
+	private static JsonFactory  jsonFactory;
 	private static ObjectMapper jsonMapper;
 	
 	/**
@@ -222,11 +226,83 @@ public class JsonUtils {
 	 */
 	public static ObjectMapper getJsonMapper() {
 		if (jsonMapper == null) {
-			jsonMapper = new ObjectMapper();
+			jsonMapper = new ObjectMapper(getJsonFactory());
 			jsonMapper.registerModule(new JavaTimeModule());
 			jsonMapper.setSerializationInclusion(Include.NON_NULL);
 		}
 		return jsonMapper;
+	}
+
+	public static JsonFactory getJsonFactory() {
+		if (jsonFactory == null) {
+			jsonFactory = new JsonFactory();
+		}
+		return jsonFactory;
+	}
+	
+	/**
+	 * Returns a parser for the given file.
+	 * @param file - the file to be parsed
+	 * @return the parser
+	 * @throws IOException - when the input cannot be read
+	 */
+	public static JsonParser getParser(File file) throws IOException {
+		return getJsonFactory().createParser(file);
+	}
+
+	/**
+	 * Returns a parser for the given string.
+	 * @param content - the content
+	 * @return the parser
+	 * @throws IOException - when the input cannot be read
+	 * @see com.fasterxml.jackson.core.JsonFactory#createParser(java.lang.String)
+	 */
+	public static JsonParser getParser(String content) throws IOException {
+		return getJsonFactory().createParser(content);
+	}
+
+	/**
+	 * Returns a parser for the given URL resource.
+	 * @param url - the URL
+	 * @return the parser
+	 * @throws IOException - when the input cannot be read
+	 * @see com.fasterxml.jackson.core.JsonFactory#createParser(java.net.URL)
+	 */
+	public static JsonParser getParser(URL url) throws IOException {
+		return getJsonFactory().createParser(url);
+	}
+
+	/**
+	 * Returns a parser for the given input stream.
+	 * @param in - the input stream
+	 * @return the parser
+	 * @throws IOException - when the input cannot be read
+	 * @see com.fasterxml.jackson.core.JsonFactory#createParser(java.io.InputStream)
+	 */
+	public static JsonParser getParser(InputStream in) throws IOException {
+		return getJsonFactory().createParser(in);
+	}
+
+	/**
+	 * Returns a parser for the given reader.
+	 * @param r - the reader
+	 * @return the parser
+	 * @throws IOException - when the input cannot be read
+	 * @see com.fasterxml.jackson.core.JsonFactory#createParser(java.io.Reader)
+	 */
+	public static JsonParser getParser(Reader r) throws IOException {
+		return getJsonFactory().createParser(r);
+	}
+
+	/**
+	 * Returns a parser for the given bytes.
+	 * @param data - the data in bytes
+	 * @return the parser
+	 * @throws IOException - when the input cannot be read
+	 * @see com.fasterxml.jackson.core.JsonFactory#createParser(byte[])
+	 */
+	public static JsonParser getParser(byte[] data) throws IOException {
+		return getJsonFactory().createParser(data);
 	}
 
 }
