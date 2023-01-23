@@ -155,7 +155,7 @@ public class CommonUtils {
 	/**
 	 * Formats the given date.
 	 * @param date date to format
-	 * @return the formatted string (see {@link #DATE_TIME_FORMATTER})
+	 * @return the formatted string (see {@link #DATE_TIME_FORMATTER()})
 	 * @deprecated - Use JavaTime interfaces instead
 	 */
 	@Deprecated
@@ -167,7 +167,7 @@ public class CommonUtils {
 	/**
 	 * Formats the given day.
 	 * @param day day to format
-	 * @return the formatted string (see {@link #DATE_FORMATTER})
+	 * @return the formatted string (see {@link #DATE_FORMATTER()})
 	 */
 	public static String toString(RsDay day) {
 		if ((day == null) || (day.getTimeInMillis() == -TimeZone.getDefault().getOffset(day.getTimeInMillis()))) return "";
@@ -187,7 +187,7 @@ public class CommonUtils {
 	/**
 	 * Formats the given month (1st day of month).
 	 * @param month date to format
-	 * @return the formatted string (see {@link #DATE_FORMATTER})
+	 * @return the formatted string (see {@link #DATE_FORMATTER()})
 	 */
 	public static String toString(RsMonth month) {
 		if ((month == null) || (month.getTimeInMillis() == 0)) return "";
