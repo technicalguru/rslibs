@@ -23,10 +23,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import rs.baselib.time.LocalMonth;
+
 /**
  * A month.
  * @author Ralph
- * @deprecated - Use JavaTime interfaces instead
+ * @deprecated - Use {@link LocalMonth} instead
  */
 @Deprecated
 public class RsMonth extends RsDate {
