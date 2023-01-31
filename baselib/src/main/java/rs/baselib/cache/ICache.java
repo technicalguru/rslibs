@@ -15,7 +15,7 @@
  *  License along with RS Library.  If not, see 
  *  <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
-package rs.baselib.util;
+package rs.baselib.cache;
 
 import java.util.Collection;
 import java.util.Set;
