@@ -55,7 +55,6 @@ public class PersonBuilderTest {
 		PersonBuilder b = $Person().withoutFirstNames().withoutLastNames().withoutGenders();
 		for (int i=0; i<10000; i++) {
 			Person actual = b.build();
-			System.out.println(actual.firstName+" "+actual.lastName+" "+actual.gender+" "+actual.birthday+" "+actual.age);
 			assertNotNull("No person generated", actual);
 			assertNull("First name was not empty", actual.firstName);
 			assertNull("Last name was not empty", actual.lastName);
