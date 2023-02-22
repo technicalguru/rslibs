@@ -15,7 +15,7 @@
  *  License along with RS Library.  If not, see 
  *  <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
-package rs.baselib.util;
+package rs.baselib.cache;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -27,7 +27,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Tests the {@link rs.baselib.util.SoftMapCache}.
+ * Tests the {@link rs.baselib.cache.SoftMapCache}.
  * @author ralph
  *
  */
