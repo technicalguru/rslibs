@@ -54,6 +54,22 @@ public class BuilderUtils {
 	}
 	
 	/**
+	 * Returns an array of objects.
+	 * @param count the number of objects to create
+	 * @param builder the builder to be used
+	 * @param <T> type of objects to be built
+	 * @return the array of objects built
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T[] arrayOf(int count, Builder<T> builder) {
+		List<T> rc = new ArrayList<>();
+		for (int i=0; i<count; i++) {
+			rc.add(builder.build());
+		}
+		return (T[])listOf(count, builder).toArray();
+	}
+	
+	/**
 	 * Returns the String Builder factory.
 	 * @return the builder for strings.
 	 */
