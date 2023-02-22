@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.commons.lang3.RandomUtils;
 
 /**
- * Selects values from an enumeration (randomly)
+ * Provided values as a list from another builder (randomly).
  * @author ralph
  *
  */

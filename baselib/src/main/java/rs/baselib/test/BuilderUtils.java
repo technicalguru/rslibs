@@ -101,5 +101,13 @@ public class BuilderUtils {
 		return new PersonBuilder();
 	}
 
+	/**
+	 * Returns the random select Builder factory.
+	 * @return the builder for random items from a list.
+	 */
+	public static <T> RandomSelectBuilder<T> $Random() {
+		return new RandomSelectBuilder<T>();
+	}
+
 
 }
