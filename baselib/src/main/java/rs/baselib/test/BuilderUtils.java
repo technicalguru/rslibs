@@ -77,5 +77,13 @@ public class BuilderUtils {
 		return new LongBuilder();
 	}
 
+	/**
+	 * Returns the Person Builder factory.
+	 * @return the builder for Persons.
+	 */
+	public static PersonBuilder $Person() {
+		return new PersonBuilder();
+	}
+
 
 }
