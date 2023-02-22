@@ -78,6 +78,14 @@ public class BuilderUtils {
 	}
 
 	/**
+	 * Returns the String Builder factory.
+	 * @return the builder for strings.
+	 */
+	public static RandomStringBuilder $RandomString() {
+		return new RandomStringBuilder();
+	}
+
+	/**
 	 * Returns the Integer Builder factory.
 	 * @return the builder for integers.
 	 */
@@ -107,6 +115,14 @@ public class BuilderUtils {
 	 */
 	public static <T> RandomSelectBuilder<T> $Random() {
 		return new RandomSelectBuilder<T>();
+	}
+
+	/**
+	 * Returns the enumeration Builder factory.
+	 * @return the builder for enumerations.
+	 */
+	public static <T extends Enum<T>> EnumerationBuilder<T> $Enum(Class<T> enumClass) {
+		return new EnumerationBuilder<>(enumClass);
 	}
 
 
