@@ -474,7 +474,7 @@ Joachim
 Tilman
 Diana
 Kerstin
-VIRGINIA 
+Virginia 
 Kyra
 Dörte
 Valeriia
@@ -634,7 +634,7 @@ Ramona
 Dinah
 Jacqueline
 Oktay
-LYN
+Lynn
 Geva
 Suhel
 Dominik
@@ -803,7 +803,7 @@ Mirella
 Sayaka
 Kang
 Marko
-VERONICA
+Veronica
 Timm
 Luca
 Sibel
@@ -955,7 +955,7 @@ Ben
 Mohammad
 Tebin
 Chintan
-SHANNEN
+Shannen
 Orawit
 Vincenzo
 Julia Felizitas
@@ -1060,7 +1060,7 @@ Frederick
 Reuter
 Greg
 Ramita
-REBECCA
+Rebecca
 Candide
 Marja
 Adam
@@ -1215,7 +1215,7 @@ Rafik
 Manjana
 Karina
 Darijo
-AINHOA
+Ainhoa
 waifong
 Sofie
 Roger
@@ -1380,7 +1380,7 @@ Loganathan
 Gianrico
 Zoe
 Marla 
-DETLEF
+Detlef
 Sourabh
 Rosina 
 Catharina
