@@ -61,6 +61,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.slf4j.Logger;
@@ -1092,7 +1093,11 @@ public class CommonUtils {
 	 */
 	public static String loadContent(InputStream in, Charset charset) throws IOException {
 		if (charset == null) charset = Charset.defaultCharset();
-		return loadContent(new InputStreamReader(in, charset));
+		try {
+			return IOUtils.toString(in, charset);
+		} finally {
+			in.close();
+		}
 	}
 
 	/**
@@ -1102,19 +1107,10 @@ public class CommonUtils {
 	 * @throws IOException when content of reader cannot be loaded
 	 */
 	public static String loadContent(Reader reader) throws IOException {
-		BufferedReader r = null;
 		try {
-			StringBuilder rc = new StringBuilder(1000);
-			r = new BufferedReader(reader);
-			String line = null;
-			while ((line = r.readLine()) != null) {
-				rc.append(line);
-				rc.append('\n');
-			}
-			return rc.toString();
+			return IOUtils.toString(reader);
 		} finally {
-			if (r != null) r.close();
-			else reader.close();
+			reader.close();
 		}
 	}
 
