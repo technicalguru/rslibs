@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonFactory;
@@ -303,6 +306,38 @@ public class JsonUtils {
 	 */
 	public static JsonParser getParser(byte[] data) throws IOException {
 		return getJsonFactory().createParser(data);
+	}
+
+	/**
+	 * Creates a {@link TypeReference} reference for a list of given class.
+	 * @param <T> the type of the items
+	 * @param clazz the class of the items
+	 * @return the {@link TypeReference} for a list of these items
+	 */
+	public static <T> TypeReference<ArrayList<T>> getListTypeRef(Class<T> clazz) {
+		return new TypeReference<ArrayList<T>>() {};
+	}
+	
+	/**
+	 * Creates a {@link TypeReference} reference for a set of given class.
+	 * @param <T> the type of the items
+	 * @param clazz the class of the items
+	 * @return the {@link TypeReference} for a set of these items
+	 */
+	public static <T> TypeReference<Set<T>> getSetTypeRef(Class<T> clazz) {
+		return new TypeReference<Set<T>>() {};
+	}
+	
+	/**
+	 * Creates a {@link TypeReference} reference for a map of given key and value classes.
+	 * @param <K> type of keys
+	 * @param <V> type of values
+	 * @param keyClass class of keys
+	 * @param valueClass class of values
+	 * @return the {@link TypeReference} for a map of these types
+	 */
+	public static <K,V> TypeReference<Map<K,V>> getMapTypeRef(Class<K> keyClass, Class<V> valueClass) {
+		return new TypeReference<Map<K,V>>() {};
 	}
 
 }
