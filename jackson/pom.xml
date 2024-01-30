@@ -3,12 +3,12 @@
 	<parent>
 		<groupId>eu.ralph-schuster</groupId>
 		<artifactId>libs</artifactId>
-		<version>4.1.1</version>
+		<version>4.1.2</version>
 	</parent>
 
 	<properties>
 		<project.home>https://github.com/technicalguru/rslibs</project.home>
-		<jackson.version>2.14.2</jackson.version>
+		<jackson.version>2.16.1</jackson.version>
 	</properties>
 	
 	<artifactId>jackson</artifactId>
