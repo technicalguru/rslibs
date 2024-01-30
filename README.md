@@ -6,10 +6,10 @@ The RS Library project was established to support my daily Java development. It 
 
 RS Library is divided into four areas, each of them published as a Maven module to RS Library:
 
- * [Base Library](https://github.com/technicalguru/rslibs/baselib) – provides non-specific code such as Java language tasks, IO tasks, bean handling, Configuration helpers and many more.
- * [Templating](https://github.com/technicalguru/rslibs/templating) – provides an easy Typo3-like way of processing text templates within Java.
- * [Jackson](https://github.com/technicalguru/rslibs/jackson) – provides Jackson-based serialization/deserialization with JSON and YAML
- * [TOTP](https://github.com/technicalguru/rslibs/totp) – provides TOTP generation and verification library
+ * [Base Library](https://github.com/technicalguru/rslibs/blob/master/baselib/README.md) – provides non-specific code such as Java language tasks, IO tasks, bean handling, Configuration helpers and many more.
+ * [Templating](https://github.com/technicalguru/rslibs/blob/master/templating/README.md) – provides an easy Typo3-like way of processing text templates within Java.
+ * [Jackson](https://github.com/technicalguru/rslibs/blob/master/jackson/README.md) – provides Jackson-based serialization/deserialization with JSON and YAML
+ * [TOTP](https://github.com/technicalguru/rslibs/blob/master/otp/README.md) – provides TOTP generation and verification library
  
 Most of this code was created when I faced specific problems in my professional work. I usually work out solutions in private projects, test them there and then apply them to my professional work. That’s why few of my employers will find the same code in their products. However, the code was created outside of professional environments and therefore is my own intellectual property.
 
