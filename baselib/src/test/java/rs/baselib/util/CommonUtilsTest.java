@@ -22,6 +22,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
@@ -200,6 +201,16 @@ public class CommonUtilsTest {
 	@Test
 	public void testLoadContentString() throws IOException {
 		assertEquals("loadContent() does not work correctly", "finder-file4", CommonUtils.loadContent(FileFinder.find("finder-file4.txt").openStream()).trim());
+	}
+
+	@Test
+	public void testLoadContentWithNewline() throws IOException {
+		assertEquals("loadContent() does not work correctly", "finder-file5\n", CommonUtils.loadContent(new File("src/test/resources/finder-file5.txt")));
+	}
+
+	@Test
+	public void testLoadContentWithoutNewline() throws IOException {
+		assertEquals("loadContent() does not work correctly", "finder-file6", CommonUtils.loadContent(new File("src/test/resources/finder-file6.txt")));
 	}
 
 	@Test

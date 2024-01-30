@@ -8,12 +8,12 @@
 
 	<properties>
 		<project.home>https://github.com/technicalguru/rslibs</project.home>
-		<maven.bundle.version>5.1.2</maven.bundle.version>
+		<maven.bundle.version>5.1.8</maven.bundle.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
 	<artifactId>libs</artifactId>
-	<version>4.1.0</version>
+	<version>4.1.1</version>
 	<packaging>pom</packaging>
 
 	<url>https://github.com/technicalguru/rslibs</url>
@@ -24,7 +24,7 @@
 		<connection>scm:git:https://github.com/technicalguru/rslibs.git</connection>
 		<developerConnection>scm:git:https://github.com/technicalguru/rslibs.git</developerConnection>
 		<url>https://github.com/technicalguru/rslibs</url>
-		<tag>libs-4.1.0</tag>
+		<tag>libs-4.1.1</tag>
 	</scm>
 
 	<issueManagement>

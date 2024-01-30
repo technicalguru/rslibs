@@ -61,6 +61,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.slf4j.Logger;
@@ -229,7 +230,7 @@ public class CommonUtils {
 	}
 
 	/**
-	 * Checks for equality null-safe
+	 * Checks for equality null-safe.
 	 * @param o1 object 1
 	 * @param o2 object 2
 	 * @return true when both values are equal
@@ -241,6 +242,36 @@ public class CommonUtils {
 				return ((BigDecimal)o1).compareTo((BigDecimal)o2) == 0;
 			}
 			return o1.equals(o2);
+		}
+		return false;
+	}
+
+	/**
+	 * Checks strings for equality null-safe and case ignore.
+	 * <p>Strings will not be trimmed before test.</p>
+	 * @param o1 string 1
+	 * @param o2 string 2
+	 * @return true when both values are equal
+	 */
+	public static boolean equalsIgnoreCase(String o1, String o2) {
+		return equalsIgnoreCase(o1, o2, false);
+	}
+	
+	/**
+	 * Checks strings for equality null-safe and case ignore.
+	 * @param o1 string 1
+	 * @param o2 string 2
+	 * @param trim whether to trim strings before comparison
+	 * @return true when both values are equal
+	 */
+	public static boolean equalsIgnoreCase(String o1, String o2, boolean trim) {
+		if ((o1 == null) && (o2 == null)) return true;
+		if ((o1 != null) && (o2 != null)) {
+			if (trim) {
+				o1 = trim(o1);
+				o2 = trim(o2);
+			}
+			return o1.equalsIgnoreCase(o2);
 		}
 		return false;
 	}
@@ -1092,7 +1123,11 @@ public class CommonUtils {
 	 */
 	public static String loadContent(InputStream in, Charset charset) throws IOException {
 		if (charset == null) charset = Charset.defaultCharset();
-		return loadContent(new InputStreamReader(in, charset));
+		try {
+			return IOUtils.toString(in, charset);
+		} finally {
+			in.close();
+		}
 	}
 
 	/**
@@ -1102,19 +1137,10 @@ public class CommonUtils {
 	 * @throws IOException when content of reader cannot be loaded
 	 */
 	public static String loadContent(Reader reader) throws IOException {
-		BufferedReader r = null;
 		try {
-			StringBuilder rc = new StringBuilder(1000);
-			r = new BufferedReader(reader);
-			String line = null;
-			while ((line = r.readLine()) != null) {
-				rc.append(line);
-				rc.append('\n');
-			}
-			return rc.toString();
+			return IOUtils.toString(reader);
 		} finally {
-			if (r != null) r.close();
-			else reader.close();
+			reader.close();
 		}
 	}
 

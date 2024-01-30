@@ -1365,7 +1365,6 @@ Möllenhoff
 Löhden
 Horbach
 Finkbeiner
-VERONICA
 Otto
 Römer
 Urban
@@ -1609,7 +1608,6 @@ Beian
 Weintraub 
 Da Ana
 Oehne 
-H
 Bühring
 Bruns
 Albersmann
@@ -1805,7 +1803,7 @@ Tangemann
 Heller
 Dave
 Brinkmann
-CHENG
+Cheng
 Manthanakit
 Röttger
 Vanessa
@@ -2519,7 +2517,7 @@ Sebald
 Apsel-von zur Gathen
 Lason
 Drüge
-VIONNET
+Vionnet
 Langsdorf
 Kircher
 Pahlevan
@@ -2612,7 +2610,7 @@ Chau
 Lagemann
 Parbel
 Horstmann
-SEDLACEK
+Sedlacek
 Voigt
 Giunta
 Garcia Huertas
@@ -3161,7 +3159,7 @@ Ulfert
 Seva Göden
 Sickenberger
 Nowakowski
-REDDIG
+Reddig
 Gutzwiller
 Liuzza
 Jayant Sirdesai
