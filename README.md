@@ -16,10 +16,13 @@ Most of this code was created when I faced specific problems in my professional 
 RS Library modules are maintained in the same Maven project and, hence, follow the same release cycle. That means that each modules will have the same version numbers and are published at the same time.
 
 ## Latest Version
-Latest version is 4.1.1.
+Latest version is 5.0.0.
+
+## Upgrading v4 to v5
+V5 is a major release that removes several deprecated date and calendar classes. This includes the ``RsDate`` class and its descendants as well as some bean helper classes. They can be easily replaced nowadays with other standard libraries such as the Java Time API or commons-beans or alike. 
 
 ## Upgrading v3 to v4
-V4 is a major release that removes several deprecated or old classes. This includes the ``RsDate`` class and its descendants as well as some bean helper classes. They can be easily replaced nowadays with other standard libraries such as the Java Time API or commons-beans or alike. 
+V4 is a major release that marks several classes as deprecated. This includes the ``RsDate`` class and its descendants as well as some bean helper classes. They can be easily replaced nowadays with other standard libraries such as the Java Time API or commons-beans or alike. 
 
 ## Upgrading v2 to v3
 V3 is a major release that removes the Data APIs. They will not be maintained any longer - in favour of Spring Data Framework. Do not upgrade to this version when you need the Data API.
