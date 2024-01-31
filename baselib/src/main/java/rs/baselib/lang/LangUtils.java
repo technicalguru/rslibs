@@ -37,8 +37,6 @@ import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import rs.baselib.util.RsDate;
-
 /**
  * Reflection and language Utils.
  * @author ralph
@@ -385,98 +383,6 @@ public class LangUtils {
 		if (s.equals("y")) return true;
 		
 		return false;
-	}
-	
-	/**
-	 * Returns the date using the first {@link DateFormat} that produces a result.
-	 * @param o object to be transformed
-	 * @param formats formats to be used
-	 * @return the date if it could be parsed or <code>null</code>
-	 * @deprecated - Use JavaTime interfaces instead
-	 */
-	@Deprecated
-	public static RsDate getRsDate(Object o, DateFormat formats[]) {
-		return getRsDate(o, formats, null);
-	}
-	
-	/**
-	 * Returns the date using the first {@link DateFormat} that produces a result.
-	 * @param o object to be transformed
-	 * @param formats formats to be used
-	 * @param defaultValue value to be returned when object cannot be transformed.
-	 * @return the date if it could be parsed, the default value otherwise
-	 * @deprecated - Use JavaTime interfaces instead
-	 */
-	@Deprecated
-	public static RsDate getRsDate(Object o, DateFormat formats[], RsDate defaultValue) {
-		if (o == null) return defaultValue;
-		if (o instanceof RsDate) return (RsDate)o;
-		RsDate rc = null; 
-		for (DateFormat format : formats) {
-			rc = getRsDate(o, format, null, false);
-			if (rc != null) break;
-		}
-		if (rc == null) rc = defaultValue;
-		return rc;
-	}
-	
-	/**
-	 * Converts the object to a {@link RsDate}.
-	 * @param o object to be converted
-	 * @return {@link RsDate} value of object, <code>null</code> otherwise
-	 * @deprecated - Use JavaTime interfaces instead
-	 */
-	@Deprecated
-	public static RsDate getRsDate(Object o) {
-		return getRsDate(o, DateFormat.getDateTimeInstance(), null, true);
-	}
-
-	/**
-	 * Converts the object to a {@link RsDate}.
-	 * @param o object to be converted
-	 * @param format format to be applied
-	 * @return {@link RsDate} value of object, <code>null</code> otherwise
-	 * @deprecated - Use JavaTime interfaces instead
-	 */
-	@Deprecated
-	public static RsDate getRsDate(Object o, DateFormat format) {
-		return getRsDate(o, format, null, true);
-	}
-	
-	/**
-	 * Converts the object to a {@link RsDate}.
-	 * @param o object to be converted
-	 * @param format format to be applied
-	 * @param defaultValue value to be returned when object cannot be transformed.
-	 * @return {@link RsDate} value of object, the default value otherwise
-	 * @deprecated - Use JavaTime interfaces instead
-	 */
-	@Deprecated
-	public static RsDate getRsDate(Object o, DateFormat format, RsDate defaultValue) {
-		return getRsDate(o, format, defaultValue, true);
-	}
-	
-	/**
-	 * Converts the object to a {@link RsDate}.
-	 * @param o object to be converted
-	 * @param format format to be applied
-	 * @param defaultValue value to be returned when object cannot be transformed.
-	 * @param logError whether parsing error shall be logged
-	 * @return {@link RsDate} value of object, the default value otherwise
-	 * @deprecated - Use JavaTime interfaces instead
-	 */
-	@Deprecated
-	public static RsDate getRsDate(Object o, DateFormat format, RsDate defaultValue, boolean logError) {
-		if (o == null) return defaultValue;
-		if (o instanceof RsDate) return (RsDate)o;
-		try {
-			String s = o.toString().trim();
-			if (s.length() == 0) return defaultValue;
-			return new RsDate(format.parse(s));
-		} catch (ParseException e) {
-			if (logError)log.error("Cannot parse date: "+o.toString(), e);
-		}
-		return defaultValue;
 	}
 	
 	/**

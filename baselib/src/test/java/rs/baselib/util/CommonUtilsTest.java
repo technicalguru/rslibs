@@ -86,38 +86,6 @@ public class CommonUtilsTest {
 	}
 
 	@Test
-	public void testToStringRsDate() {
-		assertEquals("toString(RsDate) does not work correct", "", CommonUtils.toString((RsDate)null));
-		assertEquals("toString(RsDate) does not work correct", "", CommonUtils.toString(new RsDate(0)));
-		RsDate d = new RsDate();
-		assertEquals("toString(RsDate) does not work correct", CommonUtils.DATE_TIME_FORMATTER().format(d.getTime()), CommonUtils.toString(d));
-	}
-
-	@Test
-	public void testToStringRsDay() {
-		assertEquals("toString(RsDay) does not work correct", "", CommonUtils.toString((RsDay)null));
-		assertEquals("toString(RsDay) does not work correct", "", CommonUtils.toString(new RsDay(0)));
-		RsDay d = new RsDay();
-		assertEquals("toString(RsDay) does not work correct", CommonUtils.DATE_FORMATTER().format(d.getBegin().getTime()), CommonUtils.toString(d));
-	}
-
-	@Test
-	public void testToStringRsMonth() {
-		assertEquals("toString(RsMonth) does not work correct", "", CommonUtils.toString((RsDate)null));
-		assertEquals("toString(RsMonth) does not work correct", "", CommonUtils.toString(new RsDate(0)));
-		RsMonth d = new RsMonth();
-		assertEquals("toString(RsMonth) does not work correct", CommonUtils.DATE_FORMATTER().format(d.getBegin().getTime()), CommonUtils.toString(d));
-	}
-
-	@Test
-	public void testToStringRsYear() {
-		assertEquals("toString(RsYear) does not work correct", "", CommonUtils.toString((RsYear)null));
-		assertEquals("toString(RsYear) does not work correct", "", CommonUtils.toString(new RsYear(0)));
-		RsYear d = new RsYear();
-		assertEquals("toString(RsYear) does not work correct", d.getKey(), CommonUtils.toString(d));
-	}
-
-	@Test
 	public void testToStringByteArray() {
 		byte b[] = new byte[] { (byte)0xa0, (byte)0x13, (byte)0xff };
 		assertEquals("toString(byte[]) does not work correct", "a013ff", CommonUtils.toString(b));
@@ -189,14 +157,6 @@ public class CommonUtilsTest {
 		assertEquals("getUnixTimestame(Date) does not work correctly", 1, CommonUtils.getUnixTimestamp(new Date(1200L)));
 		assertEquals("getUnixTimestame(Date) does not work correctly", 1, CommonUtils.getUnixTimestamp(new Date(1999L)));
 	}
-
-	@Test
-	public void testGetUnixTimestampRsDate() {
-		assertEquals("getUnixTimestame(RsDate) does not work correctly", 1, CommonUtils.getUnixTimestamp(new RsDate(1000L)));
-		assertEquals("getUnixTimestame(RsDate) does not work correctly", 1, CommonUtils.getUnixTimestamp(new RsDate(1200L)));
-		assertEquals("getUnixTimestame(RsDate) does not work correctly", 1, CommonUtils.getUnixTimestamp(new RsDate(1999L)));
-	}
-
 
 	@Test
 	public void testLoadContentString() throws IOException {
