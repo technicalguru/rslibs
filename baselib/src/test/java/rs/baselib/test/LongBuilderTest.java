@@ -17,15 +17,15 @@
  */
 package rs.baselib.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static rs.baselib.test.BuilderUtils.$Long;
 import static rs.baselib.test.BuilderUtils.listOf;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests the {@link LongBuilder} class.
@@ -38,14 +38,14 @@ public class LongBuilderTest {
 	public void testDefault() {
 		LongBuilder b = $Long();
 		Long actual = b.build();
-		assertEquals("LongBuilder not initialized correctly", Long.valueOf(0), actual);
+		assertEquals(Long.valueOf(0), actual);
 	}
 	
 	@Test
 	public void testStart() {
 		LongBuilder b = $Long().withStart(3);
 		Long actual = b.build();
-		assertEquals("LongBuilder not initialized correctly", Long.valueOf(3), actual);
+		assertEquals(Long.valueOf(3), actual);
 	}
 
 	@Test
@@ -53,14 +53,14 @@ public class LongBuilderTest {
 		LongBuilder b = $Long().withOffset(3);
 		b.build();
 		Long actual = b.build();
-		assertEquals("LongBuilder not initialized correctly", Long.valueOf(3), actual);
+		assertEquals(Long.valueOf(3), actual);
 	}
 
 	@Test
 	public void testList() {
 		Set<Long> delivered = new HashSet<>();
 		for (Long i : listOf(100, $Long())) {
-			assertFalse("LongBuilder does not produce unique values", delivered.contains(i));
+			assertFalse(delivered.contains(i));
 			delivered.add(i);
 		}
 	}

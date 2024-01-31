@@ -17,15 +17,15 @@
  */
 package rs.baselib.test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests the {@link IgnoreChecks} class if it correctly identifies
@@ -44,10 +44,10 @@ public class IgnoreChecksTest {
 	public void testNoIgnoreTest() {
 		try {
 			Map<String,Method> m = getTestMethods();
-			assertFalse("Method shall not be annotated", IgnoreChecks.ignoreTest(m.get("notAnnotated")));
-			assertFalse("Method shall not be annotated", IgnoreChecks.ignoreTest(m.get("notAnnotated"), "first"));
-			assertFalse("Method shall not be annotated", IgnoreChecks.ignoreTest(m.get("notAnnotated"), "first", "second"));
-			assertFalse("Method shall not be annotated", IgnoreChecks.ignoreTest(m.get("notAnnotated"), "third"));
+			assertFalse(IgnoreChecks.ignoreTest(m.get("notAnnotated")));
+			assertFalse(IgnoreChecks.ignoreTest(m.get("notAnnotated"), "first"));
+			assertFalse(IgnoreChecks.ignoreTest(m.get("notAnnotated"), "first", "second"));
+			assertFalse(IgnoreChecks.ignoreTest(m.get("notAnnotated"), "third"));
 		} catch (NoSuchMethodException e) {
 			fail("Cannot test");
 		}
@@ -61,10 +61,10 @@ public class IgnoreChecksTest {
 	public void testAllIgnoreTest() {
 		try {
 			Map<String,Method> m = getTestMethods();
-			assertTrue("Method shall be fully annotated", IgnoreChecks.ignoreTest(m.get("fullyAnnotated")));
-			assertTrue("Method shall be fully annotated", IgnoreChecks.ignoreTest(m.get("fullyAnnotated"), "first"));
-			assertTrue("Method shall be fully annotated", IgnoreChecks.ignoreTest(m.get("fullyAnnotated"), "first", "second"));
-			assertTrue("Method shall be fully annotated", IgnoreChecks.ignoreTest(m.get("fullyAnnotated"), "third"));
+			assertTrue(IgnoreChecks.ignoreTest(m.get("fullyAnnotated")));
+			assertTrue(IgnoreChecks.ignoreTest(m.get("fullyAnnotated"), "first"));
+			assertTrue(IgnoreChecks.ignoreTest(m.get("fullyAnnotated"), "first", "second"));
+			assertTrue(IgnoreChecks.ignoreTest(m.get("fullyAnnotated"), "third"));
 		} catch (NoSuchMethodException e) {
 			fail("Cannot test");
 		}
@@ -78,10 +78,10 @@ public class IgnoreChecksTest {
 	public void testSingleIgnoreTest() {
 		try {
 			Map<String,Method> m = getTestMethods();
-			assertFalse("Method shall be annotated for \"first\" only", IgnoreChecks.ignoreTest(m.get("ignoreFirstAnnotated")));
-			assertTrue("Method shall be annotated for \"first\" only", IgnoreChecks.ignoreTest(m.get("ignoreFirstAnnotated"), "first"));
-			assertTrue("Method shall be annotated for \"first\" only", IgnoreChecks.ignoreTest(m.get("ignoreFirstAnnotated"), "first", "second"));
-			assertFalse("Method shall be annotated for \"first\" only", IgnoreChecks.ignoreTest(m.get("ignoreFirstAnnotated"), "third"));
+			assertFalse(IgnoreChecks.ignoreTest(m.get("ignoreFirstAnnotated")));
+			assertTrue(IgnoreChecks.ignoreTest(m.get("ignoreFirstAnnotated"), "first"));
+			assertTrue(IgnoreChecks.ignoreTest(m.get("ignoreFirstAnnotated"), "first", "second"));
+			assertFalse(IgnoreChecks.ignoreTest(m.get("ignoreFirstAnnotated"), "third"));
 		} catch (NoSuchMethodException e) {
 			fail("Cannot test");
 		}
@@ -95,11 +95,11 @@ public class IgnoreChecksTest {
 	public void testMultipleIgnoreTest() {
 		try {
 			Map<String,Method> m = getTestMethods();
-			assertFalse("Method shall be annotated for \"first\" and \"second\"", IgnoreChecks.ignoreTest(m.get("ignoreFirstSecondAnnotated")));
-			assertTrue("Method shall be annotated for \"first\" and \"second\"", IgnoreChecks.ignoreTest(m.get("ignoreFirstSecondAnnotated"), "first"));
-			assertTrue("Method shall be annotated for \"first\" and \"second\"", IgnoreChecks.ignoreTest(m.get("ignoreFirstSecondAnnotated"), "second"));
-			assertTrue("Method shall be annotated for \"first\" and \"second\"", IgnoreChecks.ignoreTest(m.get("ignoreFirstSecondAnnotated"), "first", "second"));
-			assertFalse("Method shall be annotated for \"first\" and \"second\"", IgnoreChecks.ignoreTest(m.get("ignoreFirstSecondAnnotated"), "third"));
+			assertFalse(IgnoreChecks.ignoreTest(m.get("ignoreFirstSecondAnnotated")));
+			assertTrue(IgnoreChecks.ignoreTest(m.get("ignoreFirstSecondAnnotated"), "first"));
+			assertTrue(IgnoreChecks.ignoreTest(m.get("ignoreFirstSecondAnnotated"), "second"));
+			assertTrue(IgnoreChecks.ignoreTest(m.get("ignoreFirstSecondAnnotated"), "first", "second"));
+			assertFalse(IgnoreChecks.ignoreTest(m.get("ignoreFirstSecondAnnotated"), "third"));
 		} catch (NoSuchMethodException e) {
 			fail("Cannot test");
 		}

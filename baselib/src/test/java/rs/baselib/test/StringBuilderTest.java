@@ -17,15 +17,15 @@
  */
 package rs.baselib.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static rs.baselib.test.BuilderUtils.$String;
 import static rs.baselib.test.BuilderUtils.listOf;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests the {@link StringBuilder} class.
@@ -38,7 +38,7 @@ public class StringBuilderTest {
 	public void testDefault() {
 		StringBuilder b = $String();
 		String actual = b.build();
-		assertEquals("StringBuilder not initialized correctly", "String-0", actual);
+		assertEquals("String-0", actual);
 	}
 	
 
@@ -46,14 +46,14 @@ public class StringBuilderTest {
 	public void testPattern() {
 		StringBuilder b = $String().withPattern("myString-%s");
 		String actual = b.build();
-		assertEquals("StringBuilder not initialized correctly", "myString-0", actual);
+		assertEquals("myString-0", actual);
 	}
 
 	@Test
 	public void testList() {
 		Set<String> delivered = new HashSet<>();
 		for (String s : listOf(100, $String())) {
-			assertFalse("StringBuilder does not produce unique strings", delivered.contains(s));
+			assertFalse(delivered.contains(s));
 			delivered.add(s);
 		}
 	}

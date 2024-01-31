@@ -17,10 +17,10 @@
  */
 package rs.baselib.crypto;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests the {@link Sha512PasswordHasher}.
@@ -37,9 +37,9 @@ public class Sha512PasswordHasherTest {
 	@Test
 	public void testHash() {
 		String hash = Sha512PasswordHasher.INSTANCE.getPasswordHash(PASSWORD);
-		assertNotNull("No hash created", hash);
-		assertNotEquals("Hash returned the plain password", PASSWORD, hash);
-		assertTrue("Not a MD5 hash", hash.startsWith(Sha512PasswordHasher.PREFIX));
+		assertNotNull(hash);
+		assertNotEquals(PASSWORD, hash);
+		assertTrue(hash.startsWith(Sha512PasswordHasher.PREFIX));
 	}
 
 	/**
@@ -48,7 +48,7 @@ public class Sha512PasswordHasherTest {
 	@Test
 	public void testIsHash() {
 		String hash = Sha512PasswordHasher.INSTANCE.getPasswordHash(PASSWORD);
-		assertTrue("MD5 hasher does not recognize its own hash", Sha512PasswordHasher.INSTANCE.isHash(hash));
+		assertTrue(Sha512PasswordHasher.INSTANCE.isHash(hash));
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class Sha512PasswordHasherTest {
 	@Test
 	public void testTestPassword() {
 		String hash = Sha512PasswordHasher.INSTANCE.getPasswordHash(PASSWORD);
-		assertTrue("MD5 hasher does not test his own hash", Sha512PasswordHasher.INSTANCE.testPassword(PASSWORD, hash));
+		assertTrue(Sha512PasswordHasher.INSTANCE.testPassword(PASSWORD, hash));
 	}
 
 }

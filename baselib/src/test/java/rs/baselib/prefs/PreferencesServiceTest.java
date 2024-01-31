@@ -17,8 +17,8 @@
  */
 package rs.baselib.prefs;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -31,9 +31,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.prefs.BackingStoreException;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import rs.baselib.util.CommonUtils;
 
@@ -71,12 +71,12 @@ public class PreferencesServiceTest {
 			"#node5=something\n"+ // Ignored because leading #
 			"   \n"; // Ignored because empty line
 	
-	@BeforeClass
+	@BeforeAll
 	public static void setupClass() {
 		service = (PreferencesService)PreferencesService.INSTANCE;
 	}
 	
-	@AfterClass
+	@AfterAll
 	public static void cleanupClass() {
 		File f = service.getUserPreferencesFile("aTestProject");
 		if (f.exists()) {
@@ -137,13 +137,13 @@ public class PreferencesServiceTest {
 	protected void testNode(IPreferences node, int children[], int keys[]) throws BackingStoreException {
 		String childNames[] = node.childrenNames();
 		String keyNames[]   = node.keys();
-		assertEquals("Node "+node.absolutePath()+" has not enough children", children.length, childNames.length);
+		assertEquals(children.length, childNames.length);
 		for (int i : children) {
-			assertTrue("Cannot find node"+i, node.nodeExists("node"+i));
+			assertTrue(node.nodeExists("node"+i));
 		}
-		assertEquals("Node "+node.absolutePath()+" has not enough keys", keys.length, keyNames.length);
+		assertEquals(keys.length, keyNames.length);
 		for (int i : children) {
-			assertEquals("Cannot find correct key"+i, "value"+i, node.get("key"+i, ""));
+			assertEquals("value"+i, node.get("key"+i, ""));
 		}
 	}
 	
@@ -172,9 +172,9 @@ public class PreferencesServiceTest {
 		String l[]   = output.split("\\n");
 		Arrays.sort(cmp);
 		Arrays.sort(l);
-		assertEquals("Produced output has incorrect number of lines", cmp.length, l.length);
+		assertEquals(cmp.length, l.length);
 		for (int i=0; i<cmp.length; i++) {
-			assertEquals("Produced output differs in line "+(i+1), cmp[i].trim(), l[i].trim());
+			assertEquals(cmp[i].trim(), l[i].trim());
 		}
 	}
 	
@@ -187,9 +187,9 @@ public class PreferencesServiceTest {
 	@Test
 	public void testGetUserPreferencesFile() throws IOException, BackingStoreException {
 		File file = service.getUserPreferencesFile("aTestProject");
-		assertEquals("Not the correct user preferences filename", "user.prefs", file.getName());
-		assertEquals("Not the correct user preferences application directory", ".aTestProject", file.getParentFile().getName());
-		assertEquals("Not the correct user preferences home directory", new File(System.getProperty("user.home")), file.getParentFile().getParentFile());
+		assertEquals("user.prefs", file.getName());
+		assertEquals(".aTestProject", file.getParentFile().getName());
+		assertEquals(new File(System.getProperty("user.home")), file.getParentFile().getParentFile());
 	}
 
 	/**
@@ -198,8 +198,8 @@ public class PreferencesServiceTest {
 	@Test
 	public void testGetSystemPreferencesFile() {
 		File file = service.getSystemPreferencesFile("aTestProject");
-		assertEquals("Not the correct user preferences filename", "system.prefs", file.getName());
-		assertTrue("Not the correct user preferences application directory", file.getParentFile().getName().endsWith("aTestProject"));
+		assertEquals("system.prefs", file.getName());
+		assertTrue(file.getParentFile().getName().endsWith("aTestProject"));
 	}
 
 	/**
@@ -255,7 +255,7 @@ public class PreferencesServiceTest {
 		node.sync();
 		
 		// Check that file was produced
-		assertTrue("File was not produced", f.exists());
+		assertTrue(f.exists());
 		
 		// Check that file contains correct values
 		testOutput(CommonUtils.loadContent(f));

@@ -17,9 +17,9 @@
  */
 package rs.baselib.configuration;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.HierarchicalConfiguration;
@@ -27,8 +27,8 @@ import org.apache.commons.configuration2.SubnodeConfiguration;
 import org.apache.commons.configuration2.XMLConfiguration;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.configuration2.tree.ImmutableNode;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import rs.baselib.io.FileFinder;
 
@@ -45,7 +45,7 @@ public class ConfigurationUtilsTest {
 	 * Loads the configuration.
 	 * @throws java.lang.Exception when configuration cannot be found or read
 	 */
-	@BeforeClass
+	@BeforeAll
 	public static void setUpClass() throws Exception {
 		config = ConfigurationUtils.getXmlConfiguration(FileFinder.find(ConfigurationUtilsTest.class, "test-config.xml"));
 	}
@@ -56,14 +56,14 @@ public class ConfigurationUtilsTest {
 	@Test
 	public void testLoadConfigurationBoolean() {
 		ConfigTestObject o = (ConfigTestObject)ConfigurationUtils.load(config, false);
-		assertNotNull("Object was not loaded", o);
-		assertNull("Object was configured", o.getStringValue());
-		assertEquals("Object was configured", 0, o.getIntValue());
+		assertNotNull(o);
+		assertNull(o.getStringValue());
+		assertEquals(0, o.getIntValue());
 		
 		o = (ConfigTestObject)ConfigurationUtils.load(config, true);
-		assertNotNull("Object was not loaded", o);
-		assertEquals("Object was not configured", "a value", o.getStringValue());
-		assertEquals("Object was not configured", 5, o.getIntValue());
+		assertNotNull(o);
+		assertEquals("a value", o.getStringValue());
+		assertEquals(5, o.getIntValue());
 	}
 
 	/**
@@ -72,14 +72,14 @@ public class ConfigurationUtilsTest {
 	@Test
 	public void testLoadStringConfigurationBoolean() {
 		ConfigTestObject o = (ConfigTestObject)ConfigurationUtils.load(ConfigTestObject.class.getName(), config, false);
-		assertNotNull("Object was not loaded", o);
-		assertNull("Object was configured", o.getStringValue());
-		assertEquals("Object was configured", 0, o.getIntValue());
+		assertNotNull(o);
+		assertNull(o.getStringValue());
+		assertEquals(0, o.getIntValue());
 		
 		o = (ConfigTestObject)ConfigurationUtils.load(ConfigTestObject.class.getName(), config, true);
-		assertNotNull("Object was not loaded", o);
-		assertEquals("Object was not configured", "a value", o.getStringValue());
-		assertEquals("Object was not configured", 5, o.getIntValue());
+		assertNotNull(o);
+		assertEquals("a value", o.getStringValue());
+		assertEquals(5, o.getIntValue());
 	}
 
 	/**
@@ -88,14 +88,14 @@ public class ConfigurationUtilsTest {
 	@Test
 	public void testLoadClassConfigurationBoolean() {
 		ConfigTestObject o = ConfigurationUtils.load(ConfigTestObject.class, config, false);
-		assertNotNull("Object was not loaded", o);
-		assertNull("Object was configured", o.getStringValue());
-		assertEquals("Object was configured", 0, o.getIntValue());
+		assertNotNull(o);
+		assertNull(o.getStringValue());
+		assertEquals(0, o.getIntValue());
 		
 		o = ConfigurationUtils.load(ConfigTestObject.class, config, true);
-		assertNotNull("Object was not loaded", o);
-		assertEquals("Object was not configured", "a value", o.getStringValue());
-		assertEquals("Object was not configured", 5, o.getIntValue());
+		assertNotNull(o);
+		assertEquals("a value", o.getStringValue());
+		assertEquals(5, o.getIntValue());
 	}
 
 	/**
@@ -107,8 +107,8 @@ public class ConfigurationUtilsTest {
 	public void testConfigure() throws ConfigurationException {
 		ConfigTestObject o = new ConfigTestObject();
 		ConfigurationUtils.configure(o, config);
-		assertEquals("Object was not configured", "a value", o.getStringValue());
-		assertEquals("Object was not configured", 5, o.getIntValue());
+		assertEquals("a value", o.getStringValue());
+		assertEquals(5, o.getIntValue());
 	}
 
 	/**
@@ -118,8 +118,8 @@ public class ConfigurationUtilsTest {
 	public void testGetParam() {
 		XMLConfiguration xmlConfig = (XMLConfiguration)config;
 		HierarchicalConfiguration<ImmutableNode> cfg = xmlConfig.configurationAt("paramTest(0)");
-		assertEquals("aParameter1 is not correct", "value1", ConfigurationUtils.getParam(cfg, "aParameter1"));
-		assertEquals("aParameter2 is not correct", "value2", ConfigurationUtils.getParam(cfg, "aParameter2"));
+		assertEquals("value1", ConfigurationUtils.getParam(cfg, "aParameter1"));
+		assertEquals("value2", ConfigurationUtils.getParam(cfg, "aParameter2"));
 	}
 
 }

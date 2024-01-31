@@ -19,12 +19,12 @@ package rs.baselib.lang;
 
 import java.util.Random;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import rs.baselib.util.AdvancedThreadLocal;
 
 /**
@@ -55,13 +55,13 @@ public class AdvancedThreadLocalTest {
 		}
 		
 		// Test number of threads still in map
-		assertEquals("Local values were not removed", MAX_THREADS/2, local.getEntries().size());
+		assertEquals(MAX_THREADS/2, local.getEntries().size());
 		
 		// Verify
 		local.verifyThreads();
 		
 		// Assert that no thread is in map anymore
-		assertEquals("Obsolete values were not removed", 0, local.getEntries().size());
+		assertEquals(0, local.getEntries().size());
 		
 	}
 	
@@ -95,7 +95,7 @@ public class AdvancedThreadLocalTest {
 						sleep(Math.abs(sleepTime) % 200);
 					} catch (InterruptedException e) {}
 					// Check valid value
-					assertEquals("Thread "+id+": value is not correct", toString(), map.get());
+					assertEquals(toString(), map.get());
 				}
 				
 				if (removeValueAtEnd) {
