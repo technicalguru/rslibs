@@ -32,8 +32,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import rs.baselib.util.RsDate;
-
 /**
  * Tests {@link LangUtils}.
  * @author ralph
@@ -114,46 +112,6 @@ public class LangUtilsTest {
 		for (Object o : falseValues) {
 			assertFalse("Cannot convert to boolean: "+o, LangUtils.getBoolean(o));
 		}
-	}
-
-	/**
-	 * Test method for {@link LangUtils#getRsDate(Object, DateFormat[], RsDate)}.
-	 */
-	@Test
-	public void testGetRsDateObjectDateFormatArrayRsDate() {
-		RsDate d = new RsDate();
-		RsDate defDate = new RsDate(0);
-		DateFormat formats[] = new DateFormat[] {
-				DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.LONG),
-				DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG),
-				DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.LONG),
-		};
-		assertNull("Cannot get date", LangUtils.getRsDate("123456", formats, null));
-		assertNull("Cannot get date", LangUtils.getRsDate(null, formats, null));
-		assertEquals("Cannot get date", defDate, LangUtils.getRsDate("123456", formats, defDate));
-		assertEquals("Cannot get date", defDate, LangUtils.getRsDate(null, formats, defDate));
-		assertEquals("Cannot get date", d, LangUtils.getRsDate(d, formats, null));
-		assertEquals("Cannot get date", d, LangUtils.getRsDate(d, formats, defDate));
-		assertEquals("Cannot get date", d.getTime().toString(), LangUtils.getRsDate(formats[2].format(d.getTime()), formats, null).getTime().toString());
-		assertEquals("Cannot get date", d.getTime().toString(), LangUtils.getRsDate(formats[2].format(d.getTime()), formats, defDate).getTime().toString());	
-	}
-
-	/**
-	 * Test method for {@link LangUtils#getRsDate(Object, DateFormat, RsDate)}.
-	 */
-	@Test
-	public void testGetRsDateObjectDateFormatRsDate() {
-		RsDate d = new RsDate();
-		RsDate defDate = new RsDate(0);
-		DateFormat format = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.LONG);
-		assertNull("Cannot get date", LangUtils.getRsDate("123456", format, null, false));
-		assertNull("Cannot get date", LangUtils.getRsDate(null, format, null, false));
-		assertEquals("Cannot get date", defDate, LangUtils.getRsDate("123456", format, defDate, false));
-		assertEquals("Cannot get date", defDate, LangUtils.getRsDate(null, format, defDate, false));
-		assertEquals("Cannot get date", d, LangUtils.getRsDate(d, format, null, false));
-		assertEquals("Cannot get date", d, LangUtils.getRsDate(d, format, defDate, false));
-		assertEquals("Cannot get date", d.getTime().toString(), LangUtils.getRsDate(format.format(d.getTime()), format, null, false).getTime().toString());
-		assertEquals("Cannot get date", d.getTime().toString(), LangUtils.getRsDate(format.format(d.getTime()), format, defDate, false).getTime().toString());	
 	}
 
 	/**

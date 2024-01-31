@@ -18,13 +18,11 @@
 package rs.baselib.util;
 
 import java.beans.PropertyDescriptor;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintStream;
@@ -42,7 +40,6 @@ import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -55,7 +52,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
-import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -151,48 +147,6 @@ public class CommonUtils {
 	 */
 	public static String toString(float amount) {
 		return SIMPLE_NUMBER_FORMATTER().format(amount);
-	}
-
-	/**
-	 * Formats the given date.
-	 * @param date date to format
-	 * @return the formatted string (see {@link #DATE_TIME_FORMATTER()})
-	 * @deprecated - Use JavaTime interfaces instead
-	 */
-	@Deprecated
-	public static String toString(RsDate date) {
-		if ((date == null) || (date.getTimeInMillis() == 0)) return "";
-		return DATE_TIME_FORMATTER().format(date.getTime());
-	}
-
-	/**
-	 * Formats the given day.
-	 * @param day day to format
-	 * @return the formatted string (see {@link #DATE_FORMATTER()})
-	 */
-	public static String toString(RsDay day) {
-		if ((day == null) || (day.getTimeInMillis() == -TimeZone.getDefault().getOffset(day.getTimeInMillis()))) return "";
-		return DATE_FORMATTER().format(day.getTime());
-	}
-
-	/**
-	 * Formats the given year.
-	 * @param year year to format
-	 * @return the formatted string
-	 */
-	public static String toString(RsYear year) {
-		if ((year == null) || (year.get(Calendar.YEAR) == 1)) return "";
-		return year.getKey();
-	}
-
-	/**
-	 * Formats the given month (1st day of month).
-	 * @param month date to format
-	 * @return the formatted string (see {@link #DATE_FORMATTER()})
-	 */
-	public static String toString(RsMonth month) {
-		if ((month == null) || (month.getTimeInMillis() == 0)) return "";
-		return DATE_FORMATTER().format(month.getBegin().getTime());
 	}
 
 	/**
@@ -683,17 +637,6 @@ public class CommonUtils {
 	 */
 	public static long getUnixTimestamp(Date date) {
 		return getUnixTimestamp(date.getTime());
-	}
-
-	/**
-	 * Returns the given date as UNIX timestamp.
-	 * @param date date object.
-	 * @return time in seconds since January 1st, 1970, 00:00:00 UTC.
-	 * @deprecated - Use JavaTime interfaces instead
-	 */
-	@Deprecated
-	public static long getUnixTimestamp(RsDate date) {
-		return getUnixTimestamp(date.getTimeInMillis());
 	}
 
 	/**
