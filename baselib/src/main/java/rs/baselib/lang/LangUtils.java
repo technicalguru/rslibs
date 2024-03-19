@@ -46,9 +46,6 @@ public class LangUtils {
 
 	private static Logger log = LoggerFactory.getLogger(LangUtils.class);
 	
-	/** The Java version we are running in */
-	private static String javaVersion = null;
-	
 	/**
 	 * Load a class by first checking the thread's class loader and then the caller's class loader.
 	 * @param className name of cass to be loaded
@@ -463,21 +460,6 @@ public class LangUtils {
 			if (logError) log.error("Cannot parse date: "+o.toString(), e);
 		}
 		return defaultValue;
-	}
-	
-	/**
-	 * Returns true when the runtime is Java 6.
-	 * @return true if Java 6, false otherwise.
-	 */
-	public static boolean isJava6() {
-		if (javaVersion == null) {
-			javaVersion = System.getProperty("java.specification.version");
-			if (javaVersion == null) {
-				log.error("Cannot determine Java version.");
-				javaVersion = "unknown";
-			}
-		}
-		return javaVersion.equals("1.6");
 	}
 	
 	/**

@@ -17,8 +17,8 @@
  */
 package rs.baselib.lang;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.net.URL;
 import java.util.Collection;
@@ -28,7 +28,7 @@ import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 import java.util.regex.Pattern;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests the resource list class
@@ -41,26 +41,26 @@ public class ResourceListTest {
 	public void testGetResources() {
         Pattern pattern = Pattern.compile(".*");
         Collection<URL> list = ResourceList.getResources(pattern);
-        assertTrue("No resources found", list.size() > 0);
+        assertTrue(list.size() > 0);
         for (URL url : list) {
-            assertNotNull("Empty URL", url);
+            assertNotNull(url);
         }
 	}
 
 	@Test
 	public void testGetManifests() {
         Collection<Manifest> list = ResourceList.getManifests();
-        assertTrue("No manifests found", list.size() > 0);
+        assertTrue(list.size() > 0);
         for (Manifest manifest : list) {
         	for (Entry<Object,Object> e : manifest.getMainAttributes().entrySet()) {
-        		assertNotNull("Empty main key", e.getKey());
-        		assertNotNull("Empty main value", e.getValue());
+        		assertNotNull(e.getKey());
+        		assertNotNull(e.getValue());
         	}
         	
         	for (Map.Entry<String, Attributes> entry : manifest.getEntries().entrySet()) {
         		for (Entry<Object,Object> e : entry.getValue().entrySet()) {
-            		assertNotNull("Empty key for "+entry.getKey(), e.getKey());
-            		assertNotNull("Empty value for "+entry.getKey(), e.getValue());
+            		assertNotNull(e.getKey());
+            		assertNotNull(e.getValue());
         		}
         	}
         }

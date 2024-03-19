@@ -17,13 +17,13 @@
  */
 package rs.baselib.test;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import rs.baselib.test.PersonBuilder.Person;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import static rs.baselib.test.BuilderUtils.$Person;
 
@@ -40,13 +40,13 @@ public class PersonBuilderTest {
 		PersonBuilder b = $Person();
 		for (int i=0; i<10000; i++) {
 			Person actual = b.build();
-			assertNotNull("No person generated", actual);
-			assertNotNull("First name was empty", actual.firstName);
-			assertNotNull("Last name was empty", actual.lastName);
-			assertNotNull("Gender was empty", actual.gender);
-			assertNotNull("Birthday was empty", actual.birthday);
-			assertTrue("Min age was violated", actual.age >= 18);
-			assertTrue("Max age was violated", actual.age < 70);
+			assertNotNull(actual);
+			assertNotNull(actual.firstName);
+			assertNotNull(actual.lastName);
+			assertNotNull(actual.gender);
+			assertNotNull(actual.birthday);
+			assertTrue(actual.age >= 18);
+			assertTrue(actual.age < 70);
 		}
 	}
 
@@ -55,10 +55,10 @@ public class PersonBuilderTest {
 		PersonBuilder b = $Person().withoutFirstNames().withoutLastNames().withoutGenders();
 		for (int i=0; i<10000; i++) {
 			Person actual = b.build();
-			assertNotNull("No person generated", actual);
-			assertNull("First name was not empty", actual.firstName);
-			assertNull("Last name was not empty", actual.lastName);
-			assertNull("Gender was not empty", actual.gender);
+			assertNotNull(actual);
+			assertNull(actual.firstName);
+			assertNull(actual.lastName);
+			assertNull(actual.gender);
 		}
 	}
 }

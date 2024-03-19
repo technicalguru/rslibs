@@ -17,18 +17,18 @@
  */
 package rs.baselib.crypto;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests {@link EncryptionUtils}.
@@ -43,8 +43,8 @@ public class EncryptionUtilsTest {
 	@Test
 	public void testGenerateSaltLong() {
 		byte b[] = EncryptionUtils.generateSalt(System.currentTimeMillis());
-		assertNotNull("No salt generated", b);
-		assertEquals("Salt length problem", 8, b.length);
+		assertNotNull(b);
+		assertEquals(8, b.length);
 	}
 
 	/**
@@ -53,10 +53,10 @@ public class EncryptionUtilsTest {
 	@Test
 	public void testGeneratePasswordStringLongInt() {
 		String s = EncryptionUtils.generatePassword(EncryptionUtils.PASSWORD_CHARS, System.currentTimeMillis(), 20);
-		assertNotNull("No password generated", s);
-		assertEquals("Password length problem", 20, s.length());
+		assertNotNull(s);
+		assertEquals(20, s.length());
 		for (char c : s.toCharArray()) {
-			assertTrue("Invalid character in password: "+c, EncryptionUtils.PASSWORD_CHARS.indexOf(c) >= 0);
+			assertTrue(EncryptionUtils.PASSWORD_CHARS.indexOf(c) >= 0);
 		}
 	}
 
@@ -67,14 +67,14 @@ public class EncryptionUtilsTest {
 	public void testGenerateKeyString() {
 		try {
 			String seed = EncryptionUtils.generatePassword(8);
-			assertNotNull("No seed", seed);
+			assertNotNull(seed);
 
 			KeyPair keyPair = EncryptionUtils.generateKey(seed.getBytes(StandardCharsets.UTF_8));
 			assertNotNull(keyPair);
 			PrivateKey privateKey = keyPair.getPrivate();
 			PublicKey publicKey   = keyPair.getPublic();
-			assertNotNull("No private key", privateKey);
-			assertNotNull("No public Key", publicKey);
+			assertNotNull(privateKey);
+			assertNotNull(publicKey);
 		} catch (Throwable t) {
 			t.printStackTrace();
 			fail(t.getMessage());
@@ -87,7 +87,7 @@ public class EncryptionUtilsTest {
 	@Test
 	public void testEncodeBase64() {
 		String seed = EncryptionUtils.generatePassword(8);
-		assertNotNull("No seed", seed);
+		assertNotNull(seed);
 		byte b[] = seed.getBytes(StandardCharsets.UTF_8);
 		assertArrayEquals(b, EncryptionUtils.decodeBase64(EncryptionUtils.encodeBase64(b)));
 	}
@@ -101,13 +101,13 @@ public class EncryptionUtilsTest {
 		try {
 			// Create the key first
 			String seed = EncryptionUtils.generatePassword(8);
-			assertNotNull("No seed", seed);
+			assertNotNull(seed);
 			KeyPair keyPair = EncryptionUtils.generateKey(seed.getBytes(StandardCharsets.UTF_8));
 			assertNotNull(keyPair);
 			PrivateKey privateKey = keyPair.getPrivate();
 			PublicKey publicKey   = keyPair.getPublic();
-			assertNotNull("No private key", privateKey);
-			assertNotNull("No public Key", publicKey);
+			assertNotNull(privateKey);
+			assertNotNull(publicKey);
 			
 			assertEquals(privateKey, EncryptionUtils.decodeBase64PrivateKey(EncryptionUtils.encodeBase64(privateKey)));
 			assertEquals(publicKey, EncryptionUtils.decodeBase64PublicKey(EncryptionUtils.encodeBase64(publicKey)));

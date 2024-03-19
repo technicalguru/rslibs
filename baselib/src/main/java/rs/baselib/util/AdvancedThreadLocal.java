@@ -35,6 +35,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * @since 1.2.9
  *
  */
+@Deprecated
 public class AdvancedThreadLocal<T> {
 
 	private volatile Map<Thread,T> map = new HashMap<Thread, T>();

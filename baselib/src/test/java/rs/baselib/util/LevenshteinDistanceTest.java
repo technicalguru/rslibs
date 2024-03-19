@@ -17,9 +17,9 @@
  */
 package rs.baselib.util;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests the {@link LevenshteinDistance}.
@@ -30,22 +30,22 @@ public class LevenshteinDistanceTest {
 
 	@Test
 	public void test1() {
-		assertEquals("Invalid distance", 3, LevenshteinDistance.INSTANCE.getDistance("kitten", "sitting"));
+		assertEquals(3, LevenshteinDistance.INSTANCE.getDistance("kitten", "sitting"));
 	}
 	
 	@Test
 	public void test2() {
-		assertEquals("Invalid distance", 3, LevenshteinDistance.INSTANCE.getDistance("saturday", "sunday"));
+		assertEquals(3, LevenshteinDistance.INSTANCE.getDistance("saturday", "sunday"));
 	}
 	
 	@Test
 	public void test3() {
-		assertEquals("Invalid distance", 8, LevenshteinDistance.INSTANCE.getDistance("rosettacode", "raisethysword"));
+		assertEquals(8, LevenshteinDistance.INSTANCE.getDistance("rosettacode", "raisethysword"));
 	}
 	
 	@Test
 	public void test4() {
-		assertEquals("Invalid distance", 1, LevenshteinDistance.INSTANCE.getDistance("kitten", "sitten"));
+		assertEquals(1, LevenshteinDistance.INSTANCE.getDistance("kitten", "sitten"));
 	}
 	
 

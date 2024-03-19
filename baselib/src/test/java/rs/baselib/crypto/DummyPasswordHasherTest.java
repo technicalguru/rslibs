@@ -17,11 +17,11 @@
  */
 package rs.baselib.crypto;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests the {@link DummyPasswordHasher}.
@@ -38,8 +38,8 @@ public class DummyPasswordHasherTest {
 	@Test
 	public void testHash() {
 		String hash = DummyPasswordHasher.INSTANCE.getPasswordHash(PASSWORD);
-		assertNotNull("No hash created", hash);
-		assertEquals("Hash returned the plain password", PASSWORD, hash);
+		assertNotNull(hash);
+		assertEquals(PASSWORD, hash);
 	}
 
 	/**
@@ -48,7 +48,7 @@ public class DummyPasswordHasherTest {
 	@Test
 	public void testIsHash() {
 		String hash = DummyPasswordHasher.INSTANCE.getPasswordHash(PASSWORD);
-		assertTrue("Dummy hasher does not recognize its own hash", DummyPasswordHasher.INSTANCE.isHash(hash));
+		assertTrue(DummyPasswordHasher.INSTANCE.isHash(hash));
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class DummyPasswordHasherTest {
 	@Test
 	public void testTestPassword() {
 		String hash = DummyPasswordHasher.INSTANCE.getPasswordHash(PASSWORD);
-		assertTrue("Dummy hasher does not test his own hash", DummyPasswordHasher.INSTANCE.testPassword(PASSWORD, hash));
+		assertTrue(DummyPasswordHasher.INSTANCE.testPassword(PASSWORD, hash));
 	}
 
 }

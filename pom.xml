@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>eu.ralph-schuster</groupId>
 		<artifactId>pom-oss</artifactId>
-		<version>2.1.0</version>
+		<version>3.0.2</version>
 	</parent>
 
 	<properties>
@@ -13,7 +13,7 @@
 	</properties>
 
 	<artifactId>libs</artifactId>
-	<version>5.0.0</version>
+	<version>5.0.1</version>
 	<packaging>pom</packaging>
 
 	<url>https://github.com/technicalguru/rslibs</url>
@@ -24,7 +24,7 @@
 		<connection>scm:git:https://github.com/technicalguru/rslibs.git</connection>
 		<developerConnection>scm:git:https://github.com/technicalguru/rslibs.git</developerConnection>
 		<url>https://github.com/technicalguru/rslibs</url>
-		<tag>libs-5.0.0</tag>
+		<tag>libs-5.0.1</tag>
 	</scm>
 
 	<issueManagement>
@@ -45,23 +45,4 @@
 		<module>jackson</module>
 		<module>otp</module>
 	</modules>
-
-<!--	<repositories>-->
-<!--		<repository>-->
-<!--			<id>ow2-releases</id>-->
-<!--			<name>ObjectWeb Repository</name>-->
-<!--			<releases>-->
-<!--				<enabled>true</enabled>-->
-<!--				<updatePolicy>always</updatePolicy>-->
-<!--				<checksumPolicy>fail</checksumPolicy>-->
-<!--			</releases>-->
-<!--			<snapshots>-->
-<!--				<enabled>false</enabled>-->
-<!--				<updatePolicy>never</updatePolicy>-->
-<!--				<checksumPolicy>warn</checksumPolicy>-->
-<!--			</snapshots>-->
-<!--			<url>http://repository.ow2.org/nexus/content/repositories/ow2-legacy/</url>-->
-<!--			<layout>default</layout>-->
-<!--		</repository>-->
-<!--	</repositories>-->
 </project>

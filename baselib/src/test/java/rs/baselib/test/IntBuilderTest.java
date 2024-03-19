@@ -17,15 +17,15 @@
  */
 package rs.baselib.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static rs.baselib.test.BuilderUtils.$Int;
 import static rs.baselib.test.BuilderUtils.listOf;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests the {@link IntBuilder} class.
@@ -38,14 +38,14 @@ public class IntBuilderTest {
 	public void testDefault() {
 		IntBuilder b = $Int();
 		Integer actual = b.build();
-		assertEquals("IntBuilder not initialized correctly", Integer.valueOf(0), actual);
+		assertEquals(Integer.valueOf(0), actual);
 	}
 	
 	@Test
 	public void testStart() {
 		IntBuilder b = $Int().withStart(3);
 		Integer actual = b.build();
-		assertEquals("IntBuilder not initialized correctly", Integer.valueOf(3), actual);
+		assertEquals(Integer.valueOf(3), actual);
 	}
 
 	@Test
@@ -53,14 +53,14 @@ public class IntBuilderTest {
 		IntBuilder b = $Int().withOffset(3);
 		b.build();
 		Integer actual = b.build();
-		assertEquals("IntBuilder not initialized correctly", Integer.valueOf(3), actual);
+		assertEquals(Integer.valueOf(3), actual);
 	}
 
 	@Test
 	public void testList() {
 		Set<Integer> delivered = new HashSet<>();
 		for (Integer i : listOf(100, $Int())) {
-			assertFalse("IntBuilder does not produce unique values", delivered.contains(i));
+			assertFalse(delivered.contains(i));
 			delivered.add(i);
 		}
 	}

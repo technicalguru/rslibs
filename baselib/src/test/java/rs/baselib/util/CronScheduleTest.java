@@ -17,8 +17,8 @@
  */
 package rs.baselib.util;
 
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test the {@link CronSchedule}.
@@ -31,19 +31,19 @@ public class CronScheduleTest {
 	public void testHashCode() {
 		CronSchedule s1 = new CronSchedule("*/5 */3 * * *");
 		CronSchedule s2 = new CronSchedule("*/5 */3 * * *");
-		assertEquals("hashCode() is not equal", s1.hashCode(), s2.hashCode());
+		assertEquals(s1.hashCode(), s2.hashCode());
 	}
 
 	@Test
 	public void testEquals() {
 		CronSchedule s1 = new CronSchedule("*/5 */3 * * *");
 		CronSchedule s2 = new CronSchedule("*/5 */3 * * *");
-		assertEquals("hashCode() is not equal", s1, s2);
+		assertEquals(s1, s2);
 	}
 	
 	@Test
 	public void testNever() {
 		CronSchedule s = CronSchedule.NEVER;
-		assertEquals("cronString is not correct", CronSchedule.NEVER_MARKER, s.getCronString());
+		assertEquals(CronSchedule.NEVER_MARKER, s.getCronString());
 	}
 }
