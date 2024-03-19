@@ -17,18 +17,24 @@
  */
 package rs.baselib.crypto;
 
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
-import java.security.Provider;
-import java.security.Provider.Service;
+import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
-import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
+
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import picocli.CommandLine;
+import rs.baselib.crypto.cli.KeyGenCli;
 
 /**
  * The class for generating key pairs.
@@ -39,54 +45,128 @@ public class KeyGen {
 
 	public static final String RSA_KEY_ALGORITHM     = "RSA";
 	public static final String ECS_KEY_ALGORITHM     = "EC";
+	
+	/** Default key generating algorithm */
 	public static final String DEFAULT_KEY_ALGORITHM = "EC";
-
-	public static final String DEFAULT_RANDOM_ALGORITHM = "SHA1PRNG";
 
 	private static Logger log = LoggerFactory.getLogger(KeyGen.class);
 	
 	/**
-	 * Main method for encryption on command line.
-	 * @param seed the seed for the random process
-	 * @return the key pair
+	 * Generates a secret key (PBE) based on the given parameters.
+	 * @param iterationCount the cumber of iterations (if less than 1 then {@link EncryptionUtils#DEFAULT_ITERATIONS} will be used)
+	 * @param passPhrase the passphrase (required)
+	 * @param salt the slat (can be null)
+	 * @return a secret key based on parameters
+	 * @throws NoSuchAlgorithmException when the algorithm does not exist
+	 * @throws InvalidKeySpecException when the key spec is invalid
 	 */
-	public static KeyPair generateFromSeed(String seed) {
-		try {
-			if (seed == null) seed = EncryptionUtils.generatePassword(8);
-			
-			KeyPair keyPair = EncryptionUtils.generateKey(seed.getBytes(StandardCharsets.UTF_8));
-			log(keyPair);
-			return keyPair;
-		} catch (Throwable t) {
-			throw new RuntimeException(t.getMessage(), t);
-		}
+	public static SecretKey generateSecretKey(int iterationCount, String passPhrase, byte salt[]) throws NoSuchAlgorithmException, InvalidKeySpecException {
+		if (iterationCount < 1) iterationCount = EncryptionUtils.DEFAULT_ITERATIONS;
+		if (salt == null) salt = EncryptionUtils.generateSalt(0);
+		KeySpec keySpec = new PBEKeySpec(passPhrase.toCharArray(), salt, iterationCount);
+		SecretKey key = SecretKeyFactory.getInstance(EncryptionUtils.DEFAULT_SECRET_KEY_TYPE).generateSecret(keySpec);
+		return key;
 	}
 
+	/**
+	 * Generates a public/private key pair.
+	 * @param seed seed to be used.
+	 * @return key pair
+	 * @throws NoSuchProviderException when the algorithm provider does not exist
+	 * @throws NoSuchAlgorithmException when the algorithm does not exist
+	 */
+	public static KeyPair generateKeyPairBySeed(String seed) throws NoSuchProviderException, NoSuchAlgorithmException {
+		return generateKeyPairBySeed(seed, null);
+	}
+
+	/**
+	 * Generates a public/private key pair.
+	 * @param seed seed to be used.
+	 * @param charset the charset to be used for string encoding (<code>null</code> for {@link Charset#defaultCharset() default charset})
+	 * @return key pair
+	 * @throws NoSuchProviderException when the algorithm provider does not exist
+	 * @throws NoSuchAlgorithmException when the algorithm does not exist
+	 */
+	public static KeyPair generateKeyPairBySeed(String seed, Charset charset) throws NoSuchProviderException, NoSuchAlgorithmException {
+		if (charset == null) charset = Charset.defaultCharset();
+		return generateKeyPairBySeed(seed.getBytes(charset));
+	}
+
+	/**
+	 * Generates a public/private DSA key pair.
+	 * @param seed seed to be used.
+	 * @return key pair
+	 * @throws NoSuchProviderException when the algorithm provider does not exist
+	 * @throws NoSuchAlgorithmException when the algorithm does not exist
+	 */
+	public static KeyPair generateKeyPairBySeed(byte seed[]) throws NoSuchProviderException, NoSuchAlgorithmException {
+		KeyPairGenerator keyGen = KeyPairGenerator.getInstance("DSA");
+		SecureRandom random = EncryptionUtils.generateSecureRandom(seed);
+		keyGen.initialize(1024, random);
+		KeyPair pair = keyGen.generateKeyPair();
+		return pair;
+	}
+
+	/**
+	 * Log a key pair using the SLF4J {@link Logger}.
+	 * 
+	 * @param keyPair key pair to be logged
+	 */
 	public static void log(KeyPair keyPair) {
-		String privateKey = EncryptionUtils.encodeBase64(keyPair.getPrivate());
-		String publicKey  = EncryptionUtils.encodeBase64(keyPair.getPublic());
-		log.info("Private Key: "+privateKey);
-		log.info("Public Key : "+publicKey);
+		log.info("Private Key: "+EncryptionUtils.encodeBase64(keyPair.getPrivate()));
+		log.info("Public Key : "+EncryptionUtils.encodeBase64(keyPair.getPublic()));
 	}
 	
+	/**
+	 * Log a key pair using the {@link System#out} stream.
+	 * 
+	 * @param keyPair key pair to be logged
+	 */
 	public static void print(KeyPair keyPair) {
-		String privateKey = EncryptionUtils.encodeBase64(keyPair.getPrivate());
-		String publicKey  = EncryptionUtils.encodeBase64(keyPair.getPublic());
-		System.out.println("Private Key: "+privateKey);
-		System.out.println("Public Key : "+publicKey);
+		System.out.println("Private Key: "+EncryptionUtils.encodeBase64(keyPair.getPrivate()));
+		System.out.println("Public Key : "+EncryptionUtils.encodeBase64(keyPair.getPublic()));
 	}
 	
-	public static KeyPair generateKeyPair() throws InvalidKeySpecException, NoSuchAlgorithmException {
+	/**
+	 * Generate a key pair using default settings (EC, 256 bit).
+	 * @return a new key pair
+	 * @throws NoSuchAlgorithmException when the default algorithm does not exist
+	 */
+	public static KeyPair generateKeyPair() throws NoSuchAlgorithmException {
 		return generateKeyPair(DEFAULT_KEY_ALGORITHM);
 	}
 
-	public static KeyPair generateKeyPair(String algorithm) throws InvalidKeySpecException, NoSuchAlgorithmException {
+	/**
+	 * Generate a key pair using default settings for the given algorithm.
+	 * @param algorithm key generation algorithm
+	 * @return a new key pair
+	 * @see #getPreferredKeySize(String)
+	 * @throws NoSuchAlgorithmException when the default algorithm does not exist
+	 */
+	public static KeyPair generateKeyPair(String algorithm) throws NoSuchAlgorithmException {
+		return generateKeyPair(algorithm, getPreferredKeySize(algorithm));
+	}
+	
+	/**
+	 * Generate a key pair using default settings for the given algorithm.
+	 * @param algorithm key generation algorithm
+	 * @return a new key pair
+	 * @see #getPreferredKeySize(String)
+	 * @throws NoSuchAlgorithmException when the default algorithm does not exist
+	 */
+	public static KeyPair generateKeyPair(String algorithm, int keySize) throws NoSuchAlgorithmException {
+		if (keySize < 10) keySize = getPreferredKeySize(algorithm);
 		KeyPairGenerator generator = KeyPairGenerator.getInstance(algorithm);
-		int keySize = getPreferredKeySize(algorithm);
-		generator.initialize(keySize, generateSecureRandom());
+		generator.initialize(keySize, EncryptionUtils.generateSecureRandom());
 		return generateKeyPair(generator);
 	}
 
+	/**
+	 * Returns preferred key size for the given algorithm.
+	 * <p>The method knows about RSA, DSA and EC. All others will receive a 1024 bit key size</p>
+	 * @param algorithm the algorithm
+	 * @return the preferred key size
+	 */
 	public static int getPreferredKeySize(String algorithm) {
 		switch (algorithm) {
 		case "RSA" : return 4096;
@@ -96,38 +176,34 @@ public class KeyGen {
 		return 1024;
 	}
 	
-	public static KeyPair generateKeyPair(KeyPairGenerator generator) throws InvalidKeySpecException, NoSuchAlgorithmException {
+	/**
+	 * Generates a key pair using the configured generator.
+	 * @param generator the key pair generator
+	 * @return a new key pair
+	 */
+	public static KeyPair generateKeyPair(KeyPairGenerator generator) {
 		return generator.generateKeyPair();
-	}
-	
-	public static SecureRandom generateSecureRandom() throws NoSuchAlgorithmException {
-		return generateSecureRandom(DEFAULT_RANDOM_ALGORITHM);
-	}
-
-	public static SecureRandom generateSecureRandom(String algorithm) throws NoSuchAlgorithmException {
-		return generateSecureRandom(algorithm, EncryptionUtils.generateSalt());
-	}
-	
-	public static SecureRandom generateSecureRandom(String algorithm, byte seed[]) throws NoSuchAlgorithmException {
-		SecureRandom     random    = SecureRandom.getInstance(algorithm);
-		random.setSeed(seed);
-		return random;
 	}
 	
 	public static void main(String args[]) {
 		try {
-			String types[] = new String[] { "KeyFactory" };
-			//String types[] = new String[] { "KeyGenerator", "KeyFactory", "SecretKeyFactory" };
-			for (String type : types) {
-				System.out.println("Available "+type+"s:");
-				System.out.println();
-				for (Provider provider : Security.getProviders()) {
-					for (Service service : provider.getServices()) {
-						if (type.equals(service.getType())) System.out.println("   - "+service.getAlgorithm());
-					}
+			try {
+				KeyGenCli options = new KeyGenCli();
+				CommandLine cli = new CommandLine(options);
+				options.setCli(cli);
+				if (cli.isUsageHelpRequested()) {
+				    cli.usage(System.out);
+				    return;
+				} else if (cli.isVersionHelpRequested()) {
+				    cli.printVersionHelp(System.out);
+				    return;
 				}
-				System.out.println();
+				int exitCode = cli.execute(args);
+		        System.exit(exitCode);
+			} catch (Throwable t) {
+				LoggerFactory.getLogger(KeyGenCli.class).error("Cannot run CLI.", t);
 			}
+			
 			System.out.println("Generating key pair with: "+DEFAULT_KEY_ALGORITHM+" ("+getPreferredKeySize(DEFAULT_KEY_ALGORITHM)+" bits)");
 			System.out.println();
 			KeyPair keyPair = KeyGen.generateKeyPair();
