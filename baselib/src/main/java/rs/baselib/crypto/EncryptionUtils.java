@@ -38,10 +38,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
-import java.security.Provider;
 import java.security.PublicKey;
 import java.security.SecureRandom;
-import java.security.Security;
 import java.security.cert.CertificateException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
@@ -51,8 +49,6 @@ import java.util.Random;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
 
 import org.apache.commons.codec.binary.Base64;
@@ -75,6 +71,9 @@ public class EncryptionUtils {
 	 */
 	public static final String DEFAULT_SECRET_KEY_TYPE = "PBEWithMD5AndDES";
 
+	/** Default algorithm for the random seed */
+	public static final String DEFAULT_RANDOM_ALGORITHM = "SHA1PRNG";
+	
 	/**
 	 * The default number of iterations to be executed when creating the encrypting algorithm.
 	 */
@@ -204,12 +203,19 @@ public class EncryptionUtils {
 		return rc.toString();
 	}
 
+	/**
+	 * Generates a secret key (PBE) based on the given parameters.
+	 * @param iterationCount the cumber of iterations (if less than 1 then {@link EncryptionUtils#DEFAULT_ITERATIONS} will be used)
+	 * @param passPhrase the passphrase (required)
+	 * @param salt the slat (can be null)
+	 * @return a secret key based on parameters
+	 * @throws NoSuchAlgorithmException when the algorithm does not exist
+	 * @throws InvalidKeySpecException when the key spec is invalid
+	 * @deprecated Use {@link KeyGen#generateSecretKey(int, String, byte[])}
+	 */
+	@Deprecated
 	public static SecretKey getSecretKey(int iterationCount, String passPhrase, byte salt[]) throws NoSuchAlgorithmException, InvalidKeySpecException {
-		if (iterationCount < 1) iterationCount = EncryptionUtils.DEFAULT_ITERATIONS;
-		if (salt == null) salt = EncryptionUtils.generateSalt(0);
-		KeySpec keySpec = new PBEKeySpec(passPhrase.toCharArray(), salt, iterationCount);
-		SecretKey key = SecretKeyFactory.getInstance(EncryptionUtils.DEFAULT_SECRET_KEY_TYPE).generateSecret(keySpec);
-		return key;
+		return KeyGen.generateSecretKey(iterationCount, passPhrase, salt);
 	}
 
 	/**
@@ -218,9 +224,11 @@ public class EncryptionUtils {
 	 * @return key pair
 	 * @throws NoSuchProviderException when the algorithm provider does not exist
 	 * @throws NoSuchAlgorithmException when the algorithm does not exist
+	 * @deprecated Use {@link KeyGen#generateKeyPairBySeed(String)}
 	 */
+	@Deprecated
 	public static KeyPair generateKey(String seed) throws NoSuchProviderException, NoSuchAlgorithmException {
-		return generateKey(seed, null);
+		return KeyGen.generateKeyPairBySeed(seed);
 	}
 
 	/**
@@ -230,11 +238,11 @@ public class EncryptionUtils {
 	 * @return key pair
 	 * @throws NoSuchProviderException when the algorithm provider does not exist
 	 * @throws NoSuchAlgorithmException when the algorithm does not exist
-	 * @since 1.2.5
+	 * @deprecated Use {@link KeyGen#generateKeyPairBySeed(String,Charset)}
 	 */
+	@Deprecated
 	public static KeyPair generateKey(String seed, Charset charset) throws NoSuchProviderException, NoSuchAlgorithmException {
-		if (charset == null) charset = Charset.defaultCharset();
-		return generateKey(seed.getBytes(charset));
+		return KeyGen.generateKeyPairBySeed(seed, charset);
 	}
 
 	/**
@@ -243,24 +251,22 @@ public class EncryptionUtils {
 	 * @return key pair
 	 * @throws NoSuchProviderException when the algorithm provider does not exist
 	 * @throws NoSuchAlgorithmException when the algorithm does not exist
+	 * @deprecated Use {@link KeyGen#generateKeyPairBySeed(byte[])}
 	 */
+	@Deprecated
 	public static KeyPair generateKey(byte seed[]) throws NoSuchProviderException, NoSuchAlgorithmException {
-		if (seed == null) seed = generateSalt();
-		KeyPairGenerator keyGen = KeyPairGenerator.getInstance("DSA");
-		SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
-		random.setSeed(seed);
-		keyGen.initialize(1024, random);
-		KeyPair pair = keyGen.generateKeyPair();
-		return pair;
+		return KeyGen.generateKeyPairBySeed(seed);
 	}
 
 	/**
 	 * Generates a 512 byte RSA key pair.
 	 * @return the key pair
 	 * @throws NoSuchAlgorithmException when the algorithm does not exist
+	 * @deprecated Use {@link KeyGen#generateKeyPair()}
 	 */
+	@Deprecated
 	public static KeyPair generateKey() throws NoSuchAlgorithmException {
-		return generateKey("RSA", 512);
+		return KeyGen.generateKeyPair("RSA", 512);
 	}
 	
 	/**
@@ -268,7 +274,9 @@ public class EncryptionUtils {
 	 * @param keySize the key size
 	 * @return the key pair
 	 * @throws NoSuchAlgorithmException when the algorithm does not exist
+	 * @deprecated Use {@link KeyGen#generateKeyPair(String,int)}
 	 */
+	@Deprecated
 	public static KeyPair generateKey(int keySize) throws NoSuchAlgorithmException {
 		return generateKey("RSA", keySize);
 	}
@@ -276,10 +284,12 @@ public class EncryptionUtils {
 	/**
 	 * Generates a key pair.
 	 * @param algorithm algorithm, e.g. "RSA"
-	 * @param keySize teh key size
+	 * @param keySize the key size
 	 * @return the key pair
 	 * @throws NoSuchAlgorithmException when the algorithm does not exist
+	 * @deprecated Use {@link KeyGen#generateKeyPair(String,int)}
 	 */
+	@Deprecated
 	public static KeyPair generateKey(String algorithm, int keySize) throws NoSuchAlgorithmException {
 		KeyPairGenerator keyGen = KeyPairGenerator.getInstance(algorithm);
         keyGen.initialize(keySize);
@@ -287,27 +297,9 @@ public class EncryptionUtils {
 	}
 	
 	/**
-	 * Returns all security providers.
-	 * @return all security providers
-	 */
-	public static Provider[] getKeyPairGenerators() {
-		return Security.getProviders();
-	}
-	
-	/**
-	 * Encodes the public key into BASE64 representation.
-	 * @param key public key
-	 * @return BASE64 representation of key
-	 */
-	public static String encodeBase64(PublicKey key) {
-		byte b[] = key.getEncoded();
-		return encodeBase64(b);
-	}
-
-	/**
 	 * Encodes the public key into BASE64 X.509 representation.
 	 * @param key public key
-	 * @return BASE64 representation of key
+	 * @return BASE64 X.509 representation of key
 	 */
 	public static String encodeBase64X509(PublicKey key) {
 		X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(key.getEncoded());
@@ -315,11 +307,11 @@ public class EncryptionUtils {
 	}
 
 	/**
-	 * Encodes the private key into BASE64 representation.
-	 * @param key private key
+	 * Encodes the key into BASE64 representation.
+	 * @param key the key key
 	 * @return BASE64 representation of key
 	 */
-	public static String encodeBase64(PrivateKey key) {
+	public static String encodeBase64(Key key) {
 		byte b[] = key.getEncoded();
 		return encodeBase64(b);
 	}
@@ -327,7 +319,7 @@ public class EncryptionUtils {
 	/**
 	 * Encodes the private key into BASE64 PKCS8 representation.
 	 * @param key private key
-	 * @return BASE64 representation of key
+	 * @return BASE64 PKCS8 representation of key
 	 */
 	public static String encodeBase64Pkcs8(PrivateKey key) {
 		PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(key.getEncoded());
@@ -452,6 +444,61 @@ public class EncryptionUtils {
 		return Base64.encodeBase64String(b).trim();
 	}
 
+	/**
+	 * Generate a secure random using the default algorithm.
+	 * @return the random instance
+	 * @throws NoSuchAlgorithmException when the algorithm does not exist
+	 */
+	public static SecureRandom generateSecureRandom() throws NoSuchAlgorithmException {
+		return generateSecureRandom(DEFAULT_RANDOM_ALGORITHM);
+	}
+
+	/**
+	 * Generate a secure random using the default algorithm.
+	 * @param seed a given seed to be used
+	 * @return the random instance
+	 * @throws NoSuchAlgorithmException when the algorithm does not exist
+	 */
+	public static SecureRandom generateSecureRandom(byte seed[]) throws NoSuchAlgorithmException {
+		return generateSecureRandom(DEFAULT_RANDOM_ALGORITHM, seed);
+	}
+
+	/**
+	 * Generate a secure random using the given algorithm.
+	 * @param algorithm the algorithm to be used
+	 * @return the random instance
+	 * @throws NoSuchAlgorithmException when the algorithm does not exist
+	 */
+	public static SecureRandom generateSecureRandom(String algorithm) throws NoSuchAlgorithmException {
+		return generateSecureRandom(algorithm, EncryptionUtils.generateSalt());
+	}
+	
+	/**
+	 * Generate a secure random using the given algorithm and seed.
+	 * @param algorithm the algorithm to be used
+	 * @param seed the seed to be used
+	 * @return the random instance
+	 * @throws NoSuchAlgorithmException when the algorithm does not exist
+	 */
+	public static SecureRandom generateSecureRandom(String algorithm, byte seed[]) throws NoSuchAlgorithmException {
+		SecureRandom     random = SecureRandom.getInstance(algorithm);
+		if (seed == null) seed  = EncryptionUtils.generateSalt();
+		random.setSeed(seed);
+		return random;
+	}
+	
+	/**
+	 * Get a fingerprint of the given key.
+	 * @param key the key to fingerprint
+	 * @return the fingerprint
+	 * @throws NoSuchAlgorithmException when the hashing algorithm SHA-1 is not available
+	 */
+	public static String getThumbprint(Key key) throws NoSuchAlgorithmException {
+		MessageDigest md = MessageDigest.getInstance("SHA-1");
+		md.update(key.getEncoded());
+		return encodeBase64(md.digest()).toLowerCase();
+	}
+	
 	/**
 	 * Load the default keystore type.
 	 * @param filename filename
