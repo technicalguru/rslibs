@@ -3,8 +3,6 @@ package rs.baselib.test;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.RandomUtils;
-
 /**
  * Provided values as a list from another builder (randomly).
  * @author ralph
@@ -34,7 +32,7 @@ public class ListBuilder<T> implements Builder<List<T>> {
 	@Override
 	public List<T> build() {
 		List<T> rc = new ArrayList<>();
-		int n = RandomUtils.nextInt(min, max);
+		int n = BuilderUtils.RNG.nextInt(min, max);
 		for (int i=0; i<n; i++) rc.add(builder.build());
 		return rc;
 	}

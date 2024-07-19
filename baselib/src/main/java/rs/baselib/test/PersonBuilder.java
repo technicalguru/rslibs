@@ -28,8 +28,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.commons.lang3.RandomUtils;
-
 import rs.baselib.io.FileFinder;
 import rs.baselib.util.CommonUtils;
 
@@ -216,12 +214,12 @@ public class PersonBuilder implements Builder<PersonBuilder.Person> {
 		loadNames();
 		
 		Person rc = new Person();
-		if ((firstNames != null) && !firstNames.isEmpty()) rc.firstName = firstNames.get(RandomUtils.nextInt(0, firstNames.size()));
-		if ((lastNames  != null) && !lastNames.isEmpty())  rc.lastName  = lastNames.get(RandomUtils.nextInt(0, lastNames.size()));
-		if ((genders    != null) && !genders.isEmpty())    rc.gender    = genders.get(RandomUtils.nextInt(0, genders.size()));
+		if ((firstNames != null) && !firstNames.isEmpty()) rc.firstName = firstNames.get(BuilderUtils.RNG.nextInt(0, firstNames.size()));
+		if ((lastNames  != null) && !lastNames.isEmpty())  rc.lastName  = lastNames.get(BuilderUtils.RNG.nextInt(0, lastNames.size()));
+		if ((genders    != null) && !genders.isEmpty())    rc.gender    = genders.get(BuilderUtils.RNG.nextInt(0, genders.size()));
 		
 		LocalDate now = LocalDate.now();
-		Period period = Period.of(RandomUtils.nextInt(minAge, maxAge), RandomUtils.nextInt(0, 12), RandomUtils.nextInt(0, 28));  
+		Period period = Period.of(BuilderUtils.RNG.nextInt(minAge, maxAge), BuilderUtils.RNG.nextInt(0, 12), BuilderUtils.RNG.nextInt(0, 28));  
 		rc.birthday   = now.minus(period);
 		rc.age        = period.getYears();
 		return rc;

@@ -11,7 +11,7 @@
 	</properties>
 	
 	<artifactId>totp</artifactId>
-	<packaging>bundle</packaging>
+	<packaging>jar</packaging>
 	<name>${project.groupId}.${project.artifactId}</name>
 	<description>Provides TOTP</description>
 	<url>https://github.com/technicalguru/rslibs</url>
@@ -20,24 +20,12 @@
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
-			<version>1.16.0</version>
+			<version>1.17.1</version>
 		</dependency>
 	</dependencies>
 	
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<version>${maven.bundle.version}</version>
-				<extensions>true</extensions>
-				<configuration>
-					<instructions>
-						<Export-Package>rs.jackson.*</Export-Package>
-						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-					</instructions>
-				</configuration>
-			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
@@ -48,17 +36,5 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<reporting>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-changes-plugin</artifactId>
-				<configuration>
-					<component>${project.artifactId}</component>
-				</configuration>
-			</plugin>
-		</plugins>
-	</reporting>
 
 </project>

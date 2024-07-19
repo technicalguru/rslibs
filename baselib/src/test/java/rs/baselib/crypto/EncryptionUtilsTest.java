@@ -61,27 +61,6 @@ public class EncryptionUtilsTest {
 	}
 
 	/**
-	 * Test method for {@link EncryptionUtils#generateKey(java.lang.String)}.
-	 */
-	@Test
-	public void testGenerateKeyString() {
-		try {
-			String seed = EncryptionUtils.generatePassword(8);
-			assertNotNull(seed);
-
-			KeyPair keyPair = EncryptionUtils.generateKey(seed.getBytes(StandardCharsets.UTF_8));
-			assertNotNull(keyPair);
-			PrivateKey privateKey = keyPair.getPrivate();
-			PublicKey publicKey   = keyPair.getPublic();
-			assertNotNull(privateKey);
-			assertNotNull(publicKey);
-		} catch (Throwable t) {
-			t.printStackTrace();
-			fail(t.getMessage());
-		}
-	}
-
-	/**
 	 * Test method for {@link EncryptionUtils#encodeBase64(java.lang.String)}.
 	 */
 	@Test
@@ -102,7 +81,7 @@ public class EncryptionUtilsTest {
 			// Create the key first
 			String seed = EncryptionUtils.generatePassword(8);
 			assertNotNull(seed);
-			KeyPair keyPair = EncryptionUtils.generateKey(seed.getBytes(StandardCharsets.UTF_8));
+			KeyPair keyPair = KeyGen.generateKeyPairBySeed(seed.getBytes(StandardCharsets.UTF_8));
 			assertNotNull(keyPair);
 			PrivateKey privateKey = keyPair.getPrivate();
 			PublicKey publicKey   = keyPair.getPublic();

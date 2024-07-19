@@ -21,8 +21,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.commons.lang3.RandomUtils;
-
 import rs.baselib.util.CommonUtils;
 
 /**
@@ -69,7 +67,7 @@ public class RandomSelectBuilder<T> implements Builder<T> {
 	 */
 	@Override
 	public T build() {
-		return values.get(RandomUtils.nextInt(0, values.size()));
+		return values.get(BuilderUtils.RNG.nextInt(0, values.size()));
 	}
 	
 	
