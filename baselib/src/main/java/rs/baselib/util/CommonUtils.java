@@ -1426,5 +1426,30 @@ public class CommonUtils {
 
 		return rc.toString();
 	}
+
+	/** 
+	 * Create hex string (uppercase) from byte array.
+	 * @param bytes bytes to convert
+	 * @return hexadecimal formatting of the bytes
+	 */
+	public static String hex(byte[] bytes) {
+		return hex(bytes, true);
+	}
 	
+	/** 
+	 * Create hex string from byte array.
+	 * @param bytes bytes to convert
+	 * @param upperCase when return value shall be uppercase.
+	 * @return hexadecimal formatting of the bytes
+	 */
+	public static String hex(byte[] bytes, boolean upperCase) {
+        StringBuilder result = new StringBuilder();
+        for (byte aByte : bytes) {
+            result.append(String.format("%02x", aByte));
+            // upper case
+            // result.append(String.format("%02X", aByte));
+        }
+        return upperCase ? result.toString().toUpperCase() : result.toString();
+    }
+
 }
