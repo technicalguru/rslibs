@@ -26,6 +26,8 @@ import rs.baselib.util.CommonUtils;
 /**
  * Provides values randomly from a given list.
  * 
+ * @param <T> the class to randomly select
+
  * @author ralph
  *
  */
