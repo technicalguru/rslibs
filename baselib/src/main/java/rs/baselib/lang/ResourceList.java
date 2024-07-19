@@ -19,6 +19,8 @@ package rs.baselib.lang;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -70,7 +72,7 @@ public class ResourceList{
 		try {
 			rc = jarFile.getManifest();
 		} finally {
-			jarFile.close();
+			if (jarFile != null) jarFile.close();
 		}
 		return rc;
 	}
@@ -148,13 +150,15 @@ public class ResourceList{
 			} else {
 				rc.addAll(getResourcesFromJarFile(file, pattern));
 			}
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return rc;
 	}
 
-	private static Collection<URL> getResourcesFromJarFile(File file, Pattern pattern) throws IOException {
+	private static Collection<URL> getResourcesFromJarFile(File file, Pattern pattern) throws IOException, URISyntaxException {
 		List<URL> rc = new ArrayList<URL>();
 		JarFile jarFile = new JarFile(file);
 
@@ -165,7 +169,7 @@ public class ResourceList{
 				String fileName = entry.getName();
 				boolean accept = pattern.matcher(fileName).matches();
 				if (accept) {
-					rc.add(new URL("jar:file:"+file.getCanonicalPath()+"!/"+fileName));
+					rc.add(new URI("jar:file:"+file.getCanonicalPath()+"!/"+fileName).toURL());
 				}
 			}
 		} finally {
