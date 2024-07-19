@@ -3,16 +3,16 @@
 	<parent>
 		<groupId>eu.ralph-schuster</groupId>
 		<artifactId>libs</artifactId>
-		<version>5.1.0</version>
+		<version>5.2.0</version>
 	</parent>
 
 	<properties>
 		<project.home>https://github.com/technicalguru/rslibs</project.home>
-		<jackson.version>2.16.1</jackson.version>
+		<jackson.version>2.17.2</jackson.version>
 	</properties>
 	
 	<artifactId>jackson</artifactId>
-	<packaging>bundle</packaging>
+	<packaging>jar</packaging>
 	<name>${project.groupId}.${project.artifactId}</name>
 	<description>Converter tools for JSON and YAML using Jackson</description>
 	<url>https://github.com/technicalguru/rslibs</url>
@@ -43,18 +43,6 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<version>${maven.bundle.version}</version>
-				<extensions>true</extensions>
-				<configuration>
-					<instructions>
-						<Export-Package>rs.jackson.*</Export-Package>
-						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-					</instructions>
-				</configuration>
-			</plugin>
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<configuration>
@@ -64,17 +52,5 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<reporting>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-changes-plugin</artifactId>
-				<configuration>
-					<component>${project.artifactId}</component>
-				</configuration>
-			</plugin>
-		</plugins>
-	</reporting>
 
 </project>

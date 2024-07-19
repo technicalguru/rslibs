@@ -20,12 +20,20 @@ package rs.baselib.test;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.rng.UniformRandomProvider;
+import org.apache.commons.rng.simple.RandomSource;
+
 /**
  * Helps using the builder pattern.
  * @author ralph
  *
  */
 public class BuilderUtils {
+
+	/**
+	 * A random generator.
+	 */
+	public static final UniformRandomProvider RNG = RandomSource.JDK.create();
 
 
 	/**

@@ -33,6 +33,7 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
@@ -1225,11 +1226,13 @@ public class CommonUtils {
 		try {
 			String paths[] = url.getPath().split("#", 2);
 			if (isEmpty(anchor)) {
-				return new URL(url.getProtocol(), url.getHost(), url.getPort(), paths[0]);
+				return new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), paths[0], url.getQuery(), null).toURL();
 			} else {
-				return new URL(url.getProtocol(), url.getHost(), url.getPort(), paths[0]+"#"+anchor);
+				return new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), paths[0], url.getQuery(), anchor).toURL();
 			}
 		} catch (MalformedURLException e) {
+			LoggerFactory.getLogger(CommonUtils.class).error("Cannot append anchor", e);
+		} catch (URISyntaxException e) {
 			LoggerFactory.getLogger(CommonUtils.class).error("Cannot append anchor", e);
 		}
 		return url;
