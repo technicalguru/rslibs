@@ -36,7 +36,7 @@ public interface SyncHelper<T> {
 	 * @param value the value to add
 	 * @throws SyncException when adding fails
 	 */
-	default T add(T value) {
+	default T add(T value) throws Exception {
 		return value;
 	}
 	
@@ -45,7 +45,7 @@ public interface SyncHelper<T> {
 	 * @param value the value to remove
 	 * @throws SyncException when removing fails
 	 */
-	default T remove(T value) {
+	default T remove(T value) throws Exception {
 		return value;
 	}
 }

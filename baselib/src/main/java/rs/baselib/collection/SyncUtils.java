@@ -3,10 +3,11 @@ package rs.baselib.collection;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.apache.commons.collections4.CollectionUtils;
+
+import rs.baselib.function.ExceptionalFunction;
 
 /**
  * Helper methods for synchronizing collections.
@@ -28,8 +29,8 @@ public class SyncUtils {
 			Collection<T>                       collection, 
 			Collection<T>                       newValues, 
 			BiFunction<Collection<T>,T,Boolean> existsFunction, 
-			Function<T,T>                       addFunction,
-			Function<T,T>                       removeFunction
+			ExceptionalFunction<T,T>            addFunction,
+			ExceptionalFunction<T,T>            removeFunction
 	) throws SyncException {
 		try {
 			@SuppressWarnings("unchecked")
@@ -70,7 +71,11 @@ public class SyncUtils {
 			Collection<T>     newValues,
 			SyncHelper<T> syncer
 	) throws SyncException {
-		return sync(collection, newValues, syncer::exists, syncer::add, syncer::remove);
+		try {
+			return sync(collection, newValues, syncer::exists, syncer::add, syncer::remove);
+		} catch (Exception e) {
+			throw new SyncException(e);
+		}
 	}
 
 	/**
@@ -88,8 +93,8 @@ public class SyncUtils {
 			Supplier<Collection<T>>             collectionSupplier, 
 			Collection<T>                       newValues, 
 			BiFunction<Collection<T>,T,Boolean> existsFunction, 
-			Function<T,T>                       addFunction,
-			Function<T,T>                       removeFunction
+			ExceptionalFunction<T,T>                       addFunction,
+			ExceptionalFunction<T,T>                       removeFunction
 	) throws SyncException {
 		return sync(collectionSupplier.get(), newValues, existsFunction, addFunction, removeFunction);
 	}
