@@ -30,13 +30,10 @@ import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 import java.security.Key;
 import java.security.KeyFactory;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
@@ -48,7 +45,6 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Random;
 
 import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
 import javax.crypto.spec.PBEParameterSpec;
 
 import org.apache.commons.codec.binary.Base64;
@@ -202,99 +198,6 @@ public class EncryptionUtils {
 
 		return rc.toString();
 	}
-
-//	/**
-//	 * Generates a secret key (PBE) based on the given parameters.
-//	 * @param iterationCount the cumber of iterations (if less than 1 then {@link EncryptionUtils#DEFAULT_ITERATIONS} will be used)
-//	 * @param passPhrase the passphrase (required)
-//	 * @param salt the slat (can be null)
-//	 * @return a secret key based on parameters
-//	 * @throws NoSuchAlgorithmException when the algorithm does not exist
-//	 * @throws InvalidKeySpecException when the key spec is invalid
-//	 * @deprecated Use {@link KeyGen#generateSecretKey(int, String, byte[])}
-//	 */
-//	@Deprecated
-//	public static SecretKey getSecretKey(int iterationCount, String passPhrase, byte salt[]) throws NoSuchAlgorithmException, InvalidKeySpecException {
-//		return KeyGen.generateSecretKey(iterationCount, passPhrase, salt);
-//	}
-//
-//	/**
-//	 * Generates a public/private key pair.
-//	 * @param seed seed to be used.
-//	 * @return key pair
-//	 * @throws NoSuchProviderException when the algorithm provider does not exist
-//	 * @throws NoSuchAlgorithmException when the algorithm does not exist
-//	 * @deprecated Use {@link KeyGen#generateKeyPairBySeed(String)}
-//	 */
-//	@Deprecated
-//	public static KeyPair generateKey(String seed) throws NoSuchProviderException, NoSuchAlgorithmException {
-//		return KeyGen.generateKeyPairBySeed(seed);
-//	}
-//
-//	/**
-//	 * Generates a public/private key pair.
-//	 * @param seed seed to be used.
-//	 * @param charset the charset to be used for string encoding (<code>null</code> for {@link Charset#defaultCharset() default charset})
-//	 * @return key pair
-//	 * @throws NoSuchProviderException when the algorithm provider does not exist
-//	 * @throws NoSuchAlgorithmException when the algorithm does not exist
-//	 * @deprecated Use {@link KeyGen#generateKeyPairBySeed(String,Charset)}
-//	 */
-//	@Deprecated
-//	public static KeyPair generateKey(String seed, Charset charset) throws NoSuchProviderException, NoSuchAlgorithmException {
-//		return KeyGen.generateKeyPairBySeed(seed, charset);
-//	}
-//
-//	/**
-//	 * Generates a public/private key pair.
-//	 * @param seed seed to be used.
-//	 * @return key pair
-//	 * @throws NoSuchProviderException when the algorithm provider does not exist
-//	 * @throws NoSuchAlgorithmException when the algorithm does not exist
-//	 * @deprecated Use {@link KeyGen#generateKeyPairBySeed(byte[])}
-//	 */
-//	@Deprecated
-//	public static KeyPair generateKey(byte seed[]) throws NoSuchProviderException, NoSuchAlgorithmException {
-//		return KeyGen.generateKeyPairBySeed(seed);
-//	}
-//
-//	/**
-//	 * Generates a 512 byte RSA key pair.
-//	 * @return the key pair
-//	 * @throws NoSuchAlgorithmException when the algorithm does not exist
-//	 * @deprecated Use {@link KeyGen#generateKeyPair()}
-//	 */
-//	@Deprecated
-//	public static KeyPair generateKey() throws NoSuchAlgorithmException {
-//		return KeyGen.generateKeyPair("RSA", 512);
-//	}
-//	
-//	/**
-//	 * Generates a RSA key pair of given size 
-//	 * @param keySize the key size
-//	 * @return the key pair
-//	 * @throws NoSuchAlgorithmException when the algorithm does not exist
-//	 * @deprecated Use {@link KeyGen#generateKeyPair(String,int)}
-//	 */
-//	@Deprecated
-//	public static KeyPair generateKey(int keySize) throws NoSuchAlgorithmException {
-//		return generateKey("RSA", keySize);
-//	}
-//	
-//	/**
-//	 * Generates a key pair.
-//	 * @param algorithm algorithm, e.g. "RSA"
-//	 * @param keySize the key size
-//	 * @return the key pair
-//	 * @throws NoSuchAlgorithmException when the algorithm does not exist
-//	 * @deprecated Use {@link KeyGen#generateKeyPair(String,int)}
-//	 */
-//	@Deprecated
-//	public static KeyPair generateKey(String algorithm, int keySize) throws NoSuchAlgorithmException {
-//		KeyPairGenerator keyGen = KeyPairGenerator.getInstance(algorithm);
-//        keyGen.initialize(keySize);
-//        return keyGen.genKeyPair();
-//	}
 	
 	/**
 	 * Encodes the public key into BASE64 X.509 representation.

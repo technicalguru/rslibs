@@ -165,9 +165,11 @@ public class CommonUtilsTest {
 
 	@Test
 	public void testLoadContentWithNewline() throws IOException {
-		assertEquals("finder-file5\n", CommonUtils.loadContent(new File("src/test/resources/finder-file5.txt")));
+		String actual = CommonUtils.loadContent(new File("src/test/resources/finder-file5.txt"));
+		if (actual.indexOf('\r') > 0) actual = actual.replaceAll("\\r", "");
+		assertEquals("finder-file5\n", actual);
 	}
-
+	
 	@Test
 	public void testLoadContentWithoutNewline() throws IOException {
 		assertEquals("finder-file6", CommonUtils.loadContent(new File("src/test/resources/finder-file6.txt")));
