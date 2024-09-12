@@ -37,11 +37,13 @@ public class SyncUtils {
 			Collection<T> rc = (Collection<T>)collection.getClass().getConstructor().newInstance();
 			
 			// Add new values
-			for (T value : newValues) {
-				if (!existsFunction.apply(collection, value)) {
-					value = addFunction.apply(value);
+			if ((newValues != null) && !newValues.isEmpty()) {
+				for (T value : newValues) {
+					if (!existsFunction.apply(collection, value)) {
+						value = addFunction.apply(value);
+					}
+					rc.add(value);
 				}
-				rc.add(value);
 			}
 			
 			// Remove values we did not see yet
