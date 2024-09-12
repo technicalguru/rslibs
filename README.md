@@ -16,7 +16,7 @@ Most of this code was created when I faced specific problems in my professional 
 RS Library modules are maintained in the same Maven project and, hence, follow the same release cycle. That means that each modules will have the same version numbers and are published at the same time.
 
 ## Latest Version
-Latest version is 5.2.1. Please note that Java 21 is required since 5.1.0.
+Latest version is 5.2.2. Please note that Java 21 is required since 5.1.0.
 
 ## Upgrading v4 to v5
 V5 is a major release that removes several deprecated date and calendar classes. This includes the ``RsDate`` class and its descendants as well as some bean helper classes. They can be easily replaced nowadays with other standard libraries such as the Java Time API or commons-beans or alike. 
