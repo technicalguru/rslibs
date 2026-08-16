@@ -45,4 +45,26 @@
 		<module>jackson</module>
 		<module>otp</module>
 	</modules>
+	
+	<build>
+		<plugins>
+			<plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.21.0</version>
+                <configuration>
+                    <!-- No Beta-/Alpha-Versions -->
+                    <allowSnapshots>false</allowSnapshots>
+                </configuration>
+                <executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>display-dependency-updates</goal>
+						</goals>
+					</execution>
+				</executions>
+            </plugin>
+		</plugins>
+	</build>
 </project>
