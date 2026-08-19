@@ -13,7 +13,7 @@
 	</properties>
 
 	<artifactId>libs</artifactId>
-	<version>5.2.5</version>
+	<version>5.2.6</version>
 	<packaging>pom</packaging>
 
 	<url>https://github.com/technicalguru/rslibs</url>
@@ -24,7 +24,7 @@
 		<connection>scm:git:https://github.com/technicalguru/rslibs.git</connection>
 		<developerConnection>scm:git:https://github.com/technicalguru/rslibs.git</developerConnection>
 		<url>https://github.com/technicalguru/rslibs</url>
-		<tag>libs-5.2.5</tag>
+		<tag>libs-5.2.6</tag>
 	</scm>
 
 	<issueManagement>
@@ -45,4 +45,26 @@
 		<module>jackson</module>
 		<module>otp</module>
 	</modules>
+	
+	<build>
+		<plugins>
+			<plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.21.0</version>
+                <configuration>
+                    <!-- No Beta-/Alpha-Versions -->
+                    <allowSnapshots>false</allowSnapshots>
+                </configuration>
+                <executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>display-dependency-updates</goal>
+						</goals>
+					</execution>
+				</executions>
+            </plugin>
+		</plugins>
+	</build>
 </project>
