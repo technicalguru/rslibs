@@ -81,7 +81,7 @@ public class EncryptionUtils {
 	public static final String PASSWORD_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!\"&/()=?;*+'#;,:._-<>";
 
 	/** Encoder for line limiting encoding */
-	private static Base64 base64 = new Base64(80);
+	private static Base64 base64 = Base64.builder().setLineLength(80).get();
 	
 	/**
 	 * Creates a key specification.

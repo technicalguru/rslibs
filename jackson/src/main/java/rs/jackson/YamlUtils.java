@@ -9,12 +9,16 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLParser;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
@@ -30,7 +34,7 @@ public class YamlUtils {
 	private static ObjectMapper yamlMapper;
 	
 	/**
-	 * Convert any object to its Json representation.
+	 * Convert any object to its YAML representation.
 	 * @param o - the object to convert
 	 * @return the YAML string
 	 */
@@ -45,48 +49,97 @@ public class YamlUtils {
 	/**
 	 * Convert from YAML to Object.
 	 * @param <T> Class type
-	 * @param json YAML string
+	 * @param yaml YAML string
 	 * @param clazz Type Class
 	 * @return the object
 	 */
-	public static <T> T fromYaml(String json, Class<T> clazz) {
+	public static <T> T fromYaml(String yaml, Class<T> clazz) {
 		try {
-			return getYamlMapper().readValue(json, clazz);
+			return getYamlMapper().readValue(yaml, clazz);
 		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from YAML \""+json+"\"", t);
+			throw new RuntimeException("Cannot convert from YAML \""+yaml+"\"", t);
 		}
 	}
 	
 	/**
 	 * Convert from YAML to Object.
 	 * @param <T> Class type
-	 * @param json YAML string
+	 * @param yaml YAML string
 	 * @param type Java type
 	 * @return the object
 	 */
-	public static <T> T fromYaml(String json, JavaType type) {
+	public static <T> T fromYaml(String yaml, JavaType type) {
 		try {
-			return getYamlMapper().readValue(json, type);
+			return getYamlMapper().readValue(yaml, type);
 		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from YAML \""+json+"\"", t);
+			throw new RuntimeException("Cannot convert from YAML \""+yaml+"\"", t);
 		}
 	}
 	
 	/**
+	 * Parses the YAML, navigates to given path and returns object as given type.
+	 * @param <T> class type
+	 * @param yaml YAML string
+	 * @param path the path (simple dot notation, nothing else!!!)
+	 * @param clazz Type class
+	 * @return the object at the specified path or null if it doesn't exist
+	 */
+	public static <T> T fromYaml(String yaml, String path, Class<T> clazz) {
+		try {
+			return convertFrom(getYamlMapper().readTree(yaml), path, clazz);
+		} catch (Throwable t) {
+			throw new RuntimeException("Cannot convert from YAML \""+yaml+"\"", t);
+		}
+	}
+
+	/**
+	 * Parses the YAML, navigates to given path and returns object as given type.
+	 * @param <T> class type
+	 * @param yaml YAML string
+	 * @param path the path (simple dot notation, nothing else!!!)
+	 * @param type Java type
+	 * @return the object at the specified path or null if it doesn't exist
+	 */
+	public static <T> T fromYaml(String yaml, String path, JavaType type) {
+		try {
+			return convertFrom(getYamlMapper().readTree(yaml), path, type);
+		} catch (Throwable t) {
+			throw new RuntimeException("Cannot convert from YAML \""+yaml+"\"", t);
+		}
+	}
+
+	/**
 	 * Convert from YAML to Object.
 	 * @param <T> Class type
-	 * @param json YAML string
+	 * @param yaml YAML string
 	 * @param type Type reference
 	 * @return the object
 	 */
-	public static <T> T fromYaml(String json, TypeReference<T> type) {
+	public static <T> T fromYaml(String yaml, TypeReference<T> type) {
 		try {
-			return getYamlMapper().readValue(json, type);
+			return getYamlMapper().readValue(yaml, type);
 		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from YAML \""+json+"\"", t);
+			throw new RuntimeException("Cannot convert from YAML \""+yaml+"\"", t);
 		}
 	}
 	
+	/**
+	 * Parses the YAML, navigates to given path and returns object as given type.
+	 * <p>Use e.g with: <code>new TypeReference&lt;ArrayList&lt;String&gt;&gt;() {}</code></p>
+	 * @param <T> class type
+	 * @param yaml YAML string
+	 * @param path the path (simple dot notation, nothing else!!!)
+	 * @param type Type reference
+	 * @return the object at the specified path or null if it doesn't exist
+	 */
+	public static <T> T fromYaml(String yaml, String path, TypeReference<T> type) {
+		try {
+			return convertFrom(getYamlMapper().readTree(yaml), path, type);
+		} catch (Throwable t) {
+			throw new RuntimeException("Cannot convert from YAML \""+yaml+"\"", t);
+		}
+	}
+
 	/**
 	 * Convert from YAML to Object.
 	 * @param <T> Class type
@@ -103,6 +156,22 @@ public class YamlUtils {
 	}
 	
 	/**
+	 * Parses the YAML, navigates to given path and returns object as given type.
+	 * @param <T> class type
+	 * @param file YAML file
+	 * @param path the path (simple dot notation, nothing else!!!)
+	 * @param clazz Type class
+	 * @return the object at the specified path or null if it doesn't exist
+	 */
+	public static <T> T fromYaml(File file, String path, Class<T> clazz) {
+		try {
+			return convertFrom(getYamlMapper().readTree(file), path, clazz);
+		} catch (Throwable t) {
+			throw new RuntimeException("Cannot convert from YAML file \""+file+"\"", t);
+		}
+	}
+
+	/**
 	 * Convert from YAML to Object.
 	 * @param <T> Class type
 	 * @param file YAML file
@@ -117,6 +186,22 @@ public class YamlUtils {
 		}
 	}
 	
+	/**
+	 * Parses the YAML, navigates to given path and returns object as given type.
+	 * @param <T> class type
+	 * @param file YAML file
+	 * @param path the path (simple dot notation, nothing else!!!)
+	 * @param type Java type
+	 * @return the object at the specified path or null if it doesn't exist
+	 */
+	public static <T> T fromYaml(File file, String path, JavaType type) {
+		try {
+			return convertFrom(getYamlMapper().readTree(file), path, type);
+		} catch (Throwable t) {
+			throw new RuntimeException("Cannot convert from YAML file \""+file+"\"", t);
+		}
+	}
+
 	/**
 	 * Convert from YAML to Object.
 	 * @param <T> Class type
@@ -133,6 +218,23 @@ public class YamlUtils {
 	}
 	
 	/**
+	 * Parses the YAML, navigates to given path and returns object as given type.
+	 * <p>Use e.g with: <code>new TypeReference&lt;ArrayList&lt;String&gt;&gt;() {}</code></p>
+	 * @param <T> class type
+	 * @param file YAML file
+	 * @param path the path (simple dot notation, nothing else!!!)
+	 * @param type Type reference
+	 * @return the object at the specified path or null if it doesn't exist
+	 */
+	public static <T> T fromYaml(File file, String path, TypeReference<T> type) {
+		try {
+			return convertFrom(getYamlMapper().readTree(file), path, type);
+		} catch (Throwable t) {
+			throw new RuntimeException("Cannot convert from YAML file \""+file+"\"", t);
+		}
+	}
+
+	/**
 	 * Convert from YAML to Object.
 	 * @param <T> Class type
 	 * @param stream YAML input stream
@@ -147,6 +249,22 @@ public class YamlUtils {
 		}
 	}
 	
+	/**
+	 * Parses the YAML, navigates to given path and returns object as given type.
+	 * @param <T> class type
+	 * @param stream YAML input stream
+	 * @param path the path (simple dot notation, nothing else!!!)
+	 * @param clazz Type class
+	 * @return the object at the specified path or null if it doesn't exist
+	 */
+	public static <T> T fromYaml(InputStream stream, String path, Class<T> clazz) {
+		try {
+			return convertFrom(getYamlMapper().readTree(stream), path, clazz);
+		} catch (Throwable t) {
+			throw new RuntimeException("Cannot convert from YAML stream.", t);
+		}
+	}
+
 	/**
 	 * Convert from YAML to Object.
 	 * @param <T> Class type
@@ -163,6 +281,22 @@ public class YamlUtils {
 	}
 	
 	/**
+	 * Parses the YAML, navigates to given path and returns object as given type.
+	 * @param <T> class type
+	 * @param stream YAML input stream
+	 * @param path the path (simple dot notation, nothing else!!!)
+	 * @param type Java type
+	 * @return the object at the specified path or null if it doesn't exist
+	 */
+	public static <T> T fromYaml(InputStream stream, String path, JavaType type) {
+		try {
+			return convertFrom(getYamlMapper().readTree(stream), path, type);
+		} catch (Throwable t) {
+			throw new RuntimeException("Cannot convert from YAML stream.", t);
+		}
+	}
+
+	/**
 	 * Convert from YAML to Object.
 	 * @param <T> Class type
 	 * @param stream YAML input stream
@@ -177,6 +311,23 @@ public class YamlUtils {
 		}
 	}
 	
+	/**
+	 * Parses the YAML, navigates to given path and returns object as given type.
+	 * <p>Use e.g with: <code>new TypeReference&lt;ArrayList&lt;String&gt;&gt;() {}</code></p>
+	 * @param <T> class type
+	 * @param stream YAML input stream
+	 * @param path the path (simple dot notation, nothing else!!!)
+	 * @param type Type reference
+	 * @return the object at the specified path or null if it doesn't exist
+	 */
+	public static <T> T fromYaml(InputStream stream, String path, TypeReference<T> type) {
+		try {
+			return convertFrom(getYamlMapper().readTree(stream), path, type);
+		} catch (Throwable t) {
+			throw new RuntimeException("Cannot convert from YAML stream.", t);
+		}
+	}
+
 	/**
 	 * Convert from YAML to Object.
 	 * @param <T> Class type
@@ -193,6 +344,22 @@ public class YamlUtils {
 	}
 	
 	/**
+	 * Parses the YAML, navigates to given path and returns object as given type.
+	 * @param <T> class type
+	 * @param reader YAML reader
+	 * @param path the path (simple dot notation, nothing else!!!)
+	 * @param clazz Type class
+	 * @return the object at the specified path or null if it doesn't exist
+	 */
+	public static <T> T fromYaml(Reader reader, String path, Class<T> clazz) {
+		try {
+			return convertFrom(getYamlMapper().readTree(reader), path, clazz);
+		} catch (Throwable t) {
+			throw new RuntimeException("Cannot convert from YAML reader.", t);
+		}
+	}
+
+	/**
 	 * Convert from YAML to Object.
 	 * @param <T> Class type
 	 * @param reader YAML reader
@@ -207,6 +374,22 @@ public class YamlUtils {
 		}
 	}
 	
+	/**
+	 * Parses the YAML, navigates to given path and returns object as given type.
+	 * @param <T> class type
+	 * @param reader YAML reader
+	 * @param path the path (simple dot notation, nothing else!!!)
+	 * @param type Java type
+	 * @return the object at the specified path or null if it doesn't exist
+	 */
+	public static <T> T fromYaml(Reader reader, String path, JavaType type) {
+		try {
+			return convertFrom(getYamlMapper().readTree(reader), path, type);
+		} catch (Throwable t) {
+			throw new RuntimeException("Cannot convert from YAML reader.", t);
+		}
+	}
+
 	/**
 	 * Convert from YAML to Object.
 	 * @param <T> Class type
@@ -223,15 +406,93 @@ public class YamlUtils {
 	}
 	
 	/**
+	 * Parses the YAML, navigates to given path and returns object as given type.
+	 * <p>Use e.g with: <code>new TypeReference&lt;ArrayList&lt;String&gt;&gt;() {}</code></p>
+	 * @param <T> class type
+	 * @param reader YAML reader
+	 * @param path the path (simple dot notation, nothing else!!!)
+	 * @param type Type reference
+	 * @return the object at the specified path or null if it doesn't exist
+	 */
+	public static <T> T fromYaml(Reader reader, String path, TypeReference<T> type) {
+		try {
+			return convertFrom(getYamlMapper().readTree(reader), path, type);
+		} catch (Throwable t) {
+			throw new RuntimeException("Cannot convert from YAML reader.", t);
+		}
+	}
+
+	/**
+	 * Convert from a specific sub-path in the {@link JsonNode}.
+	 * @param <T> class type
+	 * @param root node to start from when traversing
+	 * @param path the path (simple dot notation, e.g. "path1.path2" - nothing else!!!)
+	 * @param type Java Type
+	 * @return the object at the specified path or null if it doesn't exist
+	 */
+	public static <T> T convertFrom(JsonNode root, String path, Class<T> type) {
+		try {
+			Optional<JsonNode> child = JsonUtils.traverse(root, path);
+			if (child.isPresent()) {
+				return getYamlMapper().convertValue(child.get(), type);
+			}
+			return null;
+		} catch (Throwable t) {
+			throw new RuntimeException("Cannot convert from JSON node.", t);
+		}
+	}
+
+	/**
+	 * Convert from a specific sub-path in the {@link JsonNode}.
+	 * @param <T> class type
+	 * @param root node to start from when traversing
+	 * @param path the path (simple dot notation, e.g. "path1.path2" - nothing else!!!)
+	 * @param type Java Type
+	 * @return the object at the specified path or null if it doesn't exist
+	 */
+	public static <T> T convertFrom(JsonNode root, String path, JavaType type) {
+		try {
+			Optional<JsonNode> child = JsonUtils.traverse(root, path);
+			if (child.isPresent()) {
+				return getYamlMapper().convertValue(child.get(), type);
+			}
+			return null;
+		} catch (Throwable t) {
+			throw new RuntimeException("Cannot convert from JSON node.", t);
+		}
+	}
+
+	/**
+	 * Convert from a specific sub-path in the {@link JsonNode}.
+	 * @param <T> class type
+	 * @param root node to start from when traversing
+	 * @param path the path (simple dot notation, e.g. "path1.path2" - nothing else!!!)
+	 * @param type Type Reference
+	 * @return the object at the specified path or null if it doesn't exist
+	 */
+	public static <T> T convertFrom(JsonNode root, String path, TypeReference<T> type) {
+		try {
+			Optional<JsonNode> child = JsonUtils.traverse(root, path);
+			if (child.isPresent()) {
+				return getYamlMapper().convertValue(child.get(), type);
+			}
+			return null;
+		} catch (Throwable t) {
+			throw new RuntimeException("Cannot convert from JSON node.", t);
+		}
+	}
+
+	/**
 	 * Returns a configured JsonMapper object.
 	 * @return the JsonMapper
 	 */
 	public static ObjectMapper getYamlMapper() {
 		if (yamlMapper == null) {
-			yamlMapper = new ObjectMapper(getYamlFactory());
-			yamlMapper.findAndRegisterModules();
-			yamlMapper.registerModule(new JavaTimeModule());
-			yamlMapper.setSerializationInclusion(Include.NON_NULL);
+			yamlMapper = YAMLMapper.builder(getYamlFactory())
+					.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+					.addModule(new JavaTimeModule())
+					.defaultPropertyInclusion(JsonInclude.Value.ALL_NON_NULL)
+					.build();
 		}
 		return yamlMapper;
 	}
@@ -272,7 +533,7 @@ public class YamlUtils {
 	 * @see com.fasterxml.jackson.dataformat.yaml.YAMLFactory#createParser(java.net.URL)
 	 */
 	public static YAMLParser getParser(URL url) throws IOException {
-		return getYamlFactory().createParser(url);
+		return getYamlFactory().createParser(url.openStream());
 	}
 
 	/**
