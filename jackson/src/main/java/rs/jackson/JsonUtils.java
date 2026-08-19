@@ -10,15 +10,21 @@ import java.io.Reader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+import rs.baselib.util.CommonUtils;
 
 /**
  * JSON utils for mapping back and forth
@@ -31,7 +37,7 @@ public class JsonUtils {
 	private static ObjectMapper jsonMapper;
 	
 	/**
-	 * Convert any object to its Json representation.
+	 * Convert any object to its JSON representation.
 	 * @param o - the object to convert
 	 * @return the JSON string
 	 */
@@ -59,6 +65,22 @@ public class JsonUtils {
 	}
 	
 	/**
+	 * Parses the JSON, navigates to given path and returns object as given type.
+	 * @param <T> class type
+	 * @param json JSON string
+	 * @param path the path (simple dot notation, nothing else!!!)
+	 * @param type Type Class
+	 * @return the object at the specified path or null if it doesn't exist
+	 */
+	public static <T> T fromJson(String json, String path, Class<T> type) {
+		try {
+			return convertFrom(getJsonMapper().readTree(json), path, type);
+		} catch (Throwable t) {
+			throw new RuntimeException("Cannot convert from JSON \""+json+"\"", t);
+		}
+	}
+
+	/**
 	 * Convert from JSON to Object.
 	 * @param <T> Class type
 	 * @param json JSON string
@@ -74,7 +96,24 @@ public class JsonUtils {
 	}
 	
 	/**
+	 * Parses the JSON, navigates to given path and returns object as given type.
+	 * @param <T> class type
+	 * @param json JSON string
+	 * @param path the path (simple dot notation, nothing else!!!)
+	 * @param type Java type
+	 * @return the object at the specified path or null if it doesn't exist
+	 */
+	public static <T> T fromJson(String json, String path, JavaType type) {
+		try {
+			return convertFrom(getJsonMapper().readTree(json), path, type);
+		} catch (Throwable t) {
+			throw new RuntimeException("Cannot convert from JSON \""+json+"\"", t);
+		}
+	}
+
+	/**
 	 * Convert from JSON to Object.
+	 * <p>Use e.g with: <code>new TypeReference&lt;ArrayList&lt;String&gt;&gt;() {}</code></p>
 	 * @param <T> Class type
 	 * @param json JSON string
 	 * @param type Type reference
@@ -88,6 +127,23 @@ public class JsonUtils {
 		}
 	}
 	
+	/**
+	 * Parses the JSON, navigates to given path and returns object as given type.
+	 * <p>Use e.g with: <code>new TypeReference&lt;ArrayList&lt;String&gt;&gt;() {}</code></p>
+	 * @param <T> class type
+	 * @param jaon JSON string
+	 * @param path the path (simple dot notation, nothing else!!!)
+	 * @param type Type reference
+	 * @return the object at the specified path or null if it doesn't exist
+	 */
+	public static <T> T fromJson(String json, String path, TypeReference<T> type) {
+		try {
+			return convertFrom(getJsonMapper().readTree(json), path, type);
+		} catch (Throwable t) {
+			throw new RuntimeException("Cannot convert from JSON reader.", t);
+		}
+	}
+
 	/**
 	 * Convert from JSON to Object.
 	 * @param <T> Class type
@@ -104,6 +160,22 @@ public class JsonUtils {
 	}
 	
 	/**
+	 * Parses the JSON, navigates to given path and returns object as given type.
+	 * @param <T> class type
+	 * @param file JSON file
+	 * @param path the path (simple dot notation, nothing else!!!)
+	 * @param type Type Class
+	 * @return the object at the specified path or null if it doesn't exist
+	 */
+	public static <T> T fromJson(File file, String path, Class<T> type) {
+		try {
+			return convertFrom(getJsonMapper().readTree(file), path, type);
+		} catch (Throwable t) {
+			throw new RuntimeException("Cannot convert from JSON file \""+file+"\"", t);
+		}
+	}
+
+	/**
 	 * Convert from JSON to Object.
 	 * @param <T> Class type
 	 * @param file JSON file
@@ -119,7 +191,24 @@ public class JsonUtils {
 	}
 	
 	/**
+	 * Parses the JSON, navigates to given path and returns object as given type.
+	 * @param <T> class type
+	 * @param file JSON file
+	 * @param path the path (simple dot notation, nothing else!!!)
+	 * @param type Java type
+	 * @return the object at the specified path or null if it doesn't exist
+	 */
+	public static <T> T fromJson(File file, String path, JavaType type) {
+		try {
+			return convertFrom(getJsonMapper().readTree(file), path, type);
+		} catch (Throwable t) {
+			throw new RuntimeException("Cannot convert from JSON file \""+file+"\"", t);
+		}
+	}
+
+	/**
 	 * Convert from JSON to Object.
+	 * <p>Use e.g with: <code>new TypeReference&lt;ArrayList&lt;String&gt;&gt;() {}</code></p>
 	 * @param <T> Class type
 	 * @param file JSON file
 	 * @param type Type reference
@@ -133,6 +222,23 @@ public class JsonUtils {
 		}
 	}
 	
+	/**
+	 * Parses the JSON, navigates to given path and returns object as given type.
+	 * <p>Use e.g with: <code>new TypeReference&lt;ArrayList&lt;String&gt;&gt;() {}</code></p>
+	 * @param <T> class type
+	 * @param file JSON file
+	 * @param path the path (simple dot notation, nothing else!!!)
+	 * @param type Type reference
+	 * @return the object at the specified path or null if it doesn't exist
+	 */
+	public static <T> T fromJson(File file, String path, TypeReference<T> type) {
+		try {
+			return convertFrom(getJsonMapper().readTree(file), path, type);
+		} catch (Throwable t) {
+			throw new RuntimeException("Cannot convert from JSON reader.", t);
+		}
+	}
+
 	/**
 	 * Convert from JSON to Object.
 	 * @param <T> Class type
@@ -149,6 +255,22 @@ public class JsonUtils {
 	}
 	
 	/**
+	 * Parses the JSON, navigates to given path and returns object as given type.
+	 * @param <T> class type
+	 * @param stream JSON input stream
+	 * @param path the path (simple dot notation, nothing else!!!)
+	 * @param type Type Class
+	 * @return the object at the specified path or null if it doesn't exist
+	 */
+	public static <T> T fromJson(InputStream stream, String path, Class<T> type) {
+		try {
+			return convertFrom(getJsonMapper().readTree(stream), path, type);
+		} catch (Throwable t) {
+			throw new RuntimeException("Cannot convert from JSON stream", t);
+		}
+	}
+
+	/**
 	 * Convert from JSON to Object.
 	 * @param <T> Class type
 	 * @param stream JSON input stream
@@ -164,7 +286,24 @@ public class JsonUtils {
 	}
 	
 	/**
+	 * Parses the JSON, navigates to given path and returns object as given type.
+	 * @param <T> class type
+	 * @param stream JSON stream
+	 * @param path the path (simple dot notation, nothing else!!!)
+	 * @param type Java type
+	 * @return the object at the specified path or null if it doesn't exist
+	 */
+	public static <T> T fromJson(InputStream stream, String path, JavaType type) {
+		try {
+			return convertFrom(getJsonMapper().readTree(stream), path, type);
+		} catch (Throwable t) {
+			throw new RuntimeException("Cannot convert from JSON stream.", t);
+		}
+	}
+
+	/**
 	 * Convert from JSON to Object.
+	 * <p>Use e.g with: <code>new TypeReference&lt;ArrayList&lt;String&gt;&gt;() {}</code></p>
 	 * @param <T> Class type
 	 * @param stream JSON input stream
 	 * @param type Type reference
@@ -178,6 +317,23 @@ public class JsonUtils {
 		}
 	}
 	
+	/**
+	 * Parses the JSON, navigates to given path and returns object as given type.
+	 * <p>Use e.g with: <code>new TypeReference&lt;ArrayList&lt;String&gt;&gt;() {}</code></p>
+	 * @param <T> class type
+	 * @param stream JSON input stream
+	 * @param path the path (simple dot notation, nothing else!!!)
+	 * @param type Type reference
+	 * @return the object at the specified path or null if it doesn't exist
+	 */
+	public static <T> T fromJson(InputStream stream, String path, TypeReference<T> type) {
+		try {
+			return convertFrom(getJsonMapper().readTree(stream), path, type);
+		} catch (Throwable t) {
+			throw new RuntimeException("Cannot convert from JSON stream.", t);
+		}
+	}
+
 	/**
 	 * Convert from JSON to Object.
 	 * @param <T> Class type
@@ -194,6 +350,22 @@ public class JsonUtils {
 	}
 	
 	/**
+	 * Parses the JSON, navigates to given path and returns object as given type.
+	 * @param <T> class type
+	 * @param reader JSON reader
+	 * @param path the path (simple dot notation, nothing else!!!)
+	 * @param type Type Class
+	 * @return the object at the specified path or null if it doesn't exist
+	 */
+	public static <T> T fromJson(Reader reader, String path, Class<T> type) {
+		try {
+			return convertFrom(getJsonMapper().readTree(reader), path, type);
+		} catch (Throwable t) {
+			throw new RuntimeException("Cannot convert from JSON reader", t);
+		}
+	}
+
+	/**
 	 * Convert from JSON to Object.
 	 * @param <T> Class type
 	 * @param reader JSON reader
@@ -209,7 +381,24 @@ public class JsonUtils {
 	}
 	
 	/**
+	 * Parses the JSON, navigates to given path and returns object as given type.
+	 * @param <T> class type
+	 * @param reader JSON reader
+	 * @param path the path (simple dot notation, nothing else!!!)
+	 * @param type Java type
+	 * @return the object at the specified path or null if it doesn't exist
+	 */
+	public static <T> T fromJson(Reader reader, String path, JavaType type) {
+		try {
+			return convertFrom(getJsonMapper().readTree(reader), path, type);
+		} catch (Throwable t) {
+			throw new RuntimeException("Cannot convert from JSON reader.", t);
+		}
+	}
+
+	/**
 	 * Convert from JSON to Object.
+	 * <p>Use e.g with: <code>new TypeReference&lt;ArrayList&lt;String&gt;&gt;() {}</code></p>
 	 * @param <T> Class type
 	 * @param reader JSON reader
 	 * @param type Type reference
@@ -224,14 +413,93 @@ public class JsonUtils {
 	}
 	
 	/**
+	 * Parses the JSON, navigates to given path and returns object as given type.
+	 * <p>Use e.g with: <code>new TypeReference&lt;ArrayList&lt;String&gt;&gt;() {}</code></p>
+	 * @param <T> class type
+	 * @param reader JSON reader
+	 * @param path the path (simple dot notation, nothing else!!!)
+	 * @param type Type reference
+	 * @return the object at the specified path or null if it doesn't exist
+	 */
+	public static <T> T fromJson(Reader reader, String path, TypeReference<T> type) {
+		try {
+			return convertFrom(getJsonMapper().readTree(reader), path, type);
+		} catch (Throwable t) {
+			throw new RuntimeException("Cannot convert from JSON reader.", t);
+		}
+	}
+
+	/**
+	 * Convert from a specific sub-path in the {@link JsonNode}.
+	 * @param <T> class type
+	 * @param root node to start from when traversing
+	 * @param path the path (simple dot notation, e.g. "path1.path2" - nothing else!!!)
+	 * @param type Java Type
+	 * @return the object at the specified path or null if it doesn't exist
+	 */
+	public static <T> T convertFrom(JsonNode root, String path, Class<T> type) {
+		try {
+			Optional<JsonNode> child = traverse(root, path);
+			if (child.isPresent()) {
+				return getJsonMapper().convertValue(child.get(), type);
+			}
+			return null;
+		} catch (Throwable t) {
+			throw new RuntimeException("Cannot convert from JSON node.", t);
+		}
+	}
+
+	/**
+	 * Convert from a specific sub-path in the {@link JsonNode}.
+	 * @param <T> class type
+	 * @param root node to start from when traversing
+	 * @param path the path (simple dot notation, e.g. "path1.path2" - nothing else!!!)
+	 * @param type Java Type
+	 * @return the object at the specified path or null if it doesn't exist
+	 */
+	public static <T> T convertFrom(JsonNode root, String path, JavaType type) {
+		try {
+			Optional<JsonNode> child = traverse(root, path);
+			if (child.isPresent()) {
+				return getJsonMapper().convertValue(child.get(), type);
+			}
+			return null;
+		} catch (Throwable t) {
+			throw new RuntimeException("Cannot convert from JSON node.", t);
+		}
+	}
+
+	/**
+	 * Convert from a specific sub-path in the {@link JsonNode}.
+	 * @param <T> class type
+	 * @param root node to start from when traversing
+	 * @param path the path (simple dot notation, e.g. "path1.path2" - nothing else!!!)
+	 * @param type Type Reference
+	 * @return the object at the specified path or null if it doesn't exist
+	 */
+	public static <T> T convertFrom(JsonNode root, String path, TypeReference<T> type) {
+		try {
+			Optional<JsonNode> child = traverse(root, path);
+			if (child.isPresent()) {
+				return getJsonMapper().convertValue(child.get(), type);
+			}
+			return null;
+		} catch (Throwable t) {
+			throw new RuntimeException("Cannot convert from JSON node.", t);
+		}
+	}
+
+	/**
 	 * Returns a configured JsonMapper object.
 	 * @return the JsonMapper
 	 */
 	public static ObjectMapper getJsonMapper() {
 		if (jsonMapper == null) {
-			jsonMapper = new ObjectMapper(getJsonFactory());
-			jsonMapper.registerModule(new JavaTimeModule());
-			jsonMapper.setSerializationInclusion(Include.NON_NULL);
+			jsonMapper = JsonMapper.builder(getJsonFactory())
+				.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+				.addModule(new JavaTimeModule())
+				.defaultPropertyInclusion(JsonInclude.Value.ALL_NON_NULL)
+				.build();
 		}
 		return jsonMapper;
 	}
@@ -272,7 +540,7 @@ public class JsonUtils {
 	 * @see com.fasterxml.jackson.core.JsonFactory#createParser(java.net.URL)
 	 */
 	public static JsonParser getParser(URL url) throws IOException {
-		return getJsonFactory().createParser(url);
+		return getJsonFactory().createParser(url.openStream());
 	}
 
 	/**
@@ -338,6 +606,28 @@ public class JsonUtils {
 	 */
 	public static <K,V> TypeReference<Map<K,V>> getMapTypeRef(Class<K> keyClass, Class<V> valueClass) {
 		return new TypeReference<Map<K,V>>() {};
+	}
+
+	/**
+	 * Traverse to the node given in path.
+	 * @param node the node to traverse from
+	 * @param path the path (simple dot notation, nothing else!!!)
+	 * @return the node found
+	 */
+	public static Optional<JsonNode> traverse(JsonNode node, String path) {
+		if (!CommonUtils.isEmpty(path)) {
+			String paths[] = path.split("\\.");
+			if (paths.length > 0) {
+				for (String p : paths) {
+					if (!CommonUtils.isEmpty(p)) {
+						node = node.findPath(p.trim());
+						if (node.isMissingNode()) return Optional.empty();
+					}
+				}
+			}
+		}
+		
+		return Optional.of(node);
 	}
 
 }
