@@ -521,11 +521,11 @@ public class JsonUtils {
 	 * @param <T> the type of the items
 	 * @param clazz the class of the items
 	 * @return the {@link TypeReference} for a list of these items
-	 * @deprecated use {@link Json} class instead
+	 * @deprecated use {@link JacksonUtils#getListType(Class)} class instead
 	 */
 	@Deprecated
 	public static <T> TypeReference<ArrayList<T>> getListTypeRef(Class<T> clazz) {
-		return JacksonUtils.getListTypeRef(clazz);
+		return new TypeReference<ArrayList<T>>() {};
 	}
 	
 	/**
@@ -533,11 +533,11 @@ public class JsonUtils {
 	 * @param <T> the type of the items
 	 * @param clazz the class of the items
 	 * @return the {@link TypeReference} for a set of these items
-	 * @deprecated use {@link Json} class instead
+	 * @deprecated use {@link JacksonUtils#getSetType(Class)} class instead
 	 */
 	@Deprecated
 	public static <T> TypeReference<Set<T>> getSetTypeRef(Class<T> clazz) {
-		return JacksonUtils.getSetTypeRef(clazz);
+		return new TypeReference<Set<T>>() {};
 	}
 	
 	/**
@@ -547,11 +547,11 @@ public class JsonUtils {
 	 * @param keyClass class of keys
 	 * @param valueClass class of values
 	 * @return the {@link TypeReference} for a map of these types
-	 * @deprecated use {@link Json} class instead
+	 * @deprecated use {@link JacksonUtils#getMapType(Class, Class)} class instead
 	 */
 	@Deprecated
 	public static <K,V> TypeReference<Map<K,V>> getMapTypeRef(Class<K> keyClass, Class<V> valueClass) {
-		return JacksonUtils.getMapTypeRef(keyClass, valueClass);
+		return new TypeReference<Map<K,V>>() {};
 	}
 
 	/**
@@ -559,7 +559,7 @@ public class JsonUtils {
 	 * @param node the node to traverse from
 	 * @param path the path (simple dot notation, nothing else!!!)
 	 * @return the node found
-	 * @deprecated use {@link Json} class instead
+	 * @deprecated use {@link JacksonUtils#traverse(JsonNode, String)} class instead
 	 */
 	@Deprecated
 	public static Optional<JsonNode> traverse(JsonNode node, String path) {

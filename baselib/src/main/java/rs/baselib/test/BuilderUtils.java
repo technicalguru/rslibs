@@ -133,5 +133,11 @@ public class BuilderUtils {
 		return new EnumerationBuilder<>(enumClass);
 	}
 
-
+	/**
+	 * Returns a new phone number builder.
+	 * @return the builder for phone numbers
+	 */
+	public static RandomPhoneBuilder $PhoneNumbers() {
+		return new RandomPhoneBuilder();
+	}
 }

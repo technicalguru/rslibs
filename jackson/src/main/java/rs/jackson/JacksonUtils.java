@@ -1,11 +1,11 @@
 package rs.jackson;
 
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import rs.baselib.util.CommonUtils;
@@ -18,37 +18,37 @@ import rs.baselib.util.CommonUtils;
 public class JacksonUtils {
 
 	/**
-	 * Creates a {@link TypeReference} reference for a list of given class.
+	 * Creates a {@link JavaType} reference for a list of given class.
 	 * @param <T> the type of the items
 	 * @param type the class of the items
-	 * @return the {@link TypeReference} for a list of these items
+	 * @return the {@link JavaType} for a list of these items
 	 */
-	public static <T> TypeReference<ArrayList<T>> getListTypeRef(Class<T> type) {
-		return new TypeReference<ArrayList<T>>() {};
+	public static <T> JavaType getListType(Class<T> type) {
+		return Json.JSON.getJsonMapper().getTypeFactory().constructCollectionType(ArrayList.class, type);
 	}
 	
 	/**
-	 * Creates a {@link TypeReference} reference for a set of given class.
+	 * Creates a {@link JavaType} reference for a set of given class.
 	 * @param <T> the type of the items
 	 * @param type the class of the items
-	 * @return the {@link TypeReference} for a set of these items
+	 * @return the {@link JavaType} for a set of these items
 	 */
-	public static <T> TypeReference<Set<T>> getSetTypeRef(Class<T> type) {
-		return new TypeReference<Set<T>>() {};
+	public static <T> JavaType getSetType(Class<T> type) {
+		return Json.JSON.getJsonMapper().getTypeFactory().constructCollectionType(HashSet.class, type);
 	}
 	
 	/**
-	 * Creates a {@link TypeReference} reference for a map of given key and value classes.
+	 * Creates a {@link JavaType} reference for a map of given classes.
 	 * @param <K> type of keys
 	 * @param <V> type of values
-	 * @param keyClass class of keys
-	 * @param valueClass class of values
-	 * @return the {@link TypeReference} for a map of these types
+	 * @param keyType class of keys
+	 * @param valueType class of values
+	 * @return the {@link JavaType} for a map of these items
 	 */
-	public static <K,V> TypeReference<Map<K,V>> getMapTypeRef(Class<K> keyClass, Class<V> valueClass) {
-		return new TypeReference<Map<K,V>>() {};
+	public static <K,V> JavaType getMapType(Class<K> keyType, Class<V> valueType) {
+		return Json.JSON.getJsonMapper().getTypeFactory().constructMapType(HashMap.class, keyType, valueType);
 	}
-
+	
 	/**
 	 * Traverse to the node given in path.
 	 * @param node the node to traverse from
