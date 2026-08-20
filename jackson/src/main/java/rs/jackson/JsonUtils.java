@@ -13,40 +13,36 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-
-import rs.baselib.util.CommonUtils;
 
 /**
- * JSON utils for mapping back and forth
+ * JSON utils for mapping back and forth.
+ * @deprecated Please use {@link Json} or {@link Json#JSON}. The preferred way is to create your own
+ *             instance of {@link Json} in your project as a static variable.
+ *             
  * @author ralph
  *
  */
+@Deprecated
 public class JsonUtils {
 
-	private static JsonFactory  jsonFactory;
-	private static ObjectMapper jsonMapper;
-	
+	/** The {@link Json} instance used by this class */
+	private static Json JSON = Json.builder().build();
+
 	/**
 	 * Convert any object to its JSON representation.
 	 * @param o - the object to convert
 	 * @return the JSON string
+	 * @deprecated use {@link Json} class instead
 	 */
+	@Deprecated
 	public static String toJson(Object o) {
-		try {
-			return getJsonMapper().writeValueAsString(o);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert to JSON", t);
-		}
+		return JSON.toJson(o);
 	}
 	
 	/**
@@ -55,13 +51,11 @@ public class JsonUtils {
 	 * @param json JSON string
 	 * @param clazz Type Class
 	 * @return the object
+	 * @deprecated use {@link Json} class instead
 	 */
+	@Deprecated
 	public static <T> T fromJson(String json, Class<T> clazz) {
-		try {
-			return getJsonMapper().readValue(json, clazz);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON \""+json+"\"", t);
-		}
+		return JSON.fromJson(json, clazz);
 	}
 	
 	/**
@@ -71,13 +65,11 @@ public class JsonUtils {
 	 * @param path the path (simple dot notation, nothing else!!!)
 	 * @param type Type Class
 	 * @return the object at the specified path or null if it doesn't exist
+	 * @deprecated use {@link Json} class instead
 	 */
+	@Deprecated
 	public static <T> T fromJson(String json, String path, Class<T> type) {
-		try {
-			return convertFrom(getJsonMapper().readTree(json), path, type);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON \""+json+"\"", t);
-		}
+		return JSON.fromJson(json, path, type);
 	}
 
 	/**
@@ -86,13 +78,11 @@ public class JsonUtils {
 	 * @param json JSON string
 	 * @param type Java type
 	 * @return the object
+	 * @deprecated use {@link Json} class instead
 	 */
+	@Deprecated
 	public static <T> T fromJson(String json, JavaType type) {
-		try {
-			return getJsonMapper().readValue(json, type);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON \""+json+"\"", t);
-		}
+		return JSON.fromJson(json, type);
 	}
 	
 	/**
@@ -102,13 +92,11 @@ public class JsonUtils {
 	 * @param path the path (simple dot notation, nothing else!!!)
 	 * @param type Java type
 	 * @return the object at the specified path or null if it doesn't exist
+	 * @deprecated use {@link Json} class instead
 	 */
+	@Deprecated
 	public static <T> T fromJson(String json, String path, JavaType type) {
-		try {
-			return convertFrom(getJsonMapper().readTree(json), path, type);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON \""+json+"\"", t);
-		}
+		return JSON.fromJson(json, path, type);
 	}
 
 	/**
@@ -118,13 +106,11 @@ public class JsonUtils {
 	 * @param json JSON string
 	 * @param type Type reference
 	 * @return the object
+	 * @deprecated use {@link Json} class instead
 	 */
+	@Deprecated
 	public static <T> T fromJson(String json, TypeReference<T> type) {
-		try {
-			return getJsonMapper().readValue(json, type);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON \""+json+"\"", t);
-		}
+		return JSON.fromJson(json, type);
 	}
 	
 	/**
@@ -135,13 +121,11 @@ public class JsonUtils {
 	 * @param path the path (simple dot notation, nothing else!!!)
 	 * @param type Type reference
 	 * @return the object at the specified path or null if it doesn't exist
+	 * @deprecated use {@link Json} class instead
 	 */
+	@Deprecated
 	public static <T> T fromJson(String json, String path, TypeReference<T> type) {
-		try {
-			return convertFrom(getJsonMapper().readTree(json), path, type);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON reader.", t);
-		}
+		return JSON.fromJson(json, path, type);
 	}
 
 	/**
@@ -150,13 +134,11 @@ public class JsonUtils {
 	 * @param file JSON file
 	 * @param clazz Type Class
 	 * @return the object
+	 * @deprecated use {@link Json} class instead
 	 */
+	@Deprecated
 	public static <T> T fromJson(File file, Class<T> clazz) {
-		try {
-			return getJsonMapper().readValue(file, clazz);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON file \""+file+"\"", t);
-		}
+		return JSON.fromJson(file, clazz);
 	}
 	
 	/**
@@ -164,15 +146,13 @@ public class JsonUtils {
 	 * @param <T> class type
 	 * @param file JSON file
 	 * @param path the path (simple dot notation, nothing else!!!)
-	 * @param type Type Class
+	 * @param clazz Type Class
 	 * @return the object at the specified path or null if it doesn't exist
+	 * @deprecated use {@link Json} class instead
 	 */
-	public static <T> T fromJson(File file, String path, Class<T> type) {
-		try {
-			return convertFrom(getJsonMapper().readTree(file), path, type);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON file \""+file+"\"", t);
-		}
+	@Deprecated
+	public static <T> T fromJson(File file, String path, Class<T> clazz) {
+		return JSON.fromJson(file, path, clazz);
 	}
 
 	/**
@@ -181,13 +161,11 @@ public class JsonUtils {
 	 * @param file JSON file
 	 * @param type Java type
 	 * @return the object
+	 * @deprecated use {@link Json} class instead
 	 */
+	@Deprecated
 	public static <T> T fromJson(File file, JavaType type) {
-		try {
-			return getJsonMapper().readValue(file, type);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON file \""+file+"\"", t);
-		}
+		return JSON.fromJson(file, type);
 	}
 	
 	/**
@@ -197,13 +175,11 @@ public class JsonUtils {
 	 * @param path the path (simple dot notation, nothing else!!!)
 	 * @param type Java type
 	 * @return the object at the specified path or null if it doesn't exist
+	 * @deprecated use {@link Json} class instead
 	 */
+	@Deprecated
 	public static <T> T fromJson(File file, String path, JavaType type) {
-		try {
-			return convertFrom(getJsonMapper().readTree(file), path, type);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON file \""+file+"\"", t);
-		}
+		return JSON.fromJson(file, path, type);
 	}
 
 	/**
@@ -213,13 +189,11 @@ public class JsonUtils {
 	 * @param file JSON file
 	 * @param type Type reference
 	 * @return the object
+	 * @deprecated use {@link Json} class instead
 	 */
+	@Deprecated
 	public static <T> T fromJson(File file, TypeReference<T> type) {
-		try {
-			return getJsonMapper().readValue(file, type);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON file \""+file+"\"", t);
-		}
+		return JSON.fromJson(file, type);
 	}
 	
 	/**
@@ -230,13 +204,11 @@ public class JsonUtils {
 	 * @param path the path (simple dot notation, nothing else!!!)
 	 * @param type Type reference
 	 * @return the object at the specified path or null if it doesn't exist
+	 * @deprecated use {@link Json} class instead
 	 */
+	@Deprecated
 	public static <T> T fromJson(File file, String path, TypeReference<T> type) {
-		try {
-			return convertFrom(getJsonMapper().readTree(file), path, type);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON reader.", t);
-		}
+		return JSON.fromJson(file, path, type);
 	}
 
 	/**
@@ -245,13 +217,11 @@ public class JsonUtils {
 	 * @param stream JSON input stream
 	 * @param clazz Type Class
 	 * @return the object
+	 * @deprecated use {@link Json} class instead
 	 */
+	@Deprecated
 	public static <T> T fromJson(InputStream stream, Class<T> clazz) {
-		try {
-			return getJsonMapper().readValue(stream, clazz);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON stream.", t);
-		}
+		return JSON.fromJson(stream, clazz);
 	}
 	
 	/**
@@ -259,15 +229,13 @@ public class JsonUtils {
 	 * @param <T> class type
 	 * @param stream JSON input stream
 	 * @param path the path (simple dot notation, nothing else!!!)
-	 * @param type Type Class
+	 * @param clazz Type Class
 	 * @return the object at the specified path or null if it doesn't exist
+	 * @deprecated use {@link Json} class instead
 	 */
-	public static <T> T fromJson(InputStream stream, String path, Class<T> type) {
-		try {
-			return convertFrom(getJsonMapper().readTree(stream), path, type);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON stream", t);
-		}
+	@Deprecated
+	public static <T> T fromJson(InputStream stream, String path, Class<T> clazz) {
+		return JSON.fromJson(stream, path, clazz);
 	}
 
 	/**
@@ -276,13 +244,11 @@ public class JsonUtils {
 	 * @param stream JSON input stream
 	 * @param type Java type
 	 * @return the object
+	 * @deprecated use {@link Json} class instead
 	 */
+	@Deprecated
 	public static <T> T fromJson(InputStream stream, JavaType type) {
-		try {
-			return getJsonMapper().readValue(stream, type);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON stream.", t);
-		}
+		return JSON.fromJson(stream, type);
 	}
 	
 	/**
@@ -292,13 +258,11 @@ public class JsonUtils {
 	 * @param path the path (simple dot notation, nothing else!!!)
 	 * @param type Java type
 	 * @return the object at the specified path or null if it doesn't exist
+	 * @deprecated use {@link Json} class instead
 	 */
+	@Deprecated
 	public static <T> T fromJson(InputStream stream, String path, JavaType type) {
-		try {
-			return convertFrom(getJsonMapper().readTree(stream), path, type);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON stream.", t);
-		}
+		return JSON.fromJson(stream, path, type);
 	}
 
 	/**
@@ -308,13 +272,11 @@ public class JsonUtils {
 	 * @param stream JSON input stream
 	 * @param type Type reference
 	 * @return the object
+	 * @deprecated use {@link Json} class instead
 	 */
+	@Deprecated
 	public static <T> T fromJson(InputStream stream, TypeReference<T> type) {
-		try {
-			return getJsonMapper().readValue(stream, type);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON stream.", t);
-		}
+		return JSON.fromJson(stream, type);
 	}
 	
 	/**
@@ -325,13 +287,11 @@ public class JsonUtils {
 	 * @param path the path (simple dot notation, nothing else!!!)
 	 * @param type Type reference
 	 * @return the object at the specified path or null if it doesn't exist
+	 * @deprecated use {@link Json} class instead
 	 */
+	@Deprecated
 	public static <T> T fromJson(InputStream stream, String path, TypeReference<T> type) {
-		try {
-			return convertFrom(getJsonMapper().readTree(stream), path, type);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON stream.", t);
-		}
+		return JSON.fromJson(stream, path, type);
 	}
 
 	/**
@@ -340,13 +300,11 @@ public class JsonUtils {
 	 * @param reader JSON reader
 	 * @param clazz Type Class
 	 * @return the object
+	 * @deprecated use {@link Json} class instead
 	 */
+	@Deprecated
 	public static <T> T fromJson(Reader reader, Class<T> clazz) {
-		try {
-			return getJsonMapper().readValue(reader, clazz);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON reader.", t);
-		}
+		return JSON.fromJson(reader, clazz);
 	}
 	
 	/**
@@ -354,15 +312,13 @@ public class JsonUtils {
 	 * @param <T> class type
 	 * @param reader JSON reader
 	 * @param path the path (simple dot notation, nothing else!!!)
-	 * @param type Type Class
+	 * @param clazz Type Class
 	 * @return the object at the specified path or null if it doesn't exist
+	 * @deprecated use {@link Json} class instead
 	 */
-	public static <T> T fromJson(Reader reader, String path, Class<T> type) {
-		try {
-			return convertFrom(getJsonMapper().readTree(reader), path, type);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON reader", t);
-		}
+	@Deprecated
+	public static <T> T fromJson(Reader reader, String path, Class<T> clazz) {
+		return JSON.fromJson(reader, path, clazz);
 	}
 
 	/**
@@ -371,13 +327,11 @@ public class JsonUtils {
 	 * @param reader JSON reader
 	 * @param type Java type
 	 * @return the object
+	 * @deprecated use {@link Json} class instead
 	 */
+	@Deprecated
 	public static <T> T fromJson(Reader reader, JavaType type) {
-		try {
-			return getJsonMapper().readValue(reader, type);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON reader.", t);
-		}
+		return JSON.fromJson(reader, type);
 	}
 	
 	/**
@@ -387,13 +341,11 @@ public class JsonUtils {
 	 * @param path the path (simple dot notation, nothing else!!!)
 	 * @param type Java type
 	 * @return the object at the specified path or null if it doesn't exist
+	 * @deprecated use {@link Json} class instead
 	 */
+	@Deprecated
 	public static <T> T fromJson(Reader reader, String path, JavaType type) {
-		try {
-			return convertFrom(getJsonMapper().readTree(reader), path, type);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON reader.", t);
-		}
+		return JSON.fromJson(reader, path, type);
 	}
 
 	/**
@@ -403,13 +355,11 @@ public class JsonUtils {
 	 * @param reader JSON reader
 	 * @param type Type reference
 	 * @return the object
+	 * @deprecated use {@link Json} class instead
 	 */
+	@Deprecated
 	public static <T> T fromJson(Reader reader, TypeReference<T> type) {
-		try {
-			return getJsonMapper().readValue(reader, type);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON reader.", t);
-		}
+		return JSON.fromJson(reader, type);
 	}
 	
 	/**
@@ -420,13 +370,25 @@ public class JsonUtils {
 	 * @param path the path (simple dot notation, nothing else!!!)
 	 * @param type Type reference
 	 * @return the object at the specified path or null if it doesn't exist
+	 * @deprecated use {@link Json} class instead
 	 */
+	@Deprecated
 	public static <T> T fromJson(Reader reader, String path, TypeReference<T> type) {
-		try {
-			return convertFrom(getJsonMapper().readTree(reader), path, type);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON reader.", t);
-		}
+		return JSON.fromJson(reader, path, type);
+	}
+
+	/**
+	 * Convert from a specific sub-path in the {@link JsonNode}.
+	 * @param <T> class type
+	 * @param root node to start from when traversing
+	 * @param path the path (simple dot notation, e.g. "path1.path2" - nothing else!!!)
+	 * @param clazz Java Class
+	 * @return the object at the specified path or null if it doesn't exist
+	 * @deprecated use {@link Json} class instead
+	 */
+	@Deprecated
+	public static <T> T convertFrom(JsonNode root, String path, Class<T> clazz) {
+		return JSON.convertFrom(root, path, clazz);
 	}
 
 	/**
@@ -436,37 +398,11 @@ public class JsonUtils {
 	 * @param path the path (simple dot notation, e.g. "path1.path2" - nothing else!!!)
 	 * @param type Java Type
 	 * @return the object at the specified path or null if it doesn't exist
+	 * @deprecated use {@link Json} class instead
 	 */
-	public static <T> T convertFrom(JsonNode root, String path, Class<T> type) {
-		try {
-			Optional<JsonNode> child = traverse(root, path);
-			if (child.isPresent()) {
-				return getJsonMapper().convertValue(child.get(), type);
-			}
-			return null;
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON node.", t);
-		}
-	}
-
-	/**
-	 * Convert from a specific sub-path in the {@link JsonNode}.
-	 * @param <T> class type
-	 * @param root node to start from when traversing
-	 * @param path the path (simple dot notation, e.g. "path1.path2" - nothing else!!!)
-	 * @param type Java Type
-	 * @return the object at the specified path or null if it doesn't exist
-	 */
+	@Deprecated
 	public static <T> T convertFrom(JsonNode root, String path, JavaType type) {
-		try {
-			Optional<JsonNode> child = traverse(root, path);
-			if (child.isPresent()) {
-				return getJsonMapper().convertValue(child.get(), type);
-			}
-			return null;
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON node.", t);
-		}
+		return JSON.convertFrom(root, path, type);
 	}
 
 	/**
@@ -476,39 +412,31 @@ public class JsonUtils {
 	 * @param path the path (simple dot notation, e.g. "path1.path2" - nothing else!!!)
 	 * @param type Type Reference
 	 * @return the object at the specified path or null if it doesn't exist
+	 * @deprecated use {@link Json} class instead
 	 */
+	@Deprecated
 	public static <T> T convertFrom(JsonNode root, String path, TypeReference<T> type) {
-		try {
-			Optional<JsonNode> child = traverse(root, path);
-			if (child.isPresent()) {
-				return getJsonMapper().convertValue(child.get(), type);
-			}
-			return null;
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON node.", t);
-		}
+		return JSON.convertFrom(root, path, type);
 	}
 
 	/**
 	 * Returns a configured JsonMapper object.
 	 * @return the JsonMapper
+	 * @deprecated use {@link Json} class instead
 	 */
+	@Deprecated
 	public static ObjectMapper getJsonMapper() {
-		if (jsonMapper == null) {
-			jsonMapper = JsonMapper.builder(getJsonFactory())
-				.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-				.addModule(new JavaTimeModule())
-				.defaultPropertyInclusion(JsonInclude.Value.ALL_NON_NULL)
-				.build();
-		}
-		return jsonMapper;
+		return JSON.getJsonMapper();
 	}
 
+	/**
+	 * Returns the JSON factory or creates a new one if it doesn't exist yet
+	 * @return JsonFactory
+	 * @deprecated use {@link Json} class instead
+	 */
+	@Deprecated
 	public static JsonFactory getJsonFactory() {
-		if (jsonFactory == null) {
-			jsonFactory = new JsonFactory();
-		}
-		return jsonFactory;
+		return JSON.getJsonFactory();
 	}
 	
 	/**
@@ -516,9 +444,11 @@ public class JsonUtils {
 	 * @param file - the file to be parsed
 	 * @return the parser
 	 * @throws IOException - when the input cannot be read
+	 * @deprecated use {@link Json} class instead
 	 */
+	@Deprecated
 	public static JsonParser getParser(File file) throws IOException {
-		return getJsonFactory().createParser(file);
+		return JSON.getParser(file);
 	}
 
 	/**
@@ -527,9 +457,11 @@ public class JsonUtils {
 	 * @return the parser
 	 * @throws IOException - when the input cannot be read
 	 * @see com.fasterxml.jackson.core.JsonFactory#createParser(java.lang.String)
+	 * @deprecated use {@link Json} class instead
 	 */
+	@Deprecated
 	public static JsonParser getParser(String content) throws IOException {
-		return getJsonFactory().createParser(content);
+		return JSON.getParser(content);
 	}
 
 	/**
@@ -538,9 +470,11 @@ public class JsonUtils {
 	 * @return the parser
 	 * @throws IOException - when the input cannot be read
 	 * @see com.fasterxml.jackson.core.JsonFactory#createParser(java.net.URL)
+	 * @deprecated use {@link Json#getParser(InputStream)} instead
 	 */
+	@Deprecated
 	public static JsonParser getParser(URL url) throws IOException {
-		return getJsonFactory().createParser(url.openStream());
+		return JSON.getParser(url.openStream());
 	}
 
 	/**
@@ -549,20 +483,24 @@ public class JsonUtils {
 	 * @return the parser
 	 * @throws IOException - when the input cannot be read
 	 * @see com.fasterxml.jackson.core.JsonFactory#createParser(java.io.InputStream)
+	 * @deprecated use {@link Json} class instead
 	 */
+	@Deprecated
 	public static JsonParser getParser(InputStream in) throws IOException {
-		return getJsonFactory().createParser(in);
+		return JSON.getParser(in);
 	}
 
 	/**
 	 * Returns a parser for the given reader.
-	 * @param r - the reader
+	 * @param reader the reader
 	 * @return the parser
 	 * @throws IOException - when the input cannot be read
 	 * @see com.fasterxml.jackson.core.JsonFactory#createParser(java.io.Reader)
+	 * @deprecated use {@link Json} class instead
 	 */
-	public static JsonParser getParser(Reader r) throws IOException {
-		return getJsonFactory().createParser(r);
+	@Deprecated
+	public static JsonParser getParser(Reader reader) throws IOException {
+		return JSON.getParser(reader);
 	}
 
 	/**
@@ -571,9 +509,11 @@ public class JsonUtils {
 	 * @return the parser
 	 * @throws IOException - when the input cannot be read
 	 * @see com.fasterxml.jackson.core.JsonFactory#createParser(byte[])
+	 * @deprecated use {@link Json} class instead
 	 */
+	@Deprecated
 	public static JsonParser getParser(byte[] data) throws IOException {
-		return getJsonFactory().createParser(data);
+		return JSON.getParser(data);
 	}
 
 	/**
@@ -581,7 +521,9 @@ public class JsonUtils {
 	 * @param <T> the type of the items
 	 * @param clazz the class of the items
 	 * @return the {@link TypeReference} for a list of these items
+	 * @deprecated use {@link JacksonUtils#getListType(Class)} class instead
 	 */
+	@Deprecated
 	public static <T> TypeReference<ArrayList<T>> getListTypeRef(Class<T> clazz) {
 		return new TypeReference<ArrayList<T>>() {};
 	}
@@ -591,7 +533,9 @@ public class JsonUtils {
 	 * @param <T> the type of the items
 	 * @param clazz the class of the items
 	 * @return the {@link TypeReference} for a set of these items
+	 * @deprecated use {@link JacksonUtils#getSetType(Class)} class instead
 	 */
+	@Deprecated
 	public static <T> TypeReference<Set<T>> getSetTypeRef(Class<T> clazz) {
 		return new TypeReference<Set<T>>() {};
 	}
@@ -603,7 +547,9 @@ public class JsonUtils {
 	 * @param keyClass class of keys
 	 * @param valueClass class of values
 	 * @return the {@link TypeReference} for a map of these types
+	 * @deprecated use {@link JacksonUtils#getMapType(Class, Class)} class instead
 	 */
+	@Deprecated
 	public static <K,V> TypeReference<Map<K,V>> getMapTypeRef(Class<K> keyClass, Class<V> valueClass) {
 		return new TypeReference<Map<K,V>>() {};
 	}
@@ -613,21 +559,11 @@ public class JsonUtils {
 	 * @param node the node to traverse from
 	 * @param path the path (simple dot notation, nothing else!!!)
 	 * @return the node found
+	 * @deprecated use {@link JacksonUtils#traverse(JsonNode, String)} class instead
 	 */
+	@Deprecated
 	public static Optional<JsonNode> traverse(JsonNode node, String path) {
-		if (!CommonUtils.isEmpty(path)) {
-			String paths[] = path.split("\\.");
-			if (paths.length > 0) {
-				for (String p : paths) {
-					if (!CommonUtils.isEmpty(p)) {
-						node = node.findPath(p.trim());
-						if (node.isMissingNode()) return Optional.empty();
-					}
-				}
-			}
-		}
-		
-		return Optional.of(node);
+		return JacksonUtils.traverse(node, path);
 	}
 
 }

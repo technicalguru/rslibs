@@ -46,6 +46,7 @@ public class PersonBuilder implements Builder<PersonBuilder.Person> {
 	private int maxAge = 70;
 	private boolean firstNamesSet;
 	private boolean lastNamesSet;
+	private Builder<String> phoneNumbers;
 	
 	/**
 	 * Constructor.
@@ -54,6 +55,7 @@ public class PersonBuilder implements Builder<PersonBuilder.Person> {
 		this.genders  = CommonUtils.newList("MALE", "FEMALE", "DIVERSE");
 		firstNamesSet = false;
 		lastNamesSet  = false;
+		phoneNumbers  = BuilderUtils.$PhoneNumbers();
 	}
 
 	/**
@@ -207,6 +209,16 @@ public class PersonBuilder implements Builder<PersonBuilder.Person> {
 	}
 	
 	/**
+	 * Generate phone numbers.
+	 * @param phoneNumbers phone number builder
+	 * @return this builder for method chaining
+	 */
+	public PersonBuilder withPhoneNumbers(Builder<String> phoneNumbers) {
+		this.phoneNumbers = phoneNumbers;
+		return this;
+	}
+	
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -214,14 +226,15 @@ public class PersonBuilder implements Builder<PersonBuilder.Person> {
 		loadNames();
 		
 		Person rc = new Person();
-		if ((firstNames != null) && !firstNames.isEmpty()) rc.firstName = firstNames.get(BuilderUtils.RNG.nextInt(0, firstNames.size()));
-		if ((lastNames  != null) && !lastNames.isEmpty())  rc.lastName  = lastNames.get(BuilderUtils.RNG.nextInt(0, lastNames.size()));
-		if ((genders    != null) && !genders.isEmpty())    rc.gender    = genders.get(BuilderUtils.RNG.nextInt(0, genders.size()));
+		if ((firstNames != null) && !firstNames.isEmpty()) rc.firstName   = firstNames.get(BuilderUtils.RNG.nextInt(0, firstNames.size()));
+		if ((lastNames  != null) && !lastNames.isEmpty())  rc.lastName    = lastNames.get(BuilderUtils.RNG.nextInt(0, lastNames.size()));
+		if ((genders    != null) && !genders.isEmpty())    rc.gender      = genders.get(BuilderUtils.RNG.nextInt(0, genders.size()));
+		if (phoneNumbers != null)                          rc.phoneNumber = phoneNumbers.build();
 		
-		LocalDate now = LocalDate.now();
-		Period period = Period.of(BuilderUtils.RNG.nextInt(minAge, maxAge), BuilderUtils.RNG.nextInt(0, 12), BuilderUtils.RNG.nextInt(0, 28));  
-		rc.birthday   = now.minus(period);
-		rc.age        = period.getYears();
+		LocalDate now  = LocalDate.now();
+		Period period  = Period.of(BuilderUtils.RNG.nextInt(minAge, maxAge), BuilderUtils.RNG.nextInt(0, 12), BuilderUtils.RNG.nextInt(0, 28));  
+		rc.birthday    = now.minus(period);
+		rc.age         = period.getYears();
 		return rc;
 	}
 
@@ -249,6 +262,24 @@ public class PersonBuilder implements Builder<PersonBuilder.Person> {
 		public LocalDate birthday;
 		public int age;
 		public String gender;
+		public String phoneNumber;
+
+		public Person() {}
+		
+		public Person(String firstName, String lastName, LocalDate birthday, int age, String gender, String phoneNumber) {
+			this.firstName = firstName;
+			this.lastName = lastName;
+			this.birthday = birthday;
+			this.age = age;
+			this.gender = gender;
+			this.phoneNumber = phoneNumber;
+		}
+
+		@Override
+		public String toString() {
+			return "Person [firstName=" + firstName + ", lastName=" + lastName + ", birthday=" + birthday + ", age="
+					+ age + ", gender=" + gender + ", phoneNumber=" + phoneNumber + "]";
+		}
 	}
 
 	/**
