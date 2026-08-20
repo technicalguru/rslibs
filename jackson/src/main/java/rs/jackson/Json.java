@@ -7,11 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonFactory;
@@ -21,18 +17,15 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-
-import rs.baselib.util.CommonUtils;
 
 /**
  * New JSON utils for mapping back and forth.
  * <p>Create with:
  * <pre>
  *   Json.builder()
- *      .with(myJasonMapper)
+ *      .with(myJsonMapper)
  *      .build();
  * </pre>
  * You can also pass {@link JsonFactory}, {@link JsonFactoryBuilder} and {@link JsonMapper.Builder}
@@ -55,11 +48,15 @@ public class Json {
 
 	/** The default {@link Json} instance */
 	public static Json JSON = builder().build();
+
+	private JsonFactory jsonFactory;
+	private JsonMapper  jsonMapper;
 	
-	private JsonFactory  jsonFactory;
-	private ObjectMapper jsonMapper;
-	
-	private Json(ObjectMapper jsonMapper) {
+	/**
+	 * Constructor with given JsonMapper.
+	 * @param jsonMapper JsonMapper to be used
+	 */
+	private Json(JsonMapper jsonMapper) {
 		this.jsonMapper  = jsonMapper;
 		this.jsonFactory = jsonMapper.getFactory();
 	}
@@ -76,7 +73,7 @@ public class Json {
 	 * Returns the underlying JsonMapper.
 	 * @return the JsonMapper
 	 */
-	public ObjectMapper getJsonMapper() {
+	public JsonMapper getJsonMapper() {
 		return jsonMapper;
 	}
 
@@ -97,15 +94,11 @@ public class Json {
 	 * Convert from JSON to Object.
 	 * @param <T> Class type
 	 * @param json JSON string
-	 * @param clazz Type Class
+	 * @param type Type Class
 	 * @return the object
 	 */
-	public <T> T fromJson(String json, Class<T> clazz) {
-		try {
-			return getJsonMapper().readValue(json, clazz);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON \""+json+"\"", t);
-		}
+	public <T> T fromJson(String json, Class<T> type) {
+		return fromJson(json, null, type);
 	}
 	
 	/**
@@ -132,11 +125,7 @@ public class Json {
 	 * @return the object
 	 */
 	public <T> T fromJson(String json, JavaType type) {
-		try {
-			return getJsonMapper().readValue(json, type);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON \""+json+"\"", t);
-		}
+		return fromJson(json, null, type);
 	}
 	
 	/**
@@ -164,11 +153,7 @@ public class Json {
 	 * @return the object
 	 */
 	public <T> T fromJson(String json, TypeReference<T> type) {
-		try {
-			return getJsonMapper().readValue(json, type);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON \""+json+"\"", t);
-		}
+		return fromJson(json, null, type);
 	}
 	
 	/**
@@ -192,15 +177,11 @@ public class Json {
 	 * Convert from JSON to Object.
 	 * @param <T> Class type
 	 * @param file JSON file
-	 * @param clazz Type Class
+	 * @param type Type Class
 	 * @return the object
 	 */
-	public <T> T fromJson(File file, Class<T> clazz) {
-		try {
-			return getJsonMapper().readValue(file, clazz);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON file \""+file+"\"", t);
-		}
+	public <T> T fromJson(File file, Class<T> type) {
+		return fromJson(file, null, type);
 	}
 	
 	/**
@@ -227,11 +208,7 @@ public class Json {
 	 * @return the object
 	 */
 	public <T> T fromJson(File file, JavaType type) {
-		try {
-			return getJsonMapper().readValue(file, type);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON file \""+file+"\"", t);
-		}
+		return fromJson(file, null, type);
 	}
 	
 	/**
@@ -259,11 +236,7 @@ public class Json {
 	 * @return the object
 	 */
 	public <T> T fromJson(File file, TypeReference<T> type) {
-		try {
-			return getJsonMapper().readValue(file, type);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON file \""+file+"\"", t);
-		}
+		return fromJson(file, null, type);
 	}
 	
 	/**
@@ -287,15 +260,11 @@ public class Json {
 	 * Convert from JSON to Object.
 	 * @param <T> Class type
 	 * @param stream JSON input stream
-	 * @param clazz Type Class
+	 * @param type Type Class
 	 * @return the object
 	 */
-	public <T> T fromJson(InputStream stream, Class<T> clazz) {
-		try {
-			return getJsonMapper().readValue(stream, clazz);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON stream.", t);
-		}
+	public <T> T fromJson(InputStream stream, Class<T> type) {
+		return fromJson(stream, null, type);
 	}
 	
 	/**
@@ -322,11 +291,7 @@ public class Json {
 	 * @return the object
 	 */
 	public <T> T fromJson(InputStream stream, JavaType type) {
-		try {
-			return getJsonMapper().readValue(stream, type);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON stream.", t);
-		}
+		return fromJson(stream, null, type);
 	}
 	
 	/**
@@ -354,11 +319,7 @@ public class Json {
 	 * @return the object
 	 */
 	public <T> T fromJson(InputStream stream, TypeReference<T> type) {
-		try {
-			return getJsonMapper().readValue(stream, type);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON stream.", t);
-		}
+		return fromJson(stream, null, type);
 	}
 	
 	/**
@@ -382,15 +343,11 @@ public class Json {
 	 * Convert from JSON to Object.
 	 * @param <T> Class type
 	 * @param reader JSON reader
-	 * @param clazz Type Class
+	 * @param type Type Class
 	 * @return the object
 	 */
-	public <T> T fromJson(Reader reader, Class<T> clazz) {
-		try {
-			return getJsonMapper().readValue(reader, clazz);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON reader.", t);
-		}
+	public <T> T fromJson(Reader reader, Class<T> type) {
+		return fromJson(reader, null, type);
 	}
 	
 	/**
@@ -417,11 +374,7 @@ public class Json {
 	 * @return the object
 	 */
 	public <T> T fromJson(Reader reader, JavaType type) {
-		try {
-			return getJsonMapper().readValue(reader, type);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON reader.", t);
-		}
+		return fromJson(reader, null, type);
 	}
 	
 	/**
@@ -449,11 +402,7 @@ public class Json {
 	 * @return the object
 	 */
 	public <T> T fromJson(Reader reader, TypeReference<T> type) {
-		try {
-			return getJsonMapper().readValue(reader, type);
-		} catch (Throwable t) {
-			throw new RuntimeException("Cannot convert from JSON reader.", t);
-		}
+		return fromJson(reader, null, type);
 	}
 	
 	/**
@@ -477,13 +426,13 @@ public class Json {
 	 * Convert from a specific sub-path in the {@link JsonNode}.
 	 * @param <T> class type
 	 * @param root node to start from when traversing
-	 * @param path the path (simple dot notation, e.g. "path1.path2" - nothing else!!!)
+	 * @param path the path (simple dot notation, e.g. "path1.path2" - nothing else!!!- can be null or empty)
 	 * @param type Java Type
 	 * @return the object at the specified path or null if it doesn't exist
 	 */
 	public <T> T convertFrom(JsonNode root, String path, Class<T> type) {
 		try {
-			Optional<JsonNode> child = traverse(root, path);
+			Optional<JsonNode> child = JacksonUtils.traverse(root, path);
 			if (child.isPresent()) {
 				return getJsonMapper().convertValue(child.get(), type);
 			}
@@ -497,13 +446,13 @@ public class Json {
 	 * Convert from a specific sub-path in the {@link JsonNode}.
 	 * @param <T> class type
 	 * @param root node to start from when traversing
-	 * @param path the path (simple dot notation, e.g. "path1.path2" - nothing else!!!)
+	 * @param path the path (simple dot notation, e.g. "path1.path2" - nothing else!!!- can be null or empty)
 	 * @param type Java Type
 	 * @return the object at the specified path or null if it doesn't exist
 	 */
 	public <T> T convertFrom(JsonNode root, String path, JavaType type) {
 		try {
-			Optional<JsonNode> child = traverse(root, path);
+			Optional<JsonNode> child = JacksonUtils.traverse(root, path);
 			if (child.isPresent()) {
 				return getJsonMapper().convertValue(child.get(), type);
 			}
@@ -517,13 +466,13 @@ public class Json {
 	 * Convert from a specific sub-path in the {@link JsonNode}.
 	 * @param <T> class type
 	 * @param root node to start from when traversing
-	 * @param path the path (simple dot notation, e.g. "path1.path2" - nothing else!!!)
+	 * @param path the path (simple dot notation, e.g. "path1.path2" - nothing else!!! - can be null or empty)
 	 * @param type Type Reference
 	 * @return the object at the specified path or null if it doesn't exist
 	 */
 	public <T> T convertFrom(JsonNode root, String path, TypeReference<T> type) {
 		try {
-			Optional<JsonNode> child = traverse(root, path);
+			Optional<JsonNode> child = JacksonUtils.traverse(root, path);
 			if (child.isPresent()) {
 				return getJsonMapper().convertValue(child.get(), type);
 			}
@@ -555,17 +504,6 @@ public class Json {
 	}
 
 	/**
-	 * Returns a parser for the given URL resource.
-	 * @param url - the URL
-	 * @return the parser
-	 * @throws IOException - when the input cannot be read
-	 * @see com.fasterxml.jackson.core.JsonFactory#createParser(java.net.URL)
-	 */
-	public JsonParser getParser(URL url) throws IOException {
-		return getJsonFactory().createParser(url.openStream());
-	}
-
-	/**
 	 * Returns a parser for the given input stream.
 	 * @param in - the input stream
 	 * @return the parser
@@ -578,13 +516,13 @@ public class Json {
 
 	/**
 	 * Returns a parser for the given reader.
-	 * @param r - the reader
+	 * @param reader the reader
 	 * @return the parser
 	 * @throws IOException - when the input cannot be read
 	 * @see com.fasterxml.jackson.core.JsonFactory#createParser(java.io.Reader)
 	 */
-	public JsonParser getParser(Reader r) throws IOException {
-		return getJsonFactory().createParser(r);
+	public JsonParser getParser(Reader reader) throws IOException {
+		return getJsonFactory().createParser(reader);
 	}
 
 	/**
@@ -599,60 +537,6 @@ public class Json {
 	}
 
 	/**
-	 * Creates a {@link TypeReference} reference for a list of given class.
-	 * @param <T> the type of the items
-	 * @param clazz the class of the items
-	 * @return the {@link TypeReference} for a list of these items
-	 */
-	public static <T> TypeReference<ArrayList<T>> getListTypeRef(Class<T> clazz) {
-		return new TypeReference<ArrayList<T>>() {};
-	}
-	
-	/**
-	 * Creates a {@link TypeReference} reference for a set of given class.
-	 * @param <T> the type of the items
-	 * @param clazz the class of the items
-	 * @return the {@link TypeReference} for a set of these items
-	 */
-	public static <T> TypeReference<Set<T>> getSetTypeRef(Class<T> clazz) {
-		return new TypeReference<Set<T>>() {};
-	}
-	
-	/**
-	 * Creates a {@link TypeReference} reference for a map of given key and value classes.
-	 * @param <K> type of keys
-	 * @param <V> type of values
-	 * @param keyClass class of keys
-	 * @param valueClass class of values
-	 * @return the {@link TypeReference} for a map of these types
-	 */
-	public static <K,V> TypeReference<Map<K,V>> getMapTypeRef(Class<K> keyClass, Class<V> valueClass) {
-		return new TypeReference<Map<K,V>>() {};
-	}
-
-	/**
-	 * Traverse to the node given in path.
-	 * @param node the node to traverse from
-	 * @param path the path (simple dot notation, nothing else!!!)
-	 * @return the node found
-	 */
-	public static Optional<JsonNode> traverse(JsonNode node, String path) {
-		if (!CommonUtils.isEmpty(path)) {
-			String paths[] = path.split("\\.");
-			if (paths.length > 0) {
-				for (String p : paths) {
-					if (!CommonUtils.isEmpty(p)) {
-						node = node.findPath(p.trim());
-						if (node.isMissingNode()) return Optional.empty();
-					}
-				}
-			}
-		}
-		
-		return Optional.of(node);
-	}
-
-	/**
 	 * Builder class for {@link Json} objects.
 	 * @author ralph
 	 *
@@ -661,83 +545,167 @@ public class Json {
 		
 		private JsonFactory        jsonFactory;
 		private JsonFactoryBuilder jsonFactoryBuilder;
-		private ObjectMapper       jsonMapper;
-		private com.fasterxml.jackson.databind.json.JsonMapper.Builder jsonMapperBuilder;
+		private JsonMapper         jsonMapper;
+		private JsonMapper.Builder jsonMapperBuilder;
 		
+		/**
+		 * Private constructor. Use {@link Json#builder()}
+		 */
 		private Builder() {
 			this.jsonFactory = null;
 			this.jsonMapper  = null;
 		}
 		
+		/**
+		 * Use the given {@link JsonFactory}.
+		 * <p>Will ignore any configured {@link JsonFactoryBuilder}.
+		 * @param jsonFactory the JsonFactory to be used
+		 * @return the builder for method chaining
+		 */
 		public Builder with(JsonFactory  jsonFactory) {
 			this.jsonFactory = jsonFactory;
 			return this;
 		}
 		
+		/**
+		 * Returns the configured {@link JsonFactory} object for building.
+		 * @return the {@link JsonFactory} or null if not specified
+		 */
+		public JsonFactory jsonFactory() {
+			return this.jsonFactory;
+		}
+		
+		/**
+		 * Use the given {@link JsonFactoryBuilder}.
+		 * <p>Will be ignored when {@link #with(JsonFactory)}, {@link #with(JsonMapper)} or  {@link #with(JsonMapper.Builder)} is used.
+		 * @param jsonFactoryBuilder the JsonFactoryBuilder to be used
+		 * @return the builder for method chaining
+		 */
 		public Builder with(JsonFactoryBuilder jsonFactoryBuilder) {
 			this.jsonFactoryBuilder = jsonFactoryBuilder;
 			return this;
 		}
 		
-		public Builder with(ObjectMapper jsonMapper) {
+		/**
+		 * Returns the configured {@link JsonFactoryBuilder} object for building.
+		 * @return the {@link JsonFactoryBuilder} or null if not specified
+		 */
+		public JsonFactoryBuilder jsonFactoryBuilder() {
+			return this.jsonFactoryBuilder;
+		}
+		
+		/**
+		 * Use the given {@link JsonMapper}.
+		 * <p>Will ignore any configured {@link JsonMapper.Builder}, {@link JsonFactory} or {@link JsonFactoryBuilder}.
+		 * @param jsonMapper the {@link JsonMapper} to be used
+		 * @return the builder for method chaining
+		 */
+		public Builder with(JsonMapper jsonMapper) {
 			this.jsonMapper = jsonMapper;
 			return this;
 		}
 		
-		public Builder with(com.fasterxml.jackson.databind.json.JsonMapper.Builder jsonMapperBuilder) {
+		/**
+		 * Returns the configured {@link JsonMapper} object for building.
+		 * @return the {@link JsonMapper} or null if not specified
+		 */
+		public JsonMapper jsonMapper() {
+			return this.jsonMapper;
+		}
+		
+		/**
+		 * Use the given {@link JsonMapper.Builder}.
+		 * <p>Will be ignored when {@link #with(JsonMapper)} is used.
+		 * @param jsonMapper the {@link JsonMapper} to be used
+		 * @return the builder for method chaining
+		 */
+		public Builder with(JsonMapper.Builder jsonMapperBuilder) {
 			this.jsonMapperBuilder = jsonMapperBuilder;
 			return this;
 		}
 		
 		/**
-		 * Returns the configured JsonMapper object (or creates it).
-		 * @return the JsonMapper
+		 * Returns the configured {@link JsonMapper.Builder} object for building.
+		 * @return the {@link JsonMapper.Builder} or null if not specified
 		 */
-		private ObjectMapper getJsonMapper() {
-			if (jsonMapper == null) {
-				jsonMapper = getJsonMapperBuilder().build();
-			}
+		public JsonMapper.Builder jsonMapperBuilder() {
+			return this.jsonMapperBuilder;
+		}
+		
+		/**
+		 * Returns the configured JsonMapper object (or creates it using the {@link #getJsonMapperBuilder()} method).
+		 * @return the JsonMapper to be used
+		 */
+		private JsonMapper getJsonMapper() {
+			if (jsonMapper == null) return getJsonMapperBuilder().build();
 			return jsonMapper;
 		}
 
-		private com.fasterxml.jackson.databind.json.JsonMapper.Builder getJsonMapperBuilder() {
-			if (jsonMapperBuilder == null) {
-				jsonMapperBuilder = defaultJsonMapperBuilder(getJsonFactory());
-			}
+		/**
+		 * Returns the configured {@link JsonMapper.Builder} (or creates it using the {@link Json#defaultJsonMapperBuilder(JsonFactory)} method).
+		 * @return the JsonMapper.Builder to be used
+		 */
+		private JsonMapper.Builder getJsonMapperBuilder() {
+			if (jsonMapperBuilder == null) return defaultJsonMapperBuilder(getJsonFactory());
 			return jsonMapperBuilder;
 		}
 		
+		/**
+		 * Returns the configured {@link JsonFactory} (or creates it using the {@link #getJsonFactoryBuilder()} method).
+		 * @return the JsonFactory to be used
+		 */
 		private JsonFactory getJsonFactory() {
-			if (jsonFactory == null) {
-				jsonFactory = getJsonFactoryBuilder().build();
-			}
+			if (jsonFactory == null) return getJsonFactoryBuilder().build();
 			return jsonFactory;
 		}
 		
+		/**
+		 * Returns the configured {@link JsonFactoryBuilder} (or creates it using the {@link Json#defaultJsonFactoryBuilder()} method).
+		 * @return the JsonFactory to be used
+		 */
 		private JsonFactoryBuilder getJsonFactoryBuilder() {
-			if (jsonFactoryBuilder == null) {
-				jsonFactoryBuilder = defaultJsonFactoryBuilder();
-			}
+			if (jsonFactoryBuilder == null) return defaultJsonFactoryBuilder();
 			return jsonFactoryBuilder;
 		}
 
+		/**
+		 * Builds the new {@link JsonMapper} with configured values.
+		 * <p>Re-entrant, will always create a new one based on configuration.
+		 * @return the Json utility object
+		 */
 		public Json build() {
 			return new Json(getJsonMapper());
 		}
-
 	}
 
+	/**
+	 * Creates a {@link Builder} object.
+	 * <p>A Builder object shall be used only once to build.
+	 * @return the new builder object
+	 */
 	public static Builder builder() {
 		return new Builder();
 	}
 	
-	public static com.fasterxml.jackson.databind.json.JsonMapper.Builder defaultJsonMapperBuilder(JsonFactory jsonFactory) {
+	/**
+	 * Creates a default {@link JsonMapper.Builder} object.
+	 * <p>The builder is configured to ignore unknown properties when deserializing, using JavaTime objects and with {@link JsonInclude.Value#ALL_NON_NULL} 
+	 * property inclusion.
+	 * @param jsonFactory the {@link JsonFactory} to be used
+	 * @return the Builder
+	 */
+	public static JsonMapper.Builder defaultJsonMapperBuilder(JsonFactory jsonFactory) {
 		return JsonMapper.builder(jsonFactory)
 			.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 			.addModule(new JavaTimeModule())
 			.defaultPropertyInclusion(JsonInclude.Value.ALL_NON_NULL);
 	}
 	
+	/**
+	 * Creates a default {@link JsonFactoryBuilder} object.
+	 * <p>No additional configuration is made.
+	 * @return the Builder
+	 */
 	public static JsonFactoryBuilder defaultJsonFactoryBuilder() {
 		return new JsonFactoryBuilder();
 	}
