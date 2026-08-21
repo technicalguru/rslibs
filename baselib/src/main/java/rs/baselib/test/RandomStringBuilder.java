@@ -60,7 +60,7 @@ public class RandomStringBuilder implements Builder<String> {
 	 */
 	@Override
 	public String build() {
-		return EncryptionUtils.generatePassword(chars, System.currentTimeMillis(), length);
+		return EncryptionUtils.generatePassword(chars, length);
 	}
 
 }

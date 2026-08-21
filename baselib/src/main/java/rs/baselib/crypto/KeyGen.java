@@ -62,7 +62,7 @@ public class KeyGen {
 	 */
 	public static SecretKey generateSecretKey(int iterationCount, String passPhrase, byte salt[]) throws NoSuchAlgorithmException, InvalidKeySpecException {
 		if (iterationCount < 1) iterationCount = EncryptionUtils.DEFAULT_ITERATIONS;
-		if (salt == null) salt = EncryptionUtils.generateSalt(0);
+		if (salt == null) salt = EncryptionUtils.generateSalt();
 		KeySpec keySpec = new PBEKeySpec(passPhrase.toCharArray(), salt, iterationCount);
 		SecretKey key = SecretKeyFactory.getInstance(EncryptionUtils.DEFAULT_SECRET_KEY_TYPE).generateSecret(keySpec);
 		return key;

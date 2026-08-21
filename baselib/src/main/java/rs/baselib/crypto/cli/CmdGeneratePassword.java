@@ -48,7 +48,7 @@ public class CmdGeneratePassword implements Callable<Integer> {
 	@Override
 	public Integer call() throws Exception {
 		for (int i=0; i<num; i++) {
-			System.out.println("#"+(i+1)+": "+EncryptionUtils.generatePassword(allowedChars, 0, length));
+			System.out.println("#"+(i+1)+": "+EncryptionUtils.generatePassword(allowedChars, length));
 		}
 		return 0;
 	}	
