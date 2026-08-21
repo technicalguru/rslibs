@@ -23,7 +23,7 @@ RS Library modules are maintained in the same Maven project and, hence, follow t
 Latest version is 6.0.0. Please note that Java 21 is required since 5.1.0.
 
 ## Upgrading v5 to v6
-V6 is a major release that removes several deprecated classes and integrates the projects eu.ralph-schuster.eu:csv, eu.ralph-schuster.eu:jersey-client, eu.ralph-schuster.eu:mail-queue and eu.ralph-schuster.eu:mail-templates. Besides of the removal of deprecated methods and classes, there shall be no breaking change.
+V6 is a major release that removes several deprecated classes and integrates the projects eu.ralph-schuster:csv, eu.ralph-schuster:jersey-client, eu.ralph-schuster:mail-queue and eu.ralph-schuster:mail-templates. Besides of the removal of deprecated methods and classes, there shall be no breaking change.
 
 ## Upgrading v4 to v5
 V5 is a major release that removes several deprecated date and calendar classes. This includes the ``RsDate`` class and its descendants as well as some bean helper classes. They can be easily replaced nowadays with other standard libraries such as the Java Time API or commons-beans or alike. 
