@@ -39,18 +39,6 @@ public interface ExcelFormatter {
 	 * This method is called immediately before the {@link ExcelWriter} writes the
 	 * complete workbook to the underlying output stream.
 	 * @param writer the calling writer
-	 * @param rowCount the number of rows in the selected sheet
-	 * @param columnCount the number of columns modified in the selected sheet
-	 * @deprecated Use the new method {@link #finalize(ExcelWriter)}.
-	 */
-	@Deprecated
-	public void finalize(ExcelWriter writer, int rowCount, int columnCount);
-	
-	/**
-	 * Finalizes the workbook.
-	 * This method is called immediately before the {@link ExcelWriter} writes the
-	 * complete workbook to the underlying output stream.
-	 * @param writer the calling writer
 	 * @since 4.1
 	 */
 	public void finalize(ExcelWriter writer);

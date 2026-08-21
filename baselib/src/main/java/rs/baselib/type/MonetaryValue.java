@@ -46,11 +46,6 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	public static final MathContext MATH_CONTEXT = MathContext.DECIMAL128;
 	/** The default scale to be used for monetary values */
 	public static final int DEFAULT_SCALE = 2;
-	/** 0 
-	 * @deprecated use {@link #zero(Currency)} instead.
-	 */
-	@Deprecated
-	public static final MonetaryValue ZERO = MonetaryValue.zero(null);
 	
 	private BigDecimal amount;
 	private RoundingMode roundingMode;
@@ -58,16 +53,6 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	private MathContext mathContext;
 	private Currency    currency;
 	
-	/**
-	 * Constructor.
-	 * @param value the monetary value
-	 * @deprecated use a specific currency {@link #MonetaryValue(BigDecimal, Currency)}.
-	 */
-	@Deprecated
-	public MonetaryValue(BigDecimal value) {
-		this(value, null, ROUNDING_MODE);
-	}
-
 	/**
 	 * Constructor.
 	 * @param value the monetary value
@@ -89,36 +74,12 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	 * Constructor.
 	 * @param value the monetary value
 	 * @param roundingMode the rounding mode to be used
-	 * @deprecated use a specific currency {@link #MonetaryValue(BigDecimal, Currency, RoundingMode)}.
-	 */
-	@Deprecated
-	public MonetaryValue(BigDecimal value, RoundingMode roundingMode) {
-		this(value, null, roundingMode);
-	}
-	
-	/**
-	 * Constructor.
-	 * @param value the monetary value
-	 * @param roundingMode the rounding mode to be used
 	 * @param currency the currency (can be null, default is currency of default locale)
 	 */
 	public MonetaryValue(BigDecimal value, Currency currency, RoundingMode roundingMode) {
 		this(value, currency, roundingMode, MATH_CONTEXT, DEFAULT_SCALE);
 	}
 
-	/**
-	 * Constructor.
-	 * @param value the monetary value
-	 * @param roundingMode the rounding mode to be used
-	 * @param mathContext the {@link MathContext} to be used
-	 * @param scale the scale to be used
-	 * @deprecated use a specific currency {@link #MonetaryValue(BigDecimal, Currency, RoundingMode, MathContext, int)}.
-	 */
-	@Deprecated
-	public MonetaryValue(BigDecimal value, RoundingMode roundingMode, MathContext mathContext, int scale) {
-		this(value, null, roundingMode, mathContext, scale);
-	}
-	
 	/**
 	 * Constructor.
 	 * @param value the monetary value
@@ -138,29 +99,10 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	/**
 	 * Constructor.
 	 * @param value the monetary value
-	 * @deprecated use a specific currency {@link #MonetaryValue(CharSequence, Currency)}.
-	 */
-	@Deprecated
-	public MonetaryValue(CharSequence value) {
-		this(value, null);
-	}
-
-	/**
-	 * Constructor.
-	 * @param value the monetary value
 	 * @param currency the currency (can be null, default is currency of default locale)
 	 */
 	public MonetaryValue(CharSequence value, Currency currency) {
 		this(new BigDecimal(value.toString(), MATH_CONTEXT), currency);
-	}
-
-	/**
-	 * Constructor.
-	 * @param value the monetary value
-	 * @deprecated use a specific currency {@link #MonetaryValue(double, Currency)}.
-	 */
-	public MonetaryValue(double value) {
-		this(value, null);
 	}
 
 	/**
@@ -175,28 +117,10 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	/**
 	 * Constructor.
 	 * @param value the monetary value
-	 * @deprecated use a specific currency {@link #MonetaryValue(BigInteger, Currency)}.
-	 */
-	public MonetaryValue(BigInteger value) {
-		this(value, null);
-	}
-
-	/**
-	 * Constructor.
-	 * @param value the monetary value
 	 * @param currency the currency (can be null, default is currency of default locale)
 	 */
 	public MonetaryValue(BigInteger value, Currency currency) {
 		this(new BigDecimal(value, MATH_CONTEXT), currency);
-	}
-
-	/**
-	 * Constructor.
-	 * @param value the monetary value
-	 * @deprecated use a specific currency {@link #MonetaryValue(int, Currency)}.
-	 */
-	public MonetaryValue(int value) {
-		this(value, null);
 	}
 
 	/**
@@ -352,7 +276,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue add(BigDecimal value) {
-		return add(new MonetaryValue(value));
+		return add(new MonetaryValue(value, getCurrency()));
 	}
 
 	/**
@@ -361,7 +285,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue add(int value) {
-		return add(new MonetaryValue(value));
+		return add(new MonetaryValue(value, getCurrency()));
 	}
 
 	/**
@@ -370,7 +294,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue add(long value) {
-		return add(new MonetaryValue(value));
+		return add(new MonetaryValue(value, getCurrency()));
 	}
 
 	/**
@@ -379,7 +303,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue add(double value) {
-		return add(new MonetaryValue(value));
+		return add(new MonetaryValue(value, getCurrency()));
 	}
 
 	/**
@@ -388,7 +312,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue add(BigInteger value) {
-		return add(new MonetaryValue(value));
+		return add(new MonetaryValue(value, getCurrency()));
 	}
 
 	/**
@@ -397,7 +321,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue add(CharSequence value) {
-		return add(new MonetaryValue(value));
+		return add(new MonetaryValue(value, getCurrency()));
 	}
 
 	/**
@@ -415,7 +339,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue subtract(BigDecimal value) {
-		return subtract(new MonetaryValue(value));
+		return subtract(new MonetaryValue(value, getCurrency()));
 	}
 
 	/**
@@ -424,7 +348,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue subtract(int value) {
-		return subtract(new MonetaryValue(value));
+		return subtract(new MonetaryValue(value, getCurrency()));
 	}
 
 	/**
@@ -433,7 +357,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue subtract(long value) {
-		return subtract(new MonetaryValue(value));
+		return subtract(new MonetaryValue(value, getCurrency()));
 	}
 
 	/**
@@ -442,7 +366,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue subtract(double value) {
-		return subtract(new MonetaryValue(value));
+		return subtract(new MonetaryValue(value, getCurrency()));
 	}
 
 	/**
@@ -451,7 +375,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue subtract(BigInteger value) {
-		return subtract(new MonetaryValue(value));
+		return subtract(new MonetaryValue(value, getCurrency()));
 	}
 
 	/**
@@ -460,7 +384,7 @@ public class MonetaryValue implements Serializable, Comparable<MonetaryValue> {
 	 * @return new monetary value holding the result
 	 */
 	public MonetaryValue subtract(CharSequence value) {
-		return subtract(new MonetaryValue(value));
+		return subtract(new MonetaryValue(value, getCurrency()));
 	}
 
 	/**

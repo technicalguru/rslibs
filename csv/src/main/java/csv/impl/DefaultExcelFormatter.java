@@ -262,22 +262,6 @@ public class DefaultExcelFormatter implements ExcelFormatter {
 	}
 
 	/**
-	 * Finalizes the workbook.
-	 * This method is called immediately before the {@link ExcelWriter} writes the
-	 * complete workbook to the underlying output stream.
-	 * This implementation just sets all columns to auto fit.
-	 * @param writer the calling writer
-	 * @param rowCount the number of rows in the selected sheet
-	 * @param columnCount the number of columns modified in the selected sheet
-	 * @deprecated Use {@link #finalize(ExcelWriter)} instead.
-	 */
-	@Override
-	@Deprecated
-	public void finalize(ExcelWriter writer, int rowCount, int columnCount) {
-		finalize(writer);
-	}
-
-	/**
 	 * {@inheritDoc}
 	 * @see #finalizeSheet(ExcelWriter, Workbook, Sheet, int)
 	 * @see #finalizeFirstRow(ExcelWriter, Workbook, Sheet, int, Row, Cell, int)
