@@ -1,0 +1,289 @@
+Abbey Road
+Abbey Road North
+Adderley Street
+Adelaide Terrace
+Akihabara-chuo
+Anzac Parade
+Aoyama Dori
+Ashoka Road
+Avenida 18 de Julio
+Avenida 9 de Julio
+Avenida Alameda
+Avenida Alvear
+Avenida Atlântica
+Avenida Atlântica Sul
+Avenida Brasil
+Avenida Brigadeiro Faria Lima
+Avenida Chapultepec
+Avenida Copacabana
+Avenida Corrientes
+Avenida Corrientes Sur
+Avenida de Mayo
+Avenida El Dorado
+Avenida Insurgentes
+Avenida Ipiranga
+Avenida Jimenez
+Avenida Libertador
+Avenida Madero
+Avenida Paulista
+Avenida Providencia
+Avenida Rio Branco
+Avenida Santa Fe
+Avenida São João
+Avenida Vitacura
+Avenue des Champs-Élysées
+Avenue du Parc
+Avenue Habib Bourguiba
+Avenue Montaigne
+Azikiwe Street
+Bahnhofstraße
+Baker Street
+Baker Street South
+Bay Street
+Beale Street
+Beethovenstraße
+Beijing Road
+Bergstraße
+Biscayne Boulevard
+Bismarckstraße
+Bloor Street
+Bond Street
+Boulevard de la Chapelle
+Boulevard España
+Boulevard Mohammed Zerktouni
+Boulevard Saint-Germain
+Boulevard Saint-Laurent
+Bourbon Street
+Bourke Street
+Bourke Street Mall
+Bowery
+Bree Street
+Brigade Road
+Broadway
+Broadway South
+Calle Ahumada
+Calle Balmes
+Calle Cruz
+Calle de Alcalá
+Calle de Atocha
+Calle de Serrano
+Calle Defensa
+Calle Florida
+Calle Juárez
+Calle Lavalle
+Calle Mayor
+Calle Ocho
+Calle Reconquista
+Calle Sarandí
+Canal Street
+Canton Road
+Canton Street
+Carnaby Street
+Carrera Séptima
+Cashel Street
+Champs-Élysées Ouest
+Chandni Chowk
+Charoen Krung Road
+Chuo Dori
+Clark Street
+Collins Avenue
+Collins Street
+Commercial Drive
+Commercial Street
+Commissioner Street
+Connaught Circus
+Connaught Road
+Constitution Avenue
+Corniche Road
+Corso Umberto
+Cuba Street
+Damrak
+Des Voeux Road
+Dorfstraße
+Downing Street
+Eighth Avenue
+Elizabeth Street
+Fifth Avenue
+Fisherman's Wharf
+Flinders Street
+Fox Street
+Friedrichstraße
+Gangnam-daero
+Gartenstraße
+George Street
+Getreidegasse
+Ginza
+Ginza-dori
+Goethestraße
+Graben
+Gran Vía
+Grand Via Central
+Granville Street
+Haight Street
+Hastings Street
+Hauptstraße
+Hennessy Road
+Herengracht
+Herengracht South
+Herrengasse
+Hollywood Boulevard
+Hollywood Road
+Huaihai Road
+Ilica
+Independence Avenue
+Itaewon-ro
+Jalan Braga
+Jalan Jaksa
+Jalan Malioboro
+Jalan Sudirman
+Jalan Thamrin
+Jan Smuts Avenue
+Janpath
+Jong-ro
+Julius Nyerere Way
+K Street
+Kalverstraat
+Kappabashi Dori
+Karangahape Road
+Kärntner Straße
+Keizersgracht
+Kensington High Street
+Kenyatta Avenue
+Kenyatta Lane
+Khao San Road
+Kimathi Street
+King Street
+King Street West
+King's Road
+Kirchstraße
+Kloof Street
+Knez Mihailova
+Königstraße
+Lambton Quay
+Lambton Quay East
+Leidsestraat
+Lexington Avenue
+Lincoln Road
+Lindenstraße
+Linking Road
+Lombard Street
+Lombard Street Curve
+Long Street
+Macquarie Street
+Madison Avenue
+Main Street Vancouver
+Mandela Drive
+Mariahilfer Straße
+Marina Bay
+Marine Drive Mumbai
+Market Street
+Meiji Dori
+Melrose Avenue
+MG Road
+Michigan Avenue
+Michigan Avenue South
+Mission Street
+Mohammed V Avenue
+Moi Avenue
+Mozartstraße
+Mulholland Drive
+Myeongdong-gil
+Nanjing Road
+Nankin-machi
+Nathan Road
+Nathan Road North
+Nelson Mandela Boulevard
+Nieuwendijk
+North Bridge Road
+Ocean Drive
+Omotesando
+Orchard Road
+Oxford Street
+Oxford Street West
+Park Avenue
+Paseo de Gracia
+Paseo de la Castellana
+Paseo de la Reforma
+Paseo Huerfanos
+Peachtree Street
+Pennsylvania Avenue
+Piccadilly
+Pitt Street
+Ponsonby Road
+Prinsengracht
+Prinsengracht North
+Queen Street
+Queen Street West
+Queen's Road Central
+Rajpath
+Rambla de Catalunya
+Rambla de Montevideo
+Regent Street
+Riva
+Robson Street
+Rodeo Drive
+Rodeo Drive East
+Rokin
+Royal Street
+Rua Augusta
+Rua Augusta West
+Rua Do Ouvidor
+Rua Oscar Freire
+Rue Charles de Gaulle
+Rue Cler
+Rue Crescent
+Rue de la Liberté
+Rue de la Paix
+Rue de Lyon
+Rue de Rivoli
+Rue de Rivoli Est
+Rue Mouffetard
+Rue Oberkampf
+Rue Saint-Denis
+Rush Street
+Sam Nujoma Avenue
+Samora Machel Avenue
+Schillerstraße
+Schulstraße
+Scotts Road
+Serangoon Road
+Seventh Avenue
+Sheikh Zayed Road
+Shinjuku Dori
+Silom Road
+Sotobori Dori
+Spuistraat
+St Georges Terrace
+State Street
+Ste-Catherine Street
+Strand Street
+Sukhumvit Road
+Sunset Boulevard
+Sunset Strip
+Swanston Street
+Takeshita Street
+Takeshita-dori
+Teheran-ro
+The Terrace
+Via Appia
+Via Appia Antica
+Via Condotti
+Via Della Spiga
+Via Flaminia
+Via Mazzini
+Via Nazionale
+Via Roma
+Via Toledo
+Via Veneto
+Victoria Street
+Vijzelstraat
+Vilakazi Street
+Wacker Drive
+Währinger Straße
+Waldstraße
+Wall Street
+Wall Street West
+Wisconsin Avenue
+Yaowarat Road
+Yasukuni Dori
+Yonge Street
