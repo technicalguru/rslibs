@@ -3,11 +3,12 @@ Helper Library for Jackson-based serialization and deserialization from/to JSON 
 
 Two classes are provided for better access:
 
-  * [JsonUtils](https://www.javadoc.io/doc/eu.ralph-schuster/jackson/latest/rs/jackson/JsonUtils.html)
-  * [YamlUtils](https://www.javadoc.io/doc/eu.ralph-schuster/jackson/latest/rs/jackson/YamlUtils.html)
+  * [Json](https://www.javadoc.io/doc/eu.ralph-schuster/jackson/latest/rs/jackson/Json.html)
+  * [Yaml](https://www.javadoc.io/doc/eu.ralph-schuster/jackson/latest/rs/jackson/Yaml.html)
 
 ## Synopsis
-This Jackson Package 
+This Jackson Package provides two helper classes to deal with generating and parsing JSON and YAML.
+
 ## Maven Coordinates
 
 ```
@@ -24,7 +25,7 @@ Javadoc API for latest stable version can be accessed [here](https://www.javadoc
 
 ## Contributions
 
- * [Project Homepage](https://github.com/technicalguru/rslibs/jackson)
+ * [Project Homepage](https://github.com/technicalguru/rslibs/tree/master/jackson)
  * [Issue Tracker](https://github.com/technicalguru/rslibs/issues)
  
 ## License

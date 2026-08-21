@@ -1,4 +1,6 @@
 # Java Mail Templates
+
+## Synopsis
 This project aims at creating e-mails from templates. The idea was created when dealing with a few
 applications that need different mail templates, with different languages and even different clients
 at the same time, using different content types (HTML and TEXT).
@@ -6,23 +8,15 @@ at the same time, using different content types (HTML and TEXT).
 The project delivers a default implementation using [Freemarker](https://freemarker.apache.org) but
 has been designed openly to use other template engines if needed.
 
-# Installation
-
-Maven Coordinates:
-
-**Attention:** Due to a dependency you will need JDK 17 and above.
+## Maven Coordinates
 
 ```
-	<dependency>
-		<groupId>eu.ralph-schuster</groupId>
-		<artifactId>mail-templates</artifactId>
-		<version>1.2.3</version>
-	</dependency>
+<dependency>
+	<groupId>eu.ralph-schuster</groupId>
+	<artifactId>mail-templates</artifactId>
+	<version>${version}</version>
+</dependency>
 ```
-
-# Documentation
-
-Javadoc is available from: [javadoc.io](https://www.javadoc.io/doc/eu.ralph-schuster/mail-templates)
 
 # Getting Started
 
@@ -175,3 +169,30 @@ cfg.setSQLDateAndTimeTimeZone(TimeZone.getDefault());
 cfg.setCacheStorage(new NullCacheStorage());
 cfg.setObjectWrapper(new Java8ObjectWrapper(Configuration.VERSION_2_3_31));
 ```
+
+## API Reference
+
+Javadoc API for latest stable version can be accessed [here](https://www.javadoc.io/doc/eu.ralph-schuster/mail-queue/latest//index.html).
+
+## Contribution
+
+ * [Project Homepage](https://github.com/technicalguru/rslibs/tree/master/mail-templates)
+ * [Issue Tracker](https://github.com/technicalguru/rslibs/issues)
+  
+## License
+
+Java Mail Templates is free software: you can redistribute it and/or modify it under the terms of version 3 of the GNU 
+Lesser General Public  License as published by the Free Software Foundation.
+
+Java Mail Templates is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied 
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public 
+License for more details.
+
+You should have received a copy of the GNU Lesser General Public License along with Java Mail Templates.  If not, see 
+<http://www.gnu.org/licenses/lgpl-3.0.html>.
+
+Summary:
+ 1. You are free to use all this code in any private or commercial project. 
+ 2. You must distribute license and author information along with your project.
+ 3. You are not required to publish your own source code.
+

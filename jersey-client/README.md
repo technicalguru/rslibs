@@ -1,4 +1,6 @@
 # jersey-client
+
+## Synopsis
 A basic structure for building clients with jersey.
 
 ## Maven Coordinates
@@ -7,7 +9,7 @@ A basic structure for building clients with jersey.
 <dependency>
 	<groupId>eu.ralph-schuster</groupId>
 	<artifactId>jersey-client</artifactId>
-	<version>2.1.3</version>
+	<version>${version}</version>
 </dependency>
 ```
 
@@ -118,8 +120,8 @@ Javadoc API for latest stable version can be accessed [here](https://www.javadoc
  
 ## Contribution
 
- * [Project Homepage](https://github.com/technicalguru/jersey-client)
- * [Issue Tracker](https://github.com/technicalguru/jersey-client/issues)
+ * [Project Homepage](https://github.com/technicalguru/rslibs/tree/master/jersey-client)
+ * [Issue Tracker](https://github.com/technicalguru/rslibs/issues)
   
 ## License
 

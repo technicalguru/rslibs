@@ -1,5 +1,6 @@
 # Java Mail Queue
 
+## Synopsis
 This project provides a mail queue that is agnostic to the actual mail sending framework. The mail
 queue provides these features:
 
@@ -9,16 +10,14 @@ queue provides these features:
 - Mails can be sent with priority (preceding mails in queue with normal priority)
 - Thread-safe implementation for mail queueing and sending.
 
-# Installation
-
-Maven Coordinates:
+## Maven Coordinates
 
 ```
-	<dependency>
-		<groupId>eu.ralph-schuster</groupId>
-		<artifactId>mail-queue</artifactId>
-		<version>1.2.3</version>
-	</dependency>
+<dependency>
+	<groupId>eu.ralph-schuster</groupId>
+	<artifactId>jersey-client</artifactId>
+	<version>${version}</version>
+</dependency>
 ```
 
 # Documentation
@@ -157,3 +156,29 @@ The reference ID is the ID of the message that was affected.
 
 If you want to use your own mailing framework, you can write an implementation of the `MailSender`
 interface and pass an instance of it to the `MailQueue` constructor.
+
+## API Reference
+
+Javadoc API for latest stable version can be accessed [here](https://www.javadoc.io/doc/eu.ralph-schuster/mail-queue/latest//index.html).
+
+## Contribution
+
+ * [Project Homepage](https://github.com/technicalguru/rslibs/tree/master/mail-queue)
+ * [Issue Tracker](https://github.com/technicalguru/rslibs/issues)
+  
+## License
+
+Java Mail Queue is free software: you can redistribute it and/or modify it under the terms of version 3 of the GNU 
+Lesser General Public  License as published by the Free Software Foundation.
+
+Java Mail Queue is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied 
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public 
+License for more details.
+
+You should have received a copy of the GNU Lesser General Public License along with Java Mail Queue.  If not, see 
+<http://www.gnu.org/licenses/lgpl-3.0.html>.
+
+Summary:
+ 1. You are free to use all this code in any private or commercial project. 
+ 2. You must distribute license and author information along with your project.
+ 3. You are not required to publish your own source code.

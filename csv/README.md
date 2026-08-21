@@ -1,5 +1,6 @@
-## Overview
+# CSV - CSV/Excel Utility Package
 
+## Synopsis
 Unfortunately, Java does not offer any methods to simply read CSV files or produce such, not mentioning Excel. 
 I for myself found it quite easy to work with such files; especially when you need to deal with data from and 
 to Microsoft Excel.
@@ -29,6 +30,16 @@ other packages in favour of readability and structuring of the classes.
 
 Excel functionality is available since version 2.0.
 
+## Maven Coordinates
+
+```
+<dependency>
+	<groupId>eu.ralph-schuster</groupId>
+	<artifactId>csv</artifactId>
+	<version>${version}</version>
+</dependency>
+```
+
 ## Code Examples
 
  * [Reading a CSV file](https://www.javadoc.io/doc/eu.ralph-schuster/csv/latest/csv/impl/CSVReader.html)
@@ -38,28 +49,20 @@ Excel functionality is available since version 2.0.
  * [Using StreamMapper to convert between table stream data and Java objects](https://www.javadoc.io/doc/eu.ralph-schuster/csv/latest/csv/mapper/StreamMapper.html)
  * [Reading objects from a table stream](https://www.javadoc.io/doc/eu.ralph-schuster/csv/latest/csv/util/ObjectReader.html)
  * [Writing objects to a table stream](https://www.javadoc.io/doc/eu.ralph-schuster/csv/latest/csv/util/ObjectWriter.html)
-## Maven Coordinates
 
-```
-<dependency>
-	<groupId>eu.ralph-schuster</groupId>
-	<artifactId>csv</artifactId>
-	<version>4.3.8</version>
-</dependency>
-```
 ## Version Notes
 
  * Java 21 required since v4.3
  
 ## API Reference
 
-Javadoc API for latest stable version can be accessed [here](https://www.javadoc.io/doc/eu.ralph-schuster/csv/latest//index.html).
+Javadoc API for latest stable version can be accessed [here](https://www.javadoc.io/doc/eu.ralph-schuster/csv).
 
-## Contribution
+## Contributions
 
- * [Project Homepage](https://github.com/technicalguru/csv)
- * [Issue Tracker](https://github.com/technicalguru/csv/issues)
-  
+ * [Project Homepage](https://github.com/technicalguru/rslibs/tree/master/csv)
+ * [Issue Tracker](https://github.com/technicalguru/rslibs/issues)
+ 
 ## License
 
 CSV is free software: you can redistribute it and/or modify it under the terms of version 3 of the GNU 
