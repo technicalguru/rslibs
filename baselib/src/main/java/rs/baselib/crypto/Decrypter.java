@@ -94,7 +94,7 @@ public class Decrypter {
 		
 		try {
 			if (iterationCount < 1) iterationCount = EncryptionUtils.DEFAULT_ITERATIONS;
-			if (salt == null) salt = EncryptionUtils.generateSalt(0);
+			if (salt == null) salt = EncryptionUtils.generateSalt();
 			KeySpec keySpec = new PBEKeySpec(new String(bytephrase, "UTF8").toCharArray(), salt, iterationCount);
 			SecretKey key = SecretKeyFactory.getInstance(EncryptionUtils.DEFAULT_SECRET_KEY_TYPE).generateSecret(keySpec);
 			init(key, EncryptionUtils.DEFAULT_SECRET_KEY_TYPE, EncryptionUtils.generateParamSpec(salt, iterationCount));
@@ -155,7 +155,7 @@ public class Decrypter {
 	public Decrypter(String passPhrase, byte salt[], int iterationCount) throws DecryptionException {
 		try {
 			if (iterationCount < 1) iterationCount = EncryptionUtils.DEFAULT_ITERATIONS;
-			if (salt == null) salt = EncryptionUtils.generateSalt(0);
+			if (salt == null) salt = EncryptionUtils.generateSalt();
 			KeySpec keySpec = new PBEKeySpec(passPhrase.toCharArray(), salt, iterationCount);
 			SecretKey key = SecretKeyFactory.getInstance(EncryptionUtils.DEFAULT_SECRET_KEY_TYPE).generateSecret(keySpec);
 			init(key, EncryptionUtils.DEFAULT_SECRET_KEY_TYPE, EncryptionUtils.generateParamSpec(salt, iterationCount));

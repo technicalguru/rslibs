@@ -83,6 +83,8 @@ public class EncryptionUtils {
 	/** Encoder for line limiting encoding */
 	private static Base64 base64 = Base64.builder().setLineLength(80).get();
 	
+	private static Random RND = new Random(System.currentTimeMillis());
+	
 	/**
 	 * Creates a key specification.
 	 * @param key the key 
@@ -130,9 +132,29 @@ public class EncryptionUtils {
 	 * Creates a random salt array.
 	 * @param randomInit initializer
 	 * @return the random salt
+	 * @deprecated this method was producing the same random numbers in the same order when using same randomInit. randomInit 
+	 *             parameter is now being ignored. Use {@link #generateSalt()} instead.
 	 */
+	@Deprecated
 	public static byte[] generateSalt(long randomInit) {
-		return generateRandomBytes(randomInit, 8);
+		return generateRandomBytes(8);
+	}
+
+	/**
+	 * Generate a random array of bytes
+	 * @param randomInit initializer
+	 * @param size size of returned array
+	 * @return random byte array
+	/**
+	 * Creates a random salt array.
+	 * @param randomInit initializer
+	 * @return the random salt
+	 * @deprecated this method was producing the same random numbers in the same order when using same randomInit. randomInit 
+	 *             parameter is now being ignored. Use {@link #generateRandomBytes(int)} instead.
+	 */
+	@Deprecated
+	public static byte[] generateRandomBytes(long randomInit, int size) {
+		return generateRandomBytes(size);
 	}
 
 	/**
@@ -141,11 +163,9 @@ public class EncryptionUtils {
 	 * @param size size of returned array
 	 * @return random byte array
 	 */
-	public static byte[] generateRandomBytes(long randomInit, int size) {
-		if (randomInit == 0) randomInit = System.currentTimeMillis();
-		Random random = new Random(randomInit);
+	public static byte[] generateRandomBytes(int size) {
 		byte rc[] = new byte[size];
-		random.nextBytes(rc);
+		RND.nextBytes(rc);
 		return rc;
 	}
 
@@ -154,7 +174,7 @@ public class EncryptionUtils {
 	 * @return the random password
 	 */
 	public static String generatePassword() {
-		return generatePassword(null, 0, 0);
+		return generatePassword(null, 0);
 	}
 
 	/**
@@ -163,7 +183,7 @@ public class EncryptionUtils {
 	 * @return the random password
 	 */
 	public static String generatePassword(int length) {
-		return generatePassword(null, 0, length);
+		return generatePassword(null, length);
 	}
 
 	/**
@@ -172,7 +192,7 @@ public class EncryptionUtils {
 	 * @return the random password
 	 */
 	public static String generatePassword(String allowedChars) {
-		return generatePassword(allowedChars, 0, 0);
+		return generatePassword(allowedChars, 0);
 	}
 
 	/**
@@ -181,17 +201,27 @@ public class EncryptionUtils {
 	 * @param randomInit initializer
 	 * @param length length of password
 	 * @return the random password
+	 * @deprecated this method was producing the same random numbers in the same order when using same randomInit. randomInit 
+	 *             parameter is now being ignored. Use {@link #generatePassword(String, int)} instead.
 	 */
+	@Deprecated
 	public static String generatePassword(String allowedChars, long randomInit, int length) {
+		return generatePassword(allowedChars, length);
+	}
+	
+	/**
+	 * Creates a random password.
+	 * @param allowedChars allowedCharacters
+	 * @param length length of password
+	 * @return the random password
+	 */
+	public static String generatePassword(String allowedChars, int length) {
 		if ((allowedChars == null) || (allowedChars.trim().length() == 0)) allowedChars = PASSWORD_CHARS;
-		if (randomInit == 0) randomInit = System.currentTimeMillis();
 		if (length < 1) length = DEFAULT_ITERATIONS;
-
-		Random random = new Random(randomInit);
 
 		StringBuilder rc = new StringBuilder(length);
 		while (rc.length() < length) {
-			int n = random.nextInt(allowedChars.length());
+			int n = RND.nextInt(allowedChars.length());
 			char c = allowedChars.charAt(n);
 			if (!Character.isWhitespace(c)) rc.append(c);
 		}

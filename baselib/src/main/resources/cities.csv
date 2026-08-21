@@ -1,0 +1,146 @@
+New York,1,212
+Los Angeles,1,213
+Chicago,1,312
+Toronto,1,416
+Montreal,1,514
+Vancouver,1,604
+Cairo,20,2
+Giza,20,2
+Alexandria,20,3
+Johannesburg,27,11
+Cape Town,27,21
+Durban,27,31
+Athens,30,21
+Thessaloniki,30,231
+Patras,30,261
+Rotterdam,31,10
+Amsterdam,31,20
+Den Haag,31,70
+Brussels,32,2
+Antwerpen,32,3
+Gent,32,9
+Paris,33,1
+Lyon,33,4
+Marseille,33,4
+Madrid,34,91
+Barcelona,34,93
+Valencia,34,96
+Budapest,36,1
+Debrecen,36,52
+Szeged,36,62
+Milan,39,2
+Rome,39,6
+Naples,39,81
+Bukarest,40,21
+Timișoara,40,256
+Cluj-Napoca,40,264
+Geneva,41,22
+Bern,41,31
+Zurich,41,44
+Vienna,43,1
+Graz,43,316
+Salzburg,43,662
+London,44,20
+Birmingham,44,121
+Manchester,44,161
+Kopenhagen,45,3
+Odense,45,6
+Aarhus,45,8
+Stockholm,46,8
+Göteborg,46,31
+Malmö,46,40
+Oslo,47,2
+Bergen,47,55
+Trondheim,47,73
+Krakow,48,12
+Warsaw,48,22
+Łódź,48,42
+Wrocław,48,71
+Berlin,49,30
+Hamburg,49,40
+Munich,49,89
+Lima,51,1
+Trujillo,51,44
+Arequipa,51,54
+Guadalajara,52,33
+Mexico City,52,55
+Monterrey,52,81
+Buenos Aires,54,11
+Rosario,54,341
+Cordoba,54,351
+São Paulo,55,11
+Rio de Janeiro,55,21
+Brasilia,55,61
+Santiago,56,2
+Valparaíso,56,32
+Concepción,56,41
+Bogotá,57,601
+Cali,57,602
+Medellín,57,604
+Kuala Lumpur,60,3
+Penang,60,4
+Johor Bahru,60,7
+Sydney,61,2
+Melbourne,61,3
+Brisbane,61,7
+Jakarta,62,21
+Bandung,62,22
+Surabaya,62,31
+Manila,63,2
+Cebu City,63,32
+Davao City,63,82
+Christchurch,64,3
+Wellington,64,4
+Auckland,64,9
+Singapore,65,
+Bangkok,66,2
+Chiang Mai,66,53
+Phuket,66,76
+Tokyo,81,3
+Osaka,81,6
+Kyoto,81,75
+Seoul,82,2
+Incheon,82,32
+Busan,82,51
+Hanoi,84,24
+Ho Chi Minh City,84,28
+Da Nang,84,236
+Beijing,86,10
+Guangzhou,86,20
+Shanghai,86,21
+Istanbul,90,212
+Izmir,90,232
+Ankara,90,312
+New Delhi,91,11
+Mumbai,91,22
+Bangalore,91,80
+Casablanca,212,522
+Marrakech,212,524
+Rabat,212,537
+Lagos,234,1
+Ibadan,234,2
+Abuja,234,9
+Nairobi,254,20
+Mombasa,254,41
+Kisumu,254,57
+Lisbon,351,21
+Porto,351,22
+Braga,351,253
+Dublin,353,1
+Cork,353,21
+Galway,353,91
+Tampere,358,3
+Espoo,358,9
+Helsinki,358,9
+Prague,420,2
+Brno,420,5
+Ostrava,420,59
+Riyadh,966,11
+Jeddah,966,12
+Mecca,966,12
+Abu Dhabi,971,2
+Dubai,971,4
+Sharjah,971,6
+Jerusalem,972,2
+Tel Aviv,972,3
+Haifa,972,4

@@ -42,7 +42,7 @@ public class EncryptionUtilsTest {
 	 */
 	@Test
 	public void testGenerateSaltLong() {
-		byte b[] = EncryptionUtils.generateSalt(System.currentTimeMillis());
+		byte b[] = EncryptionUtils.generateSalt();
 		assertNotNull(b);
 		assertEquals(8, b.length);
 	}
@@ -52,7 +52,7 @@ public class EncryptionUtilsTest {
 	 */
 	@Test
 	public void testGeneratePasswordStringLongInt() {
-		String s = EncryptionUtils.generatePassword(EncryptionUtils.PASSWORD_CHARS, System.currentTimeMillis(), 20);
+		String s = EncryptionUtils.generatePassword(EncryptionUtils.PASSWORD_CHARS, 20);
 		assertNotNull(s);
 		assertEquals(20, s.length());
 		for (char c : s.toCharArray()) {
