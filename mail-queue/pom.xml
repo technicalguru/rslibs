@@ -1,0 +1,66 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>eu.ralph-schuster</groupId>
+		<artifactId>libs</artifactId>
+		<version>6.0.0-SNAPSHOT</version>
+	</parent>
+
+	<properties>
+		<project.home>https://github.com/technicalguru/rslibs</project.home>
+	</properties>
+
+	<artifactId>mail-queue</artifactId>
+ 	<packaging>jar</packaging>
+	<name>${project.groupId}.${project.artifactId}</name>
+	<description>Queuing e-mails for delivery and process them</description>
+	<url>https://github.com/technicalguru/rslibs</url>
+
+	<dependencies>
+		<dependency>
+			<groupId>jakarta.mail</groupId>
+			<artifactId>jakarta.mail-api</artifactId>
+			<version>2.1.5</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.sun.mail</groupId>
+		    <artifactId>jakarta.mail</artifactId>
+		    <version>2.0.2</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>baselib</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.cowwoc.token-bucket</groupId>
+			<artifactId>token-bucket</artifactId>
+			<version>6.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>ch.qos.logback</groupId>
+					<artifactId>logback-classic</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.simplejavamail</groupId>
+			<artifactId>simple-java-mail</artifactId>
+			<version>9.3.2</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<header><![CDATA[<a href="${project.home}" target="_new">Visit the ${project.name} Homepage</a>]]></header>
+					<detectJavaApiLink>false</detectJavaApiLink>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

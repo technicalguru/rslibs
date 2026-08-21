@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Package Description csv</title>
+<!--
+ This file is part of CSV.
+
+ CSV is free software: you can redistribute it 
+ and/or modify it under the terms of version 3 of the GNU 
+ Lesser General Public  License as published by the Free Software 
+ Foundation.
+ 
+ CSV is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU Lesser General Public License for more details.
+ 
+ You should have received a copy of the GNU Lesser General Public 
+ License along with CSV.  If not, see 
+ <http://www.gnu.org/licenses/lgpl-3.0.html>.
+-->
+</head>
+<body>
+Provides implementation classes for reading various kind of streams as well as producing
+such.
+
+Delivered implementations are CSV, Excel, XML, Jdbc, JTable object.
+<p>
+CSVReader Example:
+</p>
+
+<pre>
+java.io.File f = new java.io.File("csv-test.csv");
+CSVReader in = new CSVReader(new java.io.FileReader(f));
+while (in.hasNext()) {
+    Object columns[] = in.next();
+    // Do something here
+}
+in.close();
+</pre>
+
+
+<p>
+CSVWriter Example:
+</p>
+
+<pre>
+java.io.File f = new java.io.File("csv-test.csv");
+CSVWriter out = new CSVWriter(new java.io.FileWriter(f));
+out.printRow(new Object[] { "0:0", "0:1", "0:2" });
+out.printRow(new Object[] { "1:0", "1:1", "1:2" });
+out.close();
+</pre>
+
+
+</body>
+</html>

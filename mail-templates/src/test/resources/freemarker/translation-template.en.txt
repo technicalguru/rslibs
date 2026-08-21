@@ -1,0 +1,1 @@
+A template using a ${i18n.variable} and a ${i18n.sharedVariable} - and a ${i18n.globalVariable}.

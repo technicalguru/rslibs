@@ -1,0 +1,1 @@
+***START-OF-MAIN*** <#include "sub-template"> ***END-OF-MAIN***
