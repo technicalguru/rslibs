@@ -72,7 +72,17 @@ public class LongBuilderTest {
 		for (int i=0; i<100; i++) {
 			Long actual = b.build();
 			assertTrue(actual >= 100);
-			assertTrue(actual <= 200);
+			assertTrue(actual < 200);
+		}
+	}
+	
+	@Test
+	public void testRandom_withStartGreaterThanEnd() {
+		LongBuilder b = $Long().withRandom().withStart(200).withEnd(100);
+		for (int i=0; i<100; i++) {
+			Long actual = b.build();
+			assertTrue(actual >= 100);
+			assertTrue(actual < 200);
 		}
 	}
 	

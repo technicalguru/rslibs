@@ -74,7 +74,7 @@ public class ZonedDateTimeBuilder implements Builder<ZonedDateTime> {
 
 	/**
 	 * Start the build with a given start date and time.
-	 * <p>If not set it will be the current date time.
+	 * <p>If not set it will be the current date time. Start is inclusive (random value can be equal).
 	 * @param start - the date time for the start (1st date)
 	 * @return this builder for concatenation
 	 */
@@ -86,6 +86,7 @@ public class ZonedDateTimeBuilder implements Builder<ZonedDateTime> {
 
 	/**
 	 * End date and time when generating random {@link ZonedDateTime} objects.
+	 * <p>End is exclusive (random value cannot be equal).
 	 * @param start - the first number to produce
 	 * @return this builder for concatenation
 	 */
@@ -119,6 +120,7 @@ public class ZonedDateTimeBuilder implements Builder<ZonedDateTime> {
 
 	/**
 	 * Set random creation. Will respect end time set
+	 * <p>Random value will be created so that start <= value < end.
 	 * @return this builder for concatenation
 	 */
 	public ZonedDateTimeBuilder withRandom() {

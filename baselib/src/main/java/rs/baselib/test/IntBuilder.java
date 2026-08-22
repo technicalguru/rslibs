@@ -46,6 +46,7 @@ public class IntBuilder implements Builder<Integer> {
 
 	/**
 	 * Start the build with a given int.
+	 * <p>Start is inclusive (random value can be equal).
 	 * @param start - the first number to produce
 	 * @return this builder for concatenation
 	 */
@@ -66,6 +67,7 @@ public class IntBuilder implements Builder<Integer> {
 
 	/**
 	 * Set a given max number (for random numbers only).
+	 * <p>End is exclusive (random value cannot be equal).
 	 * @param end - the max number to use
 	 * @return this builder for concatenation
 	 */
@@ -76,6 +78,7 @@ public class IntBuilder implements Builder<Integer> {
 
 	/**
 	 * Set random creation.
+	 * <p>Random value will be created so that start <= value < end.
 	 * @return this builder for concatenation
 	 */
 	public IntBuilder withRandom() {
@@ -91,8 +94,12 @@ public class IntBuilder implements Builder<Integer> {
 		if (!random) {
 			if (current == null) current  = start;
 			else                 current += step;
-		} else {
+		} else if (start == end) {
+			current = start;
+		} else if (start < end) {
 			current = Integer.valueOf(BuilderUtils.RNG.nextInt(start, end));
+		} else {
+			current = Integer.valueOf(BuilderUtils.RNG.nextInt(end, start));
 		}
 		last = current;
 		return current;

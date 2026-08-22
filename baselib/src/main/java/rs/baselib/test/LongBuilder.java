@@ -46,6 +46,7 @@ public class LongBuilder implements Builder<Long> {
 
 	/**
 	 * Start the build with a given long.
+	 * <p>Start is inclusive (random value can be equal).
 	 * @param start - the first number to produce
 	 * @return this builder for concatenation
 	 */
@@ -66,6 +67,7 @@ public class LongBuilder implements Builder<Long> {
 
 	/**
 	 * Set a given max number (for random numbers only).
+	 * <p>End is exclusive (random value cannot be equal).
 	 * @param end - the max number to use
 	 * @return this builder for concatenation
 	 */
@@ -76,6 +78,7 @@ public class LongBuilder implements Builder<Long> {
 
 	/**
 	 * Set random creation.
+	 * <p>Random value will be created so that start <= value < end.
 	 * @return this builder for concatenation
 	 */
 	public LongBuilder withRandom() {
@@ -91,8 +94,12 @@ public class LongBuilder implements Builder<Long> {
 		if (!random) {
 			if (current == null) current  = start;
 			else                 current += step;
-		} else {
+		} else if (start == end) {
+			current = start;
+		} else if (start < end) {
 			current = Long.valueOf(BuilderUtils.RNG.nextLong(start, end));
+		} else {
+			current = Long.valueOf(BuilderUtils.RNG.nextLong(end, start));
 		}
 		last = current;
 		return current;

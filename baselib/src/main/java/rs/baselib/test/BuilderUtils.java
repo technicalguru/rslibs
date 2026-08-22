@@ -148,4 +148,28 @@ public class BuilderUtils {
 	public static ZonedDateTimeBuilder $ZonedDateTime() {
 		return new ZonedDateTimeBuilder();
 	}
+
+	/**
+	 * Returns a new builder for LocalDateTime.
+	 * @return the builder for LocalDateTime
+	 */
+	public static LocalDateTimeBuilder $LocalDateTime() {
+		return new LocalDateTimeBuilder();
+	}
+
+	/**
+	 * Returns a new builder for LocalDate.
+	 * @return the builder for LocalDate
+	 */
+	public static LocalDateBuilder $LocalDate() {
+		return new LocalDateBuilder();
+	}
+
+	/**
+	 * Returns a new builder for LocalTime.
+	 * @return the builder for LocalTime
+	 */
+	public static LocalTimeBuilder $LocalTime() {
+		return new LocalTimeBuilder();
+	}
 }

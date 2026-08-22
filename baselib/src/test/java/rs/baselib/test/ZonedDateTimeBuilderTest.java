@@ -64,6 +64,14 @@ public class ZonedDateTimeBuilderTest {
 	}
 	
 	@Test
+	public void testStart() {
+		ZonedDateTime        start  = ZonedDateTime.now().plusHours(1);
+		ZonedDateTimeBuilder b      = $ZonedDateTime().withStart(start);
+		ZonedDateTime        actual = b.build();
+		assertEquals(start, actual);
+	}
+	
+	@Test
 	public void testStep() {
 		ZonedDateTimeBuilder b      = $ZonedDateTime().withStep(Period.ofDays(1), Duration.ofDays(1));
 		ZonedDateTime        first  = b.build();
@@ -86,6 +94,14 @@ public class ZonedDateTimeBuilderTest {
 		ZonedDateTime        actual = b.build();
 		assertEquals(Duration.ofDays(1).getSeconds(), actual.toInstant().getEpochSecond() - first.toInstant().getEpochSecond());
 	}
+
+	@Test
+	public void testStep_withMs() {
+		ZonedDateTimeBuilder b      = $ZonedDateTime().withStep(86400000L);
+		ZonedDateTime        first  = b.build();
+		ZonedDateTime        actual = b.build();
+		assertEquals(Duration.ofDays(1).getSeconds(), actual.toInstant().getEpochSecond() - first.toInstant().getEpochSecond());
+	}
 	
 	@Test
 	public void testRandom() {
@@ -94,7 +110,19 @@ public class ZonedDateTimeBuilderTest {
 		ZonedDateTimeBuilder b      = $ZonedDateTime().withRandom().withStart(start).withEnd(now);
 		for (int i=0; i<100; i++) {
 			ZonedDateTime        actual = b.build();
-			assertTrue(start.isBefore(actual));
+			assertTrue(start.isEqual(actual) || start.isBefore(actual));
+			assertTrue(now.isAfter(actual));
+		}
+	}
+	
+	@Test
+	public void testRandom_withStartGreaterThanEnd() {
+		ZonedDateTime        now    = ZonedDateTime.now();
+		ZonedDateTime        start  = now.minusDays(10);
+		ZonedDateTimeBuilder b      = $ZonedDateTime().withRandom().withStart(now).withEnd(start);
+		for (int i=0; i<100; i++) {
+			ZonedDateTime        actual = b.build();
+			assertTrue(start.isEqual(actual) || start.isBefore(actual));
 			assertTrue(now.isAfter(actual));
 		}
 	}

@@ -72,7 +72,17 @@ public class IntBuilderTest {
 		for (int i=0; i<100; i++) {
 			Integer actual = b.build();
 			assertTrue(actual >= 100);
-			assertTrue(actual <= 200);
+			assertTrue(actual < 200);
+		}
+	}
+
+	@Test
+	public void testRandom_withStartGreaterThanEnd() {
+		IntBuilder b = $Int().withRandom().withStart(200).withEnd(100);
+		for (int i=0; i<100; i++) {
+			Integer actual = b.build();
+			assertTrue(actual >= 100);
+			assertTrue(actual < 200);
 		}
 	}
 
