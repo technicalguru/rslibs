@@ -172,4 +172,14 @@ public class BuilderUtils {
 	public static LocalTimeBuilder $LocalTime() {
 		return new LocalTimeBuilder();
 	}
+	
+	/**
+	 * Returns the City Builder factory.
+	 * @return the builder for cities.
+	 */
+	public static CityBuilder $City() {
+		return new CityBuilder();
+	}
+
+
 }
