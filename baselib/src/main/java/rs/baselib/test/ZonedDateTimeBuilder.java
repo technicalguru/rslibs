@@ -161,17 +161,29 @@ public class ZonedDateTimeBuilder implements Builder<ZonedDateTime> {
 		return start.withZoneSameInstant(zoneId);
 	}
 	
+	/**
+	 * Get the zone id to be used (assuming it was not defined)
+	 * @return zone id from start or default
+	 */
 	protected ZoneId getZoneId() {
 		if (start == null) return ZoneId.systemDefault();
 		return start.getZone();
 	}
 	
+	/**
+	 * Get the start using the correct zone id
+	 * @return the start
+	 */
 	protected ZonedDateTime getStart() {
 		if (zoneId == null) zoneId = getZoneId();
 		if (start  == null) return ZonedDateTime.now(zoneId);
 		return start.withZoneSameInstant(zoneId);
 	}
 	
+	/**
+	 * Creates the random builder.
+	 * @return the random builder to time in ms
+	 */
 	protected LongBuilder createRandomBuilder() {
 		if (start == null) throw new RuntimeException("Minimum ZonedDateTime is not set");
 		if (end   == null) throw new RuntimeException("Maximum ZonedDateTime is not set");
