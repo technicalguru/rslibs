@@ -140,4 +140,12 @@ public class BuilderUtils {
 	public static RandomPhoneBuilder $PhoneNumbers() {
 		return new RandomPhoneBuilder();
 	}
+
+	/**
+	 * Returns a new builder for ZonedDateTime.
+	 * @return the builder for ZonedDateTime
+	 */
+	public static ZonedDateTimeBuilder $ZonedDateTime() {
+		return new ZonedDateTimeBuilder();
+	}
 }
