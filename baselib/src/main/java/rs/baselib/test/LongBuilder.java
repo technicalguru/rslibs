@@ -24,21 +24,24 @@ package rs.baselib.test;
  */
 public class LongBuilder implements Builder<Long> {
 
-	/** the uniqueness count */
-	private long count;
-	/** the offset */
-	private long offset;
+	/** end number (for random only) */
+	private long start;
+	/** the current value */
+	private Long current;
+	/** the step */
+	private long step;
 	/** end number (for random only) */
 	private long end;
 	/** whether to create random numbers */
 	private boolean random = false;
-
+	private Long last;
+	
 	/**
 	 * Constructor.
 	 */
 	public LongBuilder() {
-		this.count  = 0;
-		this.offset = 1;
+		this.start = 0;
+		this.step  = 1;
 	}
 
 	/**
@@ -47,17 +50,17 @@ public class LongBuilder implements Builder<Long> {
 	 * @return this builder for concatenation
 	 */
 	public LongBuilder withStart(long start) {
-		this.count   = start;
+		this.start = start;
 		return this;
 	}
 
 	/**
 	 * Set a given increment/decrement for each build.
-	 * @param offset - the increment/decrement to produce
+	 * @param step - the increment/decrement to produce
 	 * @return this builder for concatenation
 	 */
-	public LongBuilder withOffset(long offset) {
-		this.offset   = offset;
+	public LongBuilder withStep(long step) {
+		this.step   = step;
 		return this;
 	}
 
@@ -85,18 +88,22 @@ public class LongBuilder implements Builder<Long> {
 	 */
 	@Override
 	public Long build() {
-		Long rc = 0L;
 		if (!random) {
-			rc = Long.valueOf(count);
-			count += offset;
+			if (current == null) current  = start;
+			else                 current += step;
 		} else {
-			long l = BuilderUtils.RNG.nextLong(0, count);
-			while (l > end) {
-				l = BuilderUtils.RNG.nextLong(0, count);
-			}
-			rc = Long.valueOf(l);
+			current = Long.valueOf(BuilderUtils.RNG.nextLong(start, end));
 		}
-		return rc;
+		last = current;
+		return current;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Long last() {
+		return last;
 	}
 
 

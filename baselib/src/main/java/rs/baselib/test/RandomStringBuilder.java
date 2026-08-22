@@ -26,8 +26,9 @@ import rs.baselib.crypto.EncryptionUtils;
  */
 public class RandomStringBuilder implements Builder<String> {
 
-	private String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-	private int length   = 10;
+	private String chars  = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+	private int    length = 10;
+	private String last   = null;
 	
 	/**
 	 * Constructor.
@@ -60,7 +61,16 @@ public class RandomStringBuilder implements Builder<String> {
 	 */
 	@Override
 	public String build() {
-		return EncryptionUtils.generatePassword(chars, length);
+		last = EncryptionUtils.generatePassword(chars, length);
+		return last;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String last() {
+		return last;
+	}
+	
 }

@@ -28,6 +28,7 @@ public class StringBuilder implements Builder<String> {
 	private String pattern;
 	/** the uniqueness count */
 	private int count;
+	private String last;
 	
 	/**
 	 * Constructor.
@@ -51,7 +52,17 @@ public class StringBuilder implements Builder<String> {
 	 */
 	@Override
 	public String build() {
-		return String.format(pattern, count++);
+		last = String.format(pattern, count++);
+		return last;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String last() {
+		return last;
+	}
+
+	
 }

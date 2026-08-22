@@ -10,6 +10,7 @@ public class ArrayBuilder<T extends Object> implements Builder<T[]> {
 	private Builder<T> builder;
 	private int min;
 	private int max;
+	private T[] last = null;
 	
 	/**
 	 * Constructor.
@@ -32,7 +33,16 @@ public class ArrayBuilder<T extends Object> implements Builder<T[]> {
 		@SuppressWarnings("unchecked")
 		T rc[] = (T[]) new Object[n];
 		for (int i=0; i<n; i++) rc[i] = builder.build();
+		last = rc;
 		return rc;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public T[] last() {
+		return last;
 	}
 
 	

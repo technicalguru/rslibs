@@ -47,6 +47,7 @@ public class PersonBuilder implements Builder<PersonBuilder.Person> {
 	private boolean firstNamesSet;
 	private boolean lastNamesSet;
 	private Builder<String> phoneNumbers;
+	private Person last;
 	
 	/**
 	 * Constructor.
@@ -235,7 +236,16 @@ public class PersonBuilder implements Builder<PersonBuilder.Person> {
 		Period period  = Period.of(BuilderUtils.RNG.nextInt(minAge, maxAge), BuilderUtils.RNG.nextInt(0, 12), BuilderUtils.RNG.nextInt(0, 28));  
 		rc.birthday    = now.minus(period);
 		rc.age         = period.getYears();
+		last = rc;
 		return rc;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Person last() {
+		return last;
 	}
 
 	/**

@@ -34,6 +34,7 @@ import rs.baselib.util.CommonUtils;
 public class RandomSelectBuilder<T> implements Builder<T> {
 
 	private List<T> values;
+	private T       last;
 	
 	/**
 	 * Constructor.
@@ -69,7 +70,16 @@ public class RandomSelectBuilder<T> implements Builder<T> {
 	 */
 	@Override
 	public T build() {
-		return values.get(BuilderUtils.RNG.nextInt(0, values.size()));
+		last = values.get(BuilderUtils.RNG.nextInt(0, values.size()));
+		return last;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public T last() {
+		return last;
 	}
 	
 	

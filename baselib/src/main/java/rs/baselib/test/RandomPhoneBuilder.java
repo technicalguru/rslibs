@@ -20,6 +20,7 @@ public class RandomPhoneBuilder implements Builder<String> {
 	private Builder<Integer> areaCodes;
 	private Builder<Integer> numbers;
 	private String           format;
+	private String           last;
 	
 	/**
 	 * Constructor.
@@ -68,7 +69,17 @@ public class RandomPhoneBuilder implements Builder<String> {
 			.replace("${areaCode}",    ""+areaCodes.build())
 			.replace("${extension}",   ""+numbers.build());
 		
+		last = rc;
 		return rc;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String last() {
+		return last;
+	}
+
+	
 }

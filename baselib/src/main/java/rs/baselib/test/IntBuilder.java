@@ -24,40 +24,43 @@ package rs.baselib.test;
  */
 public class IntBuilder implements Builder<Integer> {
 
-	/** the uniqueness count */
-	private int count;
-	/** the offset */
-	private int offset;
+	/** end number (for random only) */
+	private int start;
+	/** the current value */
+	private Integer current;
+	/** the step */
+	private int step;
 	/** end number (for random only) */
 	private int end;
 	/** whether to create random numbers */
 	private boolean random = false;
-
+	private Integer last;
+	
 	/**
 	 * Constructor.
 	 */
 	public IntBuilder() {
-		this.count  = 0;
-		this.offset = 1;
+		this.start = 0;
+		this.step  = 1;
 	}
 
 	/**
-	 * Start the build with a given integer.
+	 * Start the build with a given int.
 	 * @param start - the first number to produce
 	 * @return this builder for concatenation
 	 */
 	public IntBuilder withStart(int start) {
-		this.count   = start;
+		this.start = start;
 		return this;
 	}
 
 	/**
 	 * Set a given increment/decrement for each build.
-	 * @param offset - the increment/decrement to use
+	 * @param step - the increment/decrement to produce
 	 * @return this builder for concatenation
 	 */
-	public IntBuilder withOffset(int offset) {
-		this.offset   = offset;
+	public IntBuilder withStep(int step) {
+		this.step   = step;
 		return this;
 	}
 
@@ -85,15 +88,24 @@ public class IntBuilder implements Builder<Integer> {
 	 */
 	@Override
 	public Integer build() {
-		Integer rc =  0;
 		if (!random) {
-			rc = Integer.valueOf(count);
-			count += offset;
+			if (current == null) current  = start;
+			else                 current += step;
 		} else {
-			rc = Integer.valueOf(BuilderUtils.RNG.nextInt(count, end));
+			current = Integer.valueOf(BuilderUtils.RNG.nextInt(start, end));
 		}
-		return rc;
+		last = current;
+		return current;
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Integer last() {
+		return last;
+	}
+
 
 	
 }
