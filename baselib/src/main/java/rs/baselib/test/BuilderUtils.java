@@ -140,4 +140,62 @@ public class BuilderUtils {
 	public static RandomPhoneBuilder $PhoneNumbers() {
 		return new RandomPhoneBuilder();
 	}
+
+	/**
+	 * Returns a new builder for ZonedDateTime.
+	 * @return the builder for ZonedDateTime
+	 */
+	public static ZonedDateTimeBuilder $ZonedDateTime() {
+		return new ZonedDateTimeBuilder();
+	}
+
+	/**
+	 * Returns a new builder for LocalDateTime.
+	 * @return the builder for LocalDateTime
+	 */
+	public static LocalDateTimeBuilder $LocalDateTime() {
+		return new LocalDateTimeBuilder();
+	}
+
+	/**
+	 * Returns a new builder for LocalDate.
+	 * @return the builder for LocalDate
+	 */
+	public static LocalDateBuilder $LocalDate() {
+		return new LocalDateBuilder();
+	}
+
+	/**
+	 * Returns a new builder for LocalTime.
+	 * @return the builder for LocalTime
+	 */
+	public static LocalTimeBuilder $LocalTime() {
+		return new LocalTimeBuilder();
+	}
+	
+	/**
+	 * Returns the City Builder factory.
+	 * @return the builder for cities.
+	 */
+	public static CityBuilder $City() {
+		return new CityBuilder();
+	}
+
+	/**
+	 * Returns the Steet Builder factory.
+	 * @return the builder for streets.
+	 */
+	public static StreetBuilder $Street() {
+		return new StreetBuilder();
+	}
+
+	/**
+	 * Returns the Address Builder factory.
+	 * @return the builder for addresses.
+	 */
+	public static AddressBuilder $Address() {
+		return new AddressBuilder();
+	}
+
+
 }

@@ -7,8 +7,12 @@ The RS Library project was established to support my daily Java development. It 
 RS Library is divided into four areas, each of them published as a Maven module to RS Library:
 
  * [Base Library](https://github.com/technicalguru/rslibs/blob/master/baselib/README.md) – provides non-specific code such as Java language tasks, IO tasks, bean handling, Configuration helpers and many more.
- * [Templating](https://github.com/technicalguru/rslibs/blob/master/templating/README.md) – provides an easy Typo3-like way of processing text templates within Java.
+ * [CSV/Excel Library](https://github.com/technicalguru/rslibs/blob/master/csv/README.md) – provides tools for reading and writing CSV/Excel files.
  * [Jackson](https://github.com/technicalguru/rslibs/blob/master/jackson/README.md) – provides Jackson-based serialization/deserialization with JSON and YAML
+ * [Jersey Client](https://github.com/technicalguru/rslibs/blob/master/jersey-client/README.md) – provides a base implementaion to write API clients based on Jersey.
+ * [Mail Queue](https://github.com/technicalguru/rslibs/blob/master/mail-queue/README.md) – provides a mail queue that is agnostic to the actual mail sending framework.
+ * [Mail Templates](https://github.com/technicalguru/rslibs/blob/master/mail-queue/README.md) – provides a system to create e-mails from templates.
+ * [Templating](https://github.com/technicalguru/rslibs/blob/master/templating/README.md) – provides an easy Typo3-like way of processing text templates within Java.
  * [TOTP](https://github.com/technicalguru/rslibs/blob/master/otp/README.md) – provides TOTP generation and verification library
  
 Most of this code was created when I faced specific problems in my professional work. I usually work out solutions in private projects, test them there and then apply them to my professional work. That’s why few of my employers will find the same code in their products. However, the code was created outside of professional environments and therefore is my own intellectual property.
@@ -16,7 +20,10 @@ Most of this code was created when I faced specific problems in my professional 
 RS Library modules are maintained in the same Maven project and, hence, follow the same release cycle. That means that each modules will have the same version numbers and are published at the same time.
 
 ## Latest Version
-Latest version is 5.2.5. Please note that Java 21 is required since 5.1.0.
+Latest version is 6.0.0. Please note that Java 21 is required since 5.1.0.
+
+## Upgrading v5 to v6
+V6 is a major release that removes several deprecated classes and integrates the projects eu.ralph-schuster:csv, eu.ralph-schuster:jersey-client, eu.ralph-schuster:mail-queue and eu.ralph-schuster:mail-templates. Besides of the removal of deprecated methods and classes, there shall be no breaking change.
 
 ## Upgrading v4 to v5
 V5 is a major release that removes several deprecated date and calendar classes. This includes the ``RsDate`` class and its descendants as well as some bean helper classes. They can be easily replaced nowadays with other standard libraries such as the Java Time API or commons-beans or alike. 
@@ -41,8 +48,12 @@ V2 which has some minor compatibility breaks that result from upgrading [commons
 Javadoc API for latest stable version can be accessed here:
 
 * [baselib](https://www.javadoc.io/doc/eu.ralph-schuster/baselib)
-* [templating](https://www.javadoc.io/doc/eu.ralph-schuster/templating)
+* [csv](https://www.javadoc.io/doc/eu.ralph-schuster/csv)
 * [jackson](https://www.javadoc.io/doc/eu.ralph-schuster/jackson)
+* [jersey-client](https://www.javadoc.io/doc/eu.ralph-schuster/jersey-client)
+* [mail-queue](https://www.javadoc.io/doc/eu.ralph-schuster/mail-queue)
+* [mail-templates](https://www.javadoc.io/doc/eu.ralph-schuster/mail-templates)
+* [templating](https://www.javadoc.io/doc/eu.ralph-schuster/templating)
 * [totp](https://www.javadoc.io/doc/eu.ralph-schuster/totp)
 
 ## Contributions

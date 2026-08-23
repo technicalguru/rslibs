@@ -5,7 +5,7 @@ package rs.baselib.test;
  * @author ralph
  *
  */
-public class ArrayBuilder<T extends Object> implements Builder<T[]> {
+public class ArrayBuilder<T extends Object> extends AbstractBuilder<T[]> {
 
 	private Builder<T> builder;
 	private int min;
@@ -27,13 +27,11 @@ public class ArrayBuilder<T extends Object> implements Builder<T[]> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public T[] build() {
+	protected T[] _build() {
 		int n = BuilderUtils.RNG.nextInt(min, max);
 		@SuppressWarnings("unchecked")
 		T rc[] = (T[]) new Object[n];
 		for (int i=0; i<n; i++) rc[i] = builder.build();
 		return rc;
 	}
-
-	
 }

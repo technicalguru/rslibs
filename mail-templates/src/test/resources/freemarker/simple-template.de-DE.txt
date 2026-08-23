@@ -1,0 +1,1 @@
+${aMessage}: ${object.name} is available at ${object.url}

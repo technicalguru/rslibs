@@ -30,4 +30,9 @@ public interface Builder<T> {
 	 */
 	public T build();
 	
+	/**
+	 * Returns the previously built object.
+	 * @return the built object
+	 */
+	public T last();
 }

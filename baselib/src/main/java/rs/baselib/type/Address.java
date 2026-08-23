@@ -270,5 +270,14 @@ public class Address implements Serializable {
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return "Address [street1=" + street1 + ", street2=" + street2 + ", city=" + city + ", zipCode=" + zipCode
+				+ ", state=" + state + ", country=" + country + "]";
+	}
+
 	
 }

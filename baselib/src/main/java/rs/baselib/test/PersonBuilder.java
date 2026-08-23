@@ -21,14 +21,14 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
-import java.time.Period;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import rs.baselib.io.FileFinder;
+import rs.baselib.type.Address;
+import rs.baselib.type.City;
 import rs.baselib.util.CommonUtils;
 
 /**
@@ -37,16 +37,19 @@ import rs.baselib.util.CommonUtils;
  * @author ralph
  *
  */
-public class PersonBuilder implements Builder<PersonBuilder.Person> {
+public class PersonBuilder extends AbstractBuilder<PersonBuilder.Person> {
 
+	public static final int DEFAULT_MIN_AGE = 18;
+	public static final int DEFAULT_MAX_AGE = 110;
+	
 	private List<String> genders;
 	private List<String> firstNames;
 	private List<String> lastNames;
-	private int minAge = 18;
-	private int maxAge = 70;
+	private Builder<Integer> ageBuilder;
 	private boolean firstNamesSet;
 	private boolean lastNamesSet;
 	private Builder<String> phoneNumbers;
+	private Builder<Address> addresses;
 	
 	/**
 	 * Constructor.
@@ -55,7 +58,6 @@ public class PersonBuilder implements Builder<PersonBuilder.Person> {
 		this.genders  = CommonUtils.newList("MALE", "FEMALE", "DIVERSE");
 		firstNamesSet = false;
 		lastNamesSet  = false;
-		phoneNumbers  = BuilderUtils.$PhoneNumbers();
 	}
 
 	/**
@@ -189,22 +191,12 @@ public class PersonBuilder implements Builder<PersonBuilder.Person> {
 	}
 	
 	/**
-	 * Generate person with this minimum age (inclusive, default is 18).
-	 * @param minAge - minimum age to be produced
+	 * Generate person with this builder for the age.
+	 * @param ageBuilder - mbuilder for the age.
 	 * @return this builder for method chaining
 	 */
-	public PersonBuilder withMinAge(int minAge) {
-		this.minAge = minAge;
-		return this;
-	}
-	
-	/**
-	 * Generate person with this maximum age (exclusive, default is 70).
-	 * @param maxAge - maximum age to be produced
-	 * @return this builder for method chaining
-	 */
-	public PersonBuilder withMaxAge(int maxAge) {
-		this.maxAge = maxAge;
+	public PersonBuilder withAge(Builder<Integer> ageBuilder) {
+		this.ageBuilder = ageBuilder;
 		return this;
 	}
 	
@@ -219,22 +211,41 @@ public class PersonBuilder implements Builder<PersonBuilder.Person> {
 	}
 	
 	/**
+	 * Generate addresses.
+	 * @param address address builder
+	 * @return this builder for method chaining
+	 */
+	public PersonBuilder withAddresses(Builder<Address> addresses) {
+		this.addresses = addresses;
+		return this;
+	}
+	
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Person build() {
+	protected Person _build() {
 		loadNames();
 		
 		Person rc = new Person();
 		if ((firstNames != null) && !firstNames.isEmpty()) rc.firstName   = firstNames.get(BuilderUtils.RNG.nextInt(0, firstNames.size()));
 		if ((lastNames  != null) && !lastNames.isEmpty())  rc.lastName    = lastNames.get(BuilderUtils.RNG.nextInt(0, lastNames.size()));
 		if ((genders    != null) && !genders.isEmpty())    rc.gender      = genders.get(BuilderUtils.RNG.nextInt(0, genders.size()));
-		if (phoneNumbers != null)                          rc.phoneNumber = phoneNumbers.build();
+		rc.address = addresses.build();
+		if (addresses instanceof AddressBuilder) {
+			City city  = ((AddressBuilder)addresses).getLastCity();
+			rc.phoneNumber = city.getCountry().getIdc();
+			if (city.getAreaCode() != null) rc.phoneNumber += " (0)"+city.getAreaCode();
+			rc.phoneNumber += " "+phoneNumbers.build();
+		} else {
+			rc.phoneNumber = phoneNumbers.build();
+		}
+		if (ageBuilder == null) ageBuilder = new IntBuilder().withStart(DEFAULT_MIN_AGE).withEnd(DEFAULT_MAX_AGE).withRandom();
+		rc.age           = ageBuilder.build();
+		LocalDate firstB = LocalDate.now().minusYears(rc.age+1);  
+		rc.birthday      = firstB.plusDays(BuilderUtils.RNG.nextLong(0, 365));
 		
-		LocalDate now  = LocalDate.now();
-		Period period  = Period.of(BuilderUtils.RNG.nextInt(minAge, maxAge), BuilderUtils.RNG.nextInt(0, 12), BuilderUtils.RNG.nextInt(0, 28));  
-		rc.birthday    = now.minus(period);
-		rc.age         = period.getYears();
+		
 		return rc;
 	}
 
@@ -243,6 +254,12 @@ public class PersonBuilder implements Builder<PersonBuilder.Person> {
 	 */
 	private void loadNames() {
 		try {
+			if (addresses == null) {
+				addresses = new AddressBuilder();
+				phoneNumbers = new RandomPhoneBuilder().withFormat("${extension}");
+			}
+			if (phoneNumbers == null) phoneNumbers = new RandomPhoneBuilder().withFormat("${extension}");
+			
 			if (!firstNamesSet) withFirstNames(FileFinder.find(getClass(), "firstNames.txt"));
 			if (!lastNamesSet)  withLastNames(FileFinder.find(getClass(), "lastNames.txt"));
 		} catch (IOException e) {
@@ -257,39 +274,30 @@ public class PersonBuilder implements Builder<PersonBuilder.Person> {
 	 *
 	 */
 	public static class Person {
-		public String firstName;
-		public String lastName;
+		public String    firstName;
+		public String    lastName;
 		public LocalDate birthday;
-		public int age;
-		public String gender;
-		public String phoneNumber;
-
+		public int       age;
+		public String    gender;
+		public String    phoneNumber;
+		public Address   address;
+		
 		public Person() {}
 		
-		public Person(String firstName, String lastName, LocalDate birthday, int age, String gender, String phoneNumber) {
-			this.firstName = firstName;
-			this.lastName = lastName;
-			this.birthday = birthday;
-			this.age = age;
-			this.gender = gender;
+		public Person(String firstName, String lastName, LocalDate birthday, int age, String gender, String phoneNumber, Address address) {
+			this.firstName   = firstName;
+			this.lastName    = lastName;
+			this.birthday    = birthday;
+			this.age         = age;
+			this.gender      = gender;
 			this.phoneNumber = phoneNumber;
+			this.address     = address;
 		}
 
 		@Override
 		public String toString() {
 			return "Person [firstName=" + firstName + ", lastName=" + lastName + ", birthday=" + birthday + ", age="
-					+ age + ", gender=" + gender + ", phoneNumber=" + phoneNumber + "]";
+					+ age + ", gender=" + gender + ", phoneNumber=" + phoneNumber + ", address=" + address + "]";
 		}
-	}
-
-	/**
-	 * Load a list of string from a URL.
-	 * @param url - URL to be loaded from
-	 * @return the collection of strings loaded
-	 * @throws IOException - when the content cannot be loaded
-	 */
-	protected static List<String> loadUrlList(URL url) throws IOException {
-		String content = CommonUtils.loadContent(url, StandardCharsets.UTF_8).trim();
-		return CommonUtils.newList(content.split("\n\r*"));
 	}
 }

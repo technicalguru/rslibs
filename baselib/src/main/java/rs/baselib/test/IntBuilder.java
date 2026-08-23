@@ -22,47 +22,51 @@ package rs.baselib.test;
  * @author ralph
  *
  */
-public class IntBuilder implements Builder<Integer> {
+public class IntBuilder extends AbstractBuilder<Integer> {
 
-	/** the uniqueness count */
-	private int count;
-	/** the offset */
-	private int offset;
+	/** end number (for random only) */
+	private int start;
+	/** the current value */
+	private Integer current;
+	/** the step */
+	private int step;
 	/** end number (for random only) */
 	private int end;
 	/** whether to create random numbers */
 	private boolean random = false;
-
+	
 	/**
 	 * Constructor.
 	 */
 	public IntBuilder() {
-		this.count  = 0;
-		this.offset = 1;
+		this.start = 0;
+		this.step  = 1;
 	}
 
 	/**
-	 * Start the build with a given integer.
+	 * Start the build with a given int.
+	 * <p>Start is inclusive (random value can be equal).
 	 * @param start - the first number to produce
 	 * @return this builder for concatenation
 	 */
 	public IntBuilder withStart(int start) {
-		this.count   = start;
+		this.start = start;
 		return this;
 	}
 
 	/**
 	 * Set a given increment/decrement for each build.
-	 * @param offset - the increment/decrement to use
+	 * @param step - the increment/decrement to produce
 	 * @return this builder for concatenation
 	 */
-	public IntBuilder withOffset(int offset) {
-		this.offset   = offset;
+	public IntBuilder withStep(int step) {
+		this.step   = step;
 		return this;
 	}
 
 	/**
 	 * Set a given max number (for random numbers only).
+	 * <p>End is exclusive (random value cannot be equal).
 	 * @param end - the max number to use
 	 * @return this builder for concatenation
 	 */
@@ -73,6 +77,7 @@ public class IntBuilder implements Builder<Integer> {
 
 	/**
 	 * Set random creation.
+	 * <p>Random value will be created so that start <= value < end.
 	 * @return this builder for concatenation
 	 */
 	public IntBuilder withRandom() {
@@ -84,16 +89,18 @@ public class IntBuilder implements Builder<Integer> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Integer build() {
-		Integer rc =  0;
+	protected Integer _build() {
 		if (!random) {
-			rc = Integer.valueOf(count);
-			count += offset;
+			if (current == null) current  = start;
+			else                 current += step;
+		} else if (start == end) {
+			current = start;
+		} else if (start < end) {
+			current = Integer.valueOf(BuilderUtils.RNG.nextInt(start, end));
 		} else {
-			rc = Integer.valueOf(BuilderUtils.RNG.nextInt(count, end));
+			current = Integer.valueOf(BuilderUtils.RNG.nextInt(end, start));
 		}
-		return rc;
+		return current;
 	}
 
-	
 }

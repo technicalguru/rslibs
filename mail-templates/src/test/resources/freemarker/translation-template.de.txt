@@ -1,0 +1,1 @@
+Ein Template mit einer ${i18n.variable} und einer ${i18n.sharedVariable} - und einer ${i18n.globalVariable}.

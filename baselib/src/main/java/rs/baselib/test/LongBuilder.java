@@ -22,47 +22,51 @@ package rs.baselib.test;
  * @author ralph
  *
  */
-public class LongBuilder implements Builder<Long> {
+public class LongBuilder extends AbstractBuilder<Long> {
 
-	/** the uniqueness count */
-	private long count;
-	/** the offset */
-	private long offset;
+	/** end number (for random only) */
+	private long start;
+	/** the current value */
+	private Long current;
+	/** the step */
+	private long step;
 	/** end number (for random only) */
 	private long end;
 	/** whether to create random numbers */
 	private boolean random = false;
-
+	
 	/**
 	 * Constructor.
 	 */
 	public LongBuilder() {
-		this.count  = 0;
-		this.offset = 1;
+		this.start = 0;
+		this.step  = 1;
 	}
 
 	/**
 	 * Start the build with a given long.
+	 * <p>Start is inclusive (random value can be equal).
 	 * @param start - the first number to produce
 	 * @return this builder for concatenation
 	 */
 	public LongBuilder withStart(long start) {
-		this.count   = start;
+		this.start = start;
 		return this;
 	}
 
 	/**
 	 * Set a given increment/decrement for each build.
-	 * @param offset - the increment/decrement to produce
+	 * @param step - the increment/decrement to produce
 	 * @return this builder for concatenation
 	 */
-	public LongBuilder withOffset(long offset) {
-		this.offset   = offset;
+	public LongBuilder withStep(long step) {
+		this.step   = step;
 		return this;
 	}
 
 	/**
 	 * Set a given max number (for random numbers only).
+	 * <p>End is exclusive (random value cannot be equal).
 	 * @param end - the max number to use
 	 * @return this builder for concatenation
 	 */
@@ -73,6 +77,7 @@ public class LongBuilder implements Builder<Long> {
 
 	/**
 	 * Set random creation.
+	 * <p>Random value will be created so that start <= value < end.
 	 * @return this builder for concatenation
 	 */
 	public LongBuilder withRandom() {
@@ -84,20 +89,18 @@ public class LongBuilder implements Builder<Long> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Long build() {
-		Long rc = 0L;
+	protected Long _build() {
 		if (!random) {
-			rc = Long.valueOf(count);
-			count += offset;
+			if (current == null) current  = start;
+			else                 current += step;
+		} else if (start == end) {
+			current = start;
+		} else if (start < end) {
+			current = Long.valueOf(BuilderUtils.RNG.nextLong(start, end));
 		} else {
-			long l = BuilderUtils.RNG.nextLong(0, count);
-			while (l > end) {
-				l = BuilderUtils.RNG.nextLong(0, count);
-			}
-			rc = Long.valueOf(l);
+			current = Long.valueOf(BuilderUtils.RNG.nextLong(end, start));
 		}
-		return rc;
+		return current;
 	}
-
 
 }

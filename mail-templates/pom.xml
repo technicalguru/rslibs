@@ -1,0 +1,60 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>eu.ralph-schuster</groupId>
+		<artifactId>libs</artifactId>
+		<version>6.0.0</version>
+	</parent>
+
+	<properties>
+		<project.home>https://github.com/technicalguru/java-mail</project.home>
+	</properties>
+
+	<artifactId>mail-templates</artifactId>
+ 	<packaging>jar</packaging>
+	<name>${project.groupId}.${project.artifactId}</name>
+	<description>Provide a framework for generating emails from templates</description>
+	<url>https://github.com/technicalguru/rslibs</url>
+
+	<dependencies>
+		<dependency>
+			<groupId>jakarta.mail</groupId>
+			<artifactId>jakarta.mail-api</artifactId>
+			<version>2.1.5</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.sun.mail</groupId>
+		    <artifactId>jakarta.mail</artifactId>
+		    <version>2.0.2</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>baselib</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+			<version>2.3.34</version>
+		</dependency>
+		<dependency>
+		    <groupId>no.api.freemarker</groupId>
+		    <artifactId>freemarker-java8</artifactId>
+		    <version>3.0.3</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<header><![CDATA[<a href="${project.home}" target="_new">Visit the ${project.name} Homepage</a>]]></header>
+					<detectJavaApiLink>false</detectJavaApiLink>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

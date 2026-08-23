@@ -33,7 +33,7 @@ Javadoc API for latest stable version can be accessed [here](https://www.javadoc
 
 ## Contributions
 
- * [Project Homepage](https://github.com/technicalguru/rslibs/templating)
+ * [Project Homepage](https://github.com/technicalguru/rslibs/tree/master/templating)
  * [Issue Tracker](https://github.com/technicalguru/rslibs/issues)
  
 ## License

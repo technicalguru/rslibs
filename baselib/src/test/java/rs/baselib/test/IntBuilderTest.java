@@ -19,6 +19,7 @@ package rs.baselib.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static rs.baselib.test.BuilderUtils.$Int;
 import static rs.baselib.test.BuilderUtils.listOf;
 
@@ -49,8 +50,8 @@ public class IntBuilderTest {
 	}
 
 	@Test
-	public void testOffset() {
-		IntBuilder b = $Int().withOffset(3);
+	public void testStep() {
+		IntBuilder b = $Int().withStep(3);
 		b.build();
 		Integer actual = b.build();
 		assertEquals(Integer.valueOf(3), actual);
@@ -64,4 +65,25 @@ public class IntBuilderTest {
 			delivered.add(i);
 		}
 	}
+	
+	@Test
+	public void testRandom() {
+		IntBuilder b = $Int().withRandom().withStart(100).withEnd(200);
+		for (int i=0; i<100; i++) {
+			Integer actual = b.build();
+			assertTrue(actual >= 100);
+			assertTrue(actual < 200);
+		}
+	}
+
+	@Test
+	public void testRandom_withStartGreaterThanEnd() {
+		IntBuilder b = $Int().withRandom().withStart(200).withEnd(100);
+		for (int i=0; i<100; i++) {
+			Integer actual = b.build();
+			assertTrue(actual >= 100);
+			assertTrue(actual < 200);
+		}
+	}
+
 }

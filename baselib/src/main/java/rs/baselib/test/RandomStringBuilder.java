@@ -24,10 +24,10 @@ import rs.baselib.crypto.EncryptionUtils;
  * @author ralph
  *
  */
-public class RandomStringBuilder implements Builder<String> {
+public class RandomStringBuilder extends AbstractBuilder<String> {
 
-	private String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-	private int length   = 10;
+	private String chars  = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+	private int    length = 10;
 	
 	/**
 	 * Constructor.
@@ -59,7 +59,7 @@ public class RandomStringBuilder implements Builder<String> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String build() {
+	protected String _build() {
 		return EncryptionUtils.generatePassword(chars, length);
 	}
 

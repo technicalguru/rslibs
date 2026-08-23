@@ -25,12 +25,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Method;
-import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.codec.binary.Base64;
@@ -106,31 +104,6 @@ public class LangUtils {
 	public static Object newInstance(String className, ClassLoader classLoader) throws ReflectiveOperationException {
 		Class<?> clazz = forName(className, classLoader);
 		return clazz.getConstructor().newInstance();
-	}
-	
-	/**
-	 * Get the underlying class for a type, or null if the type is a variable type.
-	 * @param type the type
-	 * @return the underlying class
-	 * @deprecated see {@link ReflectionUtils#getClass(Type)}
-	 */
-	@Deprecated
-	public static Class<?> getClass(Type type) {
-		return ReflectionUtils.getClass(type);
-	}
-
-	/**
-	 * Get the actual type arguments a child class has used to extend a generic base class.
-	 *
-	 * @param baseClass the base class
-	 * @param childClass the child class
-	 * @param <T> type of base class
-	 * @return a list of the raw classes for the actual type arguments.
-	 * @deprecated see {@link ReflectionUtils#getTypeArguments(Class, Class)}
-	 */
-	@Deprecated
-	public static <T> List<Class<?>> getTypeArguments(Class<T> baseClass, Class<? extends T> childClass) {
-		return ReflectionUtils.getTypeArguments(baseClass, childClass);
 	}
 	
 	/**
@@ -588,29 +561,4 @@ public class LangUtils {
 		}
 	}
 	
-	/**
-	 * Replacement for "instanceof" operator when it cannot be guaranteed that
-	 * the class is available in classpath at runtime.
-	 * @param o the object to be checked
-	 * @param className the complete class name
-	 * @return when the object is of that class
-	 * @deprecated see {@link ReflectionUtils#isInstanceOf(Object, String)}
-	 */
-	@Deprecated
-	public static boolean isInstanceOf(Object o, String className) {
-		return ReflectionUtils.isInstanceOf(o, className);
-	}
-	
-	/**
-	 * Replacement for {@link Class#isAssignableFrom(Class)} when it cannot be guaranteed that
-	 * the class is available in classpath at runtime.
-	 * @param inspectedClass the class to be checked
-	 * @param className the complete class name that should be implemented or a superclass of the inspected class
-	 * @return when the inspected class implements or derived from the class with given name
-	 * @deprecated see {@link ReflectionUtils#isInstanceOf(Class, String)}
-	 */
-	@Deprecated
-	public static boolean isInstanceOf(Class<?> inspectedClass, String className) {
-		return ReflectionUtils.isInstanceOf(inspectedClass, className);
-	}
 }

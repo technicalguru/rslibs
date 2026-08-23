@@ -122,7 +122,7 @@ The method follows the Google specification for [TOTP URIs](https://github.com/g
 
 # Contributions
 
- * [Project Homepage](https://github.com/technicalguru/rslibs/totp)
+ * [Project Homepage](https://github.com/technicalguru/rslibs/tree/master/totp)
  * [Issue Tracker](https://github.com/technicalguru/rslibs/issues)
  
 # License

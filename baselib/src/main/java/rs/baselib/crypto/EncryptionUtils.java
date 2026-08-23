@@ -115,7 +115,7 @@ public class EncryptionUtils {
 	 * @see #generateSalt(long)
 	 */
 	public static PBEParameterSpec generateParamSpec(byte salt[], int iterationCount) {
-		if (salt == null) salt = generateSalt(System.currentTimeMillis());
+		if (salt == null) salt = generateSalt();
 		if (iterationCount < 1) iterationCount = DEFAULT_ITERATIONS;
 		return new PBEParameterSpec(salt, iterationCount);
 	}
@@ -125,36 +125,7 @@ public class EncryptionUtils {
 	 * @return the random salt
 	 */
 	public static byte[] generateSalt() {
-		return generateSalt(0);
-	}
-
-	/**
-	 * Creates a random salt array.
-	 * @param randomInit initializer
-	 * @return the random salt
-	 * @deprecated this method was producing the same random numbers in the same order when using same randomInit. randomInit 
-	 *             parameter is now being ignored. Use {@link #generateSalt()} instead.
-	 */
-	@Deprecated
-	public static byte[] generateSalt(long randomInit) {
 		return generateRandomBytes(8);
-	}
-
-	/**
-	 * Generate a random array of bytes
-	 * @param randomInit initializer
-	 * @param size size of returned array
-	 * @return random byte array
-	/**
-	 * Creates a random salt array.
-	 * @param randomInit initializer
-	 * @return the random salt
-	 * @deprecated this method was producing the same random numbers in the same order when using same randomInit. randomInit 
-	 *             parameter is now being ignored. Use {@link #generateRandomBytes(int)} instead.
-	 */
-	@Deprecated
-	public static byte[] generateRandomBytes(long randomInit, int size) {
-		return generateRandomBytes(size);
 	}
 
 	/**
@@ -195,20 +166,6 @@ public class EncryptionUtils {
 		return generatePassword(allowedChars, 0);
 	}
 
-	/**
-	 * Creates a random password.
-	 * @param allowedChars allowedCharacters
-	 * @param randomInit initializer
-	 * @param length length of password
-	 * @return the random password
-	 * @deprecated this method was producing the same random numbers in the same order when using same randomInit. randomInit 
-	 *             parameter is now being ignored. Use {@link #generatePassword(String, int)} instead.
-	 */
-	@Deprecated
-	public static String generatePassword(String allowedChars, long randomInit, int length) {
-		return generatePassword(allowedChars, length);
-	}
-	
 	/**
 	 * Creates a random password.
 	 * @param allowedChars allowedCharacters
