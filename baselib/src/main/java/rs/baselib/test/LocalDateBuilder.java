@@ -25,7 +25,7 @@ import java.time.Period;
  * @author ralph
  *
  */
-public class LocalDateBuilder implements Builder<LocalDate> {
+public class LocalDateBuilder extends AbstractBuilder<LocalDate> {
 
 	/** the start time */
 	private LocalDate start;
@@ -37,7 +37,6 @@ public class LocalDateBuilder implements Builder<LocalDate> {
 	private boolean random = false;
 	/** The long builder for random generation */
 	private LocalDateTimeBuilder localBuilder;
-	private LocalDate last;
 	
 	/**
 	 * Constructor.
@@ -94,20 +93,11 @@ public class LocalDateBuilder implements Builder<LocalDate> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public LocalDate build() {
+	protected LocalDate _build() {
 		if (localBuilder == null) localBuilder = createLocalBuilder();
-		last = localBuilder.build().toLocalDate();
-		return last;
+		return localBuilder.build().toLocalDate();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public LocalDate last() {
-		return last;
-	}
-	
 	/**
 	 * Creates the correct {@link LocalDateTimeBuilder} as underlying builder.
 	 * @return the builder

@@ -45,6 +45,7 @@ public class PersonBuilderTest {
 			assertNotNull(actual.lastName);
 			assertNotNull(actual.gender);
 			assertNotNull(actual.birthday);
+			assertNotNull(actual.address);
 			assertTrue(actual.age >= PersonBuilder.DEFAULT_MIN_AGE);
 			assertTrue(actual.age <  PersonBuilder.DEFAULT_MAX_AGE);
 		}

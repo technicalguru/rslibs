@@ -33,6 +33,8 @@ public class City implements Serializable {
 	/** Name of city */
 	private String name;
 	/** The country */
+	private String zip;
+	/** The country */
 	private Country country;
 	/** The area code */
 	private String areaCode;
@@ -51,7 +53,7 @@ public class City implements Serializable {
 	 * @param areaCode the area code (without leading zero)
 	 * @param state state within country
 	 */
-	public City(String name, Country country, String areaCode, String state) {
+	public City(String name, String zip, Country country, String areaCode, String state) {
 		this.name = name;
 		this.country = country;
 		this.areaCode = areaCode;
@@ -72,6 +74,22 @@ public class City implements Serializable {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	/**
+	 * Returns the zip.
+	 * @return the zip
+	 */
+	public String getZip() {
+		return zip;
+	}
+
+	/**
+	 * Sets the zip.
+	 * @param zip the zip to set
+	 */
+	public void setZip(String zip) {
+		this.zip = zip;
 	}
 
 	/**
@@ -150,7 +168,9 @@ public class City implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		return "City [name=" + name + ", country=" + country + ", areaCode=" + areaCode + ", state=" + state + "]";
+		return "City [name=" + name + ", zip=" + zip + ", country=" + country + ", areaCode=" + areaCode + ", state="
+				+ state + "]";
 	}
+
 	
 }

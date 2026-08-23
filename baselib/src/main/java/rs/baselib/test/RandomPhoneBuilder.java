@@ -7,7 +7,7 @@ import rs.baselib.util.CommonUtils;
  * @author ralph
  *
  */
-public class RandomPhoneBuilder implements Builder<String> {
+public class RandomPhoneBuilder extends AbstractBuilder<String> {
 
 	/** +49 (0)610 12345678 */
 	public static final String INTERNATIONAL_FORMAT       = "+${countryCode} (0)${areaCode} ${extension}";
@@ -20,7 +20,6 @@ public class RandomPhoneBuilder implements Builder<String> {
 	private Builder<Integer> areaCodes;
 	private Builder<Integer> numbers;
 	private String           format;
-	private String           last;
 	
 	/**
 	 * Constructor.
@@ -61,7 +60,7 @@ public class RandomPhoneBuilder implements Builder<String> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String build() {
+	protected String _build() {
 		String rc = format();
 		if (CommonUtils.isEmpty(rc)) rc = INTERNATIONAL_FORMAT;
 		rc = rc
@@ -69,17 +68,6 @@ public class RandomPhoneBuilder implements Builder<String> {
 			.replace("${areaCode}",    ""+areaCodes.build())
 			.replace("${extension}",   ""+numbers.build());
 		
-		last = rc;
 		return rc;
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String last() {
-		return last;
-	}
-
-	
 }

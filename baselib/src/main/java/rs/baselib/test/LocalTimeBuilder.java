@@ -27,7 +27,7 @@ import java.time.LocalTime;
  * @author ralph
  *
  */
-public class LocalTimeBuilder implements Builder<LocalTime> {
+public class LocalTimeBuilder extends AbstractBuilder<LocalTime> {
 
 	/** the start time */
 	private LocalTime start;
@@ -39,7 +39,6 @@ public class LocalTimeBuilder implements Builder<LocalTime> {
 	private boolean random = false;
 	/** The long builder for random generation */
 	private LocalDateTimeBuilder localBuilder;
-	private LocalTime last;
 	
 	/**
 	 * Constructor.
@@ -96,20 +95,11 @@ public class LocalTimeBuilder implements Builder<LocalTime> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public LocalTime build() {
+	protected LocalTime _build() {
 		if (localBuilder == null) localBuilder = createLocalBuilder();
-		last = localBuilder.build().toLocalTime();
-		return last;
+		return localBuilder.build().toLocalTime();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public LocalTime last() {
-		return last;
-	}
-	
 	/**
 	 * Creates the correct {@link LocalDateTimeBuilder} as underlying builder.
 	 * @return the builder

@@ -5,10 +5,9 @@ package rs.baselib.test;
  * @author ralph
  *
  */
-public class EnumerationBuilder<T extends Enum<T>> implements Builder<T> {
+public class EnumerationBuilder<T extends Enum<T>> extends AbstractBuilder<T> {
 
 	private T[] values;
-	private T   last;
 	
 	/**
 	 * Constructor.
@@ -22,18 +21,7 @@ public class EnumerationBuilder<T extends Enum<T>> implements Builder<T> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public T build() {
-		last = values[BuilderUtils.RNG.nextInt(0, values.length)];
-		return last;
+	protected T _build() {
+		return values[BuilderUtils.RNG.nextInt(0, values.length)];
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public T last() {
-		return last;
-	}
-
-
 }

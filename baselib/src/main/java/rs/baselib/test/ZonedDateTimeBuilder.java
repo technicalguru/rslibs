@@ -30,7 +30,7 @@ import org.apache.commons.lang3.time.DateUtils;
  * @author ralph
  *
  */
-public class ZonedDateTimeBuilder implements Builder<ZonedDateTime> {
+public class ZonedDateTimeBuilder extends AbstractBuilder<ZonedDateTime> {
 
 	/** the current time */
 	private ZonedDateTime current;
@@ -48,7 +48,6 @@ public class ZonedDateTimeBuilder implements Builder<ZonedDateTime> {
 	private boolean random = false;
 	/** The long builder for random generation */
 	private LongBuilder msBuilder;
-	private ZonedDateTime last;
 	
 	/**
 	 * Constructor.
@@ -132,7 +131,7 @@ public class ZonedDateTimeBuilder implements Builder<ZonedDateTime> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public ZonedDateTime build() {
+	protected ZonedDateTime _build() {
 		if (random) {
 			if (msBuilder == null) msBuilder = createRandomBuilder();
 			current = ZonedDateTime.ofInstant(Instant.ofEpochMilli(msBuilder.build()), zoneId);
@@ -141,16 +140,7 @@ public class ZonedDateTimeBuilder implements Builder<ZonedDateTime> {
 		} else {
 			current = current.plus(periodStep).plus(durationStep);
 		}
-		last = current;
 		return current;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public ZonedDateTime last() {
-		return last;
 	}
 
 	/**

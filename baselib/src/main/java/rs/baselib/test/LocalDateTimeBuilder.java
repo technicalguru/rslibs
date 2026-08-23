@@ -29,7 +29,7 @@ import org.apache.commons.lang3.time.DateUtils;
  * @author ralph
  *
  */
-public class LocalDateTimeBuilder implements Builder<LocalDateTime> {
+public class LocalDateTimeBuilder extends AbstractBuilder<LocalDateTime> {
 
 	private static ZoneId DEFAULT = ZoneId.systemDefault();;
 	
@@ -45,7 +45,6 @@ public class LocalDateTimeBuilder implements Builder<LocalDateTime> {
 	private boolean random = false;
 	/** The long builder for random generation */
 	private ZonedDateTimeBuilder zonedBuilder;
-	private LocalDateTime last;
 	
 	/**
 	 * Constructor.
@@ -116,20 +115,11 @@ public class LocalDateTimeBuilder implements Builder<LocalDateTime> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public LocalDateTime build() {
+	protected LocalDateTime _build() {
 		if (zonedBuilder == null) zonedBuilder = createZonedBuilder();
-		last = zonedBuilder.build().toLocalDateTime();
-		return last;
+		return zonedBuilder.build().toLocalDateTime();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public LocalDateTime last() {
-		return last;
-	}
-	
 	/**
 	 * Creates the correct {@link ZonedDateTimeBuilder} as underlying builder.
 	 * @return the builder

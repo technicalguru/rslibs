@@ -8,12 +8,11 @@ import java.util.List;
  * @author ralph
  *
  */
-public class ListBuilder<T> implements Builder<List<T>> {
+public class ListBuilder<T> extends AbstractBuilder<List<T>> {
 
 	private Builder<T> builder;
 	private int min;
 	private int max;
-	private List<T> last;
 	
 	/**
 	 * Constructor.
@@ -31,21 +30,11 @@ public class ListBuilder<T> implements Builder<List<T>> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<T> build() {
+	protected List<T> _build() {
 		List<T> rc = new ArrayList<>();
 		int n = BuilderUtils.RNG.nextInt(min, max);
 		for (int i=0; i<n; i++) rc.add(builder.build());
-		last = rc;
 		return rc;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<T> last() {
-		return last;
-	}
-
-	
 }

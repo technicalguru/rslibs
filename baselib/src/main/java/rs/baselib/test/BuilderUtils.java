@@ -189,5 +189,13 @@ public class BuilderUtils {
 		return new StreetBuilder();
 	}
 
+	/**
+	 * Returns the Address Builder factory.
+	 * @return the builder for addresses.
+	 */
+	public static AddressBuilder $Address() {
+		return new AddressBuilder();
+	}
+
 
 }

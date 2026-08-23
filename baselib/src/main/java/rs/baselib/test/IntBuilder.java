@@ -22,7 +22,7 @@ package rs.baselib.test;
  * @author ralph
  *
  */
-public class IntBuilder implements Builder<Integer> {
+public class IntBuilder extends AbstractBuilder<Integer> {
 
 	/** end number (for random only) */
 	private int start;
@@ -34,7 +34,6 @@ public class IntBuilder implements Builder<Integer> {
 	private int end;
 	/** whether to create random numbers */
 	private boolean random = false;
-	private Integer last;
 	
 	/**
 	 * Constructor.
@@ -90,7 +89,7 @@ public class IntBuilder implements Builder<Integer> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Integer build() {
+	protected Integer _build() {
 		if (!random) {
 			if (current == null) current  = start;
 			else                 current += step;
@@ -101,18 +100,7 @@ public class IntBuilder implements Builder<Integer> {
 		} else {
 			current = Integer.valueOf(BuilderUtils.RNG.nextInt(end, start));
 		}
-		last = current;
 		return current;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Integer last() {
-		return last;
-	}
-
-
-	
 }

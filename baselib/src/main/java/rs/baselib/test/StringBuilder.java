@@ -22,13 +22,12 @@ package rs.baselib.test;
  * @author ralph
  *
  */
-public class StringBuilder implements Builder<String> {
+public class StringBuilder extends AbstractBuilder<String> {
 
 	/** the {@link String#format(String, Object...) format} pattern that contains %s for the uniqueness */
 	private String pattern;
 	/** the uniqueness count */
 	private int count;
-	private String last;
 	
 	/**
 	 * Constructor.
@@ -51,18 +50,7 @@ public class StringBuilder implements Builder<String> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String build() {
-		last = String.format(pattern, count++);
-		return last;
+	protected String _build() {
+		return String.format(pattern, count++);
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String last() {
-		return last;
-	}
-
-	
 }

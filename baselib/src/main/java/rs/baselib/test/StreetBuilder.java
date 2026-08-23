@@ -24,13 +24,11 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import rs.baselib.io.FileFinder;
-import rs.baselib.util.CommonUtils;
 
 /**
  * Produces street names.
@@ -38,14 +36,13 @@ import rs.baselib.util.CommonUtils;
  * @author ralph
  *
  */
-public class StreetBuilder implements Builder<String> {
+public class StreetBuilder extends AbstractBuilder<String> {
 
 	private List<String>     streetNames;
 	private Builder<Integer> numberBuilder;
 	private boolean          numbersSet;
 	private Builder<String>  numberExtensionBuilder;
 	private boolean          numberExtensionsSet;
-	private String           last;
 	private boolean          englishFormat;
 	
 	
@@ -157,7 +154,7 @@ public class StreetBuilder implements Builder<String> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String build() {
+	protected String _build() {
 		loadNames();
 		initNumbers();
 		
@@ -167,8 +164,7 @@ public class StreetBuilder implements Builder<String> {
 			if (englishFormat) rc = number + " "+rc;
 			else               rc = rc + " " + number;
 		}
-		last = rc;
-		return last;
+		return rc;
 	}
 
 	/**
@@ -184,14 +180,6 @@ public class StreetBuilder implements Builder<String> {
 			return rc;
 		}
 		return null;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String last() {
-		return last;
 	}
 	
 	/**
@@ -215,17 +203,6 @@ public class StreetBuilder implements Builder<String> {
 		if (!numberExtensionsSet) {
 			if (numberExtensionBuilder == null) numberExtensionBuilder = $RandomString().withChars("abcdefgh").withLength(1);
 		}
-	}
-	
-	/**
-	 * Load a list of string from a URL.
-	 * @param url - URL to be loaded from
-	 * @return the collection of strings loaded
-	 * @throws IOException - when the content cannot be loaded
-	 */
-	protected static List<String> loadUrlList(URL url) throws IOException {
-		String content = CommonUtils.loadContent(url, StandardCharsets.UTF_8).trim();
-		return CommonUtils.newList(content.split("\n\r*"));
 	}
 	
 }

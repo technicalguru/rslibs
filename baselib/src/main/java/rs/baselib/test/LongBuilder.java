@@ -22,7 +22,7 @@ package rs.baselib.test;
  * @author ralph
  *
  */
-public class LongBuilder implements Builder<Long> {
+public class LongBuilder extends AbstractBuilder<Long> {
 
 	/** end number (for random only) */
 	private long start;
@@ -34,7 +34,6 @@ public class LongBuilder implements Builder<Long> {
 	private long end;
 	/** whether to create random numbers */
 	private boolean random = false;
-	private Long last;
 	
 	/**
 	 * Constructor.
@@ -90,7 +89,7 @@ public class LongBuilder implements Builder<Long> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Long build() {
+	protected Long _build() {
 		if (!random) {
 			if (current == null) current  = start;
 			else                 current += step;
@@ -101,17 +100,7 @@ public class LongBuilder implements Builder<Long> {
 		} else {
 			current = Long.valueOf(BuilderUtils.RNG.nextLong(end, start));
 		}
-		last = current;
 		return current;
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Long last() {
-		return last;
-	}
-
 
 }

@@ -21,7 +21,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -39,13 +38,12 @@ import rs.baselib.util.CommonUtils;
  * @author ralph
  *
  */
-public class CityBuilder implements Builder<City> {
+public class CityBuilder extends AbstractBuilder<City> {
 
 	private List<City> cities;
 	private boolean citiesFiltered;
 	private Country    country;
 	private Continent  continent;
-	private City last;
 	
 	/**
 	 * Constructor.
@@ -123,7 +121,7 @@ public class CityBuilder implements Builder<City> {
 	 * @throws IOException - when the content cannot be loaded
 	 */
 	public CityBuilder withCities(URL citiesUrl) throws IOException {
-		return withCities(loadUrlList(citiesUrl));
+		return withCities(loadCityList(citiesUrl));
 	}
 	
 	/**
@@ -152,18 +150,9 @@ public class CityBuilder implements Builder<City> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public City build() {
+	protected City _build() {
 		loadCities();
-		last = cities.get(BuilderUtils.RNG.nextInt(cities.size()));
-		return last;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public City last() {
-		return last;
+		return cities.get(BuilderUtils.RNG.nextInt(cities.size()));
 	}
 
 	/**
@@ -193,17 +182,18 @@ public class CityBuilder implements Builder<City> {
 	 * @return the collection of strings loaded
 	 * @throws IOException - when the content cannot be loaded
 	 */
-	protected static List<City> loadUrlList(URL url) throws IOException {
-		String content = CommonUtils.loadContent(url, StandardCharsets.UTF_8).trim();
+	protected List<City> loadCityList(URL url) throws IOException {
+		List<String> lines = loadUrlList(url);
 		List<City> rc = new ArrayList<>();
-		for (String line : content.split("\n\r*")) {
+		for (String line : lines) {
 			if (!CommonUtils.isEmpty(line)) {
 				String infos[] = line.split("\\s*,\\s*");
 				City city = new City();
 				city.setName(infos[0]);
-				if (infos.length > 1) city.setCountry(findCountry(infos[1].trim()));
-				if ((infos.length > 2) && !CommonUtils.isEmpty(infos[2])) city.setAreaCode(infos[2].trim());
-				if ((infos.length > 3) && !CommonUtils.isEmpty(infos[3])) city.setState(infos[3].trim());
+				if ((infos.length > 1) && !CommonUtils.isEmpty(infos[1])) city.setZip(infos[1].trim());
+				if (infos.length > 2) city.setCountry(findCountry(infos[2].trim()));
+				if ((infos.length > 3) && !CommonUtils.isEmpty(infos[3])) city.setAreaCode(infos[3].trim());
+				if ((infos.length > 4) && !CommonUtils.isEmpty(infos[4])) city.setState(infos[4].trim());
 				rc.add(city);
 			}
 		}
