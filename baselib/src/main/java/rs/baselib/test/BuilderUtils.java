@@ -181,5 +181,13 @@ public class BuilderUtils {
 		return new CityBuilder();
 	}
 
+	/**
+	 * Returns the Steet Builder factory.
+	 * @return the builder for streets.
+	 */
+	public static StreetBuilder $Street() {
+		return new StreetBuilder();
+	}
+
 
 }
