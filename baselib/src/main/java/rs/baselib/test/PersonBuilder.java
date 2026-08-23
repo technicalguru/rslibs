@@ -23,7 +23,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
-import java.time.Period;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -39,11 +38,13 @@ import rs.baselib.util.CommonUtils;
  */
 public class PersonBuilder implements Builder<PersonBuilder.Person> {
 
+	public static final int DEFAULT_MIN_AGE = 18;
+	public static final int DEFAULT_MAX_AGE = 110;
+	
 	private List<String> genders;
 	private List<String> firstNames;
 	private List<String> lastNames;
-	private int minAge = 18;
-	private int maxAge = 70;
+	private Builder<Integer> ageBuilder;
 	private boolean firstNamesSet;
 	private boolean lastNamesSet;
 	private Builder<String> phoneNumbers;
@@ -190,22 +191,12 @@ public class PersonBuilder implements Builder<PersonBuilder.Person> {
 	}
 	
 	/**
-	 * Generate person with this minimum age (inclusive, default is 18).
-	 * @param minAge - minimum age to be produced
+	 * Generate person with this builder for the age.
+	 * @param ageBuilder - mbuilder for the age.
 	 * @return this builder for method chaining
 	 */
-	public PersonBuilder withMinAge(int minAge) {
-		this.minAge = minAge;
-		return this;
-	}
-	
-	/**
-	 * Generate person with this maximum age (exclusive, default is 70).
-	 * @param maxAge - maximum age to be produced
-	 * @return this builder for method chaining
-	 */
-	public PersonBuilder withMaxAge(int maxAge) {
-		this.maxAge = maxAge;
+	public PersonBuilder withAge(Builder<Integer> ageBuilder) {
+		this.ageBuilder = ageBuilder;
 		return this;
 	}
 	
@@ -232,10 +223,10 @@ public class PersonBuilder implements Builder<PersonBuilder.Person> {
 		if ((genders    != null) && !genders.isEmpty())    rc.gender      = genders.get(BuilderUtils.RNG.nextInt(0, genders.size()));
 		if (phoneNumbers != null)                          rc.phoneNumber = phoneNumbers.build();
 		
-		LocalDate now  = LocalDate.now();
-		Period period  = Period.of(BuilderUtils.RNG.nextInt(minAge, maxAge), BuilderUtils.RNG.nextInt(0, 12), BuilderUtils.RNG.nextInt(0, 28));  
-		rc.birthday    = now.minus(period);
-		rc.age         = period.getYears();
+		if (ageBuilder == null) ageBuilder = new IntBuilder().withStart(DEFAULT_MIN_AGE).withEnd(DEFAULT_MAX_AGE).withRandom();
+		rc.age           = ageBuilder.build();
+		LocalDate firstB = LocalDate.now().minusYears(rc.age+1);  
+		rc.birthday      = firstB.plusDays(BuilderUtils.RNG.nextLong(0, 365));
 		last = rc;
 		return rc;
 	}
