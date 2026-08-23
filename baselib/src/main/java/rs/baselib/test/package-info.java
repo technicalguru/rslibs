@@ -5,13 +5,14 @@
  * <pre>
  * import static rs.baselib.test.BuilderUtils.*;
  * 
- * PersonBuilder b1        = $Person().withMinAge(21).withMaxAge(35);
+ * PersonBuilder b1        = $Person().withAge($Int().withStart(18).withEnd(50).withRandom());
  * Person        person    = b1.build;
  * String        firstName = person.firstName;
  * String        lastName  = person.lastName;
  * String        gender    = person.gender;
  * LocalDate     birthday  = person.birthday;
  * int           age       = person.age;
+ * Address       address   = person.address;
  * 
  * IntBuilder b2 = $Int().withRandom();
  * int random    = b2.build();
