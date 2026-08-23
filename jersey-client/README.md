@@ -3,6 +3,8 @@
 ## Synopsis
 A basic structure for building clients with jersey.
 
+*Attention!* This project still uses Jackson 2 as the jersey-media-json-jackson prject has not yet migrated to Jackson 3.
+
 ## Maven Coordinates
 
 ```
