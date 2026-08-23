@@ -4,16 +4,13 @@
 package rs.jerseyclient.util;
 
 import java.io.IOException;
-import java.util.Date;
+import java.net.HttpCookie;
 import java.util.HashMap;
 import java.util.Map;
 
-import jakarta.ws.rs.client.ClientRequestContext;
-import jakarta.ws.rs.client.ClientRequestFilter;
-import jakarta.ws.rs.client.ClientResponseContext;
-import jakarta.ws.rs.client.ClientResponseFilter;
-import jakarta.ws.rs.core.NewCookie;
-import jakarta.ws.rs.ext.RuntimeDelegate;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpRequest;
+import org.springframework.http.client.ClientHttpResponse;
 
 /**
  * Handles cookies and "Accept" header in requests and responses.
@@ -21,13 +18,13 @@ import jakarta.ws.rs.ext.RuntimeDelegate;
  * @author ralph
  *
  */
-public class CookieAuthorizationFilter implements ClientRequestFilter, ClientResponseFilter {
+public class CookieAuthorizationFilter extends AbstractFilter {
 
 	/** Default Accept header value */
 	public static final String DEFAULT_ACCEPT_HEADER = "application/json";
 	
-	private Map<String, NewCookie> cookies;
-	private String                 acceptableMediaTypes = DEFAULT_ACCEPT_HEADER;
+	private Map<String, HttpCookie> cookies;
+	private String                  acceptableMediaTypes = DEFAULT_ACCEPT_HEADER;
 	
 	/**
 	 * Default Constructor.
@@ -56,11 +53,12 @@ public class CookieAuthorizationFilter implements ClientRequestFilter, ClientRes
 	 * Filters the reponse and evaluate the cookies to be set.
 	 */
 	@Override
-	public void filter(ClientRequestContext requestContext, ClientResponseContext responseContext) throws IOException {
-		for (Map.Entry<String, NewCookie> cookie : responseContext.getCookies().entrySet()) {
-			String n = cookie.getKey();
-			NewCookie c = cookie.getValue();
-			cookies.put(n, c);
+	public void intercept(ClientHttpResponse response) throws IOException {
+		for (String value : response.getHeaders().get(HttpHeaders.SET_COOKIE)) {
+			for (HttpCookie cookie : HttpCookie.parse(value)) {
+				String n = cookie.getName();
+				cookies.put(n, cookie);
+			}
 		}
 	}
 
@@ -68,20 +66,18 @@ public class CookieAuthorizationFilter implements ClientRequestFilter, ClientRes
 	 * Sets cookies if required in the request.
 	 */
 	@Override
-	public void filter(ClientRequestContext requestContext) throws IOException {
-		Date now = new Date();
-		for (Map.Entry<String, NewCookie> entry : cookies.entrySet()) {
+	public void intercept(HttpRequest request, byte[] body) throws IOException {
+		for (Map.Entry<String, HttpCookie> entry : cookies.entrySet()) {
 			String name = entry.getKey();
-			NewCookie cookie = entry.getValue();
-			Date expiry = cookie.getExpiry();
-			if ((expiry != null) && expiry.before(now)) {
+			HttpCookie cookie = entry.getValue();
+			if (cookie.hasExpired()) {
 				cookies.remove(name);
 			} else {
-				requestContext.getHeaders().add("Cookie", RuntimeDelegate.getInstance().createHeaderDelegate(NewCookie.class).toString(cookie)); //cookie.getName()+'='+cookie.getValue());
+				request.getHeaders().add(HttpHeaders.COOKIE, cookie.toString());
 			}
 		}
 		String v = getAcceptableMediaTypes();
-		if (v != null) requestContext.getHeaders().add("Accept", v);
+		if (v != null) request.getHeaders().add(HttpHeaders.ACCEPT, v);
 	}
 
 }

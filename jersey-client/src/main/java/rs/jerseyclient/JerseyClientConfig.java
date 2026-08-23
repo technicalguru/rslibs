@@ -4,9 +4,9 @@
 package rs.jerseyclient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import rs.jerseyclient.util.ProxyConfig;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * Holds configuration info for the client.

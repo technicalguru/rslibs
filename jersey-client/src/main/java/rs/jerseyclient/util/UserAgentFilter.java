@@ -5,8 +5,8 @@ package rs.jerseyclient.util;
 
 import java.io.IOException;
 
-import jakarta.ws.rs.client.ClientRequestContext;
-import jakarta.ws.rs.client.ClientRequestFilter;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpRequest;
 
 /**
  * Handles cookies in requests and responses.
@@ -14,7 +14,7 @@ import jakarta.ws.rs.client.ClientRequestFilter;
  * @author ralph
  *
  */
-public class UserAgentFilter implements ClientRequestFilter {
+public class UserAgentFilter extends AbstractFilter {
 
 	private String                 userAgent;
 	
@@ -37,8 +37,7 @@ public class UserAgentFilter implements ClientRequestFilter {
 	 * Sets user agent if it was set.
 	 */
 	@Override
-	public void filter(ClientRequestContext requestContext) throws IOException {
-		if (userAgent != null) requestContext.getHeaders().add("User-Agent", userAgent);
+	public void intercept(HttpRequest request, byte[] body) throws IOException {
+		if (userAgent != null) request.getHeaders().add(HttpHeaders.USER_AGENT, userAgent);
 	}
-
 }

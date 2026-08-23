@@ -3,22 +3,12 @@
  */
 package rs.jerseyclient;
 
-import java.util.logging.Level;
-
-import jakarta.ws.rs.client.Client;
-import jakarta.ws.rs.client.ClientBuilder;
-import jakarta.ws.rs.client.ClientRequestFilter;
-
-import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
-import org.glassfish.jersey.client.ClientConfig;
-import org.glassfish.jersey.client.ClientProperties;
-import org.glassfish.jersey.logging.LoggingFeature;
-
-import com.fasterxml.jackson.core.util.JacksonFeature;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.web.client.RestClient;
 
 import rs.jerseyclient.util.AbstractClient;
 import rs.jerseyclient.util.CookieAuthorizationFilter;
-import rs.jerseyclient.util.ObjectMapperProvider;
+import rs.jerseyclient.util.LoggingFilter;
 import rs.jerseyclient.util.ProxyConfig;
 import rs.jerseyclient.util.UserAgentFilter;
 
@@ -38,7 +28,7 @@ public class JerseyClient extends AbstractClient {
 	/** Default URL for User-Agent */
 	public static String URL     = "https://github.com/technicalguru/jersey-client";
 	
-	private Client             client;
+	private RestClient         client;
 	private JerseyClientConfig config;
 
 	/**
@@ -58,7 +48,7 @@ public class JerseyClient extends AbstractClient {
 	 * <p>Be aware that the constructor immediately calls {@link #authorize()}.</p>
 	 * @param config - the config to be used
 	 */
-	public JerseyClient(Client config) {
+	public JerseyClient(RestClient config) {
 		super();
 		authorize();
 	}
@@ -72,38 +62,8 @@ public class JerseyClient extends AbstractClient {
 	protected void configure(JerseyClientConfig config) {
 		this.config = config;
 		this.client = createClient();
-		setTarget(client.target(config.getUri()));
 	}
 	
-	/**
-	 * Creates the Jersey client configuration based on the config for this client.
-	 * <p>Descendants can override this method in order to manipulate the config.</p>
-	 * @return the config to be used for the JAX-WS Jersey client.
-	 */
-	protected ClientConfig createClientConfig() {
-		ClientConfig clientConfig = new ClientConfig();
-		if (config.isVerbose()) {
-			clientConfig.property(LoggingFeature.LOGGING_FEATURE_VERBOSITY_CLIENT, LoggingFeature.Verbosity.PAYLOAD_TEXT);
-			clientConfig.property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, Level.INFO.getName());
-		}
-		if (config.getObjectMapper() != null) {
-			ObjectMapperProvider.setMapper(config.getObjectMapper());
-			clientConfig.register(ObjectMapperProvider.class);
-			clientConfig.register(JacksonFeature.class);
-		}
-		ProxyConfig proxyConfig = config.getProxyConfig();
-		if ((proxyConfig != null) && (proxyConfig.getProxyHost() != null)) {
-			clientConfig.connectorProvider(new ApacheConnectorProvider());
-			clientConfig.property(ClientProperties.PROXY_URI, "http://"+proxyConfig.getProxyHost()+":"+proxyConfig.getProxyPort());
-			if (proxyConfig.getUsername() != null) {
-				clientConfig.property(ClientProperties.PROXY_USERNAME, proxyConfig.getUsername());
-				clientConfig.property(ClientProperties.PROXY_PASSWORD, proxyConfig.getPassword());
-			}
-		}
-
-		return clientConfig;
-	}
-
 	/**
 	 * Creates the actual JAX-WS Jersey client instance.
 	 * <p>Desecendants can override this method when they want full control over the creation of the client.</p>
@@ -112,10 +72,15 @@ public class JerseyClient extends AbstractClient {
 	 * @see #createClientConfig()
 	 * @see #configure(Client)
 	 */
-	protected Client createClient() {
-		Client rc = ClientBuilder.newClient(createClientConfig());
-		configure(rc);
-		return rc;
+	protected RestClient createClient() {
+		RestClient.Builder builder = createClientBuilder();
+		//.newClient(createClientConfig());
+		configure(builder);
+		return builder.build();
+	}
+	
+	protected RestClient.Builder createClientBuilder() {
+		return RestClient.builder();
 	}
 	
 	/**
@@ -124,10 +89,33 @@ public class JerseyClient extends AbstractClient {
 	 * @param client the client to configure
 	 * @see #getAuthorizationFilter()
 	 */
-	protected void configure(Client client) {
-		client.register(new UserAgentFilter(getUserAgent()));
-		ClientRequestFilter authFilter = getAuthorizationFilter();
-		if (authFilter != null) client.register(authFilter);
+	protected RestClient.Builder configure(RestClient.Builder builder) {
+		builder = builder
+			.baseUrl(getConfig().getUri())
+			.requestInterceptor(new UserAgentFilter(getUserAgent()));
+		ClientHttpRequestInterceptor authFilter = getAuthorizationFilter();
+		if (authFilter != null) builder = builder.requestInterceptor(authFilter);
+		
+		if (config.isVerbose()) {
+			builder = builder.requestInterceptor(new LoggingFilter());
+		}
+		if (config.getObjectMapper() != null) {
+			//ObjectMapperProvider.setMapper(config.getObjectMapper());
+			//clientConfig.register(ObjectMapperProvider.class);
+			//clientConfig.register(JacksonFeature.class);
+		}
+		ProxyConfig proxyConfig = config.getProxyConfig();
+		if ((proxyConfig != null) && (proxyConfig.getProxyHost() != null)) {
+			throw new RuntimeException("HTTP Proxy is currently not supported");
+//			clientConfig.connectorProvider(new ApacheConnectorProvider());
+//			clientConfig.property(ClientProperties.PROXY_URI, "http://"+proxyConfig.getProxyHost()+":"+proxyConfig.getProxyPort());
+//			if (proxyConfig.getUsername() != null) {
+//				clientConfig.property(ClientProperties.PROXY_USERNAME, proxyConfig.getUsername());
+//				clientConfig.property(ClientProperties.PROXY_PASSWORD, proxyConfig.getPassword());
+//			}
+		}
+
+		return builder;
 	}
 	
 	/**
@@ -147,7 +135,7 @@ public class JerseyClient extends AbstractClient {
 	 * @return the authorization filter.
 	 * @see CookieAuthorizationFilter
 	 */
-	protected ClientRequestFilter getAuthorizationFilter() {
+	protected ClientHttpRequestInterceptor getAuthorizationFilter() {
 		return new CookieAuthorizationFilter();
 	}
 	
@@ -155,7 +143,7 @@ public class JerseyClient extends AbstractClient {
 	 * Returns the configured Jersey client.
 	 * @return the client
 	 */
-	public Client getClient() {
+	public RestClient getClient() {
 		return client;
 	}
 
@@ -180,7 +168,6 @@ public class JerseyClient extends AbstractClient {
 	 * Close the client.
 	 */
 	public void close() {
-		client.close();
 	}
 
 }

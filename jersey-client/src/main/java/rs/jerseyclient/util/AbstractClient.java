@@ -3,13 +3,6 @@
  */
 package rs.jerseyclient.util;
 
-import jakarta.ws.rs.ClientErrorException;
-import jakarta.ws.rs.ServerErrorException;
-import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.client.Invocation.Builder;
-import jakarta.ws.rs.client.WebTarget;
-import jakarta.ws.rs.core.Response;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

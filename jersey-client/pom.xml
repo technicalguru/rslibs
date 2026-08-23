@@ -21,29 +21,41 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>baselib</artifactId>
-			<version>5.2.5</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.glassfish.jersey.core</groupId>
-		    <artifactId>jersey-client</artifactId>
-		    <version>${jersey.version}</version>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jackson</artifactId>
+			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-		    <groupId>org.glassfish.jersey.inject</groupId>
-		    <artifactId>jersey-hk2</artifactId>
-		    <version>${jersey.version}</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.glassfish.jersey.connectors/jersey-apache-connector -->
-		<dependency>
-		    <groupId>org.glassfish.jersey.connectors</groupId>
-		    <artifactId>jersey-apache-connector</artifactId>
-		    <version>${jersey.version}</version>
-		</dependency>
-		<dependency>
-		    <groupId>org.glassfish.jersey.media</groupId>
-		    <artifactId>jersey-media-json-jackson3</artifactId>
-		    <version>${jersey.version}</version>
-		</dependency>
+	    <!-- RestClient -->
+	    <dependency>
+	        <groupId>org.springframework</groupId>
+	        <artifactId>spring-web</artifactId>
+	        <version>7.0.9</version> <!-- Oder höher passend zu Java 17/21+ -->
+	    </dependency>
+		
+<!--		<dependency>-->
+<!--		    <groupId>org.glassfish.jersey.core</groupId>-->
+<!--		    <artifactId>jersey-client</artifactId>-->
+<!--		    <version>${jersey.version}</version>-->
+<!--		</dependency>-->
+<!--		<dependency>-->
+<!--		    <groupId>org.glassfish.jersey.inject</groupId>-->
+<!--		    <artifactId>jersey-hk2</artifactId>-->
+<!--		    <version>${jersey.version}</version>-->
+<!--		</dependency>-->
+<!--		 https://mvnrepository.com/artifact/org.glassfish.jersey.connectors/jersey-apache-connector -->
+<!--		<dependency>-->
+<!--		    <groupId>org.glassfish.jersey.connectors</groupId>-->
+<!--		    <artifactId>jersey-apache-connector</artifactId>-->
+<!--		    <version>${jersey.version}</version>-->
+<!--		</dependency>-->
+<!--		<dependency>-->
+<!--		    <groupId>org.glassfish.jersey.media</groupId>-->
+<!--		    <artifactId>jersey-media-json-jackson3</artifactId>-->
+<!--		    <version>${jersey.version}</version>-->
+<!--		</dependency>-->
 		
 	</dependencies>
 	
