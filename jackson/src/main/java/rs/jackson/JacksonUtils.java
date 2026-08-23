@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Optional;
 
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonNode;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.JsonNode;
 
 import rs.baselib.util.CommonUtils;
 

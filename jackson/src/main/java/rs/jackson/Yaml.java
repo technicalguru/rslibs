@@ -8,15 +8,15 @@ import java.util.List;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactoryBuilder;
-import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLParser;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.dataformat.yaml.YAMLFactory;
+import tools.jackson.dataformat.yaml.YAMLFactoryBuilder;
+import tools.jackson.dataformat.yaml.YAMLMapper;
+import tools.jackson.dataformat.yaml.YAMLParser;
 
 /**
  * New YAML utils for mapping back and forth.
@@ -56,7 +56,7 @@ public class Yaml {
 	 */
 	private Yaml(YAMLMapper yamlMapper) {
 		this.yamlMapper  = yamlMapper;
-		this.yamlFactory = yamlMapper.getFactory();
+		this.yamlFactory = yamlMapper.tokenStreamFactory();
 	}
 	
 	/**
@@ -487,7 +487,7 @@ public class Yaml {
 	 * @throws IOException - when the input cannot be read
 	 */
 	public YAMLParser getParser(File file) throws IOException {
-		return getYamlFactory().createParser(file);
+		return (YAMLParser)getYamlMapper().createParser(file);
 	}
 
 	/**
@@ -495,10 +495,10 @@ public class Yaml {
 	 * @param content - the content
 	 * @return the parser
 	 * @throws IOException - when the input cannot be read
-	 * @see com.fasterxml.jackson.core.YAMLFactory#createParser(java.lang.String)
+	 * @see tools.jackson.core.YAMLFactory#createParser(java.lang.String)
 	 */
 	public YAMLParser getParser(String content) throws IOException {
-		return getYamlFactory().createParser(content);
+		return (YAMLParser)getYamlMapper().createParser(content);
 	}
 
 	/**
@@ -506,10 +506,10 @@ public class Yaml {
 	 * @param in - the input stream
 	 * @return the parser
 	 * @throws IOException - when the input cannot be read
-	 * @see com.fasterxml.jackson.core.YAMLFactory#createParser(java.io.InputStream)
+	 * @see tools.jackson.core.YAMLFactory#createParser(java.io.InputStream)
 	 */
 	public YAMLParser getParser(InputStream in) throws IOException {
-		return getYamlFactory().createParser(in);
+		return (YAMLParser)getYamlMapper().createParser(in);
 	}
 
 	/**
@@ -517,10 +517,10 @@ public class Yaml {
 	 * @param reader the reader
 	 * @return the parser
 	 * @throws IOException - when the input cannot be read
-	 * @see com.fasterxml.jackson.core.YAMLFactory#createParser(java.io.Reader)
+	 * @see tools.jackson.core.YAMLFactory#createParser(java.io.Reader)
 	 */
 	public YAMLParser getParser(Reader reader) throws IOException {
-		return getYamlFactory().createParser(reader);
+		return (YAMLParser)getYamlMapper().createParser(reader);
 	}
 
 	/**
@@ -528,10 +528,10 @@ public class Yaml {
 	 * @param data - the data in bytes
 	 * @return the parser
 	 * @throws IOException - when the input cannot be read
-	 * @see com.fasterxml.jackson.core.YAMLFactory#createParser(byte[])
+	 * @see tools.jackson.core.YAMLFactory#createParser(byte[])
 	 */
 	public YAMLParser getParser(byte[] data) throws IOException {
-		return getYamlFactory().createParser(data);
+		return (YAMLParser)getYamlMapper().createParser(data);
 	}
 
 	/**
@@ -750,8 +750,7 @@ public class Yaml {
 	public static YAMLMapper.Builder defaultYAMLMapperBuilder(YAMLFactory yamlFactory) {
 		return YAMLMapper.builder(yamlFactory)
 			.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-			.addModule(new JavaTimeModule())
-			.defaultPropertyInclusion(JsonInclude.Value.ALL_NON_NULL);
+			.changeDefaultPropertyInclusion(v -> v.withValueInclusion(JsonInclude.Include.NON_NULL));
 	}
 	
 	/**

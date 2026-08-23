@@ -10,15 +10,19 @@ import java.io.Reader;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonFactoryBuilder;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+//import com.fasterxml.jackson.annotation.JsonInclude;
+//import tools.jackson.core.JsonFactory;
+//import tools.jackson.core.JsonFactoryBuilder;
+import tools.jackson.core.JsonParser;
+import tools.jackson.core.json.JsonFactory;
+import tools.jackson.core.json.JsonFactoryBuilder;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+//import tools.jackson.datatype.jsr310.JavaTimeModule;
 
 /**
  * New JSON utils for mapping back and forth.
@@ -51,14 +55,14 @@ public class Json {
 
 	private JsonFactory jsonFactory;
 	private JsonMapper  jsonMapper;
-	
+
 	/**
 	 * Constructor with given JsonMapper.
 	 * @param jsonMapper JsonMapper to be used
 	 */
 	private Json(JsonMapper jsonMapper) {
 		this.jsonMapper  = jsonMapper;
-		this.jsonFactory = jsonMapper.getFactory();
+		this.jsonFactory = jsonMapper.tokenStreamFactory();
 	}
 	
 	/**
@@ -489,7 +493,7 @@ public class Json {
 	 * @throws IOException - when the input cannot be read
 	 */
 	public JsonParser getParser(File file) throws IOException {
-		return getJsonFactory().createParser(file);
+		return getJsonMapper().createParser(file);
 	}
 
 	/**
@@ -497,10 +501,10 @@ public class Json {
 	 * @param content - the content
 	 * @return the parser
 	 * @throws IOException - when the input cannot be read
-	 * @see com.fasterxml.jackson.core.JsonFactory#createParser(java.lang.String)
+	 * @see tools.jackson.core.JsonFactory#createParser(java.lang.String)
 	 */
 	public JsonParser getParser(String content) throws IOException {
-		return getJsonFactory().createParser(content);
+		return getJsonMapper().createParser(content);
 	}
 
 	/**
@@ -508,10 +512,10 @@ public class Json {
 	 * @param in - the input stream
 	 * @return the parser
 	 * @throws IOException - when the input cannot be read
-	 * @see com.fasterxml.jackson.core.JsonFactory#createParser(java.io.InputStream)
+	 * @see tools.jackson.core.JsonFactory#createParser(java.io.InputStream)
 	 */
 	public JsonParser getParser(InputStream in) throws IOException {
-		return getJsonFactory().createParser(in);
+		return getJsonMapper().createParser(in);
 	}
 
 	/**
@@ -519,10 +523,10 @@ public class Json {
 	 * @param reader the reader
 	 * @return the parser
 	 * @throws IOException - when the input cannot be read
-	 * @see com.fasterxml.jackson.core.JsonFactory#createParser(java.io.Reader)
+	 * @see tools.jackson.core.JsonFactory#createParser(java.io.Reader)
 	 */
 	public JsonParser getParser(Reader reader) throws IOException {
-		return getJsonFactory().createParser(reader);
+		return getJsonMapper().createParser(reader);
 	}
 
 	/**
@@ -530,10 +534,10 @@ public class Json {
 	 * @param data - the data in bytes
 	 * @return the parser
 	 * @throws IOException - when the input cannot be read
-	 * @see com.fasterxml.jackson.core.JsonFactory#createParser(byte[])
+	 * @see tools.jackson.core.JsonFactory#createParser(byte[])
 	 */
 	public JsonParser getParser(byte[] data) throws IOException {
-		return getJsonFactory().createParser(data);
+		return getJsonMapper().createParser(data);
 	}
 
 	/**
@@ -689,7 +693,7 @@ public class Json {
 	
 	/**
 	 * Creates a default {@link JsonMapper.Builder} object.
-	 * <p>The builder is configured to ignore unknown properties when deserializing, using JavaTime objects and with {@link JsonInclude.Value#ALL_NON_NULL} 
+	 * <p>The builder is configured to ignore unknown properties when deserializing and with {@link JsonInclude.Value#ALL_NON_NULL} 
 	 * property inclusion.
 	 * @param jsonFactory the {@link JsonFactory} to be used
 	 * @return the Builder
@@ -697,8 +701,7 @@ public class Json {
 	public static JsonMapper.Builder defaultJsonMapperBuilder(JsonFactory jsonFactory) {
 		return JsonMapper.builder(jsonFactory)
 			.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-			.addModule(new JavaTimeModule())
-			.defaultPropertyInclusion(JsonInclude.Value.ALL_NON_NULL);
+			.changeDefaultPropertyInclusion(v -> v.withValueInclusion(JsonInclude.Include.NON_NULL));
 	}
 	
 	/**
