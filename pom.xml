@@ -49,6 +49,7 @@
 		<module>otp</module>
 		<module>csv</module>
 		<module>jersey-client</module>
+		<module>rest-client</module>
 		<module>mail-queue</module>
 		<module>mail-templates</module>
 	</modules>
