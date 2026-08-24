@@ -12,7 +12,7 @@ import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 import org.springframework.http.client.ClientHttpResponse;
 
 import rs.jackson.Json;
-import rs.restclient.JerseyClientConfig;
+import rs.restclient.ClientConfig;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.JavaType;
 import tools.jackson.databind.json.JsonMapper;
@@ -33,12 +33,12 @@ public class RequestBuilder {
 	public static final String OPTIONS = "OPTIONS";
 	
 	private WebTarget                      target;
-	private JerseyClientConfig             config;
+	private ClientConfig             config;
 	private Json                           json;
     private MultiValuedMap<String, Object> headers;
 	private Set<HttpCookie>                cookies;
 	
-	public RequestBuilder(WebTarget target, JerseyClientConfig config) {
+	public RequestBuilder(WebTarget target, ClientConfig config) {
 		this.target  = target;
 		this.config  = config;
 		this.json    = null;

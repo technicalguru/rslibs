@@ -5,26 +5,26 @@ package rs.restclient.util;
 
 import java.net.URI;
 
-import rs.restclient.JerseyClient;
-import rs.restclient.JerseyClientConfig;
+import rs.restclient.RsRestClient;
+import rs.restclient.ClientConfig;
 
 /**
  * Helper class to ease migration.
  */
 public class WebTarget {
 
-	private final JerseyClientConfig config;
+	private final ClientConfig config;
 	private final RestUriBuilder     targetUri;
 	
-	protected WebTarget(String uri, JerseyClient parent) {
+	protected WebTarget(String uri, RsRestClient parent) {
 		this(RestUriBuilder.fromUri(uri), parent.getConfig());
 	}
 	
-	protected WebTarget(URI uri, JerseyClient parent) {
+	protected WebTarget(URI uri, RsRestClient parent) {
         this(RestUriBuilder.fromUri(uri), parent.getConfig());
     }
 	
-	protected WebTarget(RestUriBuilder uriBuilder, JerseyClient parent) {
+	protected WebTarget(RestUriBuilder uriBuilder, RsRestClient parent) {
 		this(uriBuilder.clone(), parent.getConfig());
 	}
 	
@@ -32,11 +32,11 @@ public class WebTarget {
         this(uriBuilder, that.config);
     }
 	
-	protected WebTarget(String uri, JerseyClientConfig config) {
+	protected WebTarget(String uri, ClientConfig config) {
 		this(RestUriBuilder.fromUri(uri), config);
 	}
 	
-	protected WebTarget(RestUriBuilder uriBuilder, JerseyClientConfig config) {
+	protected WebTarget(RestUriBuilder uriBuilder, ClientConfig config) {
         this.targetUri = uriBuilder.clone();
         this.config    = config;
     }

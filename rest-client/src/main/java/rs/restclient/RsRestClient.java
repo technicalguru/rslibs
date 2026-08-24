@@ -19,7 +19,7 @@ import rs.restclient.util.UserAgentFilter;
  * @author ralph
  *
  */
-public class JerseyClient extends AbstractClient {
+public class RsRestClient extends AbstractClient {
 
 	/** Default name for User-Agent */
 	public static String NAME    = "jersey-client";
@@ -29,15 +29,15 @@ public class JerseyClient extends AbstractClient {
 	public static String URL     = "https://github.com/technicalguru/jersey-client";
 	
 	private RestClient         client;
-	private JerseyClientConfig config;
+	private ClientConfig config;
 
 	/**
 	 * Constructor.
-	 * <p>Be aware that the constructor immediately calls {@link #configure(JerseyClientConfig)} and
+	 * <p>Be aware that the constructor immediately calls {@link #configure(ClientConfig)} and
 	 *    {@link #authorize()}.</p>
 	 * @param config - the config to be used
 	 */
-	public JerseyClient(JerseyClientConfig config) {
+	public RsRestClient(ClientConfig config) {
 		super();
 		configure(config);
 		authorize();
@@ -48,7 +48,7 @@ public class JerseyClient extends AbstractClient {
 	 * <p>Be aware that the constructor immediately calls {@link #authorize()}.</p>
 	 * @param config - the config to be used
 	 */
-	public JerseyClient(RestClient config) {
+	public RsRestClient(RestClient config) {
 		super();
 		authorize();
 	}
@@ -59,7 +59,7 @@ public class JerseyClient extends AbstractClient {
 	 * @param config - the config to be used
 	 * @see #createClient()
 	 */
-	protected void configure(JerseyClientConfig config) {
+	protected void configure(ClientConfig config) {
 		this.config = config;
 		this.client = createClient();
 	}
@@ -146,7 +146,7 @@ public class JerseyClient extends AbstractClient {
 	 * Returns the config of this client.
 	 * @return the config
 	 */
-	public JerseyClientConfig getConfig() {
+	public ClientConfig getConfig() {
 		return config;
 	}
 

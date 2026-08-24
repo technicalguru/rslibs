@@ -1,25 +1,28 @@
-# jersey-client
+# rest-client
 
 ## Synopsis
-A basic structure for building clients with jersey.
+A basic structure for building clients with SpringBoot RestClient.
+
+## Important Notice
+This package is experimental and might not yet be functional. You shall test it extensively before migrating it into production.
 
 ## Maven Coordinates
 
 ```
 <dependency>
 	<groupId>eu.ralph-schuster</groupId>
-	<artifactId>jersey-client</artifactId>
+	<artifactId>rest-client</artifactId>
 	<version>${version}</version>
 </dependency>
 ```
 
 ## Usage
-You shall subclass your main client for the specific API. Derive from ``JerseyClient``. Here is an example.
+You shall subclass your main client for the specific API. Derive from ``RsRestClient``. Here is an example.
 
 ```
-public class MyApiClient extends JerseyClient {
+public class MyApiClient extends RsRestClient {
 
-	public MyApiClient(JerseyClientConfig config) {
+	public MyApiClient(ClientConfig config) {
 		super(config);
 	}
 	
@@ -42,7 +45,7 @@ public class MySubResourceClient extends AbstractClient {
 and provide access to it in the parent client:
 
 ```
-public class MyApiClient extends JerseyClient {
+public class MyApiClient extends RsRestClient {
 
 	public MySubResourceClient subResource() {
 		get(MySubResourceClient.class)
@@ -54,11 +57,11 @@ public class MyApiClient extends JerseyClient {
 You can apply this structure to sub-clients too.
 
 ## Configuration
-You are free to subclass ``JerseyClientConfig`` to provide more configuration specific to your use case.
+You are free to subclass ``RestClientConfig`` to provide more configuration specific to your use case.
 Override the ``configure()`` method to do your configuration:
 
 ```
-public class MyApiClient extends JerseyClient {
+public class MyApiClient extends RsRestClient {
 
 	public MyApiClient(MyDerivedConfig config) {
 		super(config);
@@ -111,28 +114,23 @@ Here are some examples how to implement methods in your clients:
 
 ## API Reference
 
-Javadoc API for latest stable version can be accessed [here](https://www.javadoc.io/doc/eu.ralph-schuster/jersey-client/latest//index.html).
-
-## Important Changes
-
- * v2.1 requires Java 21 now
- * v2 is using Jakarta libraries - however, v2.0.0 was a broken release in that respect.
+Javadoc API for latest stable version can be accessed [here](https://www.javadoc.io/doc/eu.ralph-schuster/rest-client/latest//index.html).
  
 ## Contribution
 
- * [Project Homepage](https://github.com/technicalguru/rslibs/tree/master/jersey-client)
+ * [Project Homepage](https://github.com/technicalguru/rslibs/tree/master/rest-client)
  * [Issue Tracker](https://github.com/technicalguru/rslibs/issues)
   
 ## License
 
-Jersey Client is free software: you can redistribute it and/or modify it under the terms of version 3 of the GNU 
+RS Rest Client is free software: you can redistribute it and/or modify it under the terms of version 3 of the GNU 
 Lesser General Public  License as published by the Free Software Foundation.
 
-Jersey Client is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied 
+RS Rest Client is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied 
 warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public 
 License for more details.
 
-You should have received a copy of the GNU Lesser General Public License along with Jersey Client.  If not, see 
+You should have received a copy of the GNU Lesser General Public License along with RS Rest Client.  If not, see 
 <http://www.gnu.org/licenses/lgpl-3.0.html>.
 
 Summary:

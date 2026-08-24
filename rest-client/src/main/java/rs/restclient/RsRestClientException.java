@@ -9,7 +9,7 @@ package rs.restclient;
  * @author ralph
  *
  */
-public class JerseyClientException extends RuntimeException {
+public class RsRestClientException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
@@ -18,7 +18,7 @@ public class JerseyClientException extends RuntimeException {
      * detail message. The cause is not initialized, and may subsequently be
      * initialized by a call to {@link #initCause(Throwable)}.
      */
-	public JerseyClientException() {
+	public RsRestClientException() {
 	}
 
 	/**
@@ -29,7 +29,7 @@ public class JerseyClientException extends RuntimeException {
      * @param   message   the detail message. The detail message is saved for
      *          later retrieval by the {@link #getMessage()} method.
 	 */
-	public JerseyClientException(String message) {
+	public RsRestClientException(String message) {
 		super(message);
 	}
 
@@ -45,7 +45,7 @@ public class JerseyClientException extends RuntimeException {
      *         permitted, and indicates that the cause is nonexistent or
      *         unknown.)
 	 */
-	public JerseyClientException(Throwable cause) {
+	public RsRestClientException(Throwable cause) {
 		super(cause);
 	}
 
@@ -62,7 +62,7 @@ public class JerseyClientException extends RuntimeException {
      *         permitted, and indicates that the cause is nonexistent or
      *         unknown.)
 	 */
-	public JerseyClientException(String message, Throwable cause) {
+	public RsRestClientException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
@@ -82,7 +82,7 @@ public class JerseyClientException extends RuntimeException {
      * @param writableStackTrace whether or not the stack trace should
      *                           be writable
 	 */
-	public JerseyClientException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+	public RsRestClientException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 	}
 

@@ -15,7 +15,7 @@ import tools.jackson.databind.json.JsonMapper;
  * @author ralph
  *
  */
-public class JerseyClientConfig {
+public class ClientConfig {
 
 	private String uri;
 	private boolean verbose         = false;
@@ -25,7 +25,7 @@ public class JerseyClientConfig {
 	/**
 	 * Default constructor.
 	 */
-	public JerseyClientConfig() {
+	public ClientConfig() {
 	}
 
 	/**
@@ -33,7 +33,7 @@ public class JerseyClientConfig {
 	 * @param uri - Base URI of the API that needs to be targeted.
 	 * @param verbose - whether the Jersey client shall be configured to be verbose.
 	 */
-	public JerseyClientConfig(String uri, boolean verbose) {
+	public ClientConfig(String uri, boolean verbose) {
 		this.uri     = uri;
 		this.verbose = verbose;
 	}

@@ -12,7 +12,7 @@ import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 
-import rs.restclient.JerseyClientException;
+import rs.restclient.RsRestClientException;
 import rs.restclient.data.HateOasPagedList;
 import rs.restclient.data.ResultList;
 import rs.restclient.data.HateOasPagedList.EmbeddedResultList;
@@ -56,7 +56,7 @@ public abstract class AbstractClient {
 		if (clients == null) {
 			clients = new ClientHolder(target);
 		} else {
-			throw new JerseyClientException("Cannot change WebTarget.");
+			throw new RsRestClientException("Cannot change WebTarget.");
 		}
 	}
 	/**
