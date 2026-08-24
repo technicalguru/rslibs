@@ -9,8 +9,6 @@ import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
-import rs.baselib.test.PersonBuilder.Person;
-
 /**
  * Test {@link Json} serialization and deserialization
  * @author ralph
@@ -29,8 +27,8 @@ public class YamlTest {
 			"person2:\n  data:\n"+
 			"    firstName: \"Jane\"\n    lastName: \"Doe\"\n    birthday: \"2000-01-01\"\n    age: 26\n    gender: \"FEMALE\"\n    phoneNumber: \"+1 555 12345678\"";
 	
-	private static final Person PERSON1 = new Person("Max",  "Mustermann", LocalDate.of(2020, Month.JANUARY, 1),  6, "MALE",   "+49 610 12345678", null);
-	private static final Person PERSON2 = new Person("Jane", "Doe",        LocalDate.of(2000, Month.JANUARY, 1), 26, "FEMALE", "+1 555 12345678", null);
+	private static final Person PERSON1 = new Person("Max",  "Mustermann", LocalDate.of(2020, Month.JANUARY, 1),  6, "MALE",   "+49 610 12345678");
+	private static final Person PERSON2 = new Person("Jane", "Doe",        LocalDate.of(2000, Month.JANUARY, 1), 26, "FEMALE", "+1 555 12345678");
 	
 	private Yaml YAML = Yaml.builder().build();
 	
