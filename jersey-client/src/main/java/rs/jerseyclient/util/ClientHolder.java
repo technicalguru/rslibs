@@ -7,8 +7,6 @@ import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 
-import jakarta.ws.rs.client.WebTarget;
-
 /**
  * A helper class to maintain (sub) clients within a client.
  * 
@@ -18,7 +16,7 @@ import jakarta.ws.rs.client.WebTarget;
 public class ClientHolder {
 
 	private Map<Class<?>, Object> clients;
-	private WebTarget             target;
+	private WebTarget         target;
 	
 	/**
 	 * Constructor.

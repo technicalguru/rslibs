@@ -3,10 +3,15 @@
  */
 package rs.jerseyclient.util;
 
+import java.io.IOException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 
-import rs.baselib.util.CommonUtils;
 import rs.jerseyclient.JerseyClientException;
 import rs.jerseyclient.data.HateOasPagedList;
 import rs.jerseyclient.data.HateOasPagedList.EmbeddedResultList;
@@ -58,9 +63,8 @@ public abstract class AbstractClient {
 	 * Returns a request builder.
 	 * @return the builder
 	 */
-	public Builder getRequest() {
-		Builder rc = getTarget().request();
-		return rc;
+	public RequestBuilder getRequest() {
+		return getTarget().request();
 	}
 
 	/**
@@ -149,33 +153,35 @@ public abstract class AbstractClient {
 				return new ResultList<>(embedded.getResults(), pagedList.getPage());
 			}
 		}
-		return new ResultList<>(CommonUtils.newList(), pagedList.getPage());
+		return new ResultList<>(RestClientUtils.newList(), pagedList.getPage());
 	}
 	
 	
 	/**
 	 * Helper method to raise exceptions in case of any other response than 2xx successful.
-	 * @param response the {@link Response} object
+	 * @param response the {@link ClientHttpResponse} object
 	 */
-	protected void checkResponse(Response response) {
+	protected void checkResponse(ClientHttpResponse response) {
 		checkResponse(response, null);
 	}
 	
 	/**
 	 * Helper method to raise exceptions in case of any other response than 2xx successful.
 	 * @param <T> - the type of successful return
-	 * @param response the {@link Response} object
+	 * @param response the {@link ClientHttpResponse} object
 	 * @param successValue the value to return when response was successfull
 	 * @return usually the successValue - everything else will raise a runtime exception
 	 */
-	protected <T> T checkResponse(Response response, T successValue) {
-		switch (response.getStatusInfo().getFamily()) {
-		case INFORMATIONAL:
-		case SUCCESSFUL: return successValue;
-		case REDIRECTION: throw new WebApplicationException(response);
-		case CLIENT_ERROR: throw new ClientErrorException(response);
-		case SERVER_ERROR: throw new ServerErrorException(response);
-		case OTHER: throw new WebApplicationException(response);
+	protected <T> T checkResponse(ClientHttpResponse response, T successValue) {
+		try {
+			HttpStatusCode status = response.getStatusCode();
+			if (status.is1xxInformational()) return successValue;
+			if (status.is2xxSuccessful()) return successValue;
+			if (status.is3xxRedirection()) throw new HttpRedirectErrorException(status);
+			if (status.is4xxClientError()) throw new HttpClientErrorException(status);
+			if (status.is5xxServerError()) throw new HttpServerErrorException(status);
+		} catch (IOException e) {
+			throw new RuntimeException("Cannot retrieve status code", e);
 		}
 		return successValue;
 	}

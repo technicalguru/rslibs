@@ -99,11 +99,6 @@ public class JerseyClient extends AbstractClient {
 		if (config.isVerbose()) {
 			builder = builder.requestInterceptor(new LoggingFilter());
 		}
-		if (config.getObjectMapper() != null) {
-			//ObjectMapperProvider.setMapper(config.getObjectMapper());
-			//clientConfig.register(ObjectMapperProvider.class);
-			//clientConfig.register(JacksonFeature.class);
-		}
 		ProxyConfig proxyConfig = config.getProxyConfig();
 		if ((proxyConfig != null) && (proxyConfig.getProxyHost() != null)) {
 			throw new RuntimeException("HTTP Proxy is currently not supported");
