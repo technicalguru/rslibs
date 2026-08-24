@@ -44,6 +44,7 @@
 	<modules>
 		<module>baselib</module>
 		<module>templating</module>
+		<module>jackson2</module>
 		<module>jackson</module>
 		<module>otp</module>
 		<module>csv</module>
