@@ -3,13 +3,12 @@ package rs.jackson;
 import java.time.LocalDate;
 
 /**
- * Helper class.
+ * Test class for serializing and deserializing.
  * 
  * @author ralph
  *
  */
 public class Person {
-
 	public String    firstName;
 	public String    lastName;
 	public LocalDate birthday;
@@ -33,5 +32,4 @@ public class Person {
 		return "Person [firstName=" + firstName + ", lastName=" + lastName + ", birthday=" + birthday + ", age="
 				+ age + ", gender=" + gender + ", phoneNumber=" + phoneNumber + "]";
 	}
-
 }

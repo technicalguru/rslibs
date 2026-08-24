@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Optional;
 
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonNode;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.JsonNode;
 
 /**
  * General helper utils for usage with Jackson.
@@ -70,9 +70,9 @@ public class JacksonUtils {
 	}
 
 	/**
-	 * Returns whether string is null or empty
-	 * @param s string to test
-	 * @return true when string is empty or null
+	 * Returns true when the given string is null empty. 
+	 * @param s the string to be checked
+	 * @return true when string must be regarded as empty
 	 */
 	private static boolean isEmpty(String s) {
 		if (s == null) return true;
