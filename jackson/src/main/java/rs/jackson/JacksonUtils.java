@@ -8,8 +8,6 @@ import java.util.Optional;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 
-import rs.baselib.util.CommonUtils;
-
 /**
  * General helper utils for usage with Jackson.
  * @author ralph
@@ -56,11 +54,11 @@ public class JacksonUtils {
 	 * @return the node found
 	 */
 	public static Optional<JsonNode> traverse(JsonNode node, String path) {
-		if (!CommonUtils.isEmpty(path)) {
+		if (!isEmpty(path)) {
 			String paths[] = path.split("\\.");
 			if (paths.length > 0) {
 				for (String p : paths) {
-					if (!CommonUtils.isEmpty(p)) {
+					if (!isEmpty(p)) {
 						node = node.findPath(p.trim());
 						if (node.isMissingNode()) return Optional.empty();
 					}
@@ -71,4 +69,13 @@ public class JacksonUtils {
 		return Optional.of(node);
 	}
 
+	/**
+	 * Returns whether string is null or empty
+	 * @param s string to test
+	 * @return true when string is empty or null
+	 */
+	private static boolean isEmpty(String s) {
+		if (s == null) return true;
+		return s.trim().length() == 0;
+	}
 }

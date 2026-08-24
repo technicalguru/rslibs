@@ -13,7 +13,6 @@ import jakarta.ws.rs.core.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import rs.baselib.util.CommonUtils;
 import rs.jerseyclient.JerseyClientException;
 import rs.jerseyclient.data.HateOasPagedList;
 import rs.jerseyclient.data.HateOasPagedList.EmbeddedResultList;
@@ -156,7 +155,7 @@ public abstract class AbstractClient {
 				return new ResultList<>(embedded.getResults(), pagedList.getPage());
 			}
 		}
-		return new ResultList<>(CommonUtils.newList(), pagedList.getPage());
+		return new ResultList<>(JerseyClientUtils.newList(), pagedList.getPage());
 	}
 	
 	

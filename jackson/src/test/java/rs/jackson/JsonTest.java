@@ -9,8 +9,6 @@ import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
-import rs.baselib.test.PersonBuilder.Person;
-
 /**
  * Test {@link Json} serialization and deserialization
  * @author ralph
@@ -23,8 +21,8 @@ public class JsonTest {
 	private static final String JSON_ARRAY   = "["+JSON1+","+JSON2+"]";
 	private static final String JSON_COMPLEX = "{ \"person1\":"+JSON1+", \"person2\":{ \"data\":"+JSON2+"}}";
 	
-	private static final Person PERSON1 = new Person("Max",  "Mustermann", LocalDate.of(2020, Month.JANUARY, 1),  6, "MALE",   "+49 610 12345678", null);
-	private static final Person PERSON2 = new Person("Jane", "Doe",        LocalDate.of(2000, Month.JANUARY, 1), 26, "FEMALE", "+1 555 12345678", null);
+	private static final Person PERSON1 = new Person("Max",  "Mustermann", LocalDate.of(2020, Month.JANUARY, 1),  6, "MALE",   "+49 610 12345678");
+	private static final Person PERSON2 = new Person("Jane", "Doe",        LocalDate.of(2000, Month.JANUARY, 1), 26, "FEMALE", "+1 555 12345678");
 	
 	private Json JSON = Json.builder().build();
 	

@@ -8,8 +8,6 @@
 
 	<properties>
 		<project.home>https://github.com/technicalguru/rslibs</project.home>
-		<log4j.version>2.26.1</log4j.version>
-		<slf4j.version>2.0.18</slf4j.version>
 	</properties>
 
 	<artifactId>baselib</artifactId>
