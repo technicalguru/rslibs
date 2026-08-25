@@ -6,8 +6,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
+
+import tools.jackson.core.type.TypeReference;
 
 /**
  * Test {@link Json} serialization and deserialization
@@ -33,7 +36,16 @@ public class JsonTest {
 	}
 	
 	@Test
-	public void testFromList() throws Exception {
+	public void testFromListWithTypeRef() throws Exception {
+		List<Person> list = JSON.fromJson(JSON_ARRAY, new TypeReference<List<Person>>() {});
+		assertNotNull(list);
+		assertEquals(2, list.size());
+		test(PERSON1, list.get(0));
+		test(PERSON2, list.get(1));
+	}
+	
+	@Test
+	public void testFromListWithJavaType() throws Exception {
 		ArrayList<Person> list = JSON.fromJson(JSON_ARRAY, JacksonUtils.getListType(Person.class));
 		assertNotNull(list);
 		assertEquals(2, list.size());

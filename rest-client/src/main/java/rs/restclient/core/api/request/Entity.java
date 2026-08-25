@@ -1,20 +1,17 @@
-package rs.restclient.util;
+package rs.restclient.core.api.request;
 
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.Objects;
 
-import org.springframework.http.MediaType;
-
-
 /**
  * Encapsulates message entity including the associated variant information.
  *
  * @param <T> entity type.
- * @author Marek Potociar
  */
 public class Entity<T> {
+	
     private static final Annotation[] EMPTY_ANNOTATIONS = new Annotation[0];
 
     private final T entity;
@@ -29,7 +26,7 @@ public class Entity<T> {
      * @param mediaType entity content type.
      * @return entity instance.
      */
-    public static <T> Entity<T> entity(final T entity, final MediaType mediaType) {
+    public static <T> Entity<T> entity(final T entity, final String mediaType) {
         return new Entity<T>(entity, mediaType);
     }
 
@@ -42,21 +39,8 @@ public class Entity<T> {
      * @param annotations entity annotations.
      * @return entity instance.
      */
-    public static <T> Entity<T> entity(final T entity, final MediaType mediaType, final Annotation[] annotations) {
+    public static <T> Entity<T> entity(final T entity, final String mediaType, final Annotation[] annotations) {
         return new Entity<T>(entity, mediaType, annotations);
-    }
-
-    /**
-     * Create an entity using a supplied content media type.
-     *
-     * @param <T> entity Java type.
-     * @param entity entity data.
-     * @param mediaType entity content type.
-     * @return entity instance.
-     * @throws IllegalArgumentException if the supplied string cannot be parsed or is {@code null}.
-     */
-    public static <T> Entity<T> entity(final T entity, final String mediaType) {
-        return new Entity<T>(entity, MediaType.valueOf(mediaType));
     }
 
     /**
@@ -139,7 +123,7 @@ public class Entity<T> {
         return new Entity<T>(entity, MediaType.APPLICATION_XHTML_XML);
     }
 
-    private Entity(final T entity, final MediaType mediaType) {
+    private Entity(final T entity, final String mediaType) {
         this(entity, new Variant(mediaType, (Locale) null, null), null);
     }
 
@@ -147,7 +131,7 @@ public class Entity<T> {
         this(entity, variant, null);
     }
 
-    private Entity(final T entity, final MediaType mediaType, final Annotation[] annotations) {
+    private Entity(final T entity, final String mediaType, final Annotation[] annotations) {
         this(entity, new Variant(mediaType, (Locale) null, null), annotations);
     }
 
@@ -172,7 +156,7 @@ public class Entity<T> {
      *
      * @return entity media type.
      */
-    public MediaType getMediaType() {
+    public String getMediaType() {
         return variant.getMediaType();
     }
 

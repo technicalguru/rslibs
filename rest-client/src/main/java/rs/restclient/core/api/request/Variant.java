@@ -1,4 +1,4 @@
-package rs.restclient.util;
+package rs.restclient.core.api.request;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -6,11 +6,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import org.springframework.http.MediaType;
-
 public class Variant {
     private Locale language;
-    private MediaType mediaType;
+    private String mediaType;
     private String encoding;
 
     /**
@@ -22,7 +20,7 @@ public class Variant {
      * @throws java.lang.IllegalArgumentException if all the parameters are {@code null}.
      * @since 2.0
      */
-    public Variant(final MediaType mediaType, final String language, final String encoding) {
+    public Variant(final String mediaType, final String language, final String encoding) {
         if (mediaType == null && language == null && encoding == null) {
             throw new IllegalArgumentException("mediaType, language, encoding all null");
         }
@@ -42,7 +40,7 @@ public class Variant {
      * @throws java.lang.IllegalArgumentException if all the parameters are {@code null}.
      * @since 2.0
      */
-    public Variant(final MediaType mediaType, final String language, final String country, final String encoding) {
+    public Variant(final String mediaType, final String language, final String country, final String encoding) {
         if (mediaType == null && language == null && encoding == null) {
             throw new IllegalArgumentException("mediaType, language, encoding all null");
         }
@@ -64,7 +62,7 @@ public class Variant {
      * @throws java.lang.IllegalArgumentException if all the parameters are {@code null}.
      * @since 2.0
      */
-    public Variant(final MediaType mediaType, final String language, final String country, final String languageVariant, final String encoding) {
+    public Variant(final String mediaType, final String language, final String country, final String languageVariant, final String encoding) {
         if (mediaType == null && language == null && encoding == null) {
             throw new IllegalArgumentException("mediaType, language, encoding all null");
         }
@@ -81,7 +79,7 @@ public class Variant {
      * @param encoding the content encoding of the variant - may be {@code null}.
      * @throws java.lang.IllegalArgumentException if all the parameters are {@code null}.
      */
-    public Variant(final MediaType mediaType, final Locale language, final String encoding) {
+    public Variant(final String mediaType, final Locale language, final String encoding) {
         if (mediaType == null && language == null && encoding == null) {
             throw new IllegalArgumentException("mediaType, language, encoding all null");
         }
@@ -114,7 +112,7 @@ public class Variant {
      *
      * @return the media type or {@code null} if none set.
      */
-    public MediaType getMediaType() {
+    public String getMediaType() {
         return mediaType;
     }
 
@@ -135,7 +133,7 @@ public class Variant {
      * @return the initialized builder.
      * @throws java.lang.IllegalArgumentException if mediaTypes is null or contains no elements.
      */
-    public static VariantListBuilder mediaTypes(final MediaType... mediaTypes) {
+    public static VariantListBuilder mediaTypes(final String... mediaTypes) {
         VariantListBuilder b = VariantListBuilder.newInstance();
         b.mediaTypes(mediaTypes);
         return b;
@@ -221,7 +219,7 @@ public class Variant {
 
        	private List<Locale>    languages  = new ArrayList<>();
        	private List<String>    encodings  = new ArrayList<>();
-       	private List<MediaType> mediaTypes = new ArrayList<>();
+       	private List<String>    mediaTypes = new ArrayList<>();
     	
        	private List<Variant>   added      = new ArrayList<>();
        	
@@ -287,7 +285,7 @@ public class Variant {
         public VariantListBuilder add() {
         	for (Locale l : languages) {
         		for (String s : encodings) {
-        			for (MediaType t : mediaTypes) {
+        			for (String t : mediaTypes) {
         				added.add(new Variant(t, l, s));
         			}
         		}
@@ -327,8 +325,8 @@ public class Variant {
          * of the respective media type.
          * @return the updated builder.
          */
-        public VariantListBuilder mediaTypes(MediaType... mediaTypes) {
-        	for (MediaType t : mediaTypes) this.mediaTypes.add(t);
+        public VariantListBuilder mediaTypes(String... mediaTypes) {
+        	for (String t : mediaTypes) this.mediaTypes.add(t);
         	return this;
         }
     }

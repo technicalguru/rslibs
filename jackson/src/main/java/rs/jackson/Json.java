@@ -113,6 +113,7 @@ public class Json {
 	 * @return the object at the specified path or null if it doesn't exist
 	 */
 	public <T> T fromJson(String json, String path, Class<T> type) {
+		if (json == null) return null;
 		try {
 			return convertFrom(getJsonMapper().readTree(json), path, type);
 		} catch (Throwable t) {
@@ -140,6 +141,7 @@ public class Json {
 	 * @return the object at the specified path or null if it doesn't exist
 	 */
 	public <T> T fromJson(String json, String path, JavaType type) {
+		if (json == null) return null;
 		try {
 			return convertFrom(getJsonMapper().readTree(json), path, type);
 		} catch (Throwable t) {
@@ -169,6 +171,7 @@ public class Json {
 	 * @return the object at the specified path or null if it doesn't exist
 	 */
 	public <T> T fromJson(String json, String path, TypeReference<T> type) {
+		if (json == null) return null;
 		try {
 			return convertFrom(getJsonMapper().readTree(json), path, type);
 		} catch (Throwable t) {
