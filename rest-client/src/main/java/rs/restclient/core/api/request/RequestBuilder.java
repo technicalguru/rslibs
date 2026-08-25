@@ -5,15 +5,15 @@ package rs.restclient.core.api.request;
 
 import java.net.HttpCookie;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.apache.commons.collections4.MultiValuedMap;
-import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 
-import rs.restclient.core.api.RequestBuilder;
+import rs.restclient.core.api.RequestInterceptor;
+import rs.restclient.core.api.RestClientException;
 import rs.restclient.core.api.Target;
 import rs.restclient.core.api.response.RestResponse;
+import rs.restclient.core.util.EndofChainRequestExecution;
+import rs.restclient.core.util.RestRequestExecution;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.JavaType;
 
@@ -21,16 +21,21 @@ import tools.jackson.databind.JavaType;
  * Abstract implementation of request builder.
  * The final class is dependent on the implementation (Jersey, SpringBoot's RestClient) etc.
  */
-public abstract class AbstractRequestBuilder implements RequestBuilder {
+public class RequestBuilder  {
 
-	protected Target                         target;
-    protected MultiValuedMap<String, Object> headers;
-	protected Set<HttpCookie>                cookies;
+	public static final String GET     = "GET";
+	public static final String POST    = "POST";
+	public static final String PUT     = "PUT";
+	public static final String DELETE  = "DELETE";
+	public static final String HEAD    = "HEAD";
+	public static final String OPTIONS = "OPTIONS";
+
+	protected Target      target;
+	protected HeadersSpec headers;
 	
-	protected AbstractRequestBuilder(Target target) {
+	public RequestBuilder(Target target) {
 		this.target   = target;
-		this.headers  = new ArrayListValuedHashMap<>();
-		this.cookies  = new HashSet<>();
+		this.headers  = new HeadersSpec();
 	}
 	
 	/**
@@ -141,7 +146,17 @@ public abstract class AbstractRequestBuilder implements RequestBuilder {
 		return method(name, null, responseType);
 	}
 
-    public abstract RestResponse method(String name, Entity<?> entity);
+	public RestResponse method(String methodName, Entity<?> entity) {
+		// 1st Build RestRequest  - standard object
+		RestRequest request = new RestRequest(getTarget(), methodName, headers, entity);
+		// Process all interceptors...
+		RestRequestExecution execution = createExecution();
+		try {
+			return execution.execute(request, null);
+		} catch (Throwable t) {
+			throw new RestClientException("Cannot execute request", t);
+		}
+	}
 
     public <T> T method(String name, Entity<?> entity, Class<T> responseType) {
     	return method(name, entity).as(responseType);
@@ -156,34 +171,41 @@ public abstract class AbstractRequestBuilder implements RequestBuilder {
 	}
 	
 	public RequestBuilder header(String name, Object ...values) {
-		for (Object value : values) {
-			if (value != null) headers.put(name, value);
-		}
+		headers.add(name, values);
 		return this;
 	}
 	
 	public RequestBuilder headers(MultiValuedMap<String, Object> headers) {
-		this.headers.putAll(headers);
+		this.headers.add(headers);
 		return this;
 	}
 	
 	public RequestBuilder cookie(String name, String cookie) {
-		return cookie(new HttpCookie(name, cookie));
+		this.headers.addCookie(name, cookie);
+		return this;
 	}
 	
 	public RequestBuilder cookie(String cookie) {
-		return cookie(HttpCookie.parse(cookie));
+		this.headers.addCookie(cookie);
+		return this;
 	}
 	
 	public RequestBuilder cookie(HttpCookie cookie) {
-		cookies.add(cookie);
+		this.headers.addCookie(cookie);
 		return this;
 	}
 	
 	public RequestBuilder cookie(Collection<HttpCookie> cookies) {
-		this.cookies.addAll(cookies);
+		this.headers.addCookies(cookies);
 		return this;
 	}
 
+	private RestRequestExecution createExecution() {
+		RestRequestExecution execution = new EndofChainRequestExecution(getTarget().getImplementation());
+		return getTarget().getInterceptors().stream()
+				.reduce(RequestInterceptor::andThen)
+				.map(interceptor -> interceptor.apply(execution))
+				.orElse(execution);
+	}
 
 }

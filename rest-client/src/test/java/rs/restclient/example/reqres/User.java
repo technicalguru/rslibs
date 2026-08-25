@@ -3,6 +3,8 @@
  */
 package rs.restclient.example.reqres;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+
 /**
  * Payload class User
  */
@@ -13,9 +15,19 @@ public class User {
 	private String firstName;
 	private String lastName;
 	private String avatar;
+	private MetaData meta;
 	
 	public User() {}
 	
+	public User(long id, String email, String firstName, String lastName, String avatar) {
+		this.id = id;
+		this.email = email;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.avatar = avatar;
+	}
+
+
 	/**
 	 * Returns the id.
 	 * @return the id
@@ -86,6 +98,25 @@ public class User {
 	public void setAvatar(String avatar) {
 		this.avatar = avatar;
 	}
+	
+	/**
+	 * Returns the meta.
+	 * @return the meta
+	 */
+	@JsonAlias("_meta")
+	public MetaData getMeta() {
+		return meta;
+	}
+
+	/**
+	 * Sets the meta.
+	 * @param meta the meta to set
+	 */
+	@JsonAlias("_meta")
+	public void setMeta(MetaData meta) {
+		this.meta = meta;
+	}
+
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", email=" + email + ", firstName=" + firstName + ", lastName=" + lastName

@@ -3,6 +3,9 @@
  */
 package rs.restclient.core.api;
 
+import rs.restclient.core.api.request.RestRequest;
+import rs.restclient.core.api.response.RestResponse;
+
 /**
  * A client implementation is the main entrance point
  * for a Client. It can produce the 
@@ -11,9 +14,9 @@ package rs.restclient.core.api;
 public interface TargetImplementation {
 
 	/**
-	 * Returns the request builder.
-	 * @param target the target for the request.
-	 * @return the request builder
+	 * Executes the request.
+	 * @param request the request.
+	 * @return the response
 	 */
-	public RequestBuilder requestBuilder(Target target);
+	public RestResponse execute(RestRequest request);
 }

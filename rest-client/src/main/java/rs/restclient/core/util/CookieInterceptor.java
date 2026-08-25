@@ -1,7 +1,7 @@
 /**
  * 
  */
-package rs.restclient.util;
+package rs.restclient.core.util;
 
 import java.io.IOException;
 import java.net.HttpCookie;
@@ -9,8 +9,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpRequest;
-import org.springframework.http.client.ClientHttpResponse;
+
+import rs.restclient.core.api.request.RestRequest;
+import rs.restclient.core.api.response.RestResponse;
 
 /**
  * Handles cookies and "Accept" header in requests and responses.
@@ -18,7 +19,7 @@ import org.springframework.http.client.ClientHttpResponse;
  * @author ralph
  *
  */
-public class CookieAuthorizationFilter extends AbstractFilter {
+public class CookieInterceptor extends AbstractRequestInterceptor {
 
 	/** Default Accept header value */
 	public static final String DEFAULT_ACCEPT_HEADER = "application/json";
@@ -29,7 +30,7 @@ public class CookieAuthorizationFilter extends AbstractFilter {
 	/**
 	 * Default Constructor.
 	 */
-	public CookieAuthorizationFilter() {
+	public CookieInterceptor() {
 		cookies = new HashMap<>();
 	}
 
@@ -53,31 +54,31 @@ public class CookieAuthorizationFilter extends AbstractFilter {
 	 * Filters the reponse and evaluate the cookies to be set.
 	 */
 	@Override
-	public void intercept(ClientHttpResponse response) throws IOException {
-		for (String value : response.getHeaders().get(HttpHeaders.SET_COOKIE)) {
-			for (HttpCookie cookie : HttpCookie.parse(value)) {
-				String n = cookie.getName();
-				cookies.put(n, cookie);
-			}
-		}
+	public void intercept(RestResponse response) throws IOException {
+//		for (String value : response.getHeaders().get(HttpHeaders.SET_COOKIE)) {
+//			for (HttpCookie cookie : HttpCookie.parse(value)) {
+//				String n = cookie.getName();
+//				cookies.put(n, cookie);
+//			}
+//		}
 	}
 
 	/**
 	 * Sets cookies if required in the request.
 	 */
 	@Override
-	public void intercept(HttpRequest request, byte[] body) throws IOException {
+	public void intercept(RestRequest request, byte[] body) throws IOException {
 		for (Map.Entry<String, HttpCookie> entry : cookies.entrySet()) {
 			String name = entry.getKey();
 			HttpCookie cookie = entry.getValue();
 			if (cookie.hasExpired()) {
 				cookies.remove(name);
 			} else {
-				request.getHeaders().add(HttpHeaders.COOKIE, cookie.toString());
+				request.addCookie(cookie);
 			}
 		}
 		String v = getAcceptableMediaTypes();
-		if (v != null) request.getHeaders().add(HttpHeaders.ACCEPT, v);
+		if (v != null) request.addHeader(HttpHeaders.ACCEPT, v);
 	}
 
 }

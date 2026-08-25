@@ -74,7 +74,16 @@ public class RestClientConfiguration {
 	public void setProxyConfig(ProxyConfig proxyConfig) {
 		this.proxyConfig = proxyConfig;
 	}
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return "RestClientConfiguration [uri=" + uri + ", verbose=" + verbose + ", proxyConfig=" + proxyConfig + "]";
+	}
 
+	
 	// missing: how to describe client authorization: cookie or token (fixed) or by auth/renew.
+	
 	
 }

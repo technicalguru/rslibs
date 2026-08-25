@@ -25,6 +25,6 @@ public class UserClient extends RestClient {
 	
 	public User create(User user) {
 		Entity<User> entity = Entity.entity(user, MediaType.APPLICATION_JSON);
-		return getTarget().request().post(entity).as(new TypeReference<ReqResResponse<User>>() {}).getData();
+		return getTarget().request().post(entity).as(User.class);
 	}
 }

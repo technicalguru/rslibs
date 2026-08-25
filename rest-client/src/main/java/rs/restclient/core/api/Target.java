@@ -4,7 +4,12 @@
 package rs.restclient.core.api;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.apache.commons.collections4.list.UnmodifiableList;
+
+import rs.restclient.core.api.request.RequestBuilder;
 import rs.restclient.core.util.UriBuilder;
 
 /**
@@ -14,11 +19,13 @@ public class Target {
 
 	private RestClientConfiguration  configuration;
 	private TargetImplementation     implementation;
+	private List<RequestInterceptor> interceptors;
 	private URI                      uri;
 
-	protected Target(RestClientConfiguration configuration, TargetImplementation implementation, URI uri) {
+	protected Target(RestClientConfiguration configuration, TargetImplementation implementation, List<RequestInterceptor> interceptors, URI uri) {
 		this.configuration  = configuration;
 		this.implementation = implementation;
+		this.interceptors   = new ArrayList<>(interceptors);
 		this.uri            = uri != null ? uri : URI.create(configuration.getUri());
 	}
 	
@@ -30,6 +37,30 @@ public class Target {
 		return configuration;
 	}
 
+	/**
+	 * Returns the implementation.
+	 * @return the implementation
+	 */
+	public TargetImplementation getImplementation() {
+		return implementation;
+	}
+
+	/**
+	 * Returns the list of interceptors.
+	 * @return the interceptors
+	 */
+	public List<RequestInterceptor> getInterceptors() {
+		return UnmodifiableList.unmodifiableList(interceptors);
+	}
+
+	/**
+	 * Register the interceptor for execution in this target.
+	 * @param interceptor interceptor
+	 */
+	public void register(RequestInterceptor interceptor) {
+		this.interceptors.add(interceptor);
+	}
+	
 	/**
 	 * Returns the uri.
 	 * @return the uri
@@ -51,7 +82,7 @@ public class Target {
 		} else {
 			uriBuilder = UriBuilder.from(uri);
 		}
-		return new Target(configuration, implementation, uriBuilder.appendSegments(path).build());
+		return new Target(configuration, implementation, interceptors, uriBuilder.appendSegments(path).build());
 	}
 	
 	/**
@@ -59,7 +90,7 @@ public class Target {
 	 * @return the request builder
 	 */
 	public RequestBuilder request() {
-		return implementation.requestBuilder(this);
+		return new RequestBuilder(this);
 	}
 	
 	/**
@@ -70,6 +101,17 @@ public class Target {
 		return new Builder();
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return "Target [configuration=" + configuration + ", implementation=" + implementation + ", interceptors="
+				+ interceptors + ", uri=" + uri + "]";
+	}
+
+
 	/**
 	 * The builder class for target.
 	 */
@@ -77,8 +119,11 @@ public class Target {
 
 		private TargetImplementation     implementation;
 		private RestClientConfiguration  configuration;
+		private List<RequestInterceptor> interceptors;
 		private URI                      baseUri;
+		
 		protected Builder() {
+			this.interceptors = new ArrayList<>();
 		}
 		
 		public Builder with(TargetImplementation implementation) {
@@ -88,6 +133,16 @@ public class Target {
 		
 		public Builder with(RestClientConfiguration configuration) {
 			this.configuration = configuration;
+			return this;
+		}
+		
+		/**
+		 * Register the interceptor for execution.
+		 * @param interceptor interceptor
+		 * @return this builder for chaining
+		 */
+		public Builder register(RequestInterceptor interceptor) {
+			this.interceptors.add(interceptor);
 			return this;
 		}
 		
@@ -108,7 +163,7 @@ public class Target {
 		public Target build() {
 			if (configuration  == null) throw new RestClientException("configuration must not be null");
 			if (implementation == null) throw new RestClientException("implementation must not be null");
-			return new Target(configuration, implementation, baseUri);
+			return new Target(configuration, implementation, interceptors, baseUri);
 		}
 	}
 

@@ -58,39 +58,18 @@ public abstract class RestResponse {
 	protected abstract Optional<String> retrieveBody();
 	
 	public <T> T as(Class<T> responseType) {
+		System.out.println(getBody());
 		return getJson().fromJson(getBody(), responseType);
 	}
 	public <T> T as(JavaType responseType) {
+		System.out.println(getBody());
 		return getJson().fromJson(getBody(), responseType);
 	}
 	public <T> T as(TypeReference<T> responseType) {
+		System.out.println(getBody());
 		return getJson().fromJson(getBody(), responseType);
 	}
 
-//    public <T> T convertBody(RestResponse response, Class<T> responseType) {
-//		try (InputStream body = response.getBody()) {
-//			return getJson().fromJson(body, responseType);
-//		} catch (IOException e) {
-//			throw new HttpConnectionException("Cannot read response body", e);
-//		}
-//	}
-//
-//    public <T> T convertBody(RestResponse response, JavaType responseType) {
-//		try (InputStream body = response.getBody()) {
-//			return getJson().fromJson(body, responseType);
-//		} catch (IOException e) {
-//			throw new HttpConnectionException("Cannot read response body", e);
-//		}
-//	}
-//
-//    public <T> T convertBody(ClientHttpResponse response, TypeReference<T> responseType) {
-//		try (InputStream body = response.getBody()) {
-//			return getJson().fromJson(body, responseType);
-//		} catch (IOException e) {
-//			throw new HttpConnectionException("Cannot read response body", e);
-//		}
-//	}
-//
 	/**
 	 * Returns teh Json object for mapping ease of use.
 	 * @return the Json object
@@ -122,6 +101,14 @@ public abstract class RestResponse {
 	 */
 	public Target getTarget() {
 		return target;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return "RestResponse [target=" + target + ", body=" + body + "]";
 	}
 
 	
