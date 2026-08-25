@@ -19,16 +19,16 @@ public class EndofChainRequestExecution implements RestRequestExecution {
 	}
 	
 	@Override
-	public RestResponse execute(RestRequest request, byte[] body) throws IOException {
+	public RestResponse execute(RestRequest request) throws IOException {
 		//RestRequest delegate = this.requestFactory.createRequest(request.getURI(), request.getMethod());
 		
 		//request.getHeaders().forEach((key, value) -> delegate.getHeaders().addAll(key, value));
 		//request.getAttributes().forEach((key, value) -> delegate.getAttributes().put(key, value));
 		
-		return executeWithRequestAndBody(request, body);
+		return executeWithRequestAndBody(request);
 	}
 
-	final RestResponse executeWithRequestAndBody(RestRequest request, byte[] body) throws IOException {
+	final RestResponse executeWithRequestAndBody(RestRequest request) throws IOException {
 
 //		if (bufferedOutput.length > 0) {
 //			long contentLength = request.getHeaders().getContentLength();

@@ -152,7 +152,7 @@ public class RequestBuilder  {
 		// Process all interceptors...
 		RestRequestExecution execution = createExecution();
 		try {
-			return execution.execute(request, null);
+			return execution.execute(request);
 		} catch (Throwable t) {
 			throw new RestClientException("Cannot execute request", t);
 		}

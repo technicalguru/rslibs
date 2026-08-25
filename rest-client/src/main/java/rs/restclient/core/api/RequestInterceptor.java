@@ -25,7 +25,7 @@ public interface RequestInterceptor {
 	 * @return the response
 	 * @throws IOException when an error occurs
 	 */
-	RestResponse intercept(RestRequest request, byte[] body, RestRequestExecution execution) throws IOException;
+	RestResponse intercept(RestRequest request, RestRequestExecution execution) throws IOException;
 	
 	/**
 	 * Return a new interceptor that invokes {@code this} interceptor first, and
@@ -36,10 +36,10 @@ public interface RequestInterceptor {
 	 */
 	default RequestInterceptor andThen(RequestInterceptor interceptor) {
 		Assert.notNull(interceptor, "RequestInterceptor must not be null");
-		return (request, body, execution) -> {
+		return (request, execution) -> {
 			RestRequestExecution nextExecution =
-					(nextRequest, nextBody) -> interceptor.intercept(nextRequest, nextBody, execution);
-			return intercept(request, body, nextExecution);
+					(nextRequest) -> interceptor.intercept(nextRequest, execution);
+			return intercept(request, nextExecution);
 		};
 	}
 
@@ -52,7 +52,7 @@ public interface RequestInterceptor {
 	 */
 	default RestRequestExecution apply(RestRequestExecution execution) {
 		Assert.notNull(execution, "RestRequestExecution must not be null");
-		return (request, body) -> intercept(request, body, execution);
+		return (request) -> intercept(request, execution);
 	}
 
 }

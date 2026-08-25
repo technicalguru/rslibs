@@ -58,15 +58,14 @@ public abstract class RestResponse {
 	protected abstract Optional<String> retrieveBody();
 	
 	public <T> T as(Class<T> responseType) {
-		System.out.println(getBody());
 		return getJson().fromJson(getBody(), responseType);
 	}
+	
 	public <T> T as(JavaType responseType) {
-		System.out.println(getBody());
 		return getJson().fromJson(getBody(), responseType);
 	}
+	
 	public <T> T as(TypeReference<T> responseType) {
-		System.out.println(getBody());
 		return getJson().fromJson(getBody(), responseType);
 	}
 

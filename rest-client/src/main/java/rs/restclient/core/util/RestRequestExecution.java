@@ -13,5 +13,5 @@ import rs.restclient.core.api.response.RestResponse;
 @FunctionalInterface
 public interface RestRequestExecution {
 
-	RestResponse execute(RestRequest request, byte[] body) throws IOException;
+	RestResponse execute(RestRequest request) throws IOException;
 }

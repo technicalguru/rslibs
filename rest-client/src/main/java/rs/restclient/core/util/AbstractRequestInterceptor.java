@@ -16,10 +16,10 @@ public class AbstractRequestInterceptor implements RequestInterceptor {
 	 * The main implementation that directs to the intercept methods.
 	 */
 	@Override
-	public final RestResponse intercept(RestRequest request, byte[] body, RestRequestExecution execution) throws IOException {
-		intercept(request, body);
-		RestResponse rc = execution.execute(request, body);
-		intercept(rc);
+	public final RestResponse intercept(RestRequest request, RestRequestExecution execution) throws IOException {
+		intercept(request);
+		RestResponse rc = execution.execute(request);
+		intercept(request, rc);
 		return rc;
 	}
 
@@ -29,15 +29,16 @@ public class AbstractRequestInterceptor implements RequestInterceptor {
 	 * @param body body that shall be sent
 	 * @throws IOException when failures occur
 	 */
-	protected void intercept(RestRequest request, byte[] body) throws IOException {
+	protected void intercept(RestRequest request) throws IOException {
 	}
 	
 	/**
 	 * The default implementation does nothing
+	 * @param request request as it was sent
 	 * @param response the response recieved
 	 * @throws IOException when failures occur
 	 */
-	protected void intercept(RestResponse response) throws IOException {
+	protected void intercept(RestRequest request, RestResponse response) throws IOException {
 	}
 	
 

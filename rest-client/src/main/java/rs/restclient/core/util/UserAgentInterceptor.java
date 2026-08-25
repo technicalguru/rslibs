@@ -39,18 +39,16 @@ public class UserAgentInterceptor extends AbstractRequestInterceptor {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected void intercept(RestRequest request, byte[] body) throws IOException {
+	protected void intercept(RestRequest request) throws IOException {
 		request.addHeader(HttpHeaders.USER_AGENT, userAgent);
-
 		System.out.println("Request: "+request);
-		System.out.println("Body:    "+body);	
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected void intercept(RestResponse response) throws IOException {
+	protected void intercept(RestRequest request, RestResponse response) throws IOException {
 		System.out.println("Response: "+response);
 	}
 

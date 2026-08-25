@@ -54,7 +54,7 @@ public class CookieInterceptor extends AbstractRequestInterceptor {
 	 * Filters the reponse and evaluate the cookies to be set.
 	 */
 	@Override
-	public void intercept(RestResponse response) throws IOException {
+	public void intercept(RestRequest request, RestResponse response) throws IOException {
 //		for (String value : response.getHeaders().get(HttpHeaders.SET_COOKIE)) {
 //			for (HttpCookie cookie : HttpCookie.parse(value)) {
 //				String n = cookie.getName();
@@ -67,7 +67,7 @@ public class CookieInterceptor extends AbstractRequestInterceptor {
 	 * Sets cookies if required in the request.
 	 */
 	@Override
-	public void intercept(RestRequest request, byte[] body) throws IOException {
+	public void intercept(RestRequest request) throws IOException {
 		for (Map.Entry<String, HttpCookie> entry : cookies.entrySet()) {
 			String name = entry.getKey();
 			HttpCookie cookie = entry.getValue();
