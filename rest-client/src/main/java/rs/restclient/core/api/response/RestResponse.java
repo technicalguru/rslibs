@@ -3,8 +3,10 @@
  */
 package rs.restclient.core.api.response;
 
+import java.util.Optional;
+
 import rs.jackson.Json;
-import rs.restclient.core.api.RestClientConfiguration;
+import rs.restclient.core.api.Target;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.JavaType;
 import tools.jackson.databind.json.JsonMapper;
@@ -12,30 +14,48 @@ import tools.jackson.databind.json.JsonMapper;
 /**
  * A wrapper for the response.
  */
-public class RestResponse {
+public abstract class RestResponse {
 
-	protected RestClientConfiguration configuration;
-	private   JsonMapper              jsonMapper;
-	private   Json                    json;
+	private Target           target;
+	private JsonMapper       jsonMapper;
+	private Json             json;
+	private Optional<String> body;
 	
-	protected RestResponse(RestClientConfiguration configuration) {
-		this(configuration, null);
+	/**
+	 * Constructs response using the target and its configuration.
+	 * @param configuration configuration
+	 */
+	protected RestResponse(Target target) {
+		this(target, null);
 	}
 		
 	/**
-	 * Constructs response using the configuration and optional jsonMapper.
+	 * Constructs response using the target and an optional jsonMapper.
 	 * @param configuration configuration
-	 * @param jsonMapper json mapper object (can be null)
+	 * @param jsonMapper json mapper object (can be null for configured mapper)
 	 */
-	protected RestResponse(RestClientConfiguration configuration, JsonMapper jsonMapper) {
-		this.configuration = configuration;
-		this.jsonMapper    = jsonMapper;
-		this.json          = null;
+	protected RestResponse(Target target, JsonMapper jsonMapper) {
+		this.target      = target;
+		this.jsonMapper  = jsonMapper;
+		this.json        = null;
 	}
 
+	/**
+	 * Returns the body.
+	 * @return the body or null if no body is available.
+	 */
 	public String getBody() {
-		return null;
+		if (body == null) {
+			body = retrieveBody();
+		};
+		return body.orElse(null);
 	}
+	
+	/**
+	 * Retrieves the body.
+	 * @return returns an empty {@link Optional} when no body is available.
+	 */
+	protected abstract Optional<String> retrieveBody();
 	
 	public <T> T as(Class<T> responseType) {
 		return getJson().fromJson(getBody(), responseType);
@@ -91,9 +111,17 @@ public class RestResponse {
 	 */
 	public JsonMapper getJsonMapper() {
 		if (jsonMapper == null) {
-			jsonMapper = configuration.getMapper();
+			jsonMapper = getTarget().getConfiguration().getMapper();
 		}
 		return jsonMapper;
+	}
+
+	/**
+	 * Returns the target.
+	 * @return the target
+	 */
+	public Target getTarget() {
+		return target;
 	}
 
 	

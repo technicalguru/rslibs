@@ -11,8 +11,9 @@ package rs.restclient.core.api;
 public interface TargetImplementation {
 
 	/**
-	 * Returns the request builder
+	 * Returns the request builder.
+	 * @param target the target for the request.
 	 * @return the request builder
 	 */
-	public RequestBuilder requestBuilder();
+	public RequestBuilder requestBuilder(Target target);
 }

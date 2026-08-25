@@ -5,7 +5,6 @@ package rs.restclient.core.api;
 
 import java.net.URI;
 
-import rs.restclient.core.api.request.AbstractRequestBuilder;
 import rs.restclient.core.util.UriBuilder;
 
 /**
@@ -23,6 +22,22 @@ public class Target {
 		this.uri            = uri != null ? uri : URI.create(configuration.getUri());
 	}
 	
+	/**
+	 * Returns the configuration.
+	 * @return the configuration
+	 */
+	public RestClientConfiguration getConfiguration() {
+		return configuration;
+	}
+
+	/**
+	 * Returns the uri.
+	 * @return the uri
+	 */
+	public URI getUri() {
+		return uri;
+	}
+
 	/**
 	 * Creates a new target at given path.
 	 * <p>If path is absolute then it will be built again from configuration uri appended by the path).
@@ -44,7 +59,7 @@ public class Target {
 	 * @return the request builder
 	 */
 	public RequestBuilder request() {
-		return implementation.requestBuilder();
+		return implementation.requestBuilder(this);
 	}
 	
 	/**

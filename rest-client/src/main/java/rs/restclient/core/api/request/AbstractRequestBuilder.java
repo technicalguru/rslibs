@@ -12,7 +12,7 @@ import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 
 import rs.restclient.core.api.RequestBuilder;
-import rs.restclient.core.api.RestClientConfiguration;
+import rs.restclient.core.api.Target;
 import rs.restclient.core.api.response.RestResponse;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.JavaType;
@@ -23,16 +23,24 @@ import tools.jackson.databind.JavaType;
  */
 public abstract class AbstractRequestBuilder implements RequestBuilder {
 
-	protected RestClientConfiguration        configuration;
+	protected Target                         target;
     protected MultiValuedMap<String, Object> headers;
 	protected Set<HttpCookie>                cookies;
 	
-	protected AbstractRequestBuilder(RestClientConfiguration configuration) {
-		this.configuration = configuration;
-		this.headers       = new ArrayListValuedHashMap<>();
-		this.cookies       = new HashSet<>();
+	protected AbstractRequestBuilder(Target target) {
+		this.target   = target;
+		this.headers  = new ArrayListValuedHashMap<>();
+		this.cookies  = new HashSet<>();
 	}
 	
+	/**
+	 * Returns the target.
+	 * @return the target
+	 */
+	public Target getTarget() {
+		return target;
+	}
+
 	public RestResponse get() {
 		return method(GET);
 	}
