@@ -1,4 +1,4 @@
-package rs.restclient.util;
+package rs.restclient.core.util;
 
 import java.util.ArrayList;
 import java.util.Collections;

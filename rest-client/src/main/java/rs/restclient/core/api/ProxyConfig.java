@@ -1,4 +1,4 @@
-package rs.restclient.util;
+package rs.restclient.core.api;
 
 /**
  * Proxy configuration

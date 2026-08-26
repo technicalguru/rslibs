@@ -11,7 +11,6 @@ import org.apache.commons.collections4.list.UnmodifiableList;
 
 import rs.restclient.core.api.request.RequestBuilder;
 import rs.restclient.core.util.UriBuilder;
-import rs.restclient.core.util.VerboseInterceptor;
 
 /**
  * Describes a target and creates your specific API requests.
@@ -164,7 +163,8 @@ public class Target {
 		public Target build() {
 			if (configuration  == null) throw new RestClientException("configuration must not be null");
 			if (implementation == null) throw new RestClientException("implementation must not be null");
-			if (configuration.isVerbose()) register(new VerboseInterceptor());
+			// Usually done by the implementation
+			//if (configuration.isVerbose()) register(new LoggingInterceptor());
 			return new Target(configuration, implementation, interceptors, baseUri);
 		}
 	}

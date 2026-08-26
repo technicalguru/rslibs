@@ -14,8 +14,6 @@ import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 import org.apache.commons.collections4.multimap.UnmodifiableMultiValuedMap;
 
-import rs.restclient.util.RestClientUtils;
-
 /**
  * Helps to construct new URIs.
  */

@@ -3,7 +3,6 @@
  */
 package rs.restclient.core.api;
 
-import rs.restclient.util.ProxyConfig;
 import tools.jackson.databind.json.JsonMapper;
 
 /**

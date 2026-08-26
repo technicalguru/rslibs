@@ -38,9 +38,8 @@ public class SpringBootImpl implements TargetImplementation {
 						}
 					}
 				});
-		if (request.getTarget().getConfiguration().isVerbose()) {
-			builder = builder.requestInterceptor(new VerboseRequestInterceptor());
-		}
+		SpringBootRequestInterceptor interceptor = new SpringBootRequestInterceptor(request.getTarget().getConfiguration().isVerbose());
+		builder = builder.requestInterceptor(interceptor);
 		RestClient client = builder.build();
 		RequestBodyUriSpec uriSpec = client.method(HttpMethod.valueOf(request.getMethod()));
 		Entity<?> entity = request.getEntity();
@@ -53,7 +52,7 @@ public class SpringBootImpl implements TargetImplementation {
 		} else {
 			responseSpec = uriSpec.retrieve();
 		}
-		return new SpringBootResponse(request.getTarget(), responseSpec);
+		return new SpringBootResponse(request.getTarget(), responseSpec, interceptor);
 	}
 
 	
