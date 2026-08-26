@@ -8,7 +8,6 @@ import java.io.IOException;
 import org.springframework.http.HttpHeaders;
 
 import rs.restclient.core.api.request.RestRequest;
-import rs.restclient.core.api.response.RestResponse;
 
 /**
  * Handles cookies in requests and responses.
@@ -41,15 +40,14 @@ public class UserAgentInterceptor extends AbstractRequestInterceptor {
 	@Override
 	protected void intercept(RestRequest request) throws IOException {
 		request.addHeader(HttpHeaders.USER_AGENT, userAgent);
-		System.out.println("Request: "+request);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected void intercept(RestRequest request, RestResponse response) throws IOException {
-		System.out.println("Response: "+response);
+	public String toString() {
+		return "UserAgentInterceptor [userAgent=" + userAgent + "]";
 	}
 
 	

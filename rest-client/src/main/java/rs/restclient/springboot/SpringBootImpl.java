@@ -56,6 +56,16 @@ public class SpringBootImpl implements TargetImplementation {
 		return new SpringBootResponse(request.getTarget(), responseSpec);
 	}
 
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return "SpringBootImpl []";
+	}
+
+
 	/**
 	 * The SpringBoot request builder.
 	 * @return the builder

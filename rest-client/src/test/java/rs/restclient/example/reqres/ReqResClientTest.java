@@ -22,7 +22,7 @@ public class ReqResClientTest {
 	public static void beforeAll() {
 		RestClientConfiguration configuration = new RestClientConfiguration();
 		configuration.setUri("https://reqres.in/api");
-		configuration.setVerbose(false);
+		configuration.setVerbose(true);
 		Target.Builder targetBuilder = Target.builder()
 				.with(SpringBootImpl.BUILDER)
 				.with(configuration)
