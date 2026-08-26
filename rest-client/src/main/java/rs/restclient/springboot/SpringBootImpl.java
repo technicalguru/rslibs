@@ -38,6 +38,9 @@ public class SpringBootImpl implements TargetImplementation {
 						}
 					}
 				});
+		if (request.getTarget().getConfiguration().isVerbose()) {
+			builder = builder.requestInterceptor(new VerboseRequestInterceptor());
+		}
 		RestClient client = builder.build();
 		RequestBodyUriSpec uriSpec = client.method(HttpMethod.valueOf(request.getMethod()));
 		Entity<?> entity = request.getEntity();

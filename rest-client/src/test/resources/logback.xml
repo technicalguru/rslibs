@@ -7,9 +7,9 @@
 		</encoder>
 	</appender>
 
-	<logger name="rs.spring" level="INFO" />
-	<logger name="org.apache.http" level="ERROR" />
 	<root level="error">
 		<appender-ref ref="STDOUT" />
 	</root>
+	<logger name="rs.restclient" level="INFO" />
+	<logger name="org.apache.http" level="ERROR" />
 </configuration>

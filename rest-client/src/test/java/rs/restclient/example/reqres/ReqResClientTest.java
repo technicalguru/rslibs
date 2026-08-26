@@ -18,7 +18,7 @@ public class ReqResClientTest {
 
 	private static ReqResClient client;
 	
-	//@BeforeAll
+	@BeforeAll
 	public static void beforeAll() {
 		RestClientConfiguration configuration = new RestClientConfiguration();
 		configuration.setUri("https://reqres.in/api");
@@ -30,13 +30,13 @@ public class ReqResClientTest {
 		client = new ReqResClient(targetBuilder);
 	}
 	
-	//@Test
+	@Test
 	public void testGet() {
 		System.out.println(client.users().get(2));
 	}
 	
 	
-	//@Test
+	@Test
 	public void testCreate() {
 		System.out.println(client.users().create(new User(0, "someone.else@reqres.in", "Jane", "Doe", null)));
 	}
