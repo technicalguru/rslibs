@@ -70,6 +70,30 @@ public class JacksonUtils {
 	}
 
 	/**
+	 * Traverse to the node given in path.
+	 * @param node the node to traverse from
+	 * @param path the path (simple dot notation, nothing else!!!)
+	 * @return the node found
+	 * @deprecated This is a Jackson2 method. Do use only when you have not alternate way of using Jackson 3.
+	 */
+	@Deprecated
+	public static Optional<com.fasterxml.jackson.databind.JsonNode> traverse(com.fasterxml.jackson.databind.JsonNode node, String path) {
+		if (!isEmpty(path)) {
+			String paths[] = path.split("\\.");
+			if (paths.length > 0) {
+				for (String p : paths) {
+					if (!isEmpty(p)) {
+						node = node.findPath(p.trim());
+						if (node.isMissingNode()) return Optional.empty();
+					}
+				}
+			}
+		}
+		
+		return Optional.of(node);
+	}
+
+	/**
 	 * Returns true when the given string is null empty. 
 	 * @param s the string to be checked
 	 * @return true when string must be regarded as empty
