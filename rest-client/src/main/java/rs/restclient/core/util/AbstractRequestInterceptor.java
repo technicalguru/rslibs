@@ -7,10 +7,12 @@ import rs.restclient.core.api.request.RestRequest;
 import rs.restclient.core.api.response.RestResponse;
 
 /**
+ * Abstract implementation of a {@link RequestInterceptor}.
+ * 
  * @author ralph
  *
  */
-public class AbstractRequestInterceptor implements RequestInterceptor {
+public abstract class AbstractRequestInterceptor implements RequestInterceptor {
 
 	/**
 	 * The main implementation that directs to the intercept methods.

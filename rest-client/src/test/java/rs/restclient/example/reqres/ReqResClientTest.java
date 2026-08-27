@@ -1,7 +1,18 @@
 package rs.restclient.example.reqres;
 
+import java.net.URL;
+import java.nio.charset.Charset;
+
+import org.apache.commons.io.IOUtils;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import rs.restclient.core.api.RestClientConfiguration;
 import rs.restclient.core.api.Target;
+import rs.restclient.core.util.AuthorizationInterceptor;
+import rs.restclient.core.util.AuthorizationInterceptor.AuthorizationType;
 import rs.restclient.core.util.UserAgentInterceptor;
 import rs.restclient.springboot.SpringBootImpl;
 
@@ -13,29 +24,50 @@ import rs.restclient.springboot.SpringBootImpl;
  */
 public class ReqResClientTest {
 
+	private static Logger log = LoggerFactory.getLogger(ReqResClientTest.class);
+	
 	private static ReqResClient client;
+	private static String       apiKey;
 	
-	//@BeforeAll
+	@BeforeAll
 	public static void beforeAll() {
-		RestClientConfiguration configuration = new RestClientConfiguration();
-		configuration.setUri("https://reqres.in/api");
-		configuration.setVerbose(true);
-		Target.Builder targetBuilder = Target.builder()
-				.with(SpringBootImpl.BUILDER)
-				.with(configuration)
-				.register(new UserAgentInterceptor("ReqResClient/0.1beta"));
-		client = new ReqResClient(targetBuilder);
+		ClassLoader classLoader = ReqResClientTest.class.getClassLoader();
+		if (classLoader != null) try {
+			URL url = classLoader.getResource("reqres-key.txt");
+			apiKey = IOUtils.toString(url, Charset.defaultCharset()).trim();
+			log.info("API key available.");
+		} catch (Exception e) {
+			log.info("API key not available. No tests will be executed.");
+		} else {
+			log.info("ClassLoader not found. No tests will be executed.");
+		}
+		
+		if (apiKey != null) {
+			RestClientConfiguration configuration = new RestClientConfiguration();
+			configuration.setUri("https://reqres.in/api");
+			configuration.setVerbose(true);
+			Target.Builder targetBuilder = Target.builder()
+					.with(SpringBootImpl.BUILDER)
+					.with(configuration)
+					.register(new UserAgentInterceptor("ReqResClient/0.1beta"))
+					.register(new AuthorizationInterceptor(AuthorizationType.X_API_KEY, apiKey));
+			client = new ReqResClient(targetBuilder);
+		}
 	}
 	
-	//@Test
+	@Test
 	public void testGet() {
-		System.out.println(client.users().get(2));
+		if (client != null) {
+			log.info(client.users().get(2).toString());
+		}
 	}
 	
 	
-	//@Test
+	@Test
 	public void testCreate() {
-		System.out.println(client.users().create(new User(0, "someone.else@reqres.in", "Jane", "Doe", null)));
+		if (client != null) {
+			log.info(client.users().create(new User(0, "someone.else@reqres.in", "Jane", "Doe", null)).toString());
+		}
 	}
 	
 	
