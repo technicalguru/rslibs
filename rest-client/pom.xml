@@ -8,6 +8,8 @@
   	
 	<properties>
 		<project.home>https://github.com/technicalguru/rslibs</project.home>
+		<jersey.version>3.1.12</jersey.version>
+		<springboot.version>7.0.9</springboot.version>
 	</properties>
 
 	<artifactId>rest-client</artifactId>
@@ -22,12 +24,41 @@
 			<artifactId>jackson</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-	    <!-- RestClient -->
+	    <!-- Spring Boot -->
 	    <dependency>
 	        <groupId>org.springframework</groupId>
 	        <artifactId>spring-web</artifactId>
-	        <version>7.0.9</version> <!-- Oder höher passend zu Java 17/21+ -->
+	        <version>${springboot.version}</version>
 	    </dependency>
+
+		<!-- Jersey -->
+		<dependency>
+		    <groupId>org.glassfish.jersey.core</groupId>
+		    <artifactId>jersey-client</artifactId>
+		    <version>${jersey.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.glassfish.jersey.inject</groupId>
+		    <artifactId>jersey-hk2</artifactId>
+		    <version>${jersey.version}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.glassfish.jersey.connectors/jersey-apache-connector -->
+		<dependency>
+		    <groupId>org.glassfish.jersey.connectors</groupId>
+		    <artifactId>jersey-apache-connector</artifactId>
+		    <version>${jersey.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.glassfish.jersey.media</groupId>
+		    <artifactId>jersey-media-json-jackson</artifactId>
+		    <version>${jersey.version}</version>
+		    <exclusions>
+		    	<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+		    		<artifactId>jackson-annotations</artifactId>
+		    	</exclusion>
+		    </exclusions>
+		</dependency>
 
 		<dependency>
 			<groupId>org.apache.commons</groupId>

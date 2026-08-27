@@ -17,6 +17,7 @@ public class RestRequest {
 
 	private Target      target;
 	private String      method;
+	private String      responseMediaType;
     private HeadersSpec headers;
 	private Entity<?>   entity;
 	
@@ -24,11 +25,12 @@ public class RestRequest {
 	 * Constructor.
 	 * @param target target of the request
 	 */
-	protected RestRequest(Target target, String method, HeadersSpec headers, Entity<?> entity) {
-		this.target  = target;
-		this.method  = method;
-		this.headers = new HeadersSpec(headers);
-		this.entity  = entity;
+	protected RestRequest(Target target, String method, String responseMediaType, HeadersSpec headers, Entity<?> entity) {
+		this.target            = target;
+		this.method            = method;
+		this.responseMediaType = responseMediaType;
+		this.headers           = new HeadersSpec(headers);
+		this.entity            = entity;
 	}
 	
 	/**
@@ -45,6 +47,14 @@ public class RestRequest {
 	 */
 	public String getMethod() {
 		return method;
+	}
+
+	/**
+	 * Returns the responseMediaType.
+	 * @return the responseMediaType
+	 */
+	public String getResponseMediaType() {
+		return responseMediaType;
 	}
 
 	/**
@@ -118,7 +128,7 @@ public class RestRequest {
 	 * @return the copy
 	 */
 	public static RestRequest from(RestRequest request) {
-		return new RestRequest(request.getTarget(), request.getMethod(), request.getHeaders(), request.getEntity());
+		return new RestRequest(request.getTarget(), request.getMethod(), request.getResponseMediaType(), request.getHeaders(), request.getEntity());
 	}
 
 	/**

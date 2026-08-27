@@ -7,31 +7,31 @@ import java.io.Reader;
 import java.util.List;
 import java.util.Optional;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
-import tools.jackson.core.type.TypeReference;
-import tools.jackson.databind.DeserializationFeature;
-import tools.jackson.databind.JavaType;
-import tools.jackson.databind.JsonNode;
-import tools.jackson.dataformat.yaml.YAMLFactory;
-import tools.jackson.dataformat.yaml.YAMLFactoryBuilder;
-import tools.jackson.dataformat.yaml.YAMLMapper;
-import tools.jackson.dataformat.yaml.YAMLParser;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonInclude.Value;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactoryBuilder;
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLParser;
 
 /**
- * New YAML utils for mapping back and forth using Jackson v3.
+ * New YAML utils for mapping back and forth using Jackson v2.
  * <p>Create with:
  * <pre>
- *   Yaml.builder()
+ *   Yaml2.builder()
  *      .with(myYamlMapper)
  *      .build();
  * </pre>
  * You can also pass {@link YAMLFactory}, {@link YAMLFactoryBuilder} and {@link YAMLMapper.Builder}
- * to configure the {@link Yaml} class more fine-granularily.
+ * to configure the {@link Yaml2} class more fine-granularily.
  * 
  * <p>Please notice that the builder classes will not be used when an object was already configured.
  * <pre>
- *   Yaml.builder()
+ *   Yaml2.builder()
  *      .with(myYamlFactory)
  *      .with(myYamlFactoryBuilder) // Ignored!
  *      .build();
@@ -42,10 +42,10 @@ import tools.jackson.dataformat.yaml.YAMLParser;
  * @author ralph
  *
  */
-public class Yaml {
+public class Yaml2 {
 	
-	/** The default {@link Yaml} instance */
-	public static Yaml YAML = builder().build();
+	/** The default {@link Yaml2} instance */
+	public static Yaml2 YAML = builder().build();
 		
 	private YAMLFactory yamlFactory;
 	private YAMLMapper  yamlMapper;
@@ -54,9 +54,9 @@ public class Yaml {
 	 * Constructor with given YAMLMapper.
 	 * @param yamlMapper YAMLMapper to be used
 	 */
-	private Yaml(YAMLMapper yamlMapper) {
+	private Yaml2(YAMLMapper yamlMapper) {
 		this.yamlMapper  = yamlMapper;
-		this.yamlFactory = yamlMapper.tokenStreamFactory();
+		this.yamlFactory = yamlMapper.getFactory();
 	}
 	
 	/**
@@ -590,7 +590,7 @@ public class Yaml {
 	}
 	
 	/**
-	 * Builder class for {@link Yaml} objects.
+	 * Builder class for {@link Yaml2} objects.
 	 * @author ralph
 	 *
 	 */
@@ -602,7 +602,7 @@ public class Yaml {
 		private YAMLMapper.Builder yamlMapperBuilder;
 		
 		/**
-		 * Private constructor. Use {@link Yaml#builder()}
+		 * Private constructor. Use {@link Yaml2#builder()}
 		 */
 		private Builder() {
 			this.yamlFactory = null;
@@ -695,7 +695,7 @@ public class Yaml {
 		}
 
 		/**
-		 * Returns the configured {@link YAMLMapper.Builder} (or creates it using the {@link Yaml#defaultYAMLMapperBuilder(YAMLFactory)} method).
+		 * Returns the configured {@link YAMLMapper.Builder} (or creates it using the {@link Yaml2#defaultYAMLMapperBuilder(YAMLFactory)} method).
 		 * @return the YAMLMapper.Builder to be used
 		 */
 		private YAMLMapper.Builder getYAMLMapperBuilder() {
@@ -713,7 +713,7 @@ public class Yaml {
 		}
 		
 		/**
-		 * Returns the configured {@link YAMLFactoryBuilder} (or creates it using the {@link Yaml#defaultYAMLFactoryBuilder()} method).
+		 * Returns the configured {@link YAMLFactoryBuilder} (or creates it using the {@link Yaml2#defaultYAMLFactoryBuilder()} method).
 		 * @return the YAMLFactory to be used
 		 */
 		private YAMLFactoryBuilder getYAMLFactoryBuilder() {
@@ -726,8 +726,8 @@ public class Yaml {
 		 * <p>Re-entrant, will always create a new one based on configuration.
 		 * @return the Yaml utility object
 		 */
-		public Yaml build() {
-			return new Yaml(getYAMLMapper());
+		public Yaml2 build() {
+			return new Yaml2(getYAMLMapper());
 		}
 	}
 
@@ -750,7 +750,7 @@ public class Yaml {
 	public static YAMLMapper.Builder defaultYAMLMapperBuilder(YAMLFactory yamlFactory) {
 		return YAMLMapper.builder(yamlFactory)
 			.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-			.changeDefaultPropertyInclusion(v -> v.withValueInclusion(JsonInclude.Include.NON_NULL));
+			.defaultPropertyInclusion(Value.construct(Include.NON_NULL, Include.NON_NULL));
 	}
 	
 	/**

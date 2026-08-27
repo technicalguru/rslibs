@@ -8,8 +8,6 @@ import java.net.HttpCookie;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.http.HttpHeaders;
-
 import rs.restclient.core.api.request.RestRequest;
 import rs.restclient.core.api.response.RestResponse;
 
@@ -21,33 +19,13 @@ import rs.restclient.core.api.response.RestResponse;
  */
 public class CookieInterceptor extends AbstractRequestInterceptor {
 
-	/** Default Accept header value */
-	public static final String DEFAULT_ACCEPT_HEADER = "application/json";
-	
 	private Map<String, HttpCookie> cookies;
-	private String                  acceptableMediaTypes = DEFAULT_ACCEPT_HEADER;
 	
 	/**
 	 * Default Constructor.
 	 */
 	public CookieInterceptor() {
 		cookies = new HashMap<>();
-	}
-
-	/**
-	 * Returns the acceptable media types to signal to the sever. Default is {@link #DEFAULT_ACCEPT_HEADER}.
-	 * @return the acceptable mediatypes
-	 */
-	public String getAcceptableMediaTypes() {
-		return acceptableMediaTypes;
-	}
-
-	/**
-	 * Sets the acceptable media types to signal to the sever. Default is {@link #DEFAULT_ACCEPT_HEADER}.
-	 * @param acceptableMediaTypes the acceptable media types to set
-	 */
-	public void setAcceptableMediaTypes(String acceptableMediaTypes) {
-		this.acceptableMediaTypes = acceptableMediaTypes;
 	}
 
 	/**
@@ -77,8 +55,6 @@ public class CookieInterceptor extends AbstractRequestInterceptor {
 				request.addCookie(cookie);
 			}
 		}
-		String v = getAcceptableMediaTypes();
-		if (v != null) request.addHeader(HttpHeaders.ACCEPT, v);
 	}
 
 }

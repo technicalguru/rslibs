@@ -9,31 +9,32 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.util.Optional;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
-import tools.jackson.core.JsonParser;
-import tools.jackson.core.json.JsonFactory;
-import tools.jackson.core.json.JsonFactoryBuilder;
-import tools.jackson.core.type.TypeReference;
-import tools.jackson.databind.DeserializationFeature;
-import tools.jackson.databind.JavaType;
-import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonInclude.Value;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonFactoryBuilder;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 /**
- * New JSON utils for mapping back and forth using Jackson 3.
+ * New JSON utils for mapping back and forth using Jackson v2.
  * <p>Create with:
  * <pre>
- *   Json.builder()
+ *   Json2.builder()
  *      .with(myJsonMapper)
  *      .build();
  * </pre>
  * You can also pass {@link JsonFactory}, {@link JsonFactoryBuilder} and {@link JsonMapper.Builder}
- * to configure the {@link Json} class more fine-granularily.
+ * to configure the {@link Json2} class more fine-granularily.
  * 
  * <p>Please notice that the builder classes will not be used when an object was already configured.
  * <pre>
- *   Json.builder()
+ *   Json2.builder()
  *      .with(myJsonFactory)
  *      .with(myJsonFactoryBuilder) // Ignored!
  *      .build();
@@ -44,10 +45,10 @@ import tools.jackson.databind.json.JsonMapper;
  * @author ralph
  *
  */
-public class Json {
+public class Json2 {
 
-	/** The default {@link Json} instance */
-	public static Json JSON = builder().build();
+	/** The default {@link Json2} instance */
+	public static Json2 JSON = builder().build();
 
 	private JsonFactory jsonFactory;
 	private JsonMapper  jsonMapper;
@@ -56,7 +57,7 @@ public class Json {
 	 * Constructor with given JsonMapper.
 	 * @param jsonMapper JsonMapper to be used
 	 */
-	private Json(JsonMapper jsonMapper) {
+	private Json2(JsonMapper jsonMapper) {
 		this.jsonMapper   = jsonMapper;
 		this.jsonFactory  = jsonMapper.tokenStreamFactory();
 	}
@@ -540,7 +541,7 @@ public class Json {
 	}
 
 	/**
-	 * Builder class for {@link Json} objects.
+	 * Builder class for {@link Json2} objects.
 	 * @author ralph
 	 *
 	 */
@@ -552,7 +553,7 @@ public class Json {
 		private JsonMapper.Builder jsonMapperBuilder;
 
 		/**
-		 * Private constructor. Use {@link Json#builder()}
+		 * Private constructor. Use {@link Json2#builder()}
 		 */
 		private Builder() {
 			this.jsonFactory = null;
@@ -645,7 +646,7 @@ public class Json {
 		}
 
 		/**
-		 * Returns the configured {@link JsonMapper.Builder} (or creates it using the {@link Json#defaultJsonMapperBuilder(JsonFactory)} method).
+		 * Returns the configured {@link JsonMapper.Builder} (or creates it using the {@link Json2#defaultJsonMapperBuilder(JsonFactory)} method).
 		 * @return the JsonMapper.Builder to be used
 		 */
 		private JsonMapper.Builder getJsonMapperBuilder() {
@@ -663,7 +664,7 @@ public class Json {
 		}
 		
 		/**
-		 * Returns the configured {@link JsonFactoryBuilder} (or creates it using the {@link Json#defaultJsonFactoryBuilder()} method).
+		 * Returns the configured {@link JsonFactoryBuilder} (or creates it using the {@link Json2#defaultJsonFactoryBuilder()} method).
 		 * @return the JsonFactory to be used
 		 */
 		private JsonFactoryBuilder getJsonFactoryBuilder() {
@@ -676,8 +677,8 @@ public class Json {
 		 * <p>Re-entrant, will always create a new one based on configuration.
 		 * @return the Json utility object
 		 */
-		public Json build() {
-			return new Json(getJsonMapper());
+		public Json2 build() {
+			return new Json2(getJsonMapper());
 		}
 	}
 
@@ -699,8 +700,9 @@ public class Json {
 	 */
 	public static JsonMapper.Builder defaultJsonMapperBuilder(JsonFactory jsonFactory) {
 		return JsonMapper.builder(jsonFactory)
-			.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-			.changeDefaultPropertyInclusion(v -> v.withValueInclusion(JsonInclude.Include.NON_NULL));
+				.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+				.addModule(new JavaTimeModule())
+				.defaultPropertyInclusion(Value.construct(Include.NON_NULL, Include.NON_NULL));
 	}
 	
 	/**

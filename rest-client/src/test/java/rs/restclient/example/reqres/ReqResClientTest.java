@@ -43,11 +43,12 @@ public class ReqResClientTest {
 		}
 		
 		if (apiKey != null) {
-			RestClientConfiguration configuration = new RestClientConfiguration();
-			configuration.setUri("https://reqres.in/api");
-			configuration.setVerbose(true);
+			RestClientConfiguration configuration = RestClientConfiguration.builder()
+				.with("https://reqres.in/api")
+				.verbose(true)
+				.build();
 			Target.Builder targetBuilder = Target.builder()
-					.with(SpringBootImpl.BUILDER)
+					.with(SpringBootImpl.SPRING_BOOT)
 					.with(configuration)
 					.register(new UserAgentInterceptor("ReqResClient/0.1beta"))
 					.register(new AuthorizationInterceptor(AuthorizationType.X_API_KEY, apiKey));

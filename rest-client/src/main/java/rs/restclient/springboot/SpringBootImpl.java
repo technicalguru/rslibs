@@ -1,6 +1,7 @@
 package rs.restclient.springboot;
 
 import org.apache.commons.collections4.MultiValuedMap;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestClient;
@@ -21,7 +22,7 @@ import rs.restclient.core.api.response.RestResponse;
 public class SpringBootImpl implements TargetImplementation {
 
 	/** The instance for usage */
-	public static final SpringBootImpl BUILDER = new SpringBootImpl();
+	public static final SpringBootImpl SPRING_BOOT = new SpringBootImpl();
 
 	/**
 	 * {@inheritDoc}
@@ -32,12 +33,14 @@ public class SpringBootImpl implements TargetImplementation {
 				.baseUrl(request.getTarget().getUri())
 				.defaultHeaders((headers) -> {
 					MultiValuedMap<String, Object> requestHeaders = request.getHeaders().getHeaders();
+					if (request.getResponseMediaType() != null) headers.add(HttpHeaders.ACCEPT, request.getResponseMediaType());
 					for (String name : requestHeaders.keySet()) {
 						for (Object value : requestHeaders.get(name)) {
 							if (value != null) headers.add(name, value.toString());
 						}
 					}
 				});
+		
 		SpringBootRequestInterceptor interceptor = new SpringBootRequestInterceptor(request.getTarget().getConfiguration().isVerbose());
 		builder = builder.requestInterceptor(interceptor);
 		RestClient client = builder.build();

@@ -9,6 +9,7 @@ import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.UnmodifiableMultiValuedMap;
 
 import rs.jackson.Json;
+import rs.jackson.Json2;
 import rs.restclient.core.api.Target;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.JavaType;
@@ -21,7 +22,9 @@ public abstract class RestResponse {
 
 	private Target                         target;
 	private JsonMapper                     jsonMapper;
+	private com.fasterxml.jackson.databind.json.JsonMapper jsonMapper2;
 	private Json                           json;
+	private Json2                          json2;
 	private MultiValuedMap<String, String> headers;
 	private Integer                        statusCode;
 	private String                         statusMessage;
@@ -32,17 +35,43 @@ public abstract class RestResponse {
 	 * @param configuration configuration
 	 */
 	protected RestResponse(Target target) {
-		this(target, null);
+		this(target, null, null);
+	}
+		
+	/**
+	 * Constructs response using the target and its configuration.
+	 * @param jsonMapper json mapper object (can be null for configured mapper)
+	 * @param configuration configuration
+	 * @deprecated This is a Jackson2 method. Do use only when you have not alternate way of using Jackson 3.
+	 */
+	@Deprecated
+	protected RestResponse(Target target, JsonMapper jsonMapper) {
+		this(target, jsonMapper, null);
+	}
+		
+	/**
+	 * Constructs response using the target and its configuration.
+	 * @param jsonMapper json mapper object for Jacksonn 2 (can be null for configured mapper)
+	 * @param configuration configuration
+	 * @deprecated This is a Jackson2 method. Do use only when you have not alternate way of using Jackson 3.
+	 */
+	@Deprecated
+	protected RestResponse(Target target, com.fasterxml.jackson.databind.json.JsonMapper jsonMapper) {
+		this(target, null, jsonMapper);
 	}
 		
 	/**
 	 * Constructs response using the target and an optional jsonMapper.
 	 * @param configuration configuration
 	 * @param jsonMapper json mapper object (can be null for configured mapper)
+	 * @param jsonMapper2 json mapper object for Jackson 2 (can be null for configured mapper)
+	 * @deprecated This is a Jackson2 method. Do use only when you have not alternate way of using Jackson 3.
 	 */
-	protected RestResponse(Target target, JsonMapper jsonMapper) {
+	@Deprecated
+	protected RestResponse(Target target, JsonMapper jsonMapper, com.fasterxml.jackson.databind.json.JsonMapper jsonMapper2) {
 		this.target      = target;
 		this.jsonMapper  = jsonMapper;
+		this.jsonMapper2 = jsonMapper2;
 		this.json        = null;
 	}
 
@@ -114,21 +143,59 @@ public abstract class RestResponse {
 	 */
 	protected abstract String retrieveStatusMessage();
 	
+	/**
+	 * Returns the response as given type.
+	 * @param <T> the type to return
+	 * @param responseType the response type
+	 * @return the response as given type
+	 */
 	public <T> T as(Class<T> responseType) {
 		return getJson().fromJson(getBody(), responseType);
 	}
 	
+	/**
+	 * Returns the response as given type.
+	 * @param <T> the type to return
+	 * @param responseType the response type
+	 * @return the response as given type
+	 */
 	public <T> T as(JavaType responseType) {
 		return getJson().fromJson(getBody(), responseType);
 	}
 	
+	/**
+	 * Returns the response as given type.
+	 * @param <T> the type to return
+	 * @param responseType the response type
+	 * @return the response as given type
+	 */
 	public <T> T as(TypeReference<T> responseType) {
 		return getJson().fromJson(getBody(), responseType);
 	}
 
 	/**
-	 * Returns teh Json object for mapping ease of use.
-	 * @return the Json object
+	 * Returns the response as given type.
+	 * @param <T> the type to return
+	 * @param responseType the response type
+	 * @return the response as given type
+	 */
+	public <T> T as(com.fasterxml.jackson.databind.JavaType responseType) {
+		return getJson2().fromJson(getBody(), responseType);
+	}
+	
+	/**
+	 * Returns the response as given type.
+	 * @param <T> the type to return
+	 * @param responseType the response type
+	 * @return the response as given type
+	 */
+	public <T> T as(com.fasterxml.jackson.core.type.TypeReference<T> responseType) {
+		return getJson2().fromJson(getBody(), responseType);
+	}
+
+	/**
+	 * Returns the Json object (Jackson 3) for mapping ease of use.
+	 * @return the Json object (Jackson 3)
 	 */
 	public Json getJson() {
 		if (json == null) {
@@ -141,6 +208,20 @@ public abstract class RestResponse {
 	}
 
 	/**
+	 * Returns the Json object (Jackson 2) for mapping ease of use.
+	 * @return the Json object (Jackson 2)
+	 */
+	public Json2 getJson2() {
+		if (json2 == null) {
+			Json2.Builder builder = Json2.builder();
+			com.fasterxml.jackson.databind.json.JsonMapper   mapper2  = getJsonMapper2();
+			if (mapper2 != null) builder = builder.with(mapper2);
+			json2 = builder.build();
+		}
+		return json2;
+	}
+
+	/**
 	 * Returns the jsonMapper.
 	 * @return the jsonMapper
 	 */
@@ -149,6 +230,17 @@ public abstract class RestResponse {
 			jsonMapper = getTarget().getConfiguration().getMapper();
 		}
 		return jsonMapper;
+	}
+
+	/**
+	 * Returns the jsonMapper.
+	 * @return the jsonMapper
+	 */
+	public com.fasterxml.jackson.databind.json.JsonMapper getJsonMapper2() {
+		if (jsonMapper2 == null) {
+			jsonMapper2 = getTarget().getConfiguration().getMapper2();
+		}
+		return jsonMapper2;
 	}
 
 	/**

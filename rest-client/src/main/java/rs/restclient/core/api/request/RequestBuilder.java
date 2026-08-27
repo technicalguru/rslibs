@@ -23,12 +23,33 @@ import tools.jackson.databind.JavaType;
  */
 public class RequestBuilder  {
 
-	public static final String GET     = "GET";
-	public static final String POST    = "POST";
-	public static final String PUT     = "PUT";
-	public static final String DELETE  = "DELETE";
-	public static final String HEAD    = "HEAD";
-	public static final String OPTIONS = "OPTIONS";
+	public static enum RequestMethod {
+		GET(MediaType.APPLICATION_JSON),
+		POST(MediaType.APPLICATION_JSON),
+		PUT(MediaType.APPLICATION_JSON),
+		DELETE(MediaType.APPLICATION_JSON),
+		HEAD,
+		OPTIONS(MediaType.APPLICATION_JSON);
+		
+		private String defaultResponseMediaType;
+		
+		private RequestMethod() {
+			this(null);
+		}
+		
+		private RequestMethod(String defaultResponseMediaType) {
+			this.defaultResponseMediaType = defaultResponseMediaType;
+		}
+
+		/**
+		 * Returns the defaultResponseMediaType.
+		 * @return the defaultResponseMediaType
+		 */
+		public String getDefaultResponseMediaType() {
+			return defaultResponseMediaType;
+		}
+		
+	}
 
 	protected Target      target;
 	protected HeadersSpec headers;
@@ -47,108 +68,128 @@ public class RequestBuilder  {
 	}
 
 	public RestResponse get() {
-		return method(GET);
+		return method(RequestMethod.GET);
 	}
 	
 	public <T> T get(Class<T> responseType) {
-		return method(GET, responseType);
+		return method(RequestMethod.GET, responseType);
 	}
 
 	public <T> T get(JavaType responseType) {
-		return method(GET, responseType);
+		return method(RequestMethod.GET, responseType);
 	}
 
 	public <T> T get(TypeReference<T> responseType) {
-		return method(GET, responseType);
+		return method(RequestMethod.GET, responseType);
 	}
 
 	public RestResponse post(Entity<?> entity) {
-		return method(POST, entity);
+		return method(RequestMethod.POST, entity);
 	}
 	
 	public <T> T post(Entity<?> entity, Class<T> responseType) {
-		return method(POST, entity, responseType);
+		return method(RequestMethod.POST, entity, responseType);
 	}
 	
 	public <T> T post(Entity<?> entity, JavaType responseType) {
-		return method(POST, entity, responseType);
+		return method(RequestMethod.POST, entity, responseType);
 	}
 	
 	public <T> T post(Entity<?> entity, TypeReference<T> responseType) {
-		return method(POST, entity, responseType);
+		return method(RequestMethod.POST, entity, responseType);
 	}
 	
 	public RestResponse put(Entity<?> entity) {
-		return method(PUT, entity);
+		return method(RequestMethod.PUT, entity);
 	}
 	
 	public <T> T put(Entity<?> entity, Class<T> responseType) {
-		return method(PUT, entity, responseType);
+		return method(RequestMethod.PUT, entity, responseType);
 	}
 	
 	public <T> T put(Entity<?> entity, JavaType responseType) {
-		return method(PUT, entity, responseType);
+		return method(RequestMethod.PUT, entity, responseType);
 	}
 	
 	public <T> T put(Entity<?> entity, TypeReference<T> responseType) {
-		return method(PUT, entity, responseType);
+		return method(RequestMethod.PUT, entity, responseType);
 	}
 	
 	public RestResponse delete() {
-		return method(DELETE);
+		return method(RequestMethod.DELETE);
 	}
 	
 	public <T> T delete(Class<T> responseType) {
-		return method(DELETE, responseType);
+		return method(RequestMethod.DELETE, responseType);
 	}
 	
 	public <T> T delete(JavaType responseType) {
-		return method(DELETE, responseType);
+		return method(RequestMethod.DELETE, responseType);
 	}
 	
 	public <T> T delete(TypeReference<T> responseType) {
-		return method(DELETE, responseType);
+		return method(RequestMethod.DELETE, responseType);
 	}
 	
 	public RestResponse head() {
-		return method(HEAD);
+		return method(RequestMethod.HEAD);
 	}
 	
 	public RestResponse options() {
-		return method(OPTIONS);
+		return method(RequestMethod.OPTIONS);
 	}
 	
 	public <T> T options(Class<T> responseType) {
-		return method(OPTIONS, responseType);
+		return method(RequestMethod.OPTIONS, responseType);
     }
 
 	public <T> T options(JavaType responseType) {
-		return method(OPTIONS, responseType);
+		return method(RequestMethod.OPTIONS, responseType);
     }
 
 	public <T> T options(TypeReference<T> responseType) {
-		return method(OPTIONS, responseType);
+		return method(RequestMethod.OPTIONS, responseType);
     }
 
-	public RestResponse method(String name) {
-		return method(name, (Entity<?>)null);
+	public RestResponse method(RequestMethod method) {
+		return method(method, (Entity<?>)null);
 	}
 	
-	public <T> T method(String name, Class<T> responseType) {
-		return method(name, null, responseType);
+	public RestResponse method(String method) {
+		return method(method, null, (Entity<?>)null);
+	}
+	
+	public <T> T method(RequestMethod method, Class<T> responseType) {
+		return method(method, null, responseType);
 	}
 
-	public <T> T method(String name, JavaType responseType) {
-		return method(name, null, responseType);
+	public <T> T method(String method, Class<T> responseType) {
+		return method(method, null, responseType);
 	}
 
-	public <T> T method(String name, TypeReference<T> responseType) {
-		return method(name, null, responseType);
+	public <T> T method(RequestMethod method, JavaType responseType) {
+		return method(method, null, responseType);
 	}
 
-	public RestResponse method(String methodName, Entity<?> entity) {
+	public <T> T method(String method, JavaType responseType) {
+		return method(method, null, responseType);
+	}
+
+	public <T> T method(RequestMethod method, TypeReference<T> responseType) {
+		return method(method, null, responseType);
+	}
+
+	public <T> T method(String method, TypeReference<T> responseType) {
+		return method(method, null, responseType);
+	}
+
+	public RestResponse method(RequestMethod method, Entity<?> entity) {
+		return method(method.name(), method.getDefaultResponseMediaType(), entity);
+	}
+	
+	public RestResponse method(String method, String responseMediaType, Entity<?> entity) {
 		// 1st Build RestRequest  - standard object
-		RestRequest request = new RestRequest(getTarget(), methodName, headers, entity);
+		RestRequest request = new RestRequest(getTarget(), method, responseMediaType, headers, entity);
 		// Process all interceptors...
 		RestRequestExecution execution = createExecution();
 		try {
@@ -158,16 +199,28 @@ public class RequestBuilder  {
 		}
 	}
 
-    public <T> T method(String name, Entity<?> entity, Class<T> responseType) {
-    	return method(name, entity).as(responseType);
+    public <T> T method(RequestMethod method, Entity<?> entity, Class<T> responseType) {
+    	return method(method, entity).as(responseType);
  	}
 
-    public <T> T method(String name, Entity<?> entity, JavaType responseType) {
-       	return method(name, entity).as(responseType);
+    public <T> T method(String method, Entity<?> entity, Class<T> responseType) {
+    	return method(method, null, entity).as(responseType);
+ 	}
+
+    public <T> T method(RequestMethod method, Entity<?> entity, JavaType responseType) {
+       	return method(method, entity).as(responseType);
 	}
 
-    public <T> T method(String name, Entity<?> entity, TypeReference<T> responseType) {
-       	return method(name, entity).as(responseType);
+    public <T> T method(String method, Entity<?> entity, JavaType responseType) {
+       	return method(method, null, entity).as(responseType);
+	}
+
+    public <T> T method(RequestMethod method, Entity<?> entity, TypeReference<T> responseType) {
+       	return method(method, entity).as(responseType);
+	}
+	
+    public <T> T method(String method, Entity<?> entity, TypeReference<T> responseType) {
+       	return method(method, null, entity).as(responseType);
 	}
 	
 	public RequestBuilder header(String name, Object ...values) {
