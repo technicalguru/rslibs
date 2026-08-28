@@ -6,11 +6,11 @@ package rs.restclient.core.api.response;
 import java.util.Optional;
 
 import org.apache.commons.collections4.MultiValuedMap;
-import org.apache.commons.collections4.multimap.UnmodifiableMultiValuedMap;
 
 import rs.jackson.Json;
 import rs.jackson.Json2;
 import rs.restclient.core.api.Target;
+import rs.restclient.core.api.request.RestRequest;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.JavaType;
 import tools.jackson.databind.json.JsonMapper;
@@ -18,61 +18,34 @@ import tools.jackson.databind.json.JsonMapper;
 /**
  * A wrapper for the response.
  */
-public abstract class RestResponse {
+public class RestResponse {
 
-	private Target                         target;
+//	private Target                         target;
+	private RestRequest                    request;
+	private MultiValuedMap<String, String> headers;
+	private int                            statusCode;
+	private String                         statusMessage;
+	private Optional<String>               body;
+
 	private JsonMapper                     jsonMapper;
 	private com.fasterxml.jackson.databind.json.JsonMapper jsonMapper2;
 	private Json                           json;
 	private Json2                          json2;
-	private MultiValuedMap<String, String> headers;
-	private Integer                        statusCode;
-	private String                         statusMessage;
-	private Optional<String>               body;
+
+	protected RestResponse(RestRequest request, MultiValuedMap<String, String> headers, int statusCode, String statusMessage, Optional<String> body) {
+		this.request       = request;
+		this.headers       = headers;
+		this.statusCode    = statusCode;
+		this.statusMessage = statusMessage;
+		this.body          = body;
+	}
 	
 	/**
-	 * Constructs response using the target and its configuration.
-	 * @param configuration configuration
+	 * Returns the request.
+	 * @return the request
 	 */
-	protected RestResponse(Target target) {
-		this(target, null, null);
-	}
-		
-	/**
-	 * Constructs response using the target and its configuration.
-	 * @param jsonMapper json mapper object (can be null for configured mapper)
-	 * @param configuration configuration
-	 * @deprecated This is a Jackson2 method. Do use only when you have not alternate way of using Jackson 3.
-	 */
-	@Deprecated
-	protected RestResponse(Target target, JsonMapper jsonMapper) {
-		this(target, jsonMapper, null);
-	}
-		
-	/**
-	 * Constructs response using the target and its configuration.
-	 * @param jsonMapper json mapper object for Jacksonn 2 (can be null for configured mapper)
-	 * @param configuration configuration
-	 * @deprecated This is a Jackson2 method. Do use only when you have not alternate way of using Jackson 3.
-	 */
-	@Deprecated
-	protected RestResponse(Target target, com.fasterxml.jackson.databind.json.JsonMapper jsonMapper) {
-		this(target, null, jsonMapper);
-	}
-		
-	/**
-	 * Constructs response using the target and an optional jsonMapper.
-	 * @param configuration configuration
-	 * @param jsonMapper json mapper object (can be null for configured mapper)
-	 * @param jsonMapper2 json mapper object for Jackson 2 (can be null for configured mapper)
-	 * @deprecated This is a Jackson2 method. Do use only when you have not alternate way of using Jackson 3.
-	 */
-	@Deprecated
-	protected RestResponse(Target target, JsonMapper jsonMapper, com.fasterxml.jackson.databind.json.JsonMapper jsonMapper2) {
-		this.target      = target;
-		this.jsonMapper  = jsonMapper;
-		this.jsonMapper2 = jsonMapper2;
-		this.json        = null;
+	public RestRequest getRequest() {
+		return request;
 	}
 
 	/**
@@ -80,9 +53,6 @@ public abstract class RestResponse {
 	 * @return the headers
 	 */
 	public final MultiValuedMap<String, String> getHeaders() {
-		if (headers == null) {
-			headers = UnmodifiableMultiValuedMap.unmodifiableMultiValuedMap(retrieveHeaders());
-		}
 		return headers;
 	}
 
@@ -91,9 +61,6 @@ public abstract class RestResponse {
 	 * @return the statusCode
 	 */
 	public final int getStatusCode() {
-		if (statusCode == null) {
-			statusCode = retrieveStatusCode();
-		}
 		return statusCode;
 	}
 
@@ -102,9 +69,6 @@ public abstract class RestResponse {
 	 * @return the statusMessage
 	 */
 	public final String getStatusMessage() {
-		if (statusMessage == null) {
-			statusMessage = retrieveStatusMessage();
-		}
 		return statusMessage;
 	}
 
@@ -113,35 +77,8 @@ public abstract class RestResponse {
 	 * @return the body or null if no body is available.
 	 */
 	public final String getBody() {
-		if (body == null) {
-			body = retrieveBody();
-		};
 		return body.orElse(null);
 	}
-	
-	/**
-	 * Retrieves the body.
-	 * @return returns an empty {@link Optional} when no body is available.
-	 */
-	protected abstract Optional<String> retrieveBody();
-	
-	/**
-	 * Must return the headers as retrieved in the response.
-	 * @return the response headers
-	 */
-	protected abstract MultiValuedMap<String, String> retrieveHeaders();
-	
-	/**
-	 * Must retrieve the status code of the response.
-	 * @return the status code
-	 */
-	protected abstract int retrieveStatusCode();
-	
-	/**
-	 * Must retrieve the status message of the response.
-	 * @return the status message
-	 */
-	protected abstract String retrieveStatusMessage();
 	
 	/**
 	 * Returns the response as given type.
@@ -248,7 +185,7 @@ public abstract class RestResponse {
 	 * @return the target
 	 */
 	public Target getTarget() {
-		return target;
+		return getRequest().getTarget();
 	}
 
 	/**
@@ -256,9 +193,48 @@ public abstract class RestResponse {
 	 */
 	@Override
 	public String toString() {
-		return "RestResponse [target=" + target + ", statusCode=" + getStatusCode() + ", statusMessage=" + getStatusMessage() +
+		return "RestResponse [request=" + getRequest() + ", statusCode=" + getStatusCode() + ", statusMessage=" + getStatusMessage() +
 				", headers=" + getHeaders() + ", body=" + getBody() + "]";
 	}
 
+	public static Builder builder() {
+		return new Builder();
+	}
 	
+	public static class Builder {
+		
+		private RestRequest                    request;
+		private MultiValuedMap<String, String> headers;
+		private Integer                        statusCode;
+		private String                         statusMessage;
+		private Optional<String>               body;
+		
+		protected Builder() {
+		}
+		
+		public Builder with(RestRequest request) {
+			this.request = request;
+			return this;
+		}
+		
+		public Builder with(MultiValuedMap<String, String> headers) {
+			this.headers = headers;
+			return this;
+		}
+		
+		public Builder withStatus(int statusCode, String statusMessage) {
+			this.statusCode    = statusCode;
+			this.statusMessage = statusMessage;
+			return this;
+		}
+		
+		public Builder with(Optional<String> body) {
+			this.body = body;
+			return this;
+		}
+		
+		public RestResponse build() {
+			return new RestResponse(request, headers, statusCode, statusMessage, body);
+		}
+	}
 }

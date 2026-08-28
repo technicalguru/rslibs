@@ -1,5 +1,7 @@
 package rs.restclient.springboot;
 
+import java.util.Optional;
+
 import org.apache.commons.collections4.MultiValuedMap;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -55,9 +57,19 @@ public class SpringBootImpl implements TargetImplementation {
 		} else {
 			responseSpec = uriSpec.retrieve();
 		}
-		return new SpringBootResponse(request.getTarget(), responseSpec, interceptor);
+		return createResponse(request, responseSpec, interceptor);
 	}
 
+	protected RestResponse createResponse(RestRequest request, ResponseSpec response, SpringBootRequestInterceptor interceptor) {
+		String body = response.body(String.class);
+
+		return RestResponse.builder()
+				.with(request)
+				.withStatus(interceptor.getStatusCode().value(), interceptor.getStatusMessage())
+				.with(interceptor.getHeaders())
+				.with(body == null ? Optional.empty() : Optional.of(body))
+				.build();
+	}
 	
 	/**
 	 * {@inheritDoc}

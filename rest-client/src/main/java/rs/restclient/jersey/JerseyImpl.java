@@ -1,20 +1,27 @@
 package rs.restclient.jersey;
 
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 import java.util.logging.Level;
 
+import org.apache.commons.collections4.MultiValuedMap;
+import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.logging.LoggingFeature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.util.JacksonFeature;
 
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
-import jakarta.ws.rs.client.ClientRequestFilter;
 import jakarta.ws.rs.client.Invocation;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.MultivaluedMap;
 import jakarta.ws.rs.core.Response;
 import rs.restclient.core.api.ProxyConfig;
 import rs.restclient.core.api.RestClientConfiguration;
@@ -30,6 +37,8 @@ import rs.restclient.core.api.response.RestResponse;
  *
  */
 public class JerseyImpl implements TargetImplementation {
+
+	private static Logger log = LoggerFactory.getLogger(JerseyImpl.class);
 
 	/** The instance for usage */
 	public static final JerseyImpl JERSEY = new JerseyImpl();
@@ -61,7 +70,7 @@ public class JerseyImpl implements TargetImplementation {
 		
 		// Invoke
 		Response response = invocation.invoke();
-		return new JerseyResponse(request.getTarget(), response);
+		return createResponse(request, response);
 	}
 	
 	protected WebTarget createWebTarget(Target target) {
@@ -106,6 +115,36 @@ public class JerseyImpl implements TargetImplementation {
 		return clientConfig;
 	}
 
-	
+	protected RestResponse createResponse(RestRequest request, Response response) {
+		// body
+		Optional<String> body = Optional.empty();
+		if (response.hasEntity()) {
+			Object entity = response.getEntity();
+			if (entity instanceof InputStream) try {
+				byte b[] = ((InputStream)entity).readAllBytes();
+				body = Optional.of(new String(b, StandardCharsets.UTF_8));
+			} catch (Exception e) {
+				log.error("Error when reading body", e);
+			} else {
+				body = Optional.of(entity.toString());
+			}
+		}
 
+		return RestResponse.builder()
+			.with(request)
+			.withStatus(response.getStatusInfo().getStatusCode(), response.getStatusInfo().getReasonPhrase())
+			.with(convertHeaders(response.getHeaders()))
+			.with(body)
+			.build();
+	}
+
+	private static MultiValuedMap<String, String> convertHeaders(MultivaluedMap<String, Object> headers) {
+		MultiValuedMap<String, String> rc = new ArrayListValuedHashMap<>();
+		for (String name : headers.keySet()) {
+			for (Object value : headers.get(name)) {
+				rc.put(name, value.toString());
+			}
+		}
+		return rc;
+	}
 }
