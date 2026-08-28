@@ -2,6 +2,7 @@ package rs.restclient.jersey;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.logging.Level;
 
@@ -10,9 +11,11 @@ import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
+import org.glassfish.jersey.client.RequestEntityProcessing;
 import org.glassfish.jersey.logging.LoggingFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 
 import com.fasterxml.jackson.core.util.JacksonFeature;
 
@@ -21,6 +24,7 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Invocation;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.MultivaluedHashMap;
 import jakarta.ws.rs.core.MultivaluedMap;
 import jakarta.ws.rs.core.Response;
 import rs.restclient.core.api.ProxyConfig;
@@ -28,6 +32,7 @@ import rs.restclient.core.api.RestClientConfiguration;
 import rs.restclient.core.api.Target;
 import rs.restclient.core.api.TargetImplementation;
 import rs.restclient.core.api.request.Entity;
+import rs.restclient.core.api.request.HeadersSpec;
 import rs.restclient.core.api.request.RestRequest;
 import rs.restclient.core.api.response.RestResponse;
 
@@ -56,7 +61,9 @@ public class JerseyImpl implements TargetImplementation {
 		// Build request with JSON response media type and set headers
 		String mediaType = request.getResponseMediaType();
 		Invocation.Builder requestBuilder = mediaType != null ? jerseyTarget.request(MediaType.APPLICATION_JSON) : jerseyTarget.request();
-		// TODO requestBuilder = requestBuilder.header(headerName, value);
+		requestBuilder = requestBuilder.headers(convertHeaders(request.getHeaders()));
+		// Missing Content-Length and Content-Type
+		if (mediaType != null) requestBuilder = requestBuilder.header(HttpHeaders.ACCEPT, request.getResponseMediaType());
 		
 		// Build invocation with/without request body
 		Entity<?> entity = request.getEntity();
@@ -93,6 +100,7 @@ public class JerseyImpl implements TargetImplementation {
 	 */
 	protected ClientConfig createClientConfig(RestClientConfiguration configuration) {
 		ClientConfig clientConfig = new ClientConfig();
+		clientConfig.connectorProvider(new ApacheConnectorProvider());
 		if (configuration.isVerbose()) {
 			clientConfig.property(LoggingFeature.LOGGING_FEATURE_VERBOSITY_CLIENT, LoggingFeature.Verbosity.PAYLOAD_TEXT);
 			clientConfig.property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, Level.INFO.getName());
@@ -111,7 +119,10 @@ public class JerseyImpl implements TargetImplementation {
 				clientConfig.property(ClientProperties.PROXY_PASSWORD, proxyConfig.getPassword());
 			}
 		}
-
+		
+		// Fixes a bug in Jersey with content-length header
+		clientConfig.property(ClientProperties.REQUEST_ENTITY_PROCESSING, RequestEntityProcessing.BUFFERED);
+		
 		return clientConfig;
 	}
 
@@ -136,6 +147,15 @@ public class JerseyImpl implements TargetImplementation {
 			.with(convertHeaders(response.getHeaders()))
 			.with(body)
 			.build();
+	}
+
+	private static MultivaluedMap<String, Object> convertHeaders(HeadersSpec headersSpec) {
+		MultiValuedMap<String, Object> headers = headersSpec.getHeaders();
+		MultivaluedMap<String, Object> rc = new MultivaluedHashMap<>();
+		for (String name : headers.keySet()) {
+			rc.put(name, new ArrayList<>(headers.get(name)));
+		}
+		return rc;
 	}
 
 	private static MultiValuedMap<String, String> convertHeaders(MultivaluedMap<String, Object> headers) {

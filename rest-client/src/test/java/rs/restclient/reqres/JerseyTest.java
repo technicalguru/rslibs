@@ -66,7 +66,6 @@ public class JerseyTest {
 		}
 	}
 	
-	
 	@Test
 	public void testCreate() {
 		if (client != null) {
@@ -74,5 +73,6 @@ public class JerseyTest {
 		}
 	}
 	
+	// We need to setup a test with https://httpbin.org/headers to test the real headers
 	
 }

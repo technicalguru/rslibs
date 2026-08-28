@@ -135,6 +135,7 @@ public abstract class AbstractRequestSpec {
 	 * @param authorizationStrategy the authorizationStrategy to set
 	 */
 	public <T extends AbstractRequestSpec> T authorizationStrategy(AuthorizationStrategy authorizationStrategy) {
+		this.authorizationStrategy = authorizationStrategy;
 		@SuppressWarnings("unchecked")
 		T t = (T)this;
 		return t;
