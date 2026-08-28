@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
+import org.apache.commons.collections4.multimap.UnmodifiableMultiValuedMap;
 import org.springframework.http.HttpHeaders;
 
 /**
@@ -41,11 +42,11 @@ public class HeadersSpec {
 	}
 	
 	/**
-	 * Returns the headers.
+	 * Returns the headers (cannot be modified).
 	 * @return the headers
 	 */
 	public MultiValuedMap<String, Object> getHeaders() {
-		return headers;
+		return UnmodifiableMultiValuedMap.unmodifiableMultiValuedMap(headers);
 	}
 
 	public void add(String name, Object ...values) {

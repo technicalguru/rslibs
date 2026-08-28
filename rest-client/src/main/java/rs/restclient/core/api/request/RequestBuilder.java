@@ -3,11 +3,6 @@
  */
 package rs.restclient.core.api.request;
 
-import java.net.HttpCookie;
-import java.util.Collection;
-
-import org.apache.commons.collections4.MultiValuedMap;
-
 import rs.restclient.core.api.RequestInterceptor;
 import rs.restclient.core.api.RestClientException;
 import rs.restclient.core.api.Target;
@@ -20,7 +15,7 @@ import rs.restclient.core.util.RestRequestExecution;
  * Abstract implementation of request builder.
  * The final class is dependent on the implementation (Jersey, SpringBoot's RestClient) etc.
  */
-public class RequestBuilder  {
+public class RequestBuilder extends AbstractRequestSpec {
 
 	public static enum RequestMethod {
 		GET(MediaType.APPLICATION_JSON),
@@ -50,12 +45,11 @@ public class RequestBuilder  {
 		
 	}
 
-	protected Target      target;
-	protected HeadersSpec headers;
+	protected Target                 target;
 	
 	public RequestBuilder(Target target) {
-		this.target   = target;
-		this.headers  = new HeadersSpec();
+		super(target);
+		this.target = target;
 	}
 	
 	/**
@@ -104,9 +98,9 @@ public class RequestBuilder  {
 	
 	public RestResponse method(String method, String responseMediaType, Entity<?> entity) {
 		// 1st Build RestRequest  - standard object
-		RestRequest request = new RestRequest(getTarget(), method, responseMediaType, headers, entity);
+		RestRequest request = new RestRequest(getTarget(), method, responseMediaType, getHeaders(), entity);
 		// Ask the authorization strategy whether we can proceed, but synchronize
-		AuthorizationStrategy authorizationStrategy = getTarget().getAuthorizationStrategy();
+		AuthorizationStrategy authorizationStrategy = getAuthorizationStrategy();
 		if (authorizationStrategy != null) {
 			synchronized(authorizationStrategy) {
 				authorizationStrategy.checkAuthorization(request);
@@ -121,39 +115,9 @@ public class RequestBuilder  {
 		}
 	}
 
-	public RequestBuilder header(String name, Object ...values) {
-		headers.add(name, values);
-		return this;
-	}
-	
-	public RequestBuilder headers(MultiValuedMap<String, Object> headers) {
-		this.headers.add(headers);
-		return this;
-	}
-	
-	public RequestBuilder cookie(String name, String cookie) {
-		this.headers.addCookie(name, cookie);
-		return this;
-	}
-	
-	public RequestBuilder cookie(String cookie) {
-		this.headers.addCookie(cookie);
-		return this;
-	}
-	
-	public RequestBuilder cookie(HttpCookie cookie) {
-		this.headers.addCookie(cookie);
-		return this;
-	}
-	
-	public RequestBuilder cookie(Collection<HttpCookie> cookies) {
-		this.headers.addCookies(cookies);
-		return this;
-	}
-
 	private RestRequestExecution createExecution() {
 		RestRequestExecution execution = new EndofChainRequestExecution(getTarget().getImplementation());
-		return getTarget().getInterceptors().stream()
+		return getInterceptors().stream()
 				.reduce(RequestInterceptor::andThen)
 				.map(interceptor -> interceptor.apply(execution))
 				.orElse(execution);
