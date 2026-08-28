@@ -1,4 +1,4 @@
-package rs.restclient.example.reqres;
+package rs.restclient.reqres;
 
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -9,10 +9,11 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import rs.restclient.core.api.RestClient;
 import rs.restclient.core.api.RestClientConfiguration;
 import rs.restclient.core.api.Target;
-import rs.restclient.core.util.AuthorizationInterceptor;
-import rs.restclient.core.util.AuthorizationInterceptor.AuthorizationType;
+import rs.restclient.core.api.auth.AuthorizationInterceptor.AuthorizationType;
+import rs.restclient.core.api.auth.FixedHeaderAuthorizationStrategy;
 import rs.restclient.core.util.UserAgentInterceptor;
 import rs.restclient.springboot.SpringBootImpl;
 
@@ -22,16 +23,16 @@ import rs.restclient.springboot.SpringBootImpl;
  * @author ralph
  *
  */
-public class ReqResClientTest {
+public class SpringBootTest {
 
-	private static Logger log = LoggerFactory.getLogger(ReqResClientTest.class);
+	private static Logger log = LoggerFactory.getLogger(SpringBootTest.class);
 	
 	private static ReqResClient client;
 	private static String       apiKey;
 	
 	@BeforeAll
 	public static void beforeAll() {
-		ClassLoader classLoader = ReqResClientTest.class.getClassLoader();
+		ClassLoader classLoader = SpringBootTest.class.getClassLoader();
 		if (classLoader != null) try {
 			URL url = classLoader.getResource("reqres-key.txt");
 			apiKey = IOUtils.toString(url, Charset.defaultCharset()).trim();
@@ -50,9 +51,11 @@ public class ReqResClientTest {
 			Target.Builder targetBuilder = Target.builder()
 					.with(SpringBootImpl.SPRING_BOOT)
 					.with(configuration)
-					.register(new UserAgentInterceptor("ReqResClient/0.1beta"))
-					.register(new AuthorizationInterceptor(AuthorizationType.X_API_KEY, apiKey));
-			client = new ReqResClient(targetBuilder);
+					.register(new UserAgentInterceptor("ReqResClient/0.1beta"));
+			client = RestClient.builder(ReqResClient.class)
+					.with(targetBuilder)
+					.withAuthorization(r -> new FixedHeaderAuthorizationStrategy(r, AuthorizationType.X_API_KEY, apiKey))
+					.build();
 		}
 	}
 	

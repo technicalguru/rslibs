@@ -1,7 +1,7 @@
 /**
  * 
  */
-package rs.restclient.example.reqres;
+package rs.restclient.reqres;
 
 /**
  * The main class a response is coming as.

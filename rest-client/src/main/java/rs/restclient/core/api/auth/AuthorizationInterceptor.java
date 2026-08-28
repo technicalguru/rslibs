@@ -1,6 +1,8 @@
-package rs.restclient.core.util;
+package rs.restclient.core.api.auth;
 
 import java.util.Base64;
+
+import rs.restclient.core.util.AddHeaderInterceptor;
 
 /**
  * Implements simple authorization scheme from fixed user/password or key values.

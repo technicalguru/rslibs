@@ -1,7 +1,7 @@
 /**
  * 
  */
-package rs.restclient.example.reqres;
+package rs.restclient.reqres;
 
 /**
  * CTA in Meta Data response.

@@ -1,8 +1,13 @@
 package rs.restclient.jersey;
 
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 import org.apache.commons.collections4.MultiValuedMap;
+import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import jakarta.ws.rs.core.Response;
 import rs.restclient.core.api.Target;
@@ -15,11 +20,17 @@ import rs.restclient.core.api.response.RestResponse;
  */
 public class JerseyResponse extends RestResponse {
 
+	private static Logger log = LoggerFactory.getLogger(JerseyResponse.class);
+	
+	private Response response;
+	
 	/**
 	 * Constructor.
 	 */
-	protected JerseyResponse(Target target, Response jerseyResponse) {
+	protected JerseyResponse(Target target, Response response) {
 		super(target);
+		this.response = response;
+		response.bufferEntity();
 	}
 
 	/**
@@ -27,7 +38,17 @@ public class JerseyResponse extends RestResponse {
 	 */
 	@Override
 	protected Optional<String> retrieveBody() {
-		// TODO Auto-generated method stub
+		if (response.hasEntity()) {
+			Object entity = response.getEntity();
+			if (entity instanceof InputStream) try {
+				byte body[] = ((InputStream)entity).readAllBytes();
+				return Optional.of(new String(body, StandardCharsets.UTF_8));
+			} catch (Exception e) {
+				log.error("Error when reading body", e);
+				return Optional.empty();
+			}
+			return Optional.of(entity.toString());
+		}
 		return Optional.empty();
 	}
 
@@ -37,7 +58,7 @@ public class JerseyResponse extends RestResponse {
 	@Override
 	protected MultiValuedMap<String, String> retrieveHeaders() {
 		// TODO Auto-generated method stub
-		return null;
+		return new ArrayListValuedHashMap<>();
 	}
 
 	/**
@@ -45,8 +66,7 @@ public class JerseyResponse extends RestResponse {
 	 */
 	@Override
 	protected int retrieveStatusCode() {
-		// TODO Auto-generated method stub
-		return 0;
+		return response.getStatusInfo().getStatusCode();
 	}
 
 	/**
@@ -54,8 +74,7 @@ public class JerseyResponse extends RestResponse {
 	 */
 	@Override
 	protected String retrieveStatusMessage() {
-		// TODO Auto-generated method stub
-		return null;
+		return response.getStatusInfo().getReasonPhrase();
 	}
 
 	

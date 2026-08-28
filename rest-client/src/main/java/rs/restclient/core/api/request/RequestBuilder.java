@@ -11,6 +11,7 @@ import org.apache.commons.collections4.MultiValuedMap;
 import rs.restclient.core.api.RequestInterceptor;
 import rs.restclient.core.api.RestClientException;
 import rs.restclient.core.api.Target;
+import rs.restclient.core.api.auth.AuthorizationStrategy;
 import rs.restclient.core.api.response.RestResponse;
 import rs.restclient.core.util.EndofChainRequestExecution;
 import rs.restclient.core.util.RestRequestExecution;
@@ -190,6 +191,13 @@ public class RequestBuilder  {
 	public RestResponse method(String method, String responseMediaType, Entity<?> entity) {
 		// 1st Build RestRequest  - standard object
 		RestRequest request = new RestRequest(getTarget(), method, responseMediaType, headers, entity);
+		// Ask the authorization strategy whether we can proceed, but synchronize
+		AuthorizationStrategy authorizationStrategy = getTarget().getAuthorizationStrategy();
+		if (authorizationStrategy != null) {
+			synchronized(authorizationStrategy) {
+				authorizationStrategy.checkAuthorization(request);
+			}
+		}
 		// Process all interceptors...
 		RestRequestExecution execution = createExecution();
 		try {

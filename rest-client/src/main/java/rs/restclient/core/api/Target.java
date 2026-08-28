@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.apache.commons.collections4.list.UnmodifiableList;
 
+import rs.restclient.core.api.auth.AuthorizationStrategy;
 import rs.restclient.core.api.request.RequestBuilder;
 import rs.restclient.core.util.UriBuilder;
 
@@ -20,13 +21,16 @@ public class Target {
 	private RestClientConfiguration  configuration;
 	private TargetImplementation     implementation;
 	private List<RequestInterceptor> interceptors;
+	private AuthorizationStrategy    authorizationStrategy;
 	private URI                      uri;
 
-	protected Target(RestClientConfiguration configuration, TargetImplementation implementation, List<RequestInterceptor> interceptors, URI uri) {
-		this.configuration  = configuration;
-		this.implementation = implementation;
-		this.interceptors   = new ArrayList<>(interceptors);
-		this.uri            = uri != null ? uri : URI.create(configuration.getUri());
+	protected Target(RestClientConfiguration configuration, TargetImplementation implementation, 
+			List<RequestInterceptor> interceptors, AuthorizationStrategy authorizationStrategy, URI uri) {
+		this.configuration         = configuration;
+		this.implementation        = implementation;
+		this.interceptors          = new ArrayList<>(interceptors);
+		this.authorizationStrategy = authorizationStrategy;
+		this.uri                   = uri != null ? uri : URI.create(configuration.getUri());
 	}
 	
 	/**
@@ -35,6 +39,22 @@ public class Target {
 	 */
 	public RestClientConfiguration getConfiguration() {
 		return configuration;
+	}
+
+	/**
+	 * Returns the authorizationStrategy.
+	 * @return the authorizationStrategy
+	 */
+	public AuthorizationStrategy getAuthorizationStrategy() {
+		return authorizationStrategy;
+	}
+
+	/**
+	 * Sets the authorizationStrategy.
+	 * @param authorizationStrategy the authorizationStrategy to set
+	 */
+	public void setAuthorizationStrategy(AuthorizationStrategy authorizationStrategy) {
+		this.authorizationStrategy = authorizationStrategy;
 	}
 
 	/**
@@ -82,7 +102,7 @@ public class Target {
 		} else {
 			uriBuilder = UriBuilder.from(uri);
 		}
-		return new Target(configuration, implementation, interceptors, uriBuilder.appendSegments(path).build());
+		return new Target(configuration, implementation, interceptors, authorizationStrategy, uriBuilder.appendSegments(path).build());
 	}
 	
 	/**
@@ -126,11 +146,21 @@ public class Target {
 			this.interceptors = new ArrayList<>();
 		}
 		
+		/**
+		 * Build with given target implementation.
+		 * @param implementation target imlementation
+		 * @return this builder for chaining
+		 */
 		public Builder with(TargetImplementation implementation) {
 			this.implementation = implementation;
 			return this;
 		}
 		
+		/**
+		 * Build with given configuration.
+		 * @param configuration the configuration
+		 * @return this builder for chaining
+		 */
 		public Builder with(RestClientConfiguration configuration) {
 			this.configuration = configuration;
 			return this;
@@ -165,7 +195,7 @@ public class Target {
 			if (implementation == null) throw new RestClientException("implementation must not be null");
 			// Usually done by the implementation
 			//if (configuration.isVerbose()) register(new LoggingInterceptor());
-			return new Target(configuration, implementation, interceptors, baseUri);
+			return new Target(configuration, implementation, interceptors, null, baseUri);
 		}
 	}
 

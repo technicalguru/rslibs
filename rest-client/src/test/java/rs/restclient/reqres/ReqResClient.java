@@ -1,7 +1,7 @@
 /**
  * 
  */
-package rs.restclient.example.reqres;
+package rs.restclient.reqres;
 
 import rs.restclient.core.api.RestClient;
 import rs.restclient.core.api.Target;
@@ -18,4 +18,6 @@ public class ReqResClient extends RestClient {
 	public UserClient users() {
 		return createClient(UserClient.class);
 	}
+
+	
 }

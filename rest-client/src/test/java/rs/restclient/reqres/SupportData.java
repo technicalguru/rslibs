@@ -1,7 +1,7 @@
 /**
  * 
  */
-package rs.restclient.example.reqres;
+package rs.restclient.reqres;
 
 /**
  * Support data in a response.
