@@ -15,8 +15,6 @@ import rs.restclient.core.api.auth.AuthorizationStrategy;
 import rs.restclient.core.api.response.RestResponse;
 import rs.restclient.core.util.EndofChainRequestExecution;
 import rs.restclient.core.util.RestRequestExecution;
-import tools.jackson.core.type.TypeReference;
-import tools.jackson.databind.JavaType;
 
 /**
  * Abstract implementation of request builder.
@@ -72,64 +70,16 @@ public class RequestBuilder  {
 		return method(RequestMethod.GET);
 	}
 	
-	public <T> T get(Class<T> responseType) {
-		return method(RequestMethod.GET, responseType);
-	}
-
-	public <T> T get(JavaType responseType) {
-		return method(RequestMethod.GET, responseType);
-	}
-
-	public <T> T get(TypeReference<T> responseType) {
-		return method(RequestMethod.GET, responseType);
-	}
-
 	public RestResponse post(Entity<?> entity) {
 		return method(RequestMethod.POST, entity);
-	}
-	
-	public <T> T post(Entity<?> entity, Class<T> responseType) {
-		return method(RequestMethod.POST, entity, responseType);
-	}
-	
-	public <T> T post(Entity<?> entity, JavaType responseType) {
-		return method(RequestMethod.POST, entity, responseType);
-	}
-	
-	public <T> T post(Entity<?> entity, TypeReference<T> responseType) {
-		return method(RequestMethod.POST, entity, responseType);
 	}
 	
 	public RestResponse put(Entity<?> entity) {
 		return method(RequestMethod.PUT, entity);
 	}
 	
-	public <T> T put(Entity<?> entity, Class<T> responseType) {
-		return method(RequestMethod.PUT, entity, responseType);
-	}
-	
-	public <T> T put(Entity<?> entity, JavaType responseType) {
-		return method(RequestMethod.PUT, entity, responseType);
-	}
-	
-	public <T> T put(Entity<?> entity, TypeReference<T> responseType) {
-		return method(RequestMethod.PUT, entity, responseType);
-	}
-	
 	public RestResponse delete() {
 		return method(RequestMethod.DELETE);
-	}
-	
-	public <T> T delete(Class<T> responseType) {
-		return method(RequestMethod.DELETE, responseType);
-	}
-	
-	public <T> T delete(JavaType responseType) {
-		return method(RequestMethod.DELETE, responseType);
-	}
-	
-	public <T> T delete(TypeReference<T> responseType) {
-		return method(RequestMethod.DELETE, responseType);
 	}
 	
 	public RestResponse head() {
@@ -140,18 +90,6 @@ public class RequestBuilder  {
 		return method(RequestMethod.OPTIONS);
 	}
 	
-	public <T> T options(Class<T> responseType) {
-		return method(RequestMethod.OPTIONS, responseType);
-    }
-
-	public <T> T options(JavaType responseType) {
-		return method(RequestMethod.OPTIONS, responseType);
-    }
-
-	public <T> T options(TypeReference<T> responseType) {
-		return method(RequestMethod.OPTIONS, responseType);
-    }
-
 	public RestResponse method(RequestMethod method) {
 		return method(method, (Entity<?>)null);
 	}
@@ -160,30 +98,6 @@ public class RequestBuilder  {
 		return method(method, null, (Entity<?>)null);
 	}
 	
-	public <T> T method(RequestMethod method, Class<T> responseType) {
-		return method(method, null, responseType);
-	}
-
-	public <T> T method(String method, Class<T> responseType) {
-		return method(method, null, responseType);
-	}
-
-	public <T> T method(RequestMethod method, JavaType responseType) {
-		return method(method, null, responseType);
-	}
-
-	public <T> T method(String method, JavaType responseType) {
-		return method(method, null, responseType);
-	}
-
-	public <T> T method(RequestMethod method, TypeReference<T> responseType) {
-		return method(method, null, responseType);
-	}
-
-	public <T> T method(String method, TypeReference<T> responseType) {
-		return method(method, null, responseType);
-	}
-
 	public RestResponse method(RequestMethod method, Entity<?> entity) {
 		return method(method.name(), method.getDefaultResponseMediaType(), entity);
 	}
@@ -207,30 +121,6 @@ public class RequestBuilder  {
 		}
 	}
 
-    public <T> T method(RequestMethod method, Entity<?> entity, Class<T> responseType) {
-    	return method(method, entity).as(responseType);
- 	}
-
-    public <T> T method(String method, Entity<?> entity, Class<T> responseType) {
-    	return method(method, null, entity).as(responseType);
- 	}
-
-    public <T> T method(RequestMethod method, Entity<?> entity, JavaType responseType) {
-       	return method(method, entity).as(responseType);
-	}
-
-    public <T> T method(String method, Entity<?> entity, JavaType responseType) {
-       	return method(method, null, entity).as(responseType);
-	}
-
-    public <T> T method(RequestMethod method, Entity<?> entity, TypeReference<T> responseType) {
-       	return method(method, entity).as(responseType);
-	}
-	
-    public <T> T method(String method, Entity<?> entity, TypeReference<T> responseType) {
-       	return method(method, null, entity).as(responseType);
-	}
-	
 	public RequestBuilder header(String name, Object ...values) {
 		headers.add(name, values);
 		return this;
