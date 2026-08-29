@@ -209,7 +209,7 @@ public class UriBuilder {
 			if (query != null) {
 			String params[] = query.split("&");
 			for (String param : params) {
-				String p[] = param.split(":");
+				String p[] = param.split("=");
 				if (p.length > 1) queryParam(decodeQueryParam(p[0]), decodeQueryParam(p[1]));
 				else queryParam(decodeQueryParam(p[0]), null);
 			}

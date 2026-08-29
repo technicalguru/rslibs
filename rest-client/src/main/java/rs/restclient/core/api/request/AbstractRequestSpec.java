@@ -17,24 +17,25 @@ import rs.restclient.core.api.auth.AuthorizationStrategy;
  * @author ralph
  *
  */
-public abstract class AbstractRequestSpec {
+public abstract class AbstractRequestSpec<T extends AbstractRequestSpec<T>> {
 
 	private HeadersSpec              headers;
 	private List<RequestInterceptor> interceptors;
 	private AuthorizationStrategy    authorizationStrategy;
-	
+	private QueryParamsSpec          queryParams;
 	/**
 	 * Default constructor.
 	 */
 	protected AbstractRequestSpec() {
-		this(new HeadersSpec(), new ArrayList<>(), null);
+		this(new HeadersSpec(), new QueryParamsSpec(), new ArrayList<>(), null);
 	}
 
 	/**
 	 * Copy constructor.
 	 */
-	protected AbstractRequestSpec(AbstractRequestSpec other) {
+	protected AbstractRequestSpec(AbstractRequestSpec<?> other) {
 		this.headers               = new HeadersSpec(other.getHeaders());
+		this.queryParams           = new QueryParamsSpec(other.getQueryParams());
 		this.interceptors          = new ArrayList<>(other.getInterceptors());
 		this.authorizationStrategy = other.getAuthorizationStrategy();
 	}
@@ -46,12 +47,12 @@ public abstract class AbstractRequestSpec {
 	 * @param interceptors interceptors to copy from
 	 * @param authorizationStrategy authorization strategy
 	 */
-	public AbstractRequestSpec(HeadersSpec headers, List<RequestInterceptor> interceptors, AuthorizationStrategy authorizationStrategy) {
+	public AbstractRequestSpec(HeadersSpec headers, QueryParamsSpec queryParams, List<RequestInterceptor> interceptors, AuthorizationStrategy authorizationStrategy) {
 		this.headers               = new HeadersSpec(headers);
+		this.queryParams           = new QueryParamsSpec(queryParams);
 		this.interceptors          = new ArrayList<>(interceptors);
 		this.authorizationStrategy = authorizationStrategy;
 	}
-
 
 	/**
 	 * Returns the interceptors.
@@ -65,7 +66,7 @@ public abstract class AbstractRequestSpec {
 	 * Register the interceptor for execution in this target.
 	 * @param interceptor interceptor
 	 */
-	public <T extends AbstractRequestSpec> T register(RequestInterceptor interceptor) {
+	public T register(RequestInterceptor interceptor) {
 		this.interceptors.add(interceptor);
 		@SuppressWarnings("unchecked")
 		T t = (T)this;
@@ -80,43 +81,75 @@ public abstract class AbstractRequestSpec {
 		return UnmodifiableHeadersSpec.unmodifiableHeadersSpec(headers);
 	}
 
-	public <T extends AbstractRequestSpec> T header(String name, Object ...values) {
+	public T header(String name, Object ...values) {
 		headers.add(name, values);
 		@SuppressWarnings("unchecked")
 		T t = (T)this;
 		return t;
 	}
 	
-	public <T extends AbstractRequestSpec> T headers(MultiValuedMap<String, Object> headers) {
+	public T headers(MultiValuedMap<String, Object> headers) {
 		this.headers.add(headers);
 		@SuppressWarnings("unchecked")
 		T t = (T)this;
 		return t;
 	}
 	
-	public <T extends AbstractRequestSpec> T cookie(String name, String cookie) {
+	public T cookie(String name, String cookie) {
 		this.headers.addCookie(name, cookie);
 		@SuppressWarnings("unchecked")
 		T t = (T)this;
 		return t;
 	}
 	
-	public <T extends AbstractRequestSpec> T cookie(String cookie) {
+	public T cookie(String cookie) {
 		this.headers.addCookie(cookie);
 		@SuppressWarnings("unchecked")
 		T t = (T)this;
 		return t;
 	}
 	
-	public <T extends AbstractRequestSpec> T cookie(HttpCookie cookie) {
+	public T cookie(HttpCookie cookie) {
 		this.headers.addCookie(cookie);
 		@SuppressWarnings("unchecked")
 		T t = (T)this;
 		return t;
 	}
 	
-	public <T extends AbstractRequestSpec> T cookie(Collection<HttpCookie> cookies) {
+	public T cookie(Collection<HttpCookie> cookies) {
 		this.headers.addCookies(cookies);
+		@SuppressWarnings("unchecked")
+		T t = (T)this;
+		return t;
+	}
+
+	/**
+	 * Returns the queryParams.
+	 * @return the queryParams
+	 */
+	public QueryParamsSpec getQueryParams() {
+		return UnmodifiableQueryParamsSpec.unmodifiableQueryParamsSpec(queryParams);
+	}
+
+	
+	/**
+	 * @param name
+	 * @param values
+	 * @see QueryParamsSpec#add(java.lang.String, java.lang.Object[])
+	 */
+	public T queryParam(String name, Object... values) {
+		queryParams.add(name, values);
+		@SuppressWarnings("unchecked")
+		T t = (T)this;
+		return t;
+	}
+
+	/**
+	 * @param params
+	 * @see QueryParamsSpec#add(org.apache.commons.collections4.MultiValuedMap)
+	 */
+	public T queryParams(MultiValuedMap<String, Object> params) {
+		queryParams.add(params);
 		@SuppressWarnings("unchecked")
 		T t = (T)this;
 		return t;
@@ -134,7 +167,7 @@ public abstract class AbstractRequestSpec {
 	 * Sets the authorizationStrategy.
 	 * @param authorizationStrategy the authorizationStrategy to set
 	 */
-	public <T extends AbstractRequestSpec> T authorizationStrategy(AuthorizationStrategy authorizationStrategy) {
+	public T authorizationStrategy(AuthorizationStrategy authorizationStrategy) {
 		this.authorizationStrategy = authorizationStrategy;
 		@SuppressWarnings("unchecked")
 		T t = (T)this;

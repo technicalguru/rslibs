@@ -15,21 +15,23 @@ import rs.restclient.core.api.Target;
  */
 public class RestRequest {
 
-	private Target      target;
-	private String      method;
-	private String      responseMediaType;
-    private HeadersSpec headers;
-	private Entity<?>   entity;
+	private Target          target;
+	private String          method;
+	private String          responseMediaType;
+    private HeadersSpec     headers;
+    private QueryParamsSpec queryParams;
+	private Entity<?>       entity;
 	
 	/**
 	 * Constructor.
 	 * @param target target of the request
 	 */
-	protected RestRequest(Target target, String method, String responseMediaType, HeadersSpec headers, Entity<?> entity) {
+	protected RestRequest(Target target, String method, String responseMediaType, HeadersSpec headers, QueryParamsSpec queryParams, Entity<?> entity) {
 		this.target            = target;
 		this.method            = method;
 		this.responseMediaType = responseMediaType;
 		this.headers           = new HeadersSpec(headers);
+		this.queryParams       = new QueryParamsSpec(queryParams);
 		this.entity            = entity;
 	}
 	
@@ -64,6 +66,15 @@ public class RestRequest {
 	public HeadersSpec getHeaders() {
 		return headers;
 	}
+	
+	/**
+	 * Returns the queryParams.
+	 * @return the queryParams
+	 */
+	public QueryParamsSpec getQueryParams() {
+		return queryParams;
+	}
+
 	/**
 	 * Returns the entity.
 	 * @return the entity
@@ -128,7 +139,7 @@ public class RestRequest {
 	 * @return the copy
 	 */
 	public static RestRequest from(RestRequest request) {
-		return new RestRequest(request.getTarget(), request.getMethod(), request.getResponseMediaType(), request.getHeaders(), request.getEntity());
+		return new RestRequest(request.getTarget(), request.getMethod(), request.getResponseMediaType(), request.getHeaders(), request.getQueryParams(), request.getEntity());
 	}
 
 	/**

@@ -73,6 +73,24 @@ public class JerseyTest {
 		}
 	}
 	
-	// We need to setup a test with https://httpbin.org/headers to test the real headers
-	
+	@Test
+	public void testHttpBin() {
+		if (client != null) {
+			// We need to setup a test with http://httpbin.org/headers to test the real headers
+			RestClientConfiguration configuration = RestClientConfiguration.builder()
+					.with("https://httpbin.org/post")
+					.verbose(true)
+					.build();
+				Target.Builder targetBuilder = Target.builder()
+						.with(JerseyImpl.JERSEY)
+						.with(configuration)
+						.register(new UserAgentInterceptor("ReqResClient/0.1beta"));
+				client = RestClient.builder(ReqResClient.class)
+						.with(targetBuilder)
+						.withAuthorization(r -> new FixedHeaderAuthorizationStrategy(r, AuthorizationType.X_API_KEY, apiKey))
+						.build();
+				
+				log.info(client.httpbin(new User(0, "someone.else@reqres.in", "Jane", "Doe", null)).toString());
+		}
+	}
 }

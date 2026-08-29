@@ -66,7 +66,6 @@ public class SpringBootTest {
 		}
 	}
 	
-	
 	@Test
 	public void testCreate() {
 		if (client != null) {

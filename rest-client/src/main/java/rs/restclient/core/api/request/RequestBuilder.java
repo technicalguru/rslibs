@@ -15,7 +15,7 @@ import rs.restclient.core.util.RestRequestExecution;
  * Abstract implementation of request builder.
  * The final class is dependent on the implementation (Jersey, SpringBoot's RestClient) etc.
  */
-public class RequestBuilder extends AbstractRequestSpec {
+public class RequestBuilder extends AbstractRequestSpec<RequestBuilder> {
 
 	public static enum RequestMethod {
 		GET(MediaType.APPLICATION_JSON),
@@ -96,9 +96,10 @@ public class RequestBuilder extends AbstractRequestSpec {
 		return method(method.name(), method.getDefaultResponseMediaType(), entity);
 	}
 	
+	
 	public RestResponse method(String method, String responseMediaType, Entity<?> entity) {
 		// 1st Build RestRequest  - standard object
-		RestRequest request = new RestRequest(getTarget(), method, responseMediaType, getHeaders(), entity);
+		RestRequest request = new RestRequest(getTarget(), method, responseMediaType, getHeaders(), getQueryParams(), entity);
 		// Ask the authorization strategy whether we can proceed, but synchronize
 		AuthorizationStrategy authorizationStrategy = getAuthorizationStrategy();
 		if (authorizationStrategy != null) {

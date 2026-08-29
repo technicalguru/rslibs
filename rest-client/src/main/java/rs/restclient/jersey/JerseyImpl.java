@@ -58,12 +58,20 @@ public class JerseyImpl implements TargetImplementation {
 		// Create WebTarget
 		WebTarget jerseyTarget = createWebTarget(target);
 		
-		// Build request with JSON response media type and set headers
+		// Query params
+		jerseyTarget = applyQueryParams(jerseyTarget, request);
+				
+		// Build request with JSON response media type
 		String mediaType = request.getResponseMediaType();
 		Invocation.Builder requestBuilder = mediaType != null ? jerseyTarget.request(MediaType.APPLICATION_JSON) : jerseyTarget.request();
+		
+		// Add headers
 		requestBuilder = requestBuilder.headers(convertHeaders(request.getHeaders()));
-		// Missing Content-Length and Content-Type
+		
+		// Accept header
 		if (mediaType != null) requestBuilder = requestBuilder.header(HttpHeaders.ACCEPT, request.getResponseMediaType());
+		
+		// TODO logging
 		
 		// Build invocation with/without request body
 		Entity<?> entity = request.getEntity();
@@ -76,13 +84,32 @@ public class JerseyImpl implements TargetImplementation {
 		}
 		
 		// Invoke
-		Response response = invocation.invoke();
-		return createResponse(request, response);
+		return execute(request, invocation);
 	}
 	
+	/**
+	 * Creates Jersey's web target from the URI alone.
+	 * @param target the target
+	 * @return the Jersey {@link WebTarget}
+	 */
 	protected WebTarget createWebTarget(Target target) {
 		Client client = createClient(target);
 		return client.target(target.getUri());
+	}
+	
+	/**
+	 * Applies the query parameters to the WebTarget.
+	 * @param jerseyTarget the Jersey WebTarget
+	 * @param request the request
+	 * @return a new WebTarget with all query params applied
+	 */
+	protected WebTarget applyQueryParams(WebTarget jerseyTarget, RestRequest request) {
+		MultiValuedMap<String,Object> queryParams = request.getQueryParams().getParams();
+		for (String name : queryParams.keys()) {
+			Object values[] = queryParams.get(name).toArray();
+			jerseyTarget = jerseyTarget.queryParam(name, values);
+		}
+		return jerseyTarget;
 	}
 	
 	/**
@@ -126,7 +153,14 @@ public class JerseyImpl implements TargetImplementation {
 		return clientConfig;
 	}
 
-	protected RestResponse createResponse(RestRequest request, Response response) {
+	/**
+	 * Executes the Jersey invocation and creates the reponse. 
+	 * @param request the request object
+	 * @param invocation Jersey's invocation specification
+	 * @return the response object
+	 */
+	protected RestResponse execute(RestRequest request, Invocation invocation) {
+		Response response = invocation.invoke();
 		// body
 		Optional<String> body = Optional.empty();
 		if (response.hasEntity()) {
@@ -149,6 +183,11 @@ public class JerseyImpl implements TargetImplementation {
 			.build();
 	}
 
+	/**
+	 * Convert (request) headers from {@link RestRequest} to Jersey's version of the headers.
+	 * @param headersSpec RestClient headers
+	 * @return Jersey's headers
+	 */
 	private static MultivaluedMap<String, Object> convertHeaders(HeadersSpec headersSpec) {
 		MultiValuedMap<String, Object> headers = headersSpec.getHeaders();
 		MultivaluedMap<String, Object> rc = new MultivaluedHashMap<>();
@@ -158,6 +197,11 @@ public class JerseyImpl implements TargetImplementation {
 		return rc;
 	}
 
+	/**
+	 * Converts Jersey's response headers to {@link RestResponse} headers.
+	 * @param headers Jersey's response headers
+	 * @return RestResponse headers
+	 */
 	private static MultiValuedMap<String, String> convertHeaders(MultivaluedMap<String, Object> headers) {
 		MultiValuedMap<String, String> rc = new ArrayListValuedHashMap<>();
 		for (String name : headers.keySet()) {
