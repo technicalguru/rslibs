@@ -118,7 +118,7 @@ public class JerseyImpl implements TargetImplementation {
 	 * @see #createClientConfig()
 	 */
 	protected Client createClient(Target target) {
-		return ClientBuilder.newClient(createClientConfig(target.getConfiguration()));
+		return ClientBuilder.newClient(createClientConfig(target.configuration()));
 	}
 	
 	/**

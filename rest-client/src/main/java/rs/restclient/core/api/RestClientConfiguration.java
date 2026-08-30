@@ -242,7 +242,5 @@ public class RestClientConfiguration {
 			return rc;
 		}
 	}
-	// missing: how to describe client authorization: cookie or token (fixed) or by auth/renew.
-	
 	
 }

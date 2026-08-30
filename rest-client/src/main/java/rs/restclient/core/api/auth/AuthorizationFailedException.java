@@ -3,7 +3,7 @@ package rs.restclient.core.api.auth;
 import rs.restclient.core.api.RestClientException;
 
 /**
- * 
+ * Thrown by the {@link AuthorizationStrategy} when authorization fails.
  * @author ralph
  *
  */

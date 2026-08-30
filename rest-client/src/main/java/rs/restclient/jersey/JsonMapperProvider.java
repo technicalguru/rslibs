@@ -6,7 +6,7 @@ import jakarta.ws.rs.ext.Provider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * Provides a custom {@link ObjectMapper}.
+ * Provides a custom {@link ObjectMapper} to Jersey implementation.
  * 
  * @author ralph
  *

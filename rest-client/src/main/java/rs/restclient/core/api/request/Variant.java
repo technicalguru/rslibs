@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+/**
+ * A default implementation of the Variant specification in case an implementation
+ * does not provide its own version of it.
+ */
 public class Variant {
     private Locale language;
     private String mediaType;

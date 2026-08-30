@@ -7,9 +7,9 @@ import rs.restclient.core.api.request.RestRequest;
 import rs.restclient.core.api.response.RestResponse;
 
 /**
- * A client implementation is the main entrance point
- * for a Client. It can produce the 
- * builders for the specific implementation details.
+ * A client implementation is the essential
+ * object where the request is being executed 
+ * and the response object created.
  */
 public interface TargetImplementation {
 

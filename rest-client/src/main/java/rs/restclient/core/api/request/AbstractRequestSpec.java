@@ -34,10 +34,10 @@ public abstract class AbstractRequestSpec<T extends AbstractRequestSpec<T>> {
 	 * Copy constructor.
 	 */
 	protected AbstractRequestSpec(AbstractRequestSpec<?> other) {
-		this.headers               = new HeadersSpec(other.getHeaders());
-		this.queryParams           = new QueryParamsSpec(other.getQueryParams());
-		this.interceptors          = new ArrayList<>(other.getInterceptors());
-		this.authorizationStrategy = other.getAuthorizationStrategy();
+		this.headers               = new HeadersSpec(other.headers());
+		this.queryParams           = new QueryParamsSpec(other.queryParams());
+		this.interceptors          = new ArrayList<>(other.interceptors());
+		this.authorizationStrategy = other.authorizationStrategy();
 	}
 
 	
@@ -58,13 +58,14 @@ public abstract class AbstractRequestSpec<T extends AbstractRequestSpec<T>> {
 	 * Returns the interceptors.
 	 * @return the interceptors
 	 */
-	public List<RequestInterceptor> getInterceptors() {
+	public List<RequestInterceptor> interceptors() {
 		return UnmodifiableList.unmodifiableList(interceptors);
 	}
 
 	/**
 	 * Register the interceptor for execution in this target.
 	 * @param interceptor interceptor
+	 * @return this object for chaining
 	 */
 	public T register(RequestInterceptor interceptor) {
 		this.interceptors.add(interceptor);
@@ -77,10 +78,16 @@ public abstract class AbstractRequestSpec<T extends AbstractRequestSpec<T>> {
 	 * Returns the headers.
 	 * @return the headers
 	 */
-	public HeadersSpec getHeaders() {
+	public HeadersSpec headers() {
 		return UnmodifiableHeadersSpec.unmodifiableHeadersSpec(headers);
 	}
 
+	/**
+	 * Adds a header.
+	 * @param name name of header
+	 * @param values value(s)
+	 * @return this object for chaining
+	 */
 	public T header(String name, Object ...values) {
 		headers.add(name, values);
 		@SuppressWarnings("unchecked")
@@ -88,6 +95,11 @@ public abstract class AbstractRequestSpec<T extends AbstractRequestSpec<T>> {
 		return t;
 	}
 	
+	/**
+	 * Adds multiple headers.
+	 * @param headers headers to add
+	 * @return this object for chaining
+	 */
 	public T headers(MultiValuedMap<String, Object> headers) {
 		this.headers.add(headers);
 		@SuppressWarnings("unchecked")
@@ -95,6 +107,12 @@ public abstract class AbstractRequestSpec<T extends AbstractRequestSpec<T>> {
 		return t;
 	}
 	
+	/**
+	 * Adds a cookie (Note: This is "Cookie" header, not "Set-Cookie").
+	 * @param name name of cookie
+	 * @param cookie value of cookie
+	 * @return this object for chaining
+	 */
 	public T cookie(String name, String cookie) {
 		this.headers.addCookie(name, cookie);
 		@SuppressWarnings("unchecked")
@@ -102,6 +120,11 @@ public abstract class AbstractRequestSpec<T extends AbstractRequestSpec<T>> {
 		return t;
 	}
 	
+	/**
+	 * Adds a cookie (Note: This is "Cookie" header, not "Set-Cookie").
+	 * @param cookie to add
+	 * @return this object for chaining
+	 */
 	public T cookie(String cookie) {
 		this.headers.addCookie(cookie);
 		@SuppressWarnings("unchecked")
@@ -109,6 +132,11 @@ public abstract class AbstractRequestSpec<T extends AbstractRequestSpec<T>> {
 		return t;
 	}
 	
+	/**
+	 * Adds a cookie (Note: This is "Cookie" header, not "Set-Cookie").
+	 * @param cookie cookie to add
+	 * @return this object for chaining
+	 */
 	public T cookie(HttpCookie cookie) {
 		this.headers.addCookie(cookie);
 		@SuppressWarnings("unchecked")
@@ -116,7 +144,12 @@ public abstract class AbstractRequestSpec<T extends AbstractRequestSpec<T>> {
 		return t;
 	}
 	
-	public T cookie(Collection<HttpCookie> cookies) {
+	/**
+	 * Adds cookies (Note: This is "Cookie" header, not "Set-Cookie").
+	 * @param cookies cookies to add
+	 * @return this object for chaining
+	 */
+	public T cookies(Collection<HttpCookie> cookies) {
 		this.headers.addCookies(cookies);
 		@SuppressWarnings("unchecked")
 		T t = (T)this;
@@ -127,14 +160,16 @@ public abstract class AbstractRequestSpec<T extends AbstractRequestSpec<T>> {
 	 * Returns the queryParams.
 	 * @return the queryParams
 	 */
-	public QueryParamsSpec getQueryParams() {
+	public QueryParamsSpec queryParams() {
 		return UnmodifiableQueryParamsSpec.unmodifiableQueryParamsSpec(queryParams);
 	}
 
 	
 	/**
-	 * @param name
-	 * @param values
+	 * Adds a query parameter.
+	 * @param name name of parameter
+	 * @param values value(s)
+	 * @return this object for chaining
 	 * @see QueryParamsSpec#add(java.lang.String, java.lang.Object[])
 	 */
 	public T queryParam(String name, Object... values) {
@@ -145,7 +180,9 @@ public abstract class AbstractRequestSpec<T extends AbstractRequestSpec<T>> {
 	}
 
 	/**
-	 * @param params
+	 * Adds multiple query parameters.
+	 * @param params  parameters to add
+	 * @return this object for chaining
 	 * @see QueryParamsSpec#add(org.apache.commons.collections4.MultiValuedMap)
 	 */
 	public T queryParams(MultiValuedMap<String, Object> params) {
@@ -159,13 +196,14 @@ public abstract class AbstractRequestSpec<T extends AbstractRequestSpec<T>> {
 	 * Returns the authorizationStrategy.
 	 * @return the authorizationStrategy
 	 */
-	public AuthorizationStrategy getAuthorizationStrategy() {
+	public AuthorizationStrategy authorizationStrategy() {
 		return authorizationStrategy;
 	}
 
 	/**
 	 * Sets the authorizationStrategy.
 	 * @param authorizationStrategy the authorizationStrategy to set
+	 * @return this object for chaining
 	 */
 	public T authorizationStrategy(AuthorizationStrategy authorizationStrategy) {
 		this.authorizationStrategy = authorizationStrategy;

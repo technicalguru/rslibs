@@ -40,7 +40,7 @@ public class SpringBootImpl implements TargetImplementation {
 		builder = applyInterceptors(builder, request);
 		
 		// Verbosity and response catching
-		SpringBootRequestInterceptor interceptor = new SpringBootRequestInterceptor(request.getTarget().getConfiguration().isVerbose());
+		SpringBootRequestInterceptor interceptor = new SpringBootRequestInterceptor(request.getTarget().configuration().isVerbose());
 		builder = builder.requestInterceptor(interceptor);
 
 		RestClient client = builder.build();

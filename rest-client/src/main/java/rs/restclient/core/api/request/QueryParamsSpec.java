@@ -44,12 +44,21 @@ public class QueryParamsSpec {
 		return UnmodifiableMultiValuedMap.unmodifiableMultiValuedMap(params);
 	}
 
+	/**
+	 * Adds a query parameter.
+	 * @param name name of parameter
+	 * @param values value(s)
+	 */
 	public void add(String name, Object ...values) {
 		for (Object value : values) {
 			if (value != null) params.put(name, value);
 		}
 	}
 	
+	/**
+	 * Adds all query parameters.
+	 * @param params parameters to add
+	 */
 	public void add(MultiValuedMap<String, Object> params) {
 		this.params.putAll(params);
 	}

@@ -9,7 +9,7 @@ import org.apache.commons.collections4.multimap.UnmodifiableMultiValuedMap;
 import org.springframework.http.HttpHeaders;
 
 /**
- * To reuse in various classes for the same reason.
+ * To encapsulate in various classes for holding headers.
  * @author ralph
  *
  */
@@ -49,30 +49,56 @@ public class HeadersSpec {
 		return UnmodifiableMultiValuedMap.unmodifiableMultiValuedMap(headers);
 	}
 
+	/**
+	 * Adds a header.
+	 * @param name name of header
+	 * @param values value(s) of header
+	 */
 	public void add(String name, Object ...values) {
 		for (Object value : values) {
 			if (value != null) headers.put(name, value);
 		}
 	}
 	
+	/**
+	 * Adds multiple headers.
+	 * @param headers headers to add
+	 */
 	public void add(MultiValuedMap<String, Object> headers) {
 		this.headers.putAll(headers);
 	}
 	
+	/**
+	 * Adds a cookie.
+	 * @param name name of cookie
+	 * @param cookie value of cookie
+	 */
 	public void addCookie(String name, String cookie) {
 		add(HttpHeaders.COOKIE, cookie);
 	}
 	
+	/**
+	 * Adds a cookie.
+	 * @param cookie cookie to add
+	 */
 	public void addCookie(String cookie) {
 		addCookies(HttpCookie.parse(cookie));
 	}
 	
+	/**
+	 * Adds all cookies.
+	 * @param cookies cookies to add
+	 */
 	public void addCookies(Collection<HttpCookie> cookies) {
 		for (HttpCookie cookie : cookies) {
 			addCookie(cookie);
 		}
 	}
 
+	/**
+	 * Adds a cookie.
+	 * @param cookie cookie to add
+	 */
 	public void addCookie(HttpCookie cookie) {
 		add(HttpHeaders.COOKIE, cookie.toString());
 	}

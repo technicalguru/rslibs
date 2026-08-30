@@ -64,7 +64,7 @@ public abstract class RestClient {
 		this.target     = target;
 		this.subClients = new HashMap<>();
 		this.log        = LoggerFactory.getLogger(getClass());
-		if (target.getAuthorizationStrategy() == null) {
+		if (target.authorizationStrategy() == null) {
 			target.authorizationStrategy(createAuthorizationStrategy());
 		}
 	}
@@ -181,11 +181,21 @@ public abstract class RestClient {
 			this.clientClass   = clientClass;
 		}
 
+		/**
+		 * Use the given target builder to create the client.
+		 * @param targetBuilder builder to be used
+		 * @return this builder for chaining
+		 */
 		public Builder<T> with(Target.Builder targetBuilder) {
 			this.targetBuilder = targetBuilder;
 			return this;
 		}
 		
+		/**
+		 * Use the given function to retrieve the {@link AuthorizationStrategy} after the client was created.
+		 * @param authorizationFunction function to be used
+		 * @return this builder for chaining
+		 */
 		public Builder<T> withAuthorization(Function<RestClient, AuthorizationStrategy> authorizationFunction) {
 			this.authorizationFunction = authorizationFunction;
 			return this;
@@ -201,7 +211,7 @@ public abstract class RestClient {
 			
 			// Check if we have an authorization strategy set.
 			Target target = rc.getTarget();
-			if (target.getAuthorizationStrategy() == null) {
+			if (target.authorizationStrategy() == null) {
 				if (authorizationFunction != null) {
 					target.authorizationStrategy(authorizationFunction.apply(rc));
 				}

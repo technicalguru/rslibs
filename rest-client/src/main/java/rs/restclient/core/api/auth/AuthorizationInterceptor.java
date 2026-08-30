@@ -6,6 +6,9 @@ import rs.restclient.core.util.AddHeaderInterceptor;
 
 /**
  * Implements simple authorization scheme from fixed user/password or key values.
+ * <p>You shall use the {@link FixedHeaderAuthorizationStrategy} instead of this
+ * interceptor. However, you can build your own strategies and use this interceptor
+ * for implementing it.
  * @author ralph
  *
  */
@@ -52,10 +55,18 @@ public class AuthorizationInterceptor extends AddHeaderInterceptor {
 			this.valueFunction = valueFunction;
 		}
 		
+		/**
+		 * Returns the header name to be used.
+		 */
 		public String getHeaderName() {
 			return headerName;
 		}
 		
+		/**
+		 * Produces the header value from given value(s).
+		 * @param values values to be used in the header value
+		 * @return the header value
+		 */
 		public String getValue(String ...values) {
 			if (valueFunction != null) {
 				return valueFunction.apply(values);
@@ -64,12 +75,25 @@ public class AuthorizationInterceptor extends AddHeaderInterceptor {
 		}
 	}
 	
+	/**
+	 * The function that makes the header value out of the values
+	 * for a specific {@link AuthorizationType}.
+	 */
 	@FunctionalInterface
 	private static interface ValueFunction {
-		
+		/**
+		 * Convert th evalue(s) to the header value.
+		 * @param values values to be used and optionally encoded
+		 * @return the correct header value to be used
+		 */
 		String apply(String ...values);
 	}
 	
+	/**
+	 * Base64 encoding of first two values.
+	 * @param values values (max 2)
+	 * @return the encoded Base64 encoding of the complete Authorization value
+	 */
 	public static String encodeAuthorization(String ...values) {
 		String rc = values[0];
 		if (values.length > 1) rc += ":"+values[1];

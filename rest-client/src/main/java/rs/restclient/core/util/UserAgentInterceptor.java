@@ -3,21 +3,19 @@
  */
 package rs.restclient.core.util;
 
-import java.io.IOException;
-
 import org.springframework.http.HttpHeaders;
 
-import rs.restclient.core.api.request.RestRequest;
+import rs.baselib.util.CommonUtils;
 
 /**
- * Handles cookies in requests and responses.
+ * Sets an user agent.
  * 
  * @author ralph
  *
  */
-public class UserAgentInterceptor extends AbstractRequestInterceptor {
+public class UserAgentInterceptor extends AddHeaderInterceptor {
 
-	private String                 userAgent;
+	private String userAgent;
 	
 	/**
 	 * Default Constructor.
@@ -31,15 +29,7 @@ public class UserAgentInterceptor extends AbstractRequestInterceptor {
 	 * @param userAgent - the user agent string to be used.
 	 */
 	public UserAgentInterceptor(String userAgent) {
-		this.userAgent = userAgent;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected void intercept(RestRequest request) throws IOException {
-		request.addHeader(HttpHeaders.USER_AGENT, userAgent);
+		super(HttpHeaders.USER_AGENT, CommonUtils.isEmpty(userAgent) ? "RestClient/6.1" : userAgent);
 	}
 
 	/**

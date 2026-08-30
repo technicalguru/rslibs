@@ -32,8 +32,8 @@ public class Target extends AbstractRequestSpec<Target> {
 	 * @param uri the URI for this target
 	 */
 	private Target(Target parentTarget, URI uri) {
-		this(uri, parentTarget.getConfiguration(), parentTarget.getImplementation(), parentTarget.getInterceptors(),
-				parentTarget.getHeaders(), parentTarget.getQueryParams(), parentTarget.getAuthorizationStrategy());
+		this(uri, parentTarget.configuration(), parentTarget.implementation(), parentTarget.interceptors(),
+				parentTarget.headers(), parentTarget.queryParams(), parentTarget.authorizationStrategy());
 	}
 	
 	/**
@@ -59,7 +59,7 @@ public class Target extends AbstractRequestSpec<Target> {
 	 * Returns the configuration.
 	 * @return the configuration
 	 */
-	public RestClientConfiguration getConfiguration() {
+	public RestClientConfiguration configuration() {
 		return configuration;
 	}
 
@@ -67,7 +67,7 @@ public class Target extends AbstractRequestSpec<Target> {
 	 * Returns the implementation.
 	 * @return the implementation
 	 */
-	public TargetImplementation getImplementation() {
+	public TargetImplementation implementation() {
 		return implementation;
 	}
 
@@ -173,8 +173,8 @@ public class Target extends AbstractRequestSpec<Target> {
 	 * @return a new target
 	 */
 	@Override
-	public Target cookie(Collection<HttpCookie> cookies) {
-		return builder(this).build().cookie(cookies);
+	public Target cookies(Collection<HttpCookie> cookies) {
+		return builder(this).build().cookies(cookies);
 	}
 
 	/**
@@ -210,11 +210,11 @@ public class Target extends AbstractRequestSpec<Target> {
 
 	public static Builder builder(Target from) {
 		return builder()
-			.with(from.getImplementation())
-			.with(from.getConfiguration())
-			.authorizationStrategy(from.getAuthorizationStrategy())
-			.headers(from.getHeaders().getHeaders())
-			.queryParams(from.getQueryParams().getParams());		
+			.with(from.implementation())
+			.with(from.configuration())
+			.authorizationStrategy(from.authorizationStrategy())
+			.headers(from.headers().getHeaders())
+			.queryParams(from.queryParams().getParams());		
 	}
 	
 	/**
@@ -225,14 +225,13 @@ public class Target extends AbstractRequestSpec<Target> {
 		return new Builder();
 	}
 	
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public String toString() {
 		return "Target [configuration=" + configuration + ", implementation=" + implementation + ", headers=" 
-				+ getHeaders() + ", interceptors=" + getInterceptors() + ", uri=" + uri + "]";
+				+ headers() + ", interceptors=" + interceptors() + ", uri=" + uri + "]";
 	}
 
 	/**
@@ -275,7 +274,7 @@ public class Target extends AbstractRequestSpec<Target> {
 			if (implementation == null) throw new RestClientException("implementation must not be null");
 			// Usually done by the implementation
 			//if (configuration.isVerbose()) register(new LoggingInterceptor());
-			return new Target(URI.create(configuration.getUri()), configuration, implementation, getInterceptors(), getHeaders(), getQueryParams(), getAuthorizationStrategy());
+			return new Target(URI.create(configuration.getUri()), configuration, implementation, interceptors(), headers(), queryParams(), authorizationStrategy());
 		}
 	}
 

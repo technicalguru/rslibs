@@ -164,7 +164,7 @@ public class RestResponse {
 	 */
 	public JsonMapper getJsonMapper() {
 		if (jsonMapper == null) {
-			jsonMapper = getTarget().getConfiguration().getMapper();
+			jsonMapper = getTarget().configuration().getMapper();
 		}
 		return jsonMapper;
 	}
@@ -175,7 +175,7 @@ public class RestResponse {
 	 */
 	public com.fasterxml.jackson.databind.json.JsonMapper getJsonMapper2() {
 		if (jsonMapper2 == null) {
-			jsonMapper2 = getTarget().getConfiguration().getMapper2();
+			jsonMapper2 = getTarget().configuration().getMapper2();
 		}
 		return jsonMapper2;
 	}
@@ -197,10 +197,17 @@ public class RestResponse {
 				", headers=" + getHeaders() + ", body=" + getBody() + "]";
 	}
 
+	/**
+	 * Creates the builder for a response.
+	 * @return the response builder
+	 */
 	public static Builder builder() {
 		return new Builder();
 	}
 	
+	/**
+	 * Response builder class.
+	 */
 	public static class Builder {
 		
 		private RestRequest                    request;
@@ -212,27 +219,52 @@ public class RestResponse {
 		protected Builder() {
 		}
 		
+		/**
+		 * Assign the given request object.
+		 * @param request the request object
+		 * @return this builder for method chaining
+		 */
 		public Builder with(RestRequest request) {
 			this.request = request;
 			return this;
 		}
 		
+		/**
+		 * Assign the given response headers.
+		 * @param headers the headers from the response
+		 * @return this builder for method chaining
+		 */
 		public Builder with(MultiValuedMap<String, String> headers) {
 			this.headers = headers;
 			return this;
 		}
 		
+		/**
+		 * Assign the given response status.
+		 * @param statusCode status code, e.g. 200
+		 * @param statusMessage status message, e.g. "OK"
+		 * @return this builder for method chaining
+		 */
 		public Builder withStatus(int statusCode, String statusMessage) {
 			this.statusCode    = statusCode;
 			this.statusMessage = statusMessage;
 			return this;
 		}
 		
+		/**
+		 * Assign the given response body.
+		 * @param body the response body
+		 * @return this builder for method chaining
+		 */
 		public Builder with(Optional<String> body) {
 			this.body = body;
 			return this;
 		}
 		
+		/**
+		 * Build the response object.
+		 * @return the response built from previous configuration
+		 */
 		public RestResponse build() {
 			return new RestResponse(request, headers, statusCode, statusMessage, body);
 		}
