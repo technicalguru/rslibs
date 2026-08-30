@@ -12,11 +12,11 @@ import org.springframework.web.client.RestClient.RequestBodySpec;
 import org.springframework.web.client.RestClient.RequestBodyUriSpec;
 import org.springframework.web.client.RestClient.ResponseSpec;
 
+import rs.baselib.util.UriBuilder;
 import rs.restclient.core.api.TargetImplementation;
 import rs.restclient.core.api.request.Entity;
 import rs.restclient.core.api.request.RestRequest;
 import rs.restclient.core.api.response.RestResponse;
-import rs.restclient.core.util.UriBuilder;
 
 /**
  * The implementation of SpringBoot backend.
@@ -86,7 +86,7 @@ public class SpringBootImpl implements TargetImplementation {
 		MultiValuedMap<String,Object> queryParams = request.getQueryParams().getParams();
 		for (String name : queryParams.keys()) {
 			for (Object value : queryParams.get(name).toArray()) {
-				if (value != null) uriBuilder.getQueryParams().put(name, value.toString());
+				if (value != null) uriBuilder.queryParams().put(name, value.toString());
 			}
 		}
 		return uriBuilder.build();

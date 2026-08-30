@@ -5,6 +5,8 @@ import java.util.List;
 import org.apache.commons.collections4.MultiValuedMap;
 import org.slf4j.Logger;
 
+import rs.baselib.util.CommonUtils;
+
 /**
  * Used for logging purposes.
  * @author ralph
@@ -15,7 +17,7 @@ public class LoggingUtils {
 	/**
 	 * Header names that contain sensitive data.
 	 */
-    public static List<String> SENSITIVE_HEADERS = RestClientUtils.newList("authorization", "proxy-authorization", "api-key", 
+    public static List<String> SENSITIVE_HEADERS = CommonUtils.newList("authorization", "proxy-authorization", "api-key", 
     		"x-api-key", "x-auth-token", "x-session-token");
     
     /**

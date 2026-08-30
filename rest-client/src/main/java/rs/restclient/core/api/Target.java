@@ -10,12 +10,12 @@ import java.util.List;
 
 import org.apache.commons.collections4.MultiValuedMap;
 
+import rs.baselib.util.UriBuilder;
 import rs.restclient.core.api.auth.AuthorizationStrategy;
 import rs.restclient.core.api.request.AbstractRequestSpec;
 import rs.restclient.core.api.request.HeadersSpec;
 import rs.restclient.core.api.request.QueryParamsSpec;
 import rs.restclient.core.api.request.RequestBuilder;
-import rs.restclient.core.util.UriBuilder;
 
 /**
  * Describes a target and creates your specific API requests.

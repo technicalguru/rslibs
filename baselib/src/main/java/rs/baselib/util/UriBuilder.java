@@ -1,12 +1,9 @@
 /**
  * 
  */
-package rs.restclient.core.util;
+package rs.baselib.util;
 
 import java.net.URI;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +25,10 @@ public class UriBuilder {
 	private MultiValuedMap<String, String> queryParams;
 	private String                         fragment;
 	
+	/**
+	 * Constructor.
+	 * @param uri URI to build with
+	 */
 	protected UriBuilder(URI uri) {
 		this(
 			uri.getScheme(),
@@ -40,119 +41,141 @@ public class UriBuilder {
 		);
 	}
 	
+	/**
+	 * Constructor.
+	 * @param scheme scheme of URI
+	 * @param userInfo userInfo of URI
+	 * @param host host of URI
+	 * @param port port of URI
+	 * @param path path of URI
+	 * @param query query of URI
+	 * @param fragment fragment of URI
+	 */
 	protected UriBuilder(String scheme, String userInfo, String host, int port, String path, String query, String fragment) {
 		this.segments    = new ArrayList<>();
 		this.queryParams = new ArrayListValuedHashMap<>();
-		setScheme(scheme);
-		if (!RestClientUtils.isEmpty(userInfo)) {
+		scheme(scheme);
+		if (!CommonUtils.isEmpty(userInfo)) {
 			String info[] = userInfo.split(":");
-			setUser(info[0]);
-			if (info.length > 1) setPassword(info[1]);
+			user(info[0]);
+			if (info.length > 1) password(info[1]);
 		}
-		setHost(host);
-		setPort(port);
-		setPath(path);
-		setQuery(query);
-		setFragment(fragment);
+		host(host);
+		port(port);
+		path(path);
+		query(query);
+		fragment(fragment);
 	}
 
 	/**
 	 * Returns the scheme.
 	 * @return the scheme
 	 */
-	public String getScheme() {
+	public String scheme() {
 		return scheme;
 	}
 
 	/**
 	 * Sets the scheme.
 	 * @param scheme the scheme to set
+	 * @return this builder for chaining
 	 */
-	public void setScheme(String scheme) {
+	public UriBuilder scheme(String scheme) {
 		this.scheme = scheme;
+		return this;
 	}
 
 	/**
 	 * Returns the user.
 	 * @return the user
 	 */
-	public String getUser() {
+	public String user() {
 		return user;
 	}
 
 	/**
 	 * Sets the user.
 	 * @param user the user to set
+	 * @return this builder for chaining
 	 */
-	public void setUser(String user) {
+	public UriBuilder user(String user) {
 		this.user = user;
+		return this;
 	}
 
 	/**
 	 * Returns the password.
 	 * @return the password
 	 */
-	public String getPassword() {
+	public String password() {
 		return password;
 	}
 
 	/**
 	 * Sets the password.
 	 * @param password the password to set
+	 * @return this builder for chaining
 	 */
-	public void setPassword(String password) {
+	public UriBuilder password(String password) {
 		this.password = password;
+		return this;
 	}
 
 	/**
 	 * Returns the host.
 	 * @return the host
 	 */
-	public String getHost() {
+	public String host() {
 		return host;
 	}
 
 	/**
 	 * Sets the host.
 	 * @param host the host to set
+	 * @return this builder for chaining
 	 */
-	public void setHost(String host) {
+	public UriBuilder host(String host) {
 		this.host = host;
+		return this;
 	}
 
 	/**
 	 * Returns the port.
 	 * @return the port
 	 */
-	public String getPort() {
+	public String port() {
 		return port;
 	}
 
 	/**
 	 * Sets the port.
 	 * @param port the port to set
+	 * @return this builder for chaining
 	 */
-	public void setPort(String port) {
+	public UriBuilder port(String port) {
 		this.port = port;
+		return this;
 	}
 
 	/**
 	 * Sets the port.
 	 * @param port the port to set
+	 * @return this builder for chaining
 	 */
-	public void setPort(int port) {
-		setPort(port > 0 ? ""+port : null);
+	public UriBuilder port(int port) {
+		port(port > 0 ? ""+port : null);
+		return this;
 	}
 	
 	/**
 	 * Returns the segments.
 	 * @return the segments
 	 */
-	public String getPath() {
+	public String path() {
 		StringBuilder path = new StringBuilder();
 		for (String segment : segments) {
 			path.append('/');
-			path.append(encodePathSegment(segment));
+			path.append(segment);
 		}
 		String rc = path.toString();
 		while (rc.indexOf("//") >= 0) rc = rc.replace("//", "/");
@@ -162,33 +185,37 @@ public class UriBuilder {
 	/**
 	 * Sets the segments.
 	 * @param segments the segments to set
+	 * @return this builder for chaining
 	 */
-	public void setPath(String path) {
+	public UriBuilder path(String path) {
 		this.segments.clear();
 		if (path != null) {
 			String segments[] = path.split("\\/");
 			for (String segment : segments) {
-				if (!RestClientUtils.isEmpty(segment)) this.segments.add(segment);
+				if (!CommonUtils.isEmpty(segment)) this.segments.add(segment);
 			}
 			if (path.endsWith("/")) this.segments.add("");
 		}
+		return this;
 	}
 
 	/**
 	 * Returns the queryParams.
 	 * @return the queryParams
 	 */
-	public MultiValuedMap<String, String> getQueryParams() {
+	public MultiValuedMap<String, String> queryParams() {
 		return UnmodifiableMultiValuedMap.unmodifiableMultiValuedMap(queryParams);
 	}
 
 	/**
 	 * Sets the queryParams.
 	 * @param queryParams the queryParams to set
+	 * @return this builder for chaining
 	 */
-	public void setQueryParams(MultiValuedMap<String, String> queryParams) {
+	public UriBuilder queryParams(MultiValuedMap<String, String> queryParams) {
 		this.queryParams.clear();
 		this.queryParams.putAll(queryParams);
+		return this;
 	}
 
 	/**
@@ -203,35 +230,44 @@ public class UriBuilder {
 	/**
 	 * Replaces the complete query.
 	 * @param query the query to be set
+	 * @return this builder for chaining
 	 */
-	public void setQuery(String query) {
+	public UriBuilder query(String query) {
 		this.queryParams.clear();
-			if (query != null) {
+		if (query != null) {
 			String params[] = query.split("&");
 			for (String param : params) {
 				String p[] = param.split("=");
-				if (p.length > 1) queryParam(decodeQueryParam(p[0]), decodeQueryParam(p[1]));
-				else queryParam(decodeQueryParam(p[0]), null);
+				if (p.length > 1) queryParam(UriUtils.decodeQueryParamPart(p[0]), UriUtils.decodeQueryParamPart(p[1]));
+				else queryParam(UriUtils.decodeQueryParamPart(p[0]), null);
 			}
 		}
+		return this;
 	}
 	
 	/**
 	 * Returns the fragment.
 	 * @return the fragment
 	 */
-	public String getFragment() {
+	public String fragment() {
 		return fragment;
 	}
 
 	/**
 	 * Sets the fragment.
 	 * @param fragment the fragment to set
+	 * @return this builder for chaining
 	 */
-	public void setFragment(String fragment) {
+	public UriBuilder fragment(String fragment) {
 		this.fragment = fragment;
+		return this;
 	}
 
+	/**
+	 * Appends the given segment(s)
+	 * @param segments the segments to add (if a "/" is in a segment then it will be considered as a separator)
+	 * @return this builder for chaining
+	 */
 	public UriBuilder appendSegments(String ...segments) {
 		for (String segment : segments) {
 			boolean isMultiple = segment.indexOf('/') > 0;
@@ -241,96 +277,86 @@ public class UriBuilder {
 		return this;
 	}
 	
+	/**
+	 * Returns the fragments.
+	 * @return the fragments
+	 */
+	protected List<String> segments() {
+		return this.segments;
+	}
+	
+	/**
+	 * Build the URI
+	 * @return URI built.
+	 */
 	public URI build() {
     	StringBuilder uri = new StringBuilder();
     	if (scheme != null) {
     		uri.append(scheme);
     		uri.append(":");
     	}
-    	if (!RestClientUtils.isEmpty(user) || !RestClientUtils.isEmpty(host) || !RestClientUtils.isEmpty(port)) {
+    	if (!CommonUtils.isEmpty(user) || !CommonUtils.isEmpty(host) || !CommonUtils.isEmpty(port)) {
     		uri.append("//");
-    		if (!RestClientUtils.isEmpty(user)) {
-    			uri.append(encodeAuthInfo(user));
-    			if (!RestClientUtils.isEmpty(password)) {
+    		if (!CommonUtils.isEmpty(user)) {
+    			uri.append(UriUtils.encodeAuthInfo(user));
+    			if (!CommonUtils.isEmpty(password)) {
     				uri.append(':');
-    				uri.append(encodeAuthInfo(password));
+    				uri.append(UriUtils.encodeAuthInfo(password));
     			}
     			uri.append("@");
     		}
-    		if (!RestClientUtils.isEmpty(host)) {
+    		if (!CommonUtils.isEmpty(host)) {
     			uri.append(host);
     		}
-    		if (!RestClientUtils.isEmpty(port)) {
+    		if (!CommonUtils.isEmpty(port)) {
     			uri.append(":");
     			uri.append(port);
     		}
     	}
-    	if (!segments.isEmpty() || ((queryParams != null) && !queryParams.isEmpty()) || !RestClientUtils.isEmpty(fragment)) {
+    	if (!segments.isEmpty() || ((queryParams != null) && !queryParams.isEmpty()) || !CommonUtils.isEmpty(fragment)) {
     		if (!segments.isEmpty()) {
    				// trailing slash appears when last segement is empty string
-    			uri.append(getPath());
+    			uri.append(UriUtils.encodePath(path()));
     		}
     		if ((queryParams != null) && !queryParams.isEmpty()) {
     			uri.append('?');
-    			uri.append(encodeQuery());
+    			uri.append(UriUtils.encodeQuery(queryParams));
     		}
-    		if (!RestClientUtils.isEmpty(fragment)) {
+    		if (!CommonUtils.isEmpty(fragment)) {
     			uri.append('#');
-    			uri.append(encodeFragment(fragment));
+    			uri.append(UriUtils.encodeFragment(fragment));
     		}
     	}
         return URI.create(uri.toString());
 	}
 	
+	/**
+	 * Create Builder from string
+	 * @param uri URI as string
+	 * @return the builder
+	 */
+	public static UriBuilder empty() {
+		return from(URI.create(""));
+	}
+	
+
+	/**
+	 * Create Builder from string
+	 * @param uri URI as string
+	 * @return the builder
+	 */
 	public static UriBuilder from(String uri) {
 		return from(URI.create(uri));
 	}
 	
+	/**
+	 * Create Builder from URI
+	 * @param uri URI as string
+	 * @return the builder
+	 */
 	public static UriBuilder from(URI uri) {
 		return new UriBuilder(uri);
 	}
 	
-	private String encodeAuthInfo(String s) {
-		if (s == null) return null;
-		return URLEncoder.encode(s, StandardCharsets.UTF_8);
-	}
-
-	private String encodePathSegment(String s) {
-		if (s == null) return null;
-		return URLEncoder.encode(s, StandardCharsets.UTF_8);
-	}
-
-	private String encodeQuery() {
-		if (queryParams == null || queryParams.isEmpty()) {
-			return null;
-		}
-
-		StringBuilder rc = new StringBuilder();
-		for (String name : queryParams.keySet()) {
-			for (String value : queryParams.get(name)) {
-				if (rc.length() > 0) {
-					rc.append('&');
-				}
-				rc.append(encodeQueryParam(name));
-				if (!RestClientUtils.isEmpty(value)) rc.append('=').append(encodeQueryParam(value));
-			}
-		}
-		return rc.toString();
-	}
-
-	private String decodeQueryParam(String s) {
-		return URLDecoder.decode(s, StandardCharsets.UTF_8);
-	}
-	
-	private String encodeQueryParam(String s) {
-		if (s == null)
-			return null;
-		return URLEncoder.encode(s, StandardCharsets.UTF_8);
-	}
-
-    private String encodeFragment(String s) {
-    	if (s == null) return null;
-    	return URLEncoder.encode(s, StandardCharsets.UTF_8);
-    }
 
 }
