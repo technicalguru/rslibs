@@ -1,5 +1,6 @@
 package rs.restclient.core.api.auth;
 
+import rs.restclient.core.api.RestClient;
 import rs.restclient.core.api.request.RestRequest;
 
 /**
@@ -14,7 +15,7 @@ import rs.restclient.core.api.request.RestRequest;
  * </ul>
  * {@link #checkAuthorization(RestRequest)} has a default implementation.
  * @author ralph
- *
+ * @see RestClient
  */
 public abstract class AbstractAuthorizationStrategy implements AuthorizationStrategy {
 

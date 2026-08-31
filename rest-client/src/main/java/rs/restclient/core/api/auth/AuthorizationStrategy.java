@@ -1,5 +1,6 @@
 package rs.restclient.core.api.auth;
 
+import rs.restclient.core.api.RestClient;
 import rs.restclient.core.api.request.RestRequest;
 
 /**
@@ -10,9 +11,14 @@ import rs.restclient.core.api.request.RestRequest;
  *    requests will be made in order and not overlap.
  * <p>Implementation shall set interceptors or trigger login/renewal requests
  * if required.
+ * <p>Creation of an authorization strategy can be cumbersome, especially when you
+ *    require customized information or references to your {@link RestClient}.
+ *    You need to create the strategy within {@link RestClient} but not yet configure
+ *    it. Introduce additional methods to configure your strategy, e.g. setApiKey(), setClient()
+ *    or alike.
  * 
  * @author ralph
- *
+ * @see RestClient
  */
 public interface AuthorizationStrategy {
 
