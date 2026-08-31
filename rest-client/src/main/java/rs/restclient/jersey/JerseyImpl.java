@@ -58,6 +58,8 @@ public class JerseyImpl implements TargetImplementation {
 	    SLF4JBridgeHandler.install();
 	}
 	
+	private Client client;
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -99,7 +101,9 @@ public class JerseyImpl implements TargetImplementation {
 	 * @return the Jersey {@link WebTarget}
 	 */
 	protected WebTarget createWebTarget(RestRequest request) {
-		Client client = createClient(request);
+		if (client == null) {
+			client = createClient(request);
+		}
 		return client.target(request.getUri());
 	}
 	
@@ -125,6 +129,7 @@ public class JerseyImpl implements TargetImplementation {
 	 * @see #createClientConfig(RestClientConfiguration)
 	 */
 	protected Client createClient(RestRequest request) {
+		
 		return ClientBuilder.newClient(createClientConfig(request.getConfiguration()));
 	}
 	
