@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.logging.Level;
+import java.util.logging.LogManager;
 
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
@@ -15,6 +16,7 @@ import org.glassfish.jersey.client.RequestEntityProcessing;
 import org.glassfish.jersey.logging.LoggingFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.http.HttpHeaders;
 
 import com.fasterxml.jackson.core.util.JacksonFeature;
@@ -27,6 +29,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.MultivaluedHashMap;
 import jakarta.ws.rs.core.MultivaluedMap;
 import jakarta.ws.rs.core.Response;
+import rs.baselib.util.CommonUtils;
 import rs.restclient.core.api.ProxyConfig;
 import rs.restclient.core.api.RestClientConfiguration;
 import rs.restclient.core.api.TargetImplementation;
@@ -34,6 +37,7 @@ import rs.restclient.core.api.request.Entity;
 import rs.restclient.core.api.request.HeadersSpec;
 import rs.restclient.core.api.request.RestRequest;
 import rs.restclient.core.api.response.RestResponse;
+import rs.restclient.core.util.LoggingUtils;
 
 /**
  * The implementation of JerseyClient backend.
@@ -42,11 +46,18 @@ import rs.restclient.core.api.response.RestResponse;
  */
 public class JerseyImpl implements TargetImplementation {
 
-	private static Logger log = LoggerFactory.getLogger(JerseyImpl.class);
-
+	private static Logger         log        = LoggerFactory.getLogger(JerseyImpl.class);
+	private static LoggingFeature JUL_LOGGER = new LoggingFeature(new LoggingUtils.JulLogger(log));
+	
 	/** The instance for usage */
 	public static final JerseyImpl JERSEY = new JerseyImpl();
 
+	static {
+	    // Install SLF4J bridge
+		LogManager.getLogManager().reset();
+	    SLF4JBridgeHandler.install();
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -125,9 +136,11 @@ public class JerseyImpl implements TargetImplementation {
 		ClientConfig clientConfig = new ClientConfig();
 		clientConfig.connectorProvider(new ApacheConnectorProvider());
 		
-		// TODO logging
+		// logging
 		if (configuration.isVerbose()) {
+			clientConfig.register(JUL_LOGGER);
 			clientConfig.property(LoggingFeature.LOGGING_FEATURE_VERBOSITY_CLIENT, LoggingFeature.Verbosity.PAYLOAD_TEXT);
+			clientConfig.property(LoggingFeature.DEFAULT_REDACT_HEADERS, CommonUtils.join( ";", LoggingUtils.SENSITIVE_HEADERS));
 			clientConfig.property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, Level.INFO.getName());
 		}
 		

@@ -6,7 +6,6 @@ package rs.restclient.core.util;
 import java.io.IOException;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import rs.restclient.core.api.request.RestRequest;
 import rs.restclient.core.api.response.RestResponse;
@@ -16,7 +15,7 @@ import rs.restclient.core.api.response.RestResponse;
  */
 public class LoggingInterceptor extends AbstractRequestInterceptor {
 
-	private static Logger log = LoggerFactory.getLogger(LoggingInterceptor.class);
+	private static Logger log = LoggingUtils.LOG;
 	
 	/**
 	 * {@inheritDoc}

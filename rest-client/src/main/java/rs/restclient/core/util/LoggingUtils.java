@@ -1,9 +1,12 @@
 package rs.restclient.core.util;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.logging.LogRecord;
 
 import org.apache.commons.collections4.MultiValuedMap;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import rs.baselib.util.CommonUtils;
 
@@ -13,6 +16,8 @@ import rs.baselib.util.CommonUtils;
  *
  */
 public class LoggingUtils {
+
+	public static Logger LOG = LoggerFactory.getLogger(LoggingUtils.class);
 
 	/**
 	 * Header names that contain sensitive data.
@@ -43,6 +48,17 @@ public class LoggingUtils {
     	return value.substring(0, 3)+"******";
     }
 
+    public static Optional<Integer> findSensitiveHeaderKey(String s) {
+    	s = s.toLowerCase();
+    	for (String header : SENSITIVE_HEADERS) {
+    		int pos = s.indexOf(header+":");
+    		if (pos > 0) {
+    			return Optional.of(pos+header.length()+1);
+    		}
+    	}
+    	return Optional.empty();
+    }
+    
     /**
      * Logs the headers and masks sensitive headers.
      * @param log the logging object
@@ -53,7 +69,7 @@ public class LoggingUtils {
 			if (!":status".equals(header)) {
 	    		for (Object value : headers.get(header)) {
 	    			if (value != null) {
-		    			if (LoggingUtils.isSensitiveHeader(header)) value = LoggingUtils.maskSensitiveHeaderValue(value.toString());
+		    			if (isSensitiveHeader(header)) value = maskSensitiveHeaderValue(value.toString());
 		    			log.info("   {}: {}", header, value.toString());
 	    			}
 	    		}
@@ -61,5 +77,46 @@ public class LoggingUtils {
     	}
     }
     
+    public static java.util.logging.Logger JUL = new JulLogger();
+    
+    public static class JulLogger extends java.util.logging.Logger {
 
+    	private Logger log;
+    	
+		/**
+		 * Constructor.
+		 */
+		public JulLogger() {
+			this(LOG);
+		}
+		
+		/**
+		 * Constructor with specific slf4j logger.
+		 * @param log
+		 */
+		public JulLogger(Logger log) {
+			super("rs.restclient.core.util.JulLogger", null);
+			this.log= log;
+		}
+
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		public void log(LogRecord record) {
+			for (String s : record.getMessage().split("\\n")) {
+				Optional<Integer> position = findSensitiveHeaderKey(s);
+				if (position.isPresent()) {
+					int p = position.get();
+					String start = s.substring(0, p);
+					String value = maskSensitiveHeaderValue(s.substring(p+1).trim());
+	    			log.info("{}: {}", start, value.toString());
+				} else {
+					log.info(s);
+				}
+			}
+		}
+    	
+    	
+    }
 }

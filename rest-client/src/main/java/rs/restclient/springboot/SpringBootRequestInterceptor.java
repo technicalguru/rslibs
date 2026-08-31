@@ -25,7 +25,7 @@ import rs.restclient.core.util.LoggingUtils;
  */
 public class SpringBootRequestInterceptor implements ClientHttpRequestInterceptor {
 	
-    private static final Logger log = LoggerFactory.getLogger(SpringBootRequestInterceptor.class);
+    private static final Logger log = LoggerFactory.getLogger(SpringBootImpl.class);
 
     private boolean                        verbose;
     private HttpStatusCode                 statusCode;
