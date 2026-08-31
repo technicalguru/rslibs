@@ -208,6 +208,15 @@ public class Target extends AbstractRequestSpec<Target> {
 		return builder(this).authorizationStrategy(authorizationStrategy).build();
 	}
 
+	/**
+	 * Replaces / Sets the authorization strategy for this target.
+	 * @param authorizationStrategy
+	 */
+	public void setAuthorizationStrategy(AuthorizationStrategy authorizationStrategy) {
+		super.authorizationStrategy(authorizationStrategy);
+	}
+
+	
 	public static Builder builder(Target from) {
 		return builder()
 			.with(from.implementation())
@@ -231,7 +240,7 @@ public class Target extends AbstractRequestSpec<Target> {
 	@Override
 	public String toString() {
 		return "Target [configuration=" + configuration + ", implementation=" + implementation + ", headers=" 
-				+ headers() + ", interceptors=" + interceptors() + ", uri=" + uri + "]";
+				+ headers() + ", interceptors=" + interceptors() + ", uri=" + uri + ", authStrategy=" + authorizationStrategy() +"]";
 	}
 
 	/**

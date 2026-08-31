@@ -40,7 +40,7 @@ public class SpringBootImpl implements TargetImplementation {
 		builder = applyInterceptors(builder, request);
 		
 		// Verbosity and response catching
-		SpringBootRequestInterceptor interceptor = new SpringBootRequestInterceptor(request.getTarget().configuration().isVerbose());
+		SpringBootRequestInterceptor interceptor = new SpringBootRequestInterceptor(request.getConfiguration().isVerbose());
 		builder = builder.requestInterceptor(interceptor);
 
 		RestClient client = builder.build();
@@ -82,7 +82,7 @@ public class SpringBootImpl implements TargetImplementation {
 	 * @return the complete URI to query
 	 */
 	protected URI createUri(RestRequest request) {
-		UriBuilder uriBuilder = UriBuilder.from(request.getTarget().getUri());
+		UriBuilder uriBuilder = UriBuilder.from(request.getUri());
 		MultiValuedMap<String,Object> queryParams = request.getQueryParams().getParams();
 		for (String name : queryParams.keys()) {
 			for (Object value : queryParams.get(name).toArray()) {

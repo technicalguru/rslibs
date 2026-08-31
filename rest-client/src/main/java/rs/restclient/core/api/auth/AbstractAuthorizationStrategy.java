@@ -1,6 +1,5 @@
 package rs.restclient.core.api.auth;
 
-import rs.restclient.core.api.RestClient;
 import rs.restclient.core.api.request.RestRequest;
 
 /**
@@ -18,21 +17,6 @@ import rs.restclient.core.api.request.RestRequest;
  *
  */
 public abstract class AbstractAuthorizationStrategy implements AuthorizationStrategy {
-
-	private RestClient client;
-	
-	protected AbstractAuthorizationStrategy(RestClient client) {
-		this.client = client;
-	}
-	
-	/**
-	 * Returns the client.
-	 * <p>You can use this client to start your authorization calls.
-	 * @return the client
-	 */
-	public RestClient getClient() {
-		return client;
-	}
 
 	/**
 	 * This implementation checks {@link #isAuthorized(RestRequest)} to see whether

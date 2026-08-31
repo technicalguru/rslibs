@@ -12,8 +12,7 @@ import org.slf4j.LoggerFactory;
 import rs.restclient.core.api.RestClient;
 import rs.restclient.core.api.RestClientConfiguration;
 import rs.restclient.core.api.Target;
-import rs.restclient.core.api.auth.AuthorizationInterceptor.AuthorizationType;
-import rs.restclient.core.api.auth.FixedHeaderAuthorizationStrategy;
+import rs.restclient.core.util.CookieInterceptor;
 import rs.restclient.core.util.UserAgentInterceptor;
 import rs.restclient.springboot.SpringBootImpl;
 
@@ -51,11 +50,12 @@ public class SpringBootTest {
 			Target.Builder targetBuilder = Target.builder()
 					.with(SpringBootImpl.SPRING_BOOT)
 					.with(configuration)
+					.register(new CookieInterceptor())
 					.register(new UserAgentInterceptor("ReqResClient/0.1beta"));
 			client = RestClient.builder(ReqResClient.class)
 					.with(targetBuilder)
-					.withAuthorization(r -> new FixedHeaderAuthorizationStrategy(r, AuthorizationType.X_API_KEY, apiKey))
 					.build();
+			client.setApiKey(apiKey);
 		}
 	}
 	

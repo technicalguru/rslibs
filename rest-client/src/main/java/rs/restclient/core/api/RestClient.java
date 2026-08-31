@@ -6,7 +6,6 @@ package rs.restclient.core.api;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +23,9 @@ import rs.restclient.core.api.auth.AuthorizationStrategy;
  *       .build();
  *    Target.Builder targetBuilder = Target.builder()
  *       .with(myImpl)
- *       .with(configuration);
+ *       .with(configuration)
+ *       .register(new CookieInterceptor())
+ *       .register(new UserAgentInterceptor("MyClient/1.0"));
  *    client = RestClient.builder(MyMainClient.class)
  *       .with(targetBuilder)
  *       .withAuthorization(r -> new MyAuthorizationStrategy(r))
@@ -61,25 +62,24 @@ public abstract class RestClient {
 	 */
 	protected RestClient(Target target) {
 		if (target == null) throw new RestClientException("target must not be null");
-		this.target     = target;
 		this.subClients = new HashMap<>();
 		this.log        = LoggerFactory.getLogger(getClass());
-		if (target.authorizationStrategy() == null) {
-			target.authorizationStrategy(createAuthorizationStrategy());
-		}
+		this.target     = setAuthorizationStrategy(target);
 	}
 	
 	/**
-	 * Creates the authorization strategy for this client.
+	 * Creates the authorization strategy for this clientand applies to the given target.
 	 * <p>Notice that a strategy is automatically propagated to its sub-targets. That's why
-	 * you only need to create your strategy in your main client. If your strategy is
-	 * different for any sub-client, then call {@link Target#setAuthorizationStrategy(AuthorizationStrategy)}
-	 * in that client's constructor.
-	 * <p>Default implementation returns NULL.
+	 * you only need to create your strategy in your main client unless you sub-client
+	 * uses a different strategy.
+	 * <p>Please notice that {@link Target#authorizationStrategy(AuthorizationStrategy)} will
+	 *    return a new target that becomes the client's client. That's why you need
+	 *    to be careful how to use the argument. 
+	 * <p>Default implementation returns the target without modifying it.
 	 * @return
 	 */
-	protected AuthorizationStrategy createAuthorizationStrategy() {
-		return null;
+	protected Target setAuthorizationStrategy(Target target) {
+		return target;
 	}
 	
 	/**
@@ -171,8 +171,6 @@ public abstract class RestClient {
 		private Target.Builder targetBuilder;
 		private Class<T>       clientClass;
 		
-		private Function<RestClient, AuthorizationStrategy> authorizationFunction;
-		
 		/**
 		 * Create the builder with this target builder.
 		 * @param targetBuilder
@@ -192,30 +190,12 @@ public abstract class RestClient {
 		}
 		
 		/**
-		 * Use the given function to retrieve the {@link AuthorizationStrategy} after the client was created.
-		 * @param authorizationFunction function to be used
-		 * @return this builder for chaining
-		 */
-		public Builder<T> withAuthorization(Function<RestClient, AuthorizationStrategy> authorizationFunction) {
-			this.authorizationFunction = authorizationFunction;
-			return this;
-		}
-		
-		/**
 		 * Builds the client using {@link #buildClient()} and configures
 		 * {@link AuthorizationStrategy} for it if required.
 		 * @return the client built and configured
 		 */
 		public T build() {
 			T rc = buildClient();
-			
-			// Check if we have an authorization strategy set.
-			Target target = rc.getTarget();
-			if (target.authorizationStrategy() == null) {
-				if (authorizationFunction != null) {
-					target.authorizationStrategy(authorizationFunction.apply(rc));
-				}
-			}
 			return rc;
 		}
 		

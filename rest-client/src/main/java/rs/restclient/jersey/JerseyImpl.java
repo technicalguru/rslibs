@@ -29,7 +29,6 @@ import jakarta.ws.rs.core.MultivaluedMap;
 import jakarta.ws.rs.core.Response;
 import rs.restclient.core.api.ProxyConfig;
 import rs.restclient.core.api.RestClientConfiguration;
-import rs.restclient.core.api.Target;
 import rs.restclient.core.api.TargetImplementation;
 import rs.restclient.core.api.request.Entity;
 import rs.restclient.core.api.request.HeadersSpec;
@@ -53,10 +52,8 @@ public class JerseyImpl implements TargetImplementation {
 	 */
 	@Override
 	public RestResponse execute(RestRequest request) {
-		Target target = request.getTarget();
-		
 		// Create WebTarget
-		WebTarget jerseyTarget = createWebTarget(target);
+		WebTarget jerseyTarget = createWebTarget(request);
 		
 		// Query params
 		jerseyTarget = applyQueryParams(jerseyTarget, request);
@@ -70,8 +67,6 @@ public class JerseyImpl implements TargetImplementation {
 		
 		// Accept header
 		if (mediaType != null) requestBuilder = requestBuilder.header(HttpHeaders.ACCEPT, request.getResponseMediaType());
-		
-		// TODO logging
 		
 		// Build invocation with/without request body
 		Entity<?> entity = request.getEntity();
@@ -89,12 +84,12 @@ public class JerseyImpl implements TargetImplementation {
 	
 	/**
 	 * Creates Jersey's web target from the URI alone.
-	 * @param target the target
+	 * @param request the request
 	 * @return the Jersey {@link WebTarget}
 	 */
-	protected WebTarget createWebTarget(Target target) {
-		Client client = createClient(target);
-		return client.target(target.getUri());
+	protected WebTarget createWebTarget(RestRequest request) {
+		Client client = createClient(request);
+		return client.target(request.getUri());
 	}
 	
 	/**
@@ -114,11 +109,12 @@ public class JerseyImpl implements TargetImplementation {
 	
 	/**
 	 * Creates the actual JAX-WS Jersey client instance.
+	 * @param request the request
 	 * @return the client
-	 * @see #createClientConfig()
+	 * @see #createClientConfig(RestClientConfiguration)
 	 */
-	protected Client createClient(Target target) {
-		return ClientBuilder.newClient(createClientConfig(target.configuration()));
+	protected Client createClient(RestRequest request) {
+		return ClientBuilder.newClient(createClientConfig(request.getConfiguration()));
 	}
 	
 	/**
@@ -128,10 +124,13 @@ public class JerseyImpl implements TargetImplementation {
 	protected ClientConfig createClientConfig(RestClientConfiguration configuration) {
 		ClientConfig clientConfig = new ClientConfig();
 		clientConfig.connectorProvider(new ApacheConnectorProvider());
+		
+		// TODO logging
 		if (configuration.isVerbose()) {
 			clientConfig.property(LoggingFeature.LOGGING_FEATURE_VERBOSITY_CLIENT, LoggingFeature.Verbosity.PAYLOAD_TEXT);
 			clientConfig.property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, Level.INFO.getName());
 		}
+		
 		if (configuration.getMapper2() != null) {
 			JsonMapperProvider.setMapper(configuration.getMapper2());
 			clientConfig.register(JsonMapperProvider.class);

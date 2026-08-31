@@ -9,7 +9,6 @@ import org.apache.commons.collections4.MultiValuedMap;
 
 import rs.jackson.Json;
 import rs.jackson.Json2;
-import rs.restclient.core.api.Target;
 import rs.restclient.core.api.request.RestRequest;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.JavaType;
@@ -164,7 +163,7 @@ public class RestResponse {
 	 */
 	public JsonMapper getJsonMapper() {
 		if (jsonMapper == null) {
-			jsonMapper = getTarget().configuration().getMapper();
+			jsonMapper = getRequest().getConfiguration().getMapper();
 		}
 		return jsonMapper;
 	}
@@ -175,17 +174,9 @@ public class RestResponse {
 	 */
 	public com.fasterxml.jackson.databind.json.JsonMapper getJsonMapper2() {
 		if (jsonMapper2 == null) {
-			jsonMapper2 = getTarget().configuration().getMapper2();
+			jsonMapper2 = getRequest().getConfiguration().getMapper2();
 		}
 		return jsonMapper2;
-	}
-
-	/**
-	 * Returns the target.
-	 * @return the target
-	 */
-	public Target getTarget() {
-		return getRequest().getTarget();
 	}
 
 	/**

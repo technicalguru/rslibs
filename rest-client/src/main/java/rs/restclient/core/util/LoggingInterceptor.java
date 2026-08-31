@@ -25,7 +25,7 @@ public class LoggingInterceptor extends AbstractRequestInterceptor {
 	protected void intercept(RestRequest request) throws IOException {
 		log.info("");;
 		log.info("Request:");
-		log.info("   {} {}", request.getMethod(), request.getTarget().getUri());
+		log.info("   {} {}", request.getMethod(), request.getUri());
 		log.info("   {}",    request.getHeaders());
 		if (request.getEntity() != null) {
 			log.info("");;

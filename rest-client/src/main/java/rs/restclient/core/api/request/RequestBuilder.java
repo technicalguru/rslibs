@@ -150,7 +150,9 @@ public class RequestBuilder extends AbstractRequestSpec<RequestBuilder> {
 	 */
 	public RestResponse method(String method, String responseMediaType, Entity<?> entity) {
 		// 1st Build RestRequest  - standard object
-		RestRequest request = new RestRequest(getTarget(), method, responseMediaType, headers(), queryParams(), entity);
+		Target      target  = getTarget();
+		RestRequest request = new RestRequest(target.getUri(), method, responseMediaType, headers(), queryParams(), entity, 
+				                              interceptors(), target.configuration(), target.implementation());
 		// Ask the authorization strategy whether we can proceed, but synchronize
 		AuthorizationStrategy authorizationStrategy = authorizationStrategy();
 		if (authorizationStrategy != null) {
@@ -159,7 +161,7 @@ public class RequestBuilder extends AbstractRequestSpec<RequestBuilder> {
 			}
 		}
 		// Process all interceptors...
-		RestRequestExecution execution = createExecution();
+		RestRequestExecution execution = createExecution(request);
 		try {
 			return execution.execute(request);
 		} catch (Throwable t) {
@@ -171,9 +173,9 @@ public class RequestBuilder extends AbstractRequestSpec<RequestBuilder> {
 	 * Creates the interceptor execution chain.
 	 * @return the execution chain
 	 */
-	private RestRequestExecution createExecution() {
+	private RestRequestExecution createExecution(RestRequest request) {
 		RestRequestExecution execution = new EndofChainRequestExecution(getTarget().implementation());
-		return interceptors().stream()
+		return request.getInterceptors().stream()
 				.reduce(RequestInterceptor::andThen)
 				.map(interceptor -> interceptor.apply(execution))
 				.orElse(execution);

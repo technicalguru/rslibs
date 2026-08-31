@@ -1,7 +1,7 @@
 package rs.restclient.core.api.auth;
 
-import rs.restclient.core.api.RestClient;
 import rs.restclient.core.api.auth.AuthorizationInterceptor.AuthorizationType;
+import rs.restclient.core.api.request.RestRequest;
 import rs.restclient.core.util.AddHeaderInterceptor;
 
 /**
@@ -12,14 +12,18 @@ import rs.restclient.core.util.AddHeaderInterceptor;
  */
 public class FixedHeaderAuthorizationStrategy extends AbstractAuthorizationStrategy {
 
+	private AddHeaderInterceptor interceptor;
+	private String               header;
+	private String               value;
+	
 	/**
 	 * Adds the given authorization header to all requests. 
 	 * @param client the client
 	 * @param header the header to set
 	 * @param value the value of the header
 	 */
-	public FixedHeaderAuthorizationStrategy(RestClient client, AuthorizationType headerType, String value) {
-		this(client, headerType.getHeaderName(), value);
+	public FixedHeaderAuthorizationStrategy(AuthorizationType headerType, String value) {
+		this(headerType.getHeaderName(), value);
 	}
 	
 	/**
@@ -28,9 +32,38 @@ public class FixedHeaderAuthorizationStrategy extends AbstractAuthorizationStrat
 	 * @param header the header to set
 	 * @param value the value of the header
 	 */
-	public FixedHeaderAuthorizationStrategy(RestClient client, String header, String value) {
-		super(client);
-		client.getTarget().register(new AddHeaderInterceptor(header, value));
+	public FixedHeaderAuthorizationStrategy(String header, String value) {
+		this.header = header;
+		this.value  = value;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void checkAuthorization(RestRequest request) throws AuthorizationFailedException {
+		if (value == null) throw new AuthorizationFailedException("No authorization value available");
+		if (interceptor == null) {
+			interceptor = new AddHeaderInterceptor(header, value);
+			request.register(interceptor);
+		}
+	}
+
+	/**
+	 * Sets the header.
+	 * @param header the header to set
+	 */
+	public void setHeader(String header) {
+		this.header = header;
+	}
+
+	/**
+	 * Sets the value.
+	 * @param value the value to set
+	 */
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+	
 }
