@@ -104,7 +104,8 @@ public class LoggingUtils {
 		 */
 		@Override
 		public void log(LogRecord record) {
-			for (String s : record.getMessage().split("\\n")) {
+			String messages[] = record.getMessage().split("\\n");
+			for (String s : messages) {
 				Optional<Integer> position = findSensitiveHeaderKey(s);
 				if (position.isPresent()) {
 					int p = position.get();
@@ -115,6 +116,7 @@ public class LoggingUtils {
 					log.info(s);
 				}
 			}
+			if (messages.length > 1) log.info("");
 		}
     	
     	
