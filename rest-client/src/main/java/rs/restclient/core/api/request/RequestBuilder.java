@@ -144,6 +144,16 @@ public class RequestBuilder extends AbstractRequestSpec<RequestBuilder> {
 	/**
 	 * Executes a request with arbitrary method.
 	 * @param method method to execute
+	 * @param entity the entity to send in request body
+	 * @return the response
+	 */
+	public RestResponse method(String method, Entity<?> entity) {
+		return method(method, MediaType.APPLICATION_JSON, entity);
+	}
+	
+	/**
+	 * Executes a request with arbitrary method.
+	 * @param method method to execute
 	 * @param responseMediaType the expected response type
 	 * @param entity the entity to send in request body
 	 * @return the response
