@@ -1,5 +1,8 @@
 package rs.restclient.core.api.auth;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import rs.restclient.core.api.RestClient;
 import rs.restclient.core.api.request.RestRequest;
 
@@ -20,6 +23,8 @@ import rs.restclient.core.api.request.RestRequest;
 public abstract class AbstractAuthorizationStrategy implements AuthorizationStrategy {
 
 	private volatile boolean inProgress = false;
+	
+	protected Logger log = LoggerFactory.getLogger(getClass());
 	
 	/**
 	 * This implementation checks {@link #isAuthorized(RestRequest)} to see whether
