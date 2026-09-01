@@ -11,7 +11,7 @@ import rs.restclient.core.api.request.Entity;
 import rs.restclient.core.api.request.MediaType;
 
 /**
- * Demonstrates how to create a main client (at parent target)
+ * Demonstrates how to create a main client.
  */
 public class ReqResClient extends RestClient {
 
@@ -20,7 +20,7 @@ public class ReqResClient extends RestClient {
 	}
 
 	@Override
-	protected Target setAuthorizationStrategy(Target target) {
+	protected Target configureTarget(Target target) {
 		return target.authorizationStrategy(new FixedHeaderAuthorizationStrategy(AuthorizationType.X_API_KEY, null));
 	}
 	

@@ -10,7 +10,7 @@ import rs.restclient.core.api.request.RestRequest;
  * <p>Calls to the strategy will be synchronized so that login, authorization and renewal
  *    requests will be made in order and not overlap.
  * <p>Implementation shall set interceptors or trigger login/renewal requests
- * if required.
+ *    if required.
  * <p>Creation of an authorization strategy can be cumbersome, especially when you
  *    require customized information or references to your {@link RestClient}.
  *    You need to create the strategy within {@link RestClient} but not yet configure

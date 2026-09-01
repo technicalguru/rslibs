@@ -28,7 +28,7 @@ import rs.restclient.core.api.auth.AuthorizationStrategy;
  *       .register(new UserAgentInterceptor("MyClient/1.0"));
  *    client = RestClient.builder(MyMainClient.class)
  *       .with(targetBuilder)
- *       .withAuthorization(r -> new MyAuthorizationStrategy(r))
+ *       .authorizationStrategy(new MyAuthorizationStrategy())
  *       .build();
  * </pre>
  * Sub-clients must use {@link #RestClient(Target)} as constructor.
@@ -64,21 +64,23 @@ public abstract class RestClient {
 		if (target == null) throw new RestClientException("target must not be null");
 		this.subClients = new HashMap<>();
 		this.log        = LoggerFactory.getLogger(getClass());
-		this.target     = setAuthorizationStrategy(target);
+		this.target     = configureTarget(target);
 	}
 	
 	/**
-	 * Creates the authorization strategy for this clientand applies to the given target.
-	 * <p>Notice that a strategy is automatically propagated to its sub-targets. That's why
-	 * you only need to create your strategy in your main client unless you sub-client
-	 * uses a different strategy.
-	 * <p>Please notice that {@link Target#authorizationStrategy(AuthorizationStrategy)} will
-	 *    return a new target that becomes the client's client. That's why you need
-	 *    to be careful how to use the argument. 
+	 * Called by the constructor to allow your client to further configure the target,
+	 * e.g. to adjust the path, set your authorization strategy or register any interceptors
+	 * for this client.
+	 * <p>Please understand that your objects, such as {@link AuthorizationStrategy} should
+	 *    use the target carefully as the target clones itself when settings change. This
+	 *    method must return the target that is fully configured. 
+	 * <p>Notice that all settings in a target are automatically propagated to sub-clients and
+	 * its targets. That's why you only need to make global settings in your main client 
+	 * unless your sub-client uses a different target.
 	 * <p>Default implementation returns the target without modifying it.
 	 * @return
 	 */
-	protected Target setAuthorizationStrategy(Target target) {
+	protected Target configureTarget(Target target) {
 		return target;
 	}
 	
@@ -136,7 +138,7 @@ public abstract class RestClient {
 	 *       .with(configuration);
 	 *    client = RestClient.builder(MyMainClient.class)
 	 *       .with(targetBuilder)
-	 *       .withAuthorization(r -> new MyAuthorizationStrategy(r))
+	 *       .authorizationStrategy(new MyAuthorizationStrategy())
 	 *       .build();
 	 * </pre>
 	 * @param <T> type of client
@@ -161,7 +163,7 @@ public abstract class RestClient {
 	 *       .with(configuration);
 	 *    client = RestClient.builder(MyMainClient.class)
 	 *       .with(targetBuilder)
-	 *       .withAuthorization(r -> new MyAuthorizationStrategy(r))
+	 *       .authorizationStrategy(new MyAuthorizationStrategy())
 	 *       .build();
 	 * </pre>
 	 * @param <T> type of client

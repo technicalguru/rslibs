@@ -15,8 +15,8 @@ import rs.restclient.core.api.response.RestResponse;
 /**
  * Handles cookies and "Accept" header in requests and responses.
  * 
- * This interceptor not added to your client automatically. You need to setup the chain in the 
- * bootstrap target handler, e.g.:
+ * This interceptor is not added to your client automatically. You need to setup the chain in the 
+ * bootstrap target builder, e.g.:
  * <pre>
  *    RestClientConfiguration configuration = RestClientConfiguration.builder()
  *       .with(myUri)
@@ -28,7 +28,7 @@ import rs.restclient.core.api.response.RestResponse;
  *       .register(new CookieInterceptor());
  *    client = RestClient.builder(MyMainClient.class)
  *       .with(targetBuilder)
- *       .withAuthorization(r -> new MyAuthorizationStrategy(r))
+ *       .authorizationStrategy(new MyAuthorizationStrategy())
  *       .build();
  * </pre> 
  *  

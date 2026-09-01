@@ -281,8 +281,6 @@ public class Target extends AbstractRequestSpec<Target> {
 		public Target build() {
 			if (configuration  == null) throw new RestClientException("configuration must not be null");
 			if (implementation == null) throw new RestClientException("implementation must not be null");
-			// Usually done by the implementation
-			//if (configuration.isVerbose()) register(new LoggingInterceptor());
 			return new Target(URI.create(configuration.getUri()), configuration, implementation, interceptors(), headers(), queryParams(), authorizationStrategy());
 		}
 	}
