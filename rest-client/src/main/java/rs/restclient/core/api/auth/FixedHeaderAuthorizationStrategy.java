@@ -48,13 +48,12 @@ public class FixedHeaderAuthorizationStrategy extends AbstractAuthorizationStrat
 	 */
 	@Override
 	public void checkAuthorization(RestRequest request) throws AuthorizationFailedException {
-		if (value == null) throw new AuthorizationFailedException("No authorization value available");
 		if (interceptor == null) {
 			if ((header != null) && (value != null)) {
 				interceptor = new AddHeaderInterceptor(header, value);
 				request.register(interceptor);
 			} else {
-				log.info("checkAuthorization() was called without prior configuration.");
+				log.warn("checkAuthorization() was called without prior configuration.");
 			}
 		}
 	}
@@ -65,7 +64,7 @@ public class FixedHeaderAuthorizationStrategy extends AbstractAuthorizationStrat
 	 * @param value value of header
 	 */
 	public void setAuthorization(AuthorizationType headerType, String value) {
-		
+		setAuthorization(headerType.getHeaderName(), value);
 	}
 
 	/**
@@ -74,7 +73,8 @@ public class FixedHeaderAuthorizationStrategy extends AbstractAuthorizationStrat
 	 * @param value the value of the header
 	 */
 	public void setAuthorization(String header, String value) {
-		
+		setHeader(header);
+		setValue(value);
 	}
 	
 	/**

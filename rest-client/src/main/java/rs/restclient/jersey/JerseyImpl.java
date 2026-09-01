@@ -5,7 +5,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.logging.Level;
-import java.util.logging.LogManager;
 
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
@@ -16,7 +15,6 @@ import org.glassfish.jersey.client.RequestEntityProcessing;
 import org.glassfish.jersey.logging.LoggingFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.http.HttpHeaders;
 
 import com.fasterxml.jackson.core.util.JacksonFeature;
@@ -52,12 +50,6 @@ public class JerseyImpl implements TargetImplementation {
 	/** The instance for usage */
 	public static final JerseyImpl JERSEY = new JerseyImpl();
 
-	static {
-	    // Install SLF4J bridge
-		LogManager.getLogManager().reset();
-	    SLF4JBridgeHandler.install();
-	}
-	
 	private Client client;
 	
 	/**
