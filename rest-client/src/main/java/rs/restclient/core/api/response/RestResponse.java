@@ -3,10 +3,12 @@
  */
 package rs.restclient.core.api.response;
 
+import java.util.Collection;
 import java.util.Optional;
 
 import org.apache.commons.collections4.MultiValuedMap;
 
+import rs.baselib.util.CommonUtils;
 import rs.jackson.Json;
 import rs.jackson.Json2;
 import rs.restclient.core.api.request.RestRequest;
@@ -179,6 +181,17 @@ public class RestResponse {
 		return jsonMapper2;
 	}
 
+	/**
+	 * Returns the given header as single value (joined by commas)
+	 * @param name name of header
+	 * @return value or null if it doesn't exist
+	 */
+	public String getHeaderString(String name) {
+		Collection<String> values = getHeaders().get(name);
+		if (values.isEmpty()) return null;
+		return CommonUtils.join(",", values);
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
