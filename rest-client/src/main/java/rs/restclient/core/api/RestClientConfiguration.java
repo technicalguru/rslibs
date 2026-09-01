@@ -44,6 +44,7 @@ public class RestClientConfiguration {
 	public String getUri() {
 		return uri;
 	}
+	
 	/**
 	 * Sets the uri.
 	 * @param uri the uri to set
@@ -51,6 +52,7 @@ public class RestClientConfiguration {
 	public void setUri(String uri) {
 		this.uri = uri;
 	}
+	
 	/**
 	 * Returns the verbose.
 	 * @return the verbose
@@ -58,6 +60,7 @@ public class RestClientConfiguration {
 	public boolean isVerbose() {
 		return verbose;
 	}
+	
 	/**
 	 * Sets the verbose.
 	 * @param verbose the verbose to set
@@ -65,6 +68,7 @@ public class RestClientConfiguration {
 	public void setVerbose(boolean verbose) {
 		this.verbose = verbose;
 	}
+	
 	/**
 	 * Returns the mapper.
 	 * @return the mapper
@@ -72,6 +76,7 @@ public class RestClientConfiguration {
 	public JsonMapper getMapper() {
 		return mapper;
 	}
+	
 	/**
 	 * Sets the mapper.
 	 * @param mapper the mapper to set
@@ -79,6 +84,7 @@ public class RestClientConfiguration {
 	public void setMapper(JsonMapper mapper) {
 		this.mapper = mapper;
 	}
+	
 	/**
 	 * Returns the mapper.
 	 * @return the mapper
@@ -86,6 +92,7 @@ public class RestClientConfiguration {
 	public com.fasterxml.jackson.databind.json.JsonMapper getMapper2() {
 		return mapper2;
 	}
+	
 	/**
 	 * Sets the mapper.
 	 * @param mapper the mapper to set
@@ -93,6 +100,7 @@ public class RestClientConfiguration {
 	public void setMapper2(com.fasterxml.jackson.databind.json.JsonMapper mapper) {
 		this.mapper2 = mapper;
 	}
+	
 	/**
 	 * Returns the proxyConfig.
 	 * @return the proxyConfig
@@ -100,6 +108,7 @@ public class RestClientConfiguration {
 	public ProxyConfig getProxyConfig() {
 		return proxyConfig;
 	}
+	
 	/**
 	 * Sets the proxyConfig.
 	 * @param proxyConfig the proxyConfig to set
@@ -107,6 +116,18 @@ public class RestClientConfiguration {
 	public void setProxyConfig(ProxyConfig proxyConfig) {
 		this.proxyConfig = proxyConfig;
 	}
+	
+	/**
+	 * Returns whether the configuration is valid.
+	 * <p>Sub-classes can override to allow their applications to identify invalid
+	 *    client configurations (e.g. missing client secrets).
+	 * <p>The default method returns true.
+	 * @return true when configuration is valid.
+	 */
+	public boolean isValid() {
+		return true;
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
