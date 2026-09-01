@@ -92,7 +92,27 @@ public class Target extends AbstractRequestSpec<Target> {
 		} else {
 			uriBuilder = UriBuilder.from(uri);
 		}
-		return new Target(this, uriBuilder.appendSegments(path).build());
+		return uri(uriBuilder.appendSegments(path).build());
+	}
+	
+	/**
+	 * Creates a new target using a new URI.
+	 * <p>This is a complete replacement of the URI.
+	 * @param uri the new URI to be used.
+	 * @return the new target
+	 */
+	public Target uri(String uri) {
+		return uri(URI.create(uri));
+	}
+	
+	/**
+	 * Creates a new target using a new URI.
+	 * <p>This is a complete replacement of the URI.
+	 * @param uri the new URI to be used.
+	 * @return the new target
+	 */
+	public Target uri(URI uri) {
+		return new Target(this, uri);
 	}
 	
 	// Manipulate all super methids to return a copy instead

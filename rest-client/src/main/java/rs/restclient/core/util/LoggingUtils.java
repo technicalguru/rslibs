@@ -40,11 +40,11 @@ public class LoggingUtils {
      * @return the masked value (usually first 3 characters are readable to allow debugging)
      */
     public static String maskSensitiveHeaderValue(String value) {
-    	if (value.toLowerCase().startsWith("bearer ")) value = "Bearer "+value.substring(7, 10)+"******";
-    	if (value.toLowerCase().startsWith("basic ")) value = "Basic "+value.substring(6, 9)+"******";
-    	if (value.toLowerCase().startsWith("digest ")) value = "Digest "+value.substring(7, 10)+"******";
-    	if (value.toLowerCase().startsWith("negotiate ")) value = "Negotiate "+value.substring(9, 12)+"******";
-    	if (value.toLowerCase().startsWith("aws4-hmac-sha256 ")) value = "AWS4-HMAC-SHA256 "+value.substring(17, 20)+"******";
+    	if (value.toLowerCase().startsWith("bearer "))           return "Bearer "+value.substring(7, 10)+"******";
+    	if (value.toLowerCase().startsWith("basic "))            return "Basic "+value.substring(6, 9)+"******";
+    	if (value.toLowerCase().startsWith("digest "))           return "Digest "+value.substring(7, 10)+"******";
+    	if (value.toLowerCase().startsWith("negotiate "))        return "Negotiate "+value.substring(9, 12)+"******";
+    	if (value.toLowerCase().startsWith("aws4-hmac-sha256 ")) return "AWS4-HMAC-SHA256 "+value.substring(17, 20)+"******";
     	return value.substring(0, 3)+"******";
     }
 

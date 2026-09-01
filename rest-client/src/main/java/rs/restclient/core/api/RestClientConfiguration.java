@@ -9,9 +9,10 @@ import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Describes the main aspect of a client such as logging, authorization, logging and object mapping.
- * <p>Use the builder to create a config:
+ * <p>The configuration can be sub-classed and you can configure it yourself, or you can use
+ *    the generic builder:
  * <pre>
- *    RestClientConfiguration config = RestClientConfiguration.builder()
+ *    MyConfiguration config = RestClientConfiguration.builder(MyConfiguration.class)
  *    	.with(myUri)
  *    	.verbose(false)          // default: false
  *    	.with(myJsonMapper)      // default: built by Json or Json2
@@ -33,7 +34,7 @@ public class RestClientConfiguration {
 	/**
 	 * Constructor.
 	 */
-	private  RestClientConfiguration() {
+	protected RestClientConfiguration() {
 	}
 	
 	/**
@@ -115,26 +116,39 @@ public class RestClientConfiguration {
 	}
 
 	/**
-	 * Create a builder.
+	 * Creates a builder for the base {@link RestClientConfiguration}.
 	 * @return the new builder
 	 */
-	public static Builder builder() {
-		return new Builder();
+	public static Builder<RestClientConfiguration> builder() {
+		return builder(RestClientConfiguration.class);
+	}
+	
+	/**
+	 * Creates a builder using your own configuration class (sub-class of {@link RestClientConfiguration}.
+	 * @param <T> Class of configuration
+	 * @return the new builder
+	 */
+	public static <T extends RestClientConfiguration> Builder<T> builder(Class<T> configClass) {
+		return new Builder<>(configClass);
 	}
 	
 	/**
 	 * A builder for the configuration.
+	 * @param <T> the configuration class to build
 	 * @author ralph
 	 *
 	 */
-	public static class Builder {
+	public static class Builder<T extends RestClientConfiguration> {
+		
+		private Class<T>    configClass = null;
 		private String      uri         = null;
 		private boolean     verbose     = false;
 		private JsonMapper  mapper      = null;
 		private com.fasterxml.jackson.databind.json.JsonMapper  mapper2     = null;
 		private ProxyConfig proxyConfig = null;
 
-		private Builder() {
+		private Builder(Class<T> configClass) {
+			this.configClass = configClass;
 		}
 		
 		/**
@@ -142,7 +156,7 @@ public class RestClientConfiguration {
 		 * @param uri uri to be used
 		 * @return this builder for chaining
 		 */
-		public Builder with(String uri) {
+		public Builder<T> with(String uri) {
 			this.uri = uri;
 			return this;
 		}
@@ -152,7 +166,7 @@ public class RestClientConfiguration {
 		 * @param uri uri to be used
 		 * @return this builder for chaining
 		 */
-		public Builder with(URI uri) {
+		public Builder<T> with(URI uri) {
 			return this.with(uri.toString());
 		}
 		
@@ -165,7 +179,7 @@ public class RestClientConfiguration {
 		 * @param verbose true when it shall be verbosed output (default: false)
 		 * @return this builder for chaining
 		 */
-		public Builder verbose(boolean verbose) {
+		public Builder<T> verbose(boolean verbose) {
 			this.verbose = verbose;
 			return this;
 		}
@@ -183,7 +197,7 @@ public class RestClientConfiguration {
 		 * @param jsonMapper mapper to be used
 		 * @return this builder for chaining
 		 */
-		public Builder with(JsonMapper jsonMapper) {
+		public Builder<T> with(JsonMapper jsonMapper) {
 			this.mapper = jsonMapper;
 			return this;
 		}
@@ -201,7 +215,7 @@ public class RestClientConfiguration {
 		 * @param jsonMapper mapper to be used
 		 * @return this builder for chaining
 		 */
-		public Builder with(com.fasterxml.jackson.databind.json.JsonMapper jsonMapper) {
+		public Builder<T> with(com.fasterxml.jackson.databind.json.JsonMapper jsonMapper) {
 			this.mapper2 = jsonMapper;
 			return this;
 		}
@@ -219,7 +233,7 @@ public class RestClientConfiguration {
 		 * @param proxyConfig proxy configuration to be used
 		 * @return this builder for chaining
 		 */
-		public Builder with(ProxyConfig proxyConfig) {
+		public Builder<T> with(ProxyConfig proxyConfig) {
 			this.proxyConfig = proxyConfig;
 			return this;
 		}
@@ -232,14 +246,22 @@ public class RestClientConfiguration {
 			return this.proxyConfig;
 		}
 		
-		public RestClientConfiguration build() {
-			RestClientConfiguration rc = new RestClientConfiguration();
-			rc.setUri(uri);
-			rc.setVerbose(verbose);
-			rc.setMapper(mapper);
-			rc.setMapper2(mapper2);
-			rc.setProxyConfig(proxyConfig);
-			return rc;
+		/**
+		 * Builda configuration of the declared class.
+		 * @return the class
+		 */
+		public T build() {
+			try {
+				T rc = configClass.getDeclaredConstructor().newInstance();
+				rc.setUri(uri);
+				rc.setVerbose(verbose);
+				rc.setMapper(mapper);
+				rc.setMapper2(mapper2);
+				rc.setProxyConfig(proxyConfig);
+				return rc;
+			} catch (Throwable t) {
+				throw new RestClientException("Cannot create configuration class", t);
+			}
 		}
 	}
 	

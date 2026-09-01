@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import rs.restclient.core.api.auth.AuthorizationStrategy;
+import rs.restclient.core.util.UserAgentInterceptor;
 
 /**
  * Abstract implementation of a client. The API that will be interacted with by your users.
@@ -77,10 +78,13 @@ public abstract class RestClient {
 	 * <p>Notice that all settings in a target are automatically propagated to sub-clients and
 	 * its targets. That's why you only need to make global settings in your main client 
 	 * unless your sub-client uses a different target.
-	 * <p>Default implementation returns the target without modifying it.
-	 * @return
+	 * <p>Default implementation configures the user agent if required.
+	 * @return the new target
+	 * @see #getUserAgent()
 	 */
 	protected Target configureTarget(Target target) {
+		String ua = getUserAgent();
+		if (ua != null) target = target.register(new UserAgentInterceptor(ua));
 		return target;
 	}
 	
@@ -90,6 +94,37 @@ public abstract class RestClient {
 	 */
 	public final Target getTarget() {
 		return target;
+	}
+	
+	/**
+	 * Returns the configuration.
+	 * <p>This is equivalent to {@code getTarget().configuration()}.
+	 * @return the configuration
+	 * @see Target#configuration()
+	 */
+	public RestClientConfiguration getConfiguration() {
+		return getTarget().configuration();
+	}
+	
+	/**
+	 * Returns the underlying implementation.
+	 * <p>This is equivalent to {@code getTarget().implementation()}.
+	 * @return the implementation
+	 * @see Target#implementation()
+	 */
+	public TargetImplementation getImplementation() {
+		return getTarget().implementation();
+	}
+	
+	/**
+	 * Returns the user agent of the client.
+	 * <p>The method will be called by default {@link #configureTarget(Target)} implementation
+	 *    to add an interceptor for it. Return NULL if you don't need it.
+	 * <p>Default method return NULL.
+	 * @return the user agent
+	 */
+	protected String getUserAgent() {
+		return null;
 	}
 	
 	/**

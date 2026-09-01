@@ -19,6 +19,8 @@ import rs.restclient.core.api.request.RestRequest;
  */
 public abstract class AbstractAuthorizationStrategy implements AuthorizationStrategy {
 
+	private volatile boolean inProgress = false;
+	
 	/**
 	 * This implementation checks {@link #isAuthorized(RestRequest)} to see whether
 	 * an authorization is already given or not. If not, the it will
@@ -37,17 +39,26 @@ public abstract class AbstractAuthorizationStrategy implements AuthorizationStra
 	 */
 	@Override
 	public void checkAuthorization(RestRequest request) throws AuthorizationFailedException {
-		if (!isAuthorized(request)) {
-			if (canRenew(request)) {
-				renewAuthorization(request);
-				return;
-			}
-			authorize(request);
-		} else {
-			if (needsRenewal(request)) {
-				if (canRenew(request)) {
-					renewAuthorization(request);
+		if (!inProgress) {
+			try {
+				if (!isAuthorized(request)) {
+					this.inProgress = true;
+					if (canRenew(request)) {
+						renewAuthorization(request);
+						return;
+					}
+					authorize(request);
+				} else {
+					if (needsRenewal(request)) {
+						if (canRenew(request)) {
+							this.inProgress = true;
+							renewAuthorization(request);
+						}
+					}
 				}
+				applyAuthorization(request);
+			} finally {
+				this.inProgress = false;
 			}
 		}
 	}
@@ -99,5 +110,27 @@ public abstract class AbstractAuthorizationStrategy implements AuthorizationStra
 	 */
 	protected void renewAuthorization(RestRequest request) throws AuthorizationFailedException {
 		authorize(request);
+	}
+
+	/**
+	 * Returns whether an authorization call is in progress.
+	 * <p>This is intended for status information to other objects. The abstract implementation
+	 *    will consider authorization checking when authorization is alrealy in progress.
+	 * @return the inProgress
+	 */
+	public boolean isInProgress() {
+		return inProgress;
+	}
+	
+	/**
+	 * Apply the authorization to the request.
+	 * <p>The method is called when {@link #isAuthorized(RestRequest)}, {@link #authorize(RestRequest)}
+	 *    or {@link #renewAuthorization(RestRequest)} was successfull. Override here to
+	 *    manipulate the request and add your authorization information.
+	 * <p>The default implementation does nothing.
+	 * @param request the request to manipulate
+	 */
+	public void applyAuthorization(RestRequest request) {
+		
 	}
 }

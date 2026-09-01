@@ -1,12 +1,16 @@
 package rs.restclient.springboot;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.apache.commons.collections4.MultiValuedMap;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.HttpMessageConverters;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClient.RequestBodySpec;
 import org.springframework.web.client.RestClient.RequestBodyUriSpec;
@@ -20,6 +24,8 @@ import rs.restclient.core.api.response.RestResponse;
 
 /**
  * The implementation of SpringBoot backend.
+ * <p>You can sub-class this implementation in case you need additional SpringBoot RestClient
+ *    configuration settings to be done.
  * @author ralph
  *
  */
@@ -28,6 +34,8 @@ public class SpringBootImpl implements TargetImplementation {
 	/** The instance for usage */
 	public static final SpringBootImpl SPRING_BOOT = new SpringBootImpl();
 
+	private List<HttpMessageConverter<?>> converters = null;
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -125,16 +133,57 @@ public class SpringBootImpl implements TargetImplementation {
 	 */
 	@Override
 	public String toString() {
-		return "SpringBootImpl []";
+		StringBuilder rc = new StringBuilder();
+		for (HttpMessageConverter<?> converter : getConverters()) {
+			if (rc.length() > 0) rc.append(",");
+			rc.append(converter.getClass().getName());
+		}
+		return "SpringBootImpl [converters={"+rc.toString()+"}]";
 	}
-
 
 	/**
 	 * The SpringBoot request builder.
 	 * @return the builder
 	 */
-	private static RestClient.Builder clientBuilder() {
-		return RestClient.builder();
+	protected RestClient.Builder clientBuilder() {
+		return registerConverters(RestClient.builder());
 	}
 
+	/**
+	 * Register a converter for SpringBoot in case the request body encoding is
+	 * not supported (error: "no HttpMessageConverter for &lt;type&gt;").
+	 * <p>The converter is inserted at the beginning of the default list
+	 *    of SpringBoot converters so it overwrites any default for the same
+	 *    MediaType and entity class.
+	 * @param converter converter to register
+	 */
+	protected void registerMessageConverter(HttpMessageConverter<?> converter) {
+		List<HttpMessageConverter<?>> converters = getConverters();
+		converters.add(0, converter);
+	}
+	
+	/**
+	 * Register converters for message content.
+	 * @param builder
+	 * @return
+	 */
+	protected RestClient.Builder registerConverters(RestClient.Builder builder) {
+		return builder
+			.configureMessageConverters(clientBuilder -> {
+				// Unfortunately we have to do this manually each time
+				//HttpMessageConverters.forClient().registerDefaults().build().forEach(c -> clientBuilder.addCustomConverter(c));
+				for (HttpMessageConverter<?> converter : getConverters()) {
+					clientBuilder.addCustomConverter(converter);
+				}
+			});
+	}
+	
+	protected List<HttpMessageConverter<?>> getConverters() {
+		if (converters == null) {
+			converters = new ArrayList<>();
+			converters.add(new FormMessageConverter());
+			HttpMessageConverters.forClient().registerDefaults().build().forEach(c -> converters.add(c));
+		}
+		return converters;
+	}
 }

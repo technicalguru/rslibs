@@ -34,6 +34,8 @@ public class AuthorizationInterceptor extends AddHeaderInterceptor {
 		BASIC_AUTH("Authorization",       (values) -> "Basic "+encodeAuthorization(values)),
 		/** Proxy Authorization Scheme. Arguments are either "user:password" or "user" and "password" */
 		PROXY_AUTH("Proxy-Authorization", (values) -> "Basic "+encodeAuthorization(values)),
+		/** Bearer Token Authorization. Single argument is the token itself */
+		BEARER_TOKEN("Authorization",       (values) -> "Bearer "+values[0]),
 		/** Simple API-Key. Argument is a single value to be sent. Any encoding must be applied by the caller. */
 		X_API_KEY("X-Api-Key"),
 		/** Simple API-Key. Argument is a single value to be sent. Any encoding must be applied by the caller. */
