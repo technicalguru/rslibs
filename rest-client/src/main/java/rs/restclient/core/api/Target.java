@@ -299,6 +299,7 @@ public class Target extends AbstractRequestSpec<Target> {
 		 * @return the target built
 		 */
 		public Target build() {
+			if (configuration.getUri() == null) throw new RestClientException("configuration.uri must not be null");
 			if (configuration  == null) throw new RestClientException("configuration must not be null");
 			if (implementation == null) throw new RestClientException("implementation must not be null");
 			return new Target(URI.create(configuration.getUri()), configuration, implementation, interceptors(), headers(), queryParams(), authorizationStrategy());
