@@ -10,8 +10,17 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import rs.baselib.util.CommonUtils;
 import rs.restclient.core.api.auth.AuthorizationStrategy;
+import rs.restclient.core.api.response.ClientErrorException;
+import rs.restclient.core.api.response.RedirectionException;
+import rs.restclient.core.api.response.RestResponse;
+import rs.restclient.core.api.response.RestResponseException;
+import rs.restclient.core.api.response.ServerErrorException;
 import rs.restclient.core.util.UserAgentInterceptor;
+import rs.restclient.data.HateOasPagedList;
+import rs.restclient.data.HateOasPagedList.EmbeddedResultList;
+import rs.restclient.data.ResultList;
 
 /**
  * Abstract implementation of a client. The API that will be interacted with by your users.
@@ -157,6 +166,117 @@ public abstract class RestClient {
 		} catch (Throwable t) {
 			throw new RestClientException("Cannot create client.", t);
 		}
+	}
+
+	/**
+	 * Returns the target with paging parameters applied.
+	 * @param page     - page index (0-based) 
+	 * @param pageSize - page size
+	 * @return the target
+	 */
+	protected Target getTarget(Integer page, Integer pageSize) {
+		return applyPaging(getTarget(), page, pageSize);
+	}
+	
+	/**
+	 * Returns the target with sort parameter applied.
+	 * @param sort - the sort parameter
+	 * @return the target
+	 */
+	protected Target getTarget(String sort) {
+		return applySort(getTarget(), sort);
+	}
+	
+	/**
+	 * Returns the target with paging and sort parameters applied.
+	 * @param sort     - the sort parameter
+	 * @param page     - page index (0-based) 
+	 * @param pageSize - page size
+	 * @return the target
+	 */
+	protected Target getTarget(String sort, Integer page, Integer pageSize) {
+		return applySort(applyPaging(getTarget(), page, pageSize), sort);
+	}
+	
+	/**
+	 * Applies paging parameters to the target.
+	 * @param target   - the base target
+	 * @param page     - page index (0-based) 
+	 * @param pageSize - page size
+	 * @return the new target
+	 */
+	protected Target applyPaging(Target target, Integer page, Integer pageSize) {
+		if (page     != null) target = target.queryParam("page",     page);
+		if (pageSize != null) target = target.queryParam("pageSize", pageSize);
+		return target;
+	}
+
+	/**
+	 * Applies sort parameter to the target.
+	 * @param target - the base target
+	 * @param sort   - the sort parameter
+	 * @return the new target
+	 */
+	protected Target applySort(Target target, String sort) {
+		if (sort != null) target = target.queryParam("sort", sort);
+		return target;
+	}
+	
+	/**
+	 * Retrieves the results from the REST response object.
+	 * @param <T> - class of result type
+	 * @param pagedList - the response object
+	 * @return the list of objects (or empty list)
+	 */
+	protected <T> ResultList<T> getResults(HateOasPagedList<T> pagedList) {
+		if (pagedList != null) {
+			EmbeddedResultList<T> embedded = pagedList.get_embedded();
+			if (embedded != null) {
+				return new ResultList<>(embedded.getResults(), pagedList.getPage());
+			}
+		}
+		return new ResultList<>(CommonUtils.newList(), pagedList.getPage());
+	}
+	
+	
+	/**
+	 * Helper method to raise exceptions in case of any other response than 2xx successful.
+	 * @param response the {@link Response} object
+	 */
+	protected void checkResponse(RestResponse response) {
+		checkResponse(response, null);
+	}
+	
+	/**
+	 * Helper method to raise exceptions in case of any other response than 2xx successful.
+	 * @param <T> - the type of successful return
+	 * @param response the {@link Response} object
+	 * @param successValue the value to return when response was successfull
+	 * @return usually the successValue - everything else will raise a runtime exception
+	 */
+	protected <T> T checkResponse(RestResponse response, T successValue) {
+		int statusCode = response.getStatusCode();
+		if ((statusCode / 100 == 1) || (statusCode / 100 == 2)) return successValue;
+		if (statusCode / 100 == 3) throw new RedirectionException(response);
+		if (statusCode / 100 == 3) throw new ClientErrorException(response);
+		if (statusCode / 100 == 3) throw new ServerErrorException(response);
+		throw new RestResponseException(response);
+	}
+
+	/**
+	 * Helper method to raise exceptions in case of any other response than 2xx successful.
+	 * @param <T> - the type of successful return
+	 * @param responseClass the {@link Response} object type
+	 * @param successValue the value to return when response was successfull
+	 * @return usually the successValue - everything else will raise a runtime exception
+	 */
+	protected <T> T getResponse(RestResponse response, Class<T> successClass) {
+		int statusCode = response.getStatusCode();
+		if ((statusCode / 100 == 1) || (statusCode / 100 == 2)) return response.as(successClass);
+		if (statusCode / 100 == 3) throw new RedirectionException(response);
+		if (statusCode / 100 == 3) throw new ClientErrorException(response);
+		if (statusCode / 100 == 3) throw new ServerErrorException(response);
+		throw new RestResponseException(response);
 	}
 
 	/**
