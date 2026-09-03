@@ -123,6 +123,17 @@ public class Entity<T> {
         return new Entity<T>(entity, MediaType.APPLICATION_XHTML_XML);
     }
 
+    /**
+     * Create an {@value jakarta.ws.rs.core.MediaType#APPLICATION_FORM_URLENCODED} entity.
+     *
+     * @param <T> entity Java type.
+     * @param entity entity data.
+     * @return {@value jakarta.ws.rs.core.MediaType#APPLICATION_FORM_URLENCODED} entity instance.
+     */
+    public static <T> Entity<T> form(final T entity) {
+        return new Entity<T>(entity, MediaType.APPLICATION_FORM_URLENCODED);
+    }
+
     private Entity(final T entity, final String mediaType) {
         this(entity, new Variant(mediaType, (Locale) null, null), null);
     }
