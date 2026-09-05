@@ -94,7 +94,7 @@ public class SpringBootImpl implements TargetImplementation {
 		MultiValuedMap<String,Object> queryParams = request.getQueryParams().getParams();
 		for (String name : queryParams.keys()) {
 			for (Object value : queryParams.get(name).toArray()) {
-				if (value != null) uriBuilder.queryParams().put(name, value.toString());
+				if (value != null) uriBuilder.queryParam(name, value.toString());
 			}
 		}
 		return uriBuilder.build();
