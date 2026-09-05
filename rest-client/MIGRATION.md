@@ -30,3 +30,6 @@ Steps to migrate to RestClient
    - Create config using RestConfiguration.Builder
    - Create base Target using Target.Builder
    - Create client using RestClient.Builder
+8. Miscellaneous:
+   - Don't use GenericType or TypeReference for Lists and Sets when declaring response Types. Use JacksonUtils.getListType() or .getSetType() or .getMapType()
+   - Replace Entity.json() by Json.JSON.toJson()
