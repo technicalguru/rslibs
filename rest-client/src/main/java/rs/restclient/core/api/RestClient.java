@@ -269,13 +269,14 @@ public abstract class RestClient {
 	 * @param responseClass the {@link Response} object type
 	 * @param successValue the value to return when response was successfull
 	 * @return usually the successValue - everything else will raise a runtime exception
+	 * @throws RestResponseException or any of is subclasses
 	 */
 	protected <T> T getResponse(RestResponse response, Class<T> successClass) {
 		int statusCode = response.getStatusCode();
 		if ((statusCode / 100 == 1) || (statusCode / 100 == 2)) return response.as(successClass);
 		if (statusCode / 100 == 3) throw new RedirectionException(response);
-		if (statusCode / 100 == 3) throw new ClientErrorException(response);
-		if (statusCode / 100 == 3) throw new ServerErrorException(response);
+		if (statusCode / 100 == 4) throw new ClientErrorException(response);
+		if (statusCode / 100 == 5) throw new ServerErrorException(response);
 		throw new RestResponseException(response);
 	}
 
