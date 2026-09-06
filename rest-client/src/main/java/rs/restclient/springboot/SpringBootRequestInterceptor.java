@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.collections4.MultiValuedMap;
-import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -74,7 +73,7 @@ public class SpringBootRequestInterceptor implements ClientHttpRequestIntercepto
     private void logRequest(HttpRequest request, byte[] body) {
     	log.info("Request:");
         log.info("   {} {}", request.getMethod(), request.getURI());
-    	LoggingUtils.logHeaders(log, convert(request.getHeaders()));
+    	LoggingUtils.logHeaders(log, SpringBootImpl.convert(request.getHeaders()));
         if (body != null && body.length > 0) {
         	log.info("");
             log.info("   {}", new String(body, StandardCharsets.UTF_8));
@@ -86,7 +85,7 @@ public class SpringBootRequestInterceptor implements ClientHttpRequestIntercepto
         byte[] responseBody = response.getBody().readAllBytes();
         statusCode    = response.getStatusCode();
         statusMessage = response.getStatusText();
-        headers       = convert(response.getHeaders());
+        headers       = SpringBootImpl.convert(response.getHeaders());
         
         if (verbose) {
         	log.info("Response:");
@@ -147,13 +146,4 @@ public class SpringBootRequestInterceptor implements ClientHttpRequestIntercepto
         }
     }
 
-    private static MultiValuedMap<String, String> convert(HttpHeaders headers) {
-    	MultiValuedMap<String, String> rc = new ArrayListValuedHashMap<>();
-    	for (String header : headers.headerNames()) {
-    		for (String value : headers.get(header)) {
-    			rc.put(header, value);
-    		}
-    	}
-    	return rc;
-    }
 }

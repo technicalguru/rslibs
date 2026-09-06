@@ -15,6 +15,9 @@ public interface TargetImplementation {
 
 	/**
 	 * Executes the request.
+	 * <p>The implementation MUST not throw exceptions based on any HTTP status code. Runtime
+	 *    Exceptions must be thrown only when technical reasons prevent request or response
+	 *    processing.
 	 * @param request the request.
 	 * @return the response
 	 */

@@ -6,15 +6,19 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.commons.collections4.MultiValuedMap;
+import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverters;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClient.RequestBodySpec;
 import org.springframework.web.client.RestClient.RequestBodyUriSpec;
 import org.springframework.web.client.RestClient.ResponseSpec;
+import org.springframework.web.util.DefaultUriBuilderFactory;
+import org.springframework.web.util.UriBuilderFactory;
 
 import rs.baselib.util.UriBuilder;
 import rs.restclient.core.api.TargetImplementation;
@@ -34,7 +38,7 @@ public class SpringBootImpl implements TargetImplementation {
 	/** The instance for usage */
 	public static final SpringBootImpl SPRING_BOOT = new SpringBootImpl();
 
-	private List<HttpMessageConverter<?>> converters = null;
+	private List<HttpMessageConverter<?>> converters        = null;
 	
 	/**
 	 * {@inheritDoc}
@@ -43,7 +47,8 @@ public class SpringBootImpl implements TargetImplementation {
 	public RestResponse execute(RestRequest request) {
 		URI uri = createUri(request);
 		
-		RestClient.Builder builder = clientBuilder().baseUrl(uri);
+		RestClient.Builder builder = clientBuilder()
+				.uriBuilderFactory(createUriBuilderFactory(uri));
 		builder = applyHeaders(builder, request);
 		builder = applyInterceptors(builder, request);
 		
@@ -74,14 +79,25 @@ public class SpringBootImpl implements TargetImplementation {
 	 * @return the response created
 	 */
 	protected RestResponse execute(RestRequest request, ResponseSpec response, SpringBootRequestInterceptor interceptor) {
-		String body = response.body(String.class);
-
-		return RestResponse.builder()
-				.with(request)
-				.withStatus(interceptor.getStatusCode().value(), interceptor.getStatusMessage())
-				.with(interceptor.getHeaders())
-				.with(body == null ? Optional.empty() : Optional.of(body))
-				.build();
+		try {
+			String body = response.body(String.class);
+	
+			return RestResponse.builder()
+					.with(request)
+					.withStatus(interceptor.getStatusCode().value(), interceptor.getStatusMessage())
+					.with(interceptor.getHeaders())
+					.with(body == null ? Optional.empty() : Optional.of(body))
+					.build();
+		} catch (HttpStatusCodeException e) {
+			String body = e.getResponseBodyAsString();
+			return RestResponse.builder()
+					.with(request)
+					.withStatus(e.getStatusCode().value(), e.getStatusText())
+					.with(convert(e.getResponseHeaders()))
+					.with(body == null ? Optional.empty() : Optional.of(body))
+					.build();
+			
+		}
 	}
 	
 	/**
@@ -98,6 +114,16 @@ public class SpringBootImpl implements TargetImplementation {
 			}
 		}
 		return uriBuilder.build();
+	}
+	
+	/**
+	 * A special URI builder factory that prevents double-encoding in URIs.
+	 * @return the factory (created if not existing yet)
+	 */
+	protected UriBuilderFactory createUriBuilderFactory(URI uri) {
+		DefaultUriBuilderFactory uriBuilderFactory = new DefaultUriBuilderFactory(uri.toString()); 
+		uriBuilderFactory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.NONE);
+		return uriBuilderFactory;
 	}
 	
 	/**
@@ -186,4 +212,15 @@ public class SpringBootImpl implements TargetImplementation {
 		}
 		return converters;
 	}
+	
+    public static MultiValuedMap<String, String> convert(HttpHeaders headers) {
+    	MultiValuedMap<String, String> rc = new ArrayListValuedHashMap<>();
+    	for (String header : headers.headerNames()) {
+    		for (String value : headers.get(header)) {
+    			rc.put(header, value);
+    		}
+    	}
+    	return rc;
+    }
+
 }

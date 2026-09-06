@@ -239,6 +239,7 @@ public class Target extends AbstractRequestSpec<Target> {
 	
 	public static Builder builder(Target from) {
 		return builder()
+			.with(from.getUri())
 			.with(from.implementation())
 			.with(from.configuration())
 			.authorizationStrategy(from.authorizationStrategy())
@@ -268,10 +269,21 @@ public class Target extends AbstractRequestSpec<Target> {
 	 */
 	public static class Builder extends AbstractRequestSpec<Builder> {
 
+		private URI                      uri;
 		private TargetImplementation     implementation;
 		private RestClientConfiguration  configuration;
 		
 		protected Builder() {
+		}
+		
+		/**
+		 * Build with given URI.
+		 * @param uri URI for the target (if NULL, URI will be taken from configuration)
+		 * @return this builder for chaining
+		 */
+		public Builder with(URI uri) {
+			this.uri = uri;
+			return this;
 		}
 		
 		/**
@@ -295,14 +307,16 @@ public class Target extends AbstractRequestSpec<Target> {
 		}
 		
 		/**
-		 * Builds a target with specific implementation and configuration.
+		 * Builds a target with specific URI, implementation and configuration.
 		 * @return the target built
 		 */
 		public Target build() {
-			if (configuration.getUri() == null) throw new RestClientException("configuration.uri must not be null");
 			if (configuration  == null) throw new RestClientException("configuration must not be null");
 			if (implementation == null) throw new RestClientException("implementation must not be null");
-			return new Target(URI.create(configuration.getUri()), configuration, implementation, interceptors(), headers(), queryParams(), authorizationStrategy());
+			if (configuration.getUri() == null) throw new RestClientException("configuration.uri must not be null");
+			URI uri = this.uri;
+			if (uri == null) uri = URI.create(configuration.getUri());
+			return new Target(uri, configuration, implementation, interceptors(), headers(), queryParams(), authorizationStrategy());
 		}
 	}
 
