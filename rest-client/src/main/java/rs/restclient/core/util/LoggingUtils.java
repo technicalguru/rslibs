@@ -23,7 +23,7 @@ public class LoggingUtils {
 	 * Header names that contain sensitive data.
 	 */
     public static List<String> SENSITIVE_HEADERS = CommonUtils.newList("authorization", "proxy-authorization", "api-key", 
-    		"x-api-key", "x-auth-token", "x-session-token");
+    		"x-api-key", "x-auth-token", "x-session-token", "password");
     
     /**
      * Whether the header contains sensitive data.
