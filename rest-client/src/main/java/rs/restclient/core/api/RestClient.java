@@ -12,11 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import rs.baselib.util.CommonUtils;
 import rs.restclient.core.api.auth.AuthorizationStrategy;
-import rs.restclient.core.api.response.ClientErrorException;
-import rs.restclient.core.api.response.RedirectionException;
-import rs.restclient.core.api.response.RestResponse;
-import rs.restclient.core.api.response.RestResponseException;
-import rs.restclient.core.api.response.ServerErrorException;
 import rs.restclient.core.util.UserAgentInterceptor;
 import rs.restclient.data.HateOasPagedList;
 import rs.restclient.data.HateOasPagedList.EmbeddedResultList;
@@ -238,48 +233,6 @@ public abstract class RestClient {
 		return new ResultList<>(CommonUtils.newList(), pagedList.getPage());
 	}
 	
-	
-	/**
-	 * Helper method to raise exceptions in case of any other response than 2xx successful.
-	 * @param response the {@link Response} object
-	 */
-	protected void checkResponse(RestResponse response) {
-		checkResponse(response, null);
-	}
-	
-	/**
-	 * Helper method to raise exceptions in case of any other response than 2xx successful.
-	 * @param <T> - the type of successful return
-	 * @param response the {@link Response} object
-	 * @param successValue the value to return when response was successfull
-	 * @return usually the successValue - everything else will raise a runtime exception
-	 */
-	protected <T> T checkResponse(RestResponse response, T successValue) {
-		int statusCode = response.getStatusCode();
-		if ((statusCode / 100 == 1) || (statusCode / 100 == 2)) return successValue;
-		if (statusCode / 100 == 3) throw new RedirectionException(response);
-		if (statusCode / 100 == 3) throw new ClientErrorException(response);
-		if (statusCode / 100 == 3) throw new ServerErrorException(response);
-		throw new RestResponseException(response);
-	}
-
-	/**
-	 * Helper method to raise exceptions in case of any other response than 2xx successful.
-	 * @param <T> - the type of successful return
-	 * @param responseClass the {@link Response} object type
-	 * @param successValue the value to return when response was successfull
-	 * @return usually the successValue - everything else will raise a runtime exception
-	 * @throws RestResponseException or any of is subclasses
-	 */
-	protected <T> T getResponse(RestResponse response, Class<T> successClass) {
-		int statusCode = response.getStatusCode();
-		if ((statusCode / 100 == 1) || (statusCode / 100 == 2)) return response.as(successClass);
-		if (statusCode / 100 == 3) throw new RedirectionException(response);
-		if (statusCode / 100 == 4) throw new ClientErrorException(response);
-		if (statusCode / 100 == 5) throw new ServerErrorException(response);
-		throw new RestResponseException(response);
-	}
-
 	/**
 	 * Create a builder for a {@link RestClient} of given type.
 	 * <p>You should not subclass this builder and interact only during bootstrap setup of

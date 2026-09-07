@@ -88,7 +88,9 @@ public class RestClientConfiguration {
 	/**
 	 * Returns the mapper.
 	 * @return the mapper
+	 * @deprecated this is a Jackson 2 method. Use the Jackson 3 method instead.
 	 */
+	@Deprecated
 	public com.fasterxml.jackson.databind.json.JsonMapper getMapper2() {
 		return mapper2;
 	}
@@ -96,7 +98,9 @@ public class RestClientConfiguration {
 	/**
 	 * Sets the mapper.
 	 * @param mapper the mapper to set
+	 * @deprecated this is a Jackson 2 method. Use the Jackson 3 method instead.
 	 */
+	@Deprecated
 	public void setMapper2(com.fasterxml.jackson.databind.json.JsonMapper mapper) {
 		this.mapper2 = mapper;
 	}
@@ -235,7 +239,9 @@ public class RestClientConfiguration {
 		 * Use the given Jackson 2 {@link com.fasterxml.jackson.databind.json.JsonMapper JsonMapper}.
 		 * @param jsonMapper mapper to be used
 		 * @return this builder for chaining
+		 * @deprecated this is a Jackson 2 method. Use the Jackson 3 method instead.
 		 */
+		@Deprecated
 		public Builder<T> with(com.fasterxml.jackson.databind.json.JsonMapper jsonMapper) {
 			this.mapper2 = jsonMapper;
 			return this;
@@ -244,7 +250,9 @@ public class RestClientConfiguration {
 		/**
 		 * Returns the Jackson 2 {@link com.fasterxml.jackson.databind.json.JsonMapper JasonMapper}.
 		 * @return mapper used or NULL
+		 * @deprecated this is a Jackson 2 method. Use the Jackson 3 method instead.
 		 */
+		@Deprecated
 		public com.fasterxml.jackson.databind.json.JsonMapper jsonMapper2() {
 			return this.mapper2;
 		}

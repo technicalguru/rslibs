@@ -21,7 +21,6 @@ import tools.jackson.databind.json.JsonMapper;
  */
 public class RestResponse {
 
-//	private Target                         target;
 	private RestRequest                    request;
 	private MultiValuedMap<String, String> headers;
 	private int                            statusCode;
@@ -116,7 +115,9 @@ public class RestResponse {
 	 * @param <T> the type to return
 	 * @param responseType the response type
 	 * @return the response as given type
+	 * @deprecated this is a Jackson 2 method, please use the corresponding Jackson 3 method
 	 */
+	@Deprecated
 	public <T> T as(com.fasterxml.jackson.databind.JavaType responseType) {
 		return getJson2().fromJson(getBody(), responseType);
 	}
@@ -126,9 +127,97 @@ public class RestResponse {
 	 * @param <T> the type to return
 	 * @param responseType the response type
 	 * @return the response as given type
+	 * @deprecated this is a Jackson 2 method, please use the corresponding Jackson 3 method
 	 */
+	@Deprecated
 	public <T> T as(com.fasterxml.jackson.core.type.TypeReference<T> responseType) {
 		return getJson2().fromJson(getBody(), responseType);
+	}
+
+	/**
+	 * Helper method to raise exceptions in case of any other response than 1xx or 2xx successful.
+	 * @throws RestResponseException or any subclass when response was not successful
+	 */
+	public void check() throws RestResponseException {
+		if ((statusCode / 100 == 1) || (statusCode / 100 == 2)) return;
+		if (statusCode / 100 == 3) throw new RedirectionException(this);
+		if (statusCode / 100 == 4) throw new ClientErrorException(this);
+		if (statusCode / 100 == 5) throw new ServerErrorException(this);
+		throw new RestResponseException(this);
+	}
+	
+	/**
+	 * Helper method to raise exceptions in case of any other response than 1xx or 2xx successful.
+	 * @param <T> the type to return
+	 * @param responseType the response type
+	 * @return the response of the body as given type in case of 1xx or 2xx status code.
+	 * @throws RestResponseException or any subclass when response was not successful
+	 */
+	public <T> T check(Class<T> responseType) throws RestResponseException {
+		check();
+		int statusCode = getStatusCode();
+		if ((statusCode / 100 == 1) || (statusCode / 100 == 2)) return as(responseType);
+		return null;
+	}
+
+	/**
+	 * Helper method to raise exceptions in case of any other response than 1xx or 2xx successful.
+	 * @param <T> the type to return
+	 * @param responseType the response type
+	 * @return the response of the body as given type in case of 1xx or 2xx status code.
+	 * @throws RestResponseException or any subclass when response was not successful
+	 */
+	public <T> T check(JavaType responseType) throws RestResponseException {
+		check();
+		int statusCode = getStatusCode();
+		if ((statusCode / 100 == 1) || (statusCode / 100 == 2)) return as(responseType);
+		return null;
+	}
+
+	/**
+	 * Helper method to raise exceptions in case of any other response than 1xx or 2xx successful.
+	 * @param <T> the type to return
+	 * @param responseType the response type
+	 * @return the response of the body as given type in case of 1xx or 2xx status code.
+	 * @throws RestResponseException or any subclass when response was not successful
+	 */
+	public <T> T check(TypeReference<T> responseType) throws RestResponseException {
+		check();
+		int statusCode = getStatusCode();
+		if ((statusCode / 100 == 1) || (statusCode / 100 == 2)) return as(responseType);
+		return null;
+	}
+	
+	/**
+	 * Helper method to raise exceptions in case of any other response than 1xx or 2xx successful.
+	 * @param <T> the type to return
+	 * @param responseType the response type
+	 * @return the response of the body as given type in case of 1xx or 2xx status code.
+	 * @throws RestResponseException or any subclass when response was not successful
+	 * @deprecated this is a Jackson 2 method, please use the corresponding Jackson 3 method
+	 */
+	@Deprecated
+	public <T> T check(com.fasterxml.jackson.databind.JavaType responseType) throws RestResponseException {
+		check();
+		int statusCode = getStatusCode();
+		if ((statusCode / 100 == 1) || (statusCode / 100 == 2)) return as(responseType);
+		return null;
+	}
+
+	/**
+	 * Helper method to raise exceptions in case of any other response than 1xx or 2xx successful.
+	 * @param <T> the type to return
+	 * @param responseType the response type
+	 * @return the response of the body as given type in case of 1xx or 2xx status code.
+	 * @throws RestResponseException or any subclass when response was not successful
+	 * @deprecated this is a Jackson 2 method, please use the corresponding Jackson 3 method
+	 */
+	@Deprecated
+	public <T> T check(com.fasterxml.jackson.core.type.TypeReference<T> responseType) throws RestResponseException {
+		check();
+		int statusCode = getStatusCode();
+		if ((statusCode / 100 == 1) || (statusCode / 100 == 2)) return as(responseType);
+		return null;
 	}
 
 	/**
@@ -148,7 +237,9 @@ public class RestResponse {
 	/**
 	 * Returns the Json object (Jackson 2) for mapping ease of use.
 	 * @return the Json object (Jackson 2)
+	 * @deprecated this is a Jackson 2 method, please use the corresponding Jackson 3 method
 	 */
+	@Deprecated
 	public Json2 getJson2() {
 		if (json2 == null) {
 			Json2.Builder builder = Json2.builder();
@@ -173,7 +264,9 @@ public class RestResponse {
 	/**
 	 * Returns the jsonMapper.
 	 * @return the jsonMapper
+	 * @deprecated this is a Jackson 2 method, please use the corresponding Jackson 3 method
 	 */
+	@Deprecated
 	public com.fasterxml.jackson.databind.json.JsonMapper getJsonMapper2() {
 		if (jsonMapper2 == null) {
 			jsonMapper2 = getRequest().getConfiguration().getMapper2();

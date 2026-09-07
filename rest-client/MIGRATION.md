@@ -33,3 +33,5 @@ Steps to migrate to RestClient
 8. Miscellaneous:
    - Don't use GenericType or TypeReference for Lists and Sets when declaring response Types. Use JacksonUtils.getListType() or .getSetType() or .getMapType()
    - Replace Entity.json() by Json.JSON.toJson()
+   - Migrate to Jackson 3 (JsonSerialize/JsonDeserialize)
+   - Intensively test client requests
