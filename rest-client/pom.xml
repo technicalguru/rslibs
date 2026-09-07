@@ -8,7 +8,7 @@
   	
 	<properties>
 		<project.home>https://github.com/technicalguru/rslibs</project.home>
-		<jersey.version>3.1.12</jersey.version>
+		<jersey.version>4.0.2</jersey.version>
 		<springboot.version>7.0.9</springboot.version>
 	</properties>
 
@@ -51,7 +51,7 @@
 		<dependency>
 		    <groupId>org.glassfish.jersey.connectors</groupId>
 		    <artifactId>jersey-apache-connector</artifactId>
-		    <version>${jersey.version}</version>
+		    <version>3.1.12</version>
 		</dependency>
 		<dependency>
 		    <groupId>org.glassfish.jersey.media</groupId>
