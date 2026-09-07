@@ -172,11 +172,13 @@ public class RequestBuilder extends AbstractRequestSpec<RequestBuilder> {
 		}
 		// Process all interceptors...
 		RestRequestExecution execution = createExecution(request);
+		RestResponse         rc        = null;
 		try {
-			return execution.execute(request);
+			rc = execution.execute(request);
 		} catch (Throwable t) {
 			throw new RestClientException("Cannot execute request", t);
 		}
+		return rc.check();
 	}
 
 	/**

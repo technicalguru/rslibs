@@ -138,88 +138,14 @@ public class RestResponse {
 	 * Helper method to raise exceptions in case of any other response than 1xx or 2xx successful.
 	 * @throws RestResponseException or any subclass when response was not successful
 	 */
-	public void check() throws RestResponseException {
-		if ((statusCode / 100 == 1) || (statusCode / 100 == 2)) return;
+	public RestResponse check() throws RestResponseException {
+		if ((statusCode / 100 == 1) || (statusCode / 100 == 2)) return this;
 		if (statusCode / 100 == 3) throw new RedirectionException(this);
 		if (statusCode / 100 == 4) throw new ClientErrorException(this);
 		if (statusCode / 100 == 5) throw new ServerErrorException(this);
 		throw new RestResponseException(this);
 	}
 	
-	/**
-	 * Helper method to raise exceptions in case of any other response than 1xx or 2xx successful.
-	 * @param <T> the type to return
-	 * @param responseType the response type
-	 * @return the response of the body as given type in case of 1xx or 2xx status code.
-	 * @throws RestResponseException or any subclass when response was not successful
-	 */
-	public <T> T check(Class<T> responseType) throws RestResponseException {
-		check();
-		int statusCode = getStatusCode();
-		if ((statusCode / 100 == 1) || (statusCode / 100 == 2)) return as(responseType);
-		return null;
-	}
-
-	/**
-	 * Helper method to raise exceptions in case of any other response than 1xx or 2xx successful.
-	 * @param <T> the type to return
-	 * @param responseType the response type
-	 * @return the response of the body as given type in case of 1xx or 2xx status code.
-	 * @throws RestResponseException or any subclass when response was not successful
-	 */
-	public <T> T check(JavaType responseType) throws RestResponseException {
-		check();
-		int statusCode = getStatusCode();
-		if ((statusCode / 100 == 1) || (statusCode / 100 == 2)) return as(responseType);
-		return null;
-	}
-
-	/**
-	 * Helper method to raise exceptions in case of any other response than 1xx or 2xx successful.
-	 * @param <T> the type to return
-	 * @param responseType the response type
-	 * @return the response of the body as given type in case of 1xx or 2xx status code.
-	 * @throws RestResponseException or any subclass when response was not successful
-	 */
-	public <T> T check(TypeReference<T> responseType) throws RestResponseException {
-		check();
-		int statusCode = getStatusCode();
-		if ((statusCode / 100 == 1) || (statusCode / 100 == 2)) return as(responseType);
-		return null;
-	}
-	
-	/**
-	 * Helper method to raise exceptions in case of any other response than 1xx or 2xx successful.
-	 * @param <T> the type to return
-	 * @param responseType the response type
-	 * @return the response of the body as given type in case of 1xx or 2xx status code.
-	 * @throws RestResponseException or any subclass when response was not successful
-	 * @deprecated this is a Jackson 2 method, please use the corresponding Jackson 3 method
-	 */
-	@Deprecated
-	public <T> T check(com.fasterxml.jackson.databind.JavaType responseType) throws RestResponseException {
-		check();
-		int statusCode = getStatusCode();
-		if ((statusCode / 100 == 1) || (statusCode / 100 == 2)) return as(responseType);
-		return null;
-	}
-
-	/**
-	 * Helper method to raise exceptions in case of any other response than 1xx or 2xx successful.
-	 * @param <T> the type to return
-	 * @param responseType the response type
-	 * @return the response of the body as given type in case of 1xx or 2xx status code.
-	 * @throws RestResponseException or any subclass when response was not successful
-	 * @deprecated this is a Jackson 2 method, please use the corresponding Jackson 3 method
-	 */
-	@Deprecated
-	public <T> T check(com.fasterxml.jackson.core.type.TypeReference<T> responseType) throws RestResponseException {
-		check();
-		int statusCode = getStatusCode();
-		if ((statusCode / 100 == 1) || (statusCode / 100 == 2)) return as(responseType);
-		return null;
-	}
-
 	/**
 	 * Returns the Json object (Jackson 3) for mapping ease of use.
 	 * @return the Json object (Jackson 3)

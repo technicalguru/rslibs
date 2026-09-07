@@ -35,3 +35,5 @@ Steps to migrate to RestClient
    - Replace Entity.json() by Json.JSON.toJson()
    - Migrate to Jackson 3 (JsonSerialize/JsonDeserialize)
    - Intensively test client requests
+   - RestResponseException now always thrown for other than 1xx/2xx responses
+   
