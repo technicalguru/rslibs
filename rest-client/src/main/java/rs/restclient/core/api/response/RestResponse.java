@@ -111,7 +111,7 @@ public class RestResponse {
 	}
 
 	/**
-	 * Returns the response as given type.
+	 * Returns the response as given type using Jackson v2.
 	 * @param <T> the type to return
 	 * @param responseType the response type
 	 * @return the response as given type
@@ -123,7 +123,19 @@ public class RestResponse {
 	}
 	
 	/**
-	 * Returns the response as given type.
+	 * Returns the response as given type using Jackson v2.
+	 * @param <T> the type to return
+	 * @param responseType the response type
+	 * @return the response as given type
+	 * @deprecated this is a Jackson 2 method, please use the corresponding Jackson 3 method
+	 */
+	@Deprecated
+	public <T> T as2(Class<T> responseType) {
+		return getJson2().fromJson(getBody(), responseType);
+	}
+	
+	/**
+	 * Returns the response as given type using Jackson v2.
 	 * @param <T> the type to return
 	 * @param responseType the response type
 	 * @return the response as given type
