@@ -33,23 +33,50 @@ import rs.baselib.util.CommonUtils;
  */
 public abstract class AbstractBuilder<T> implements Builder<T> {
 
+	private Builder<T> parentBuilder;
+
 	private T last;
+
+	/**
+	 * No parent constructor.
+	 */
+	protected AbstractBuilder() {
+		this(null);
+	}
+	
+	/**
+	 * Constructor with parent builder
+	 * @param parentBuilder the parent builder to be called
+	 */
+	protected AbstractBuilder(Builder<T> parentBuilder) {
+		this.parentBuilder = parentBuilder;
+	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public final T build() {
-		last = _build();
+		last = parentBuilder != null ? _build(parentBuilder.build()) : _build();
 		return last;
 	}
 
 	/**
-	 * The actual specific builder method.
+	 * The actual specific builder method (when no parent builder is defined).
 	 * @return the built value
 	 */
 	protected abstract T _build();
 	
+	/**
+	 * Method when a parent built an object already.
+	 * <p>The default implementation return the given object.
+	 * @param value the object as built by the parent.
+	 * @return the built object
+	 */
+	protected T _build(T value) {
+		return value;
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */

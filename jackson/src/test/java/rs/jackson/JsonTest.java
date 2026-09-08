@@ -6,10 +6,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import rs.baselib.test.PersonBuilder.Person;
+import tools.jackson.core.type.TypeReference;
 
 /**
  * Test {@link Json} serialization and deserialization
@@ -23,8 +24,8 @@ public class JsonTest {
 	private static final String JSON_ARRAY   = "["+JSON1+","+JSON2+"]";
 	private static final String JSON_COMPLEX = "{ \"person1\":"+JSON1+", \"person2\":{ \"data\":"+JSON2+"}}";
 	
-	private static final Person PERSON1 = new Person("Max",  "Mustermann", LocalDate.of(2020, Month.JANUARY, 1),  6, "MALE",   "+49 610 12345678", null);
-	private static final Person PERSON2 = new Person("Jane", "Doe",        LocalDate.of(2000, Month.JANUARY, 1), 26, "FEMALE", "+1 555 12345678", null);
+	private static final Person PERSON1 = new Person("Max",  "Mustermann", LocalDate.of(2020, Month.JANUARY, 1),  6, "MALE",   "+49 610 12345678");
+	private static final Person PERSON2 = new Person("Jane", "Doe",        LocalDate.of(2000, Month.JANUARY, 1), 26, "FEMALE", "+1 555 12345678");
 	
 	private Json JSON = Json.builder().build();
 	
@@ -35,7 +36,16 @@ public class JsonTest {
 	}
 	
 	@Test
-	public void testFromList() throws Exception {
+	public void testFromListWithTypeRef() throws Exception {
+		List<Person> list = JSON.fromJson(JSON_ARRAY, new TypeReference<List<Person>>() {});
+		assertNotNull(list);
+		assertEquals(2, list.size());
+		test(PERSON1, list.get(0));
+		test(PERSON2, list.get(1));
+	}
+	
+	@Test
+	public void testFromListWithJavaType() throws Exception {
 		ArrayList<Person> list = JSON.fromJson(JSON_ARRAY, JacksonUtils.getListType(Person.class));
 		assertNotNull(list);
 		assertEquals(2, list.size());
