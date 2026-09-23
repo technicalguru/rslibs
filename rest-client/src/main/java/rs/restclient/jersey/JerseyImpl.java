@@ -39,6 +39,9 @@ import rs.restclient.core.util.LoggingUtils;
 
 /**
  * The implementation of JerseyClient backend.
+ * <p>This implementation does not support a verbosity setting per request.
+ *    Only configuration-level verbosity is supported. This is due to the fact
+ *    that the instantiated Jersey client is configured once and then re-used.
  * @author ralph
  *
  */

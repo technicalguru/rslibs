@@ -29,14 +29,15 @@ public class RestRequest {
 	private List<RequestInterceptor> interceptors;
 	private RestClientConfiguration  configuration;
 	private TargetImplementation     implementation;
-
+	private Boolean                  verbose;
+	
 	/**
 	 * Constructor.
 	 * @param target target of the request
 	 */
 	protected RestRequest(URI uri, String method, String responseMediaType, HeadersSpec headers, QueryParamsSpec queryParams, 
 			Entity<?> entity, List<RequestInterceptor> interceptors, RestClientConfiguration configuration, 
-			TargetImplementation implementation) {
+			TargetImplementation implementation, Boolean verbose) {
 		this.uri               = uri;
 		this.method            = method;
 		this.responseMediaType = responseMediaType;
@@ -46,6 +47,7 @@ public class RestRequest {
 		this.interceptors      = new ArrayList<>(interceptors);
 		this.configuration     = configuration;
 		this.implementation    = implementation;
+		this.verbose           = verbose;;
 	}
 	
 	/**
@@ -96,6 +98,35 @@ public class RestRequest {
 		return entity;
 	}
 
+	/**
+	 * Returns the verbose property.
+	 * <p>Verbosity setting per request is not supported by all implementations.
+	 * @return true (verbose logging on), false (verbose logging off), null (use default config)
+	 */
+	public Boolean verbose() {
+		return verbose;
+	}
+	
+	/**
+	 * Returns the calculated verbosity property for this request.
+	 * @return true when request shall be verbose looging, false otherwise.
+	 */
+	public boolean isVerbose() {
+		Boolean b = verbose();
+		if (b!= null) return b.booleanValue();
+		return getConfiguration().isVerbose();
+	}
+	
+	/**
+	 * Sets whether the request shall be executed with verbose logging.
+	 * <p>Verbosity setting per request is not supported by all implementations.
+	 * @param verbose true (verbose logging on), false (verbose logging off), null (use default config)
+	 * @return this object for chaining
+	 */
+	public void verbose(Boolean verbose) {
+		this.verbose = verbose;
+	}
+	
 	/**
 	 * Adds the given header with values.
 	 * @param name name of header
@@ -185,7 +216,7 @@ public class RestRequest {
 	 */
 	public static RestRequest from(RestRequest request) {
 		return new RestRequest(request.getUri(), request.getMethod(), request.getResponseMediaType(), request.getHeaders(), request.getQueryParams(), 
-				request.getEntity(), request.getInterceptors(), request.getConfiguration(), request.getImplementation());
+				request.getEntity(), request.getInterceptors(), request.getConfiguration(), request.getImplementation(), request.verbose());
 	}
 
 	/**
