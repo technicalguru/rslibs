@@ -35,7 +35,6 @@ public class BuilderUtils {
 	 */
 	public static final UniformRandomProvider RNG = RandomSource.JDK.create();
 
-
 	/**
 	 * Return any object.
 	 * @param builder the builder to be used
@@ -78,6 +77,16 @@ public class BuilderUtils {
 	}
 	
 	/**
+	 * Returns a builder that always produces the same value.
+	 * @param <T> type of value
+	 * @param value value to be produced
+	 * @return the builder
+	 */
+	public static <T> Builder<T> $fixed(T value) {
+		return new StaticBuilder<>(value);
+	}
+	
+	/**
 	 * Returns the String Builder factory.
 	 * @return the builder for strings.
 	 */
@@ -91,6 +100,14 @@ public class BuilderUtils {
 	 */
 	public static RandomStringBuilder $RandomString() {
 		return new RandomStringBuilder();
+	}
+
+	/**
+	 * Returns the Boolean Builder factory.
+	 * @return the builder for boolean.
+	 */
+	public static BooleanBuilder $Boolean() {
+		return new BooleanBuilder();
 	}
 
 	/**
