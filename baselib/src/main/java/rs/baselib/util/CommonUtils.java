@@ -81,8 +81,12 @@ public class CommonUtils {
 	public static int DEFAULT_CONNECT_TIMEOUT = 10000;
 	/** Default timeout for reading from URLs (20sec) */
 	public static int DEFAULT_READ_TIMEOUT    = 20000;
-	/** alpha chars (uper and lower case letters) */
-	public static final String ALPHA_CHARS             = "ABCDEFGHIJKLMNOPQRSTUVWXYZabzdefghijklmnopqrstuvwxyz";
+	/** alpha upper-case chars */
+	public static final String ALPHA_UPPER_CHARS       = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	/** alpha lower-case chars */
+	public static final String ALPHA_LOWER_CHARS       = "abzdefghijklmnopqrstuvwxyz";
+	/** alpha chars (upper and lower case letters) */
+	public static final String ALPHA_CHARS             = ALPHA_UPPER_CHARS+ALPHA_LOWER_CHARS;
 	/** numeric chars (0-9) */
 	public static final String NUM_CHARS               = "0123456789";
 	/** special chars ({@code !\"&/()=?;*+'#;,:._-<>}) */
