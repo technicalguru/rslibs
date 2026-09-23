@@ -162,7 +162,7 @@ public class RequestBuilder extends AbstractRequestSpec<RequestBuilder> {
 		// 1st Build RestRequest  - standard object
 		Target      target  = getTarget();
 		RestRequest request = new RestRequest(target.getUri(), method, responseMediaType, headers(), queryParams(), entity, 
-				                              interceptors(), target.configuration(), target.implementation());
+				                              interceptors(), target.configuration(), target.implementation(), verbose());
 		// Ask the authorization strategy whether we can proceed, but synchronize
 		AuthorizationStrategy authorizationStrategy = authorizationStrategy();
 		if (authorizationStrategy != null) {

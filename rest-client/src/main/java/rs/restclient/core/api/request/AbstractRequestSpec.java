@@ -23,6 +23,8 @@ public abstract class AbstractRequestSpec<T extends AbstractRequestSpec<T>> {
 	private List<RequestInterceptor> interceptors;
 	private AuthorizationStrategy    authorizationStrategy;
 	private QueryParamsSpec          queryParams;
+	private Boolean                  verbose;
+	
 	/**
 	 * Default constructor.
 	 */
@@ -212,4 +214,25 @@ public abstract class AbstractRequestSpec<T extends AbstractRequestSpec<T>> {
 		return t;
 	}
 
+	/**
+	 * Returns whether the request shall be executed with verbose logging.
+	 * <p>Verbosity setting per request is not supported by all implementations.
+	 * @return true (verbose logging on), false (verbose logging off), null (use default config)
+	 */
+	public Boolean verbose() {
+		return verbose;
+	}
+	
+	/**
+	 * Sets whether the request shall be executed with verbose logging.
+	 * <p>Verbosity setting per request is not supported by all implementations.
+	 * @param verbose true (verbose logging on), false (verbose logging off), null (use default config)
+	 * @return this object for chaining
+	 */
+	public T verbose(Boolean verbose) {
+		this.verbose = verbose;
+		@SuppressWarnings("unchecked")
+		T t = (T)this;
+		return t;
+	}
 }

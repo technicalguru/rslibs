@@ -78,6 +78,16 @@ public class BuilderUtils {
 	}
 	
 	/**
+	 * Returns a builder that produces the given value.
+	 * @param <T> type of value
+	 * @param value value to produce
+	 * @return the builder
+	 */
+	public static <T> Builder<T> fixed(T value) {
+		return new StaticBuilder<T>(value);
+	}
+	
+	/**
 	 * Returns the String Builder factory.
 	 * @return the builder for strings.
 	 */
@@ -99,6 +109,14 @@ public class BuilderUtils {
 	 */
 	public static IntBuilder $Int() {
 		return new IntBuilder();
+	}
+
+	/**
+	 * Returns the Boolean Builder factory.
+	 * @return the builder for integers.
+	 */
+	public static BooleanBuilder $Boolean() {
+		return new BooleanBuilder();
 	}
 
 	/**
@@ -197,5 +215,27 @@ public class BuilderUtils {
 		return new AddressBuilder();
 	}
 
+	/**
+	 * Returns the E-mail Address Builder factory.
+	 * @return the builder for e-mail addresses.
+	 */
+	public static EmailAddressBuilder $EmailAddress() {
+		return new EmailAddressBuilder();
+	}
 
+	/**
+	 * Returns the Apex Domain Builder factory.
+	 * @return the builder for Apex domains.
+	 */
+	public static ApexDomainBuilder $ApexDomain() {
+		return new ApexDomainBuilder();
+	}
+
+	/**
+	 * Returns the Hostname Builder factory.
+	 * @return the builder for hostnames.
+	 */
+	public static HostnameBuilder $Hostname() {
+		return new HostnameBuilder();
+	}
 }
