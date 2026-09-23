@@ -8,8 +8,8 @@
 
 	<properties>
 		<project.home>https://github.com/technicalguru/rslibs</project.home>
-		<jackson3.version>3.2.2</jackson3.version>
-		<jackson2.version>2.22.2</jackson2.version>
+		<jackson3.version>3.2.3</jackson3.version>
+		<jackson2.version>2.22.3</jackson2.version>
 	</properties>
 
 	<artifactId>jackson</artifactId>
