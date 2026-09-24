@@ -11,11 +11,11 @@
 		<maven.bundle.version>5.1.8</maven.bundle.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<log4j.version>2.26.1</log4j.version>
-		<slf4j.version>2.0.19</slf4j.version>
+		<slf4j.version>2.0.20</slf4j.version>
 	</properties>
 
 	<artifactId>libs</artifactId>
-	<version>6.1.1</version>
+	<version>6.1.2</version>
 	<packaging>pom</packaging>
 
 	<url>https://github.com/technicalguru/rslibs</url>
@@ -26,7 +26,7 @@
 		<connection>scm:git:https://github.com/technicalguru/rslibs.git</connection>
 		<developerConnection>scm:git:https://github.com/technicalguru/rslibs.git</developerConnection>
 		<url>https://github.com/technicalguru/rslibs</url>
-		<tag>libs-6.1.1</tag>
+		<tag>libs-6.1.2</tag>
 	</scm>
 
 	<issueManagement>

@@ -18,7 +18,9 @@ public class ApexDomainBuilder extends AbstractBuilder<String> {
 	public ApexDomainBuilder() {
 		this.domains = BuilderUtils.$RandomString().withChars(CommonUtils.ALPHA_LOWER_CHARS).withLength(15);
 		Set<String> tlds = CommonUtils.newSet(".net", ".org", ".info", ".biz", ".int", ".edu", ".aero", ".name", ".eu", ".asia", ".travel", ".online");
-		for (Country country : Country.values()) tlds.add(country.getTld());
+		for (Country country : Country.values()) {
+			if (country.getTld() != null) tlds.add(country.getTld());
+		}
 		this.tlds    = new RandomSelectBuilder<String>().withValues(tlds.toArray(new String[tlds.size()]));
 	}
 
