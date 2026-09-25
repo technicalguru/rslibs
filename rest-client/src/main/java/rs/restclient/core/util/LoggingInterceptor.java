@@ -22,13 +22,15 @@ public class LoggingInterceptor extends AbstractRequestInterceptor {
 	 */
 	@Override
 	protected void intercept(RestRequest request) throws IOException {
-		log.info("");;
-		log.info("Request:");
-		log.info("   {} {}", request.getMethod(), request.getUri());
-		log.info("   {}",    request.getHeaders());
-		if (request.getEntity() != null) {
-			log.info("");;
-			log.info("   {}",    request.getEntity());
+		if (request.isVerbose()) {
+			log.info("");
+			log.info("Request:");
+			log.info("   {} {}", request.getMethod(), request.getUri());
+			log.info("   {}",    request.getHeaders());
+			if (request.getEntity() != null) {
+				log.info("");;
+				log.info("   {}",    request.getEntity());
+			}
 		}
 	}
 
@@ -37,12 +39,14 @@ public class LoggingInterceptor extends AbstractRequestInterceptor {
 	 */
 	@Override
 	protected void intercept(RestRequest request, RestResponse response) throws IOException {
-		log.info("");;
-		log.info("Response:");
-		log.info("   {} {}", response.getStatusCode(), response.getStatusMessage());
-		LoggingUtils.logHeaders(log, response.getHeaders());
-		log.info("");
-		log.info("   {}", response.getBody());
+		if (request.isVerbose()) {
+			log.info("");
+			log.info("Response:");
+			log.info("   {} {}", response.getStatusCode(), response.getStatusMessage());
+			LoggingUtils.logHeaders(log, response.getHeaders());
+			log.info("");
+			log.info("   {}", response.getBody());
+		}
 	}
 
 	/**

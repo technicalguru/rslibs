@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.apache.commons.collections4.MultiValuedMap;
 
+import rs.baselib.util.CommonUtils;
 import rs.baselib.util.UriBuilder;
 import rs.restclient.core.api.auth.AuthorizationStrategy;
 import rs.restclient.core.api.request.AbstractRequestSpec;
@@ -33,7 +34,7 @@ public class Target extends AbstractRequestSpec<Target> {
 	 */
 	private Target(Target parentTarget, URI uri) {
 		this(uri, parentTarget.configuration(), parentTarget.implementation(), parentTarget.interceptors(),
-				parentTarget.headers(), parentTarget.queryParams(), parentTarget.authorizationStrategy());
+				parentTarget.headers(), parentTarget.queryParams(), parentTarget.authorizationStrategy(), parentTarget.verbose());
 	}
 	
 	/**
@@ -45,10 +46,11 @@ public class Target extends AbstractRequestSpec<Target> {
 	 * @param headers headers to be present
 	 * @param queryParams query params to be present
 	 * @param authorizationStrategy the authorization strategy
+	 * @param verbose verbosity of request
 	 */
 	private Target(URI uri, RestClientConfiguration configuration, TargetImplementation implementation,
-			List<RequestInterceptor> interceptors, HeadersSpec headers, QueryParamsSpec queryParams, AuthorizationStrategy authorizationStrategy) {
-		super(headers, queryParams, interceptors, authorizationStrategy);
+			List<RequestInterceptor> interceptors, HeadersSpec headers, QueryParamsSpec queryParams, AuthorizationStrategy authorizationStrategy, Boolean verbose) {
+		super(headers, queryParams, interceptors, authorizationStrategy, verbose);
 		if (uri == null) throw new RestClientException("uri must not be null");
 		this.uri                   = uri;
 		this.configuration         = configuration;
@@ -229,6 +231,17 @@ public class Target extends AbstractRequestSpec<Target> {
 	}
 
 	/**
+	 * Sets the local verbosity.
+	 * @param verbosity the new verbosity
+	 * @return a new target
+	 */
+	@Override
+	public Target verbose(Boolean verbose) {
+		if (CommonUtils.equals(verbose(), verbose)) return this;
+		return builder(this).verbose(verbose).build();
+	}
+
+	/**
 	 * Replaces / Sets the authorization strategy for this target.
 	 * @param authorizationStrategy
 	 */
@@ -244,7 +257,8 @@ public class Target extends AbstractRequestSpec<Target> {
 			.with(from.configuration())
 			.authorizationStrategy(from.authorizationStrategy())
 			.headers(from.headers().getHeaders())
-			.queryParams(from.queryParams().getParams());		
+			.queryParams(from.queryParams().getParams())
+			.verbose(from.verbose());		
 	}
 	
 	/**
@@ -261,7 +275,8 @@ public class Target extends AbstractRequestSpec<Target> {
 	@Override
 	public String toString() {
 		return "Target [configuration=" + configuration + ", implementation=" + implementation + ", headers=" 
-				+ headers() + ", interceptors=" + interceptors() + ", uri=" + uri + ", authStrategy=" + authorizationStrategy() +"]";
+				+ headers() + ", interceptors=" + interceptors() + ", uri=" + uri + ", authStrategy=" + authorizationStrategy() 
+				+", verbose=" + verbose() + "]";
 	}
 
 	/**
@@ -316,7 +331,7 @@ public class Target extends AbstractRequestSpec<Target> {
 			if (configuration.getUri() == null) throw new RestClientException("configuration.uri must not be null");
 			URI uri = this.uri;
 			if (uri == null) uri = URI.create(configuration.getUri());
-			return new Target(uri, configuration, implementation, interceptors(), headers(), queryParams(), authorizationStrategy());
+			return new Target(uri, configuration, implementation, interceptors(), headers(), queryParams(), authorizationStrategy(), verbose());
 		}
 	}
 

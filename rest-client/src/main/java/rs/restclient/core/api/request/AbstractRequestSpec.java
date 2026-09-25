@@ -29,7 +29,7 @@ public abstract class AbstractRequestSpec<T extends AbstractRequestSpec<T>> {
 	 * Default constructor.
 	 */
 	protected AbstractRequestSpec() {
-		this(new HeadersSpec(), new QueryParamsSpec(), new ArrayList<>(), null);
+		this(new HeadersSpec(), new QueryParamsSpec(), new ArrayList<>(), null, null);
 	}
 
 	/**
@@ -40,6 +40,7 @@ public abstract class AbstractRequestSpec<T extends AbstractRequestSpec<T>> {
 		this.queryParams           = new QueryParamsSpec(other.queryParams());
 		this.interceptors          = new ArrayList<>(other.interceptors());
 		this.authorizationStrategy = other.authorizationStrategy();
+		this.verbose               = other.verbose();
 	}
 
 	
@@ -48,12 +49,15 @@ public abstract class AbstractRequestSpec<T extends AbstractRequestSpec<T>> {
 	 * @param headers headers to copy from
 	 * @param interceptors interceptors to copy from
 	 * @param authorizationStrategy authorization strategy
+	 * @param verbose verbosity of request
 	 */
-	public AbstractRequestSpec(HeadersSpec headers, QueryParamsSpec queryParams, List<RequestInterceptor> interceptors, AuthorizationStrategy authorizationStrategy) {
+	public AbstractRequestSpec(HeadersSpec headers, QueryParamsSpec queryParams, List<RequestInterceptor> interceptors, 
+			AuthorizationStrategy authorizationStrategy, Boolean verbose) {
 		this.headers               = new HeadersSpec(headers);
 		this.queryParams           = new QueryParamsSpec(queryParams);
 		this.interceptors          = new ArrayList<>(interceptors);
 		this.authorizationStrategy = authorizationStrategy;
+		this.verbose               = verbose;
 	}
 
 	/**
