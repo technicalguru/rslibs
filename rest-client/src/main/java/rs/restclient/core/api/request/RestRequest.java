@@ -226,7 +226,8 @@ public class RestRequest {
 	public String toString() {
 		return "RestRequest [uri=" + uri + ", method=" + method + ", responseMediaType=" + responseMediaType
 				+ ", headers=" + headers + ", queryParams=" + queryParams + ", entity=" + entity + ", interceptors="
-				+ interceptors + ", configuration=" + configuration + ", implementation=" + implementation + "]";
+				+ interceptors + ", verbose=" + verbose + ", configuration=" + configuration + ", implementation=" 
+				+ implementation + "]";
 	}
 
 	
