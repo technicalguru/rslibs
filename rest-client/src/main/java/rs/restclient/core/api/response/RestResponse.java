@@ -218,17 +218,30 @@ public class RestResponse {
 	}
 
 	/**
+	 * Returns the given header as collection.
+	 * <p>Headers are stored with lower-case names, this functions returns the values
+	 *    regardless of the lower-/upper-case form of the argument.
+	 * @param name name of header
+	 * @return collection as optional
+	 */
+	public Optional<Collection<String>> getHeader(String name) {
+		if (CommonUtils.isEmpty(name)) return Optional.empty();
+		Collection<String> values = getHeaders().get(name.trim().toLowerCase());
+		if ((values == null) || values.isEmpty()) return Optional.empty();
+		return Optional.of(values);
+	}
+	
+	/**
 	 * Returns the given header as single value (joined by commas).
 	 * <p>Headers are stored with lower-case names, this functions returns the values
 	 *    regardless of the lower-/upper-case form of the argument.
 	 * @param name name of header
-	 * @return value or null if it doesn't exist
+	 * @return value as optional
 	 */
-	public String getHeaderString(String name) {
-		if (CommonUtils.isEmpty(name)) return null;
-		Collection<String> values = getHeaders().get(name.trim().toLowerCase());
-		if (values.isEmpty()) return null;
-		return CommonUtils.join(",", values);
+	public Optional<String> getHeaderString(String name) {
+		Optional<Collection<String>> values = getHeader(name);
+		if (values.isEmpty()) return Optional.empty();
+		return Optional.of(CommonUtils.join(",", values.get()));
 	}
 	
 	/**
