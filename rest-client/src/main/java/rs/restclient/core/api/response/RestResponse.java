@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 import org.apache.commons.collections4.MultiValuedMap;
+import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 
 import rs.baselib.util.CommonUtils;
 import rs.jackson.Json;
@@ -34,7 +35,11 @@ public class RestResponse {
 
 	protected RestResponse(RestRequest request, MultiValuedMap<String, String> headers, int statusCode, String statusMessage, Optional<String> body) {
 		this.request       = request;
-		this.headers       = headers;
+		
+		this.headers       = new ArrayListValuedHashMap<String, String>();
+		for (String key : headers.keys()) {
+			this.headers.putAll(key.trim().toLowerCase(), headers.get(key));
+		}
 		this.statusCode    = statusCode;
 		this.statusMessage = statusMessage;
 		this.body          = body;
@@ -213,14 +218,30 @@ public class RestResponse {
 	}
 
 	/**
-	 * Returns the given header as single value (joined by commas)
+	 * Returns the given header as collection.
+	 * <p>Headers are stored with lower-case names, this functions returns the values
+	 *    regardless of the lower-/upper-case form of the argument.
 	 * @param name name of header
-	 * @return value or null if it doesn't exist
+	 * @return collection as optional
 	 */
-	public String getHeaderString(String name) {
-		Collection<String> values = getHeaders().get(name);
-		if (values.isEmpty()) return null;
-		return CommonUtils.join(",", values);
+	public Optional<Collection<String>> getHeader(String name) {
+		if (CommonUtils.isEmpty(name)) return Optional.empty();
+		Collection<String> values = getHeaders().get(name.trim().toLowerCase());
+		if ((values == null) || values.isEmpty()) return Optional.empty();
+		return Optional.of(values);
+	}
+	
+	/**
+	 * Returns the given header as single value (joined by commas).
+	 * <p>Headers are stored with lower-case names, this functions returns the values
+	 *    regardless of the lower-/upper-case form of the argument.
+	 * @param name name of header
+	 * @return value as optional
+	 */
+	public Optional<String> getHeaderString(String name) {
+		Optional<Collection<String>> values = getHeader(name);
+		if (values.isEmpty()) return Optional.empty();
+		return Optional.of(CommonUtils.join(",", values.get()));
 	}
 	
 	/**
