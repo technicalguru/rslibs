@@ -37,7 +37,7 @@ public class RestResponse {
 		this.request       = request;
 		
 		this.headers       = new ArrayListValuedHashMap<String, String>();
-		for (String key : headers.keys()) {
+		for (String key : headers.keySet()) {
 			this.headers.putAll(key.trim().toLowerCase(), headers.get(key));
 		}
 		this.statusCode    = statusCode;

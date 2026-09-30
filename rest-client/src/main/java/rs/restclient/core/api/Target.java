@@ -149,6 +149,27 @@ public class Target extends AbstractRequestSpec<Target> {
 	}
 
 	/**
+	 * Replaces a header.
+	 * @param name name of header
+	 * @param values values to add
+	 * @return a new target
+	 */
+	@Override
+	public Target replaceHeader(String name, Object... values) {
+		return builder(this).replaceHeader(name, values).build();
+	}
+
+	/**
+	 * Removes a header.
+	 * @param name name of header
+	 * @return a new target
+	 */
+	@Override
+	public Target removeHeader(String name) {
+		return builder(this).removeHeader(name).build();
+	}
+
+	/**
 	 * Adds headers.
 	 * @param headers headers to add
 	 * @return a new target
@@ -218,6 +239,27 @@ public class Target extends AbstractRequestSpec<Target> {
 	@Override
 	public Target queryParams(MultiValuedMap<String, Object> params) {
 		return builder(this).queryParams(params).build();
+	}
+
+	/**
+	 * Replaces a query param.
+	 * @param name name of query param
+	 * @param values values to replace
+	 * @return a new target
+	 */
+	@Override
+	public Target replaceQueryParam(String name, Object... values) {
+		return builder(this).replaceQueryParam(name, values).build();
+	}
+
+	/**
+	 * Removes a query param.
+	 * @param name name of query param
+	 * @return a new target
+	 */
+	@Override
+	public Target removeQueryParam(String name) {
+		return builder(this).removeQueryParam(name).build();
 	}
 
 	/**

@@ -61,6 +61,24 @@ public class HeadersSpec {
 	}
 	
 	/**
+	 * Replaces a header.
+	 * @param name name of header
+	 * @param values value(s) of header
+	 */
+	public void replace(String name, Object ...values) {
+		remove(name);
+		add(name, values);
+	}
+	
+	/**
+	 * Removes a header.
+	 * @param name name of header
+	 */
+	public void remove(String name) {
+		headers.remove(name);
+	}
+	
+	/**
 	 * Adds multiple headers.
 	 * @param headers headers to add
 	 */

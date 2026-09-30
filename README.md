@@ -20,7 +20,7 @@ Most of this code was created when I faced specific problems in my professional 
 RS Library modules are maintained in the same Maven project and, hence, follow the same release cycle. That means that each modules will have the same version numbers and are published at the same time.
 
 ## Latest Version
-Latest version is 6.1.0. Please note that Java 21 is required since 5.1.0.
+Latest version is 6.1.5. Please note that Java 21 is required since 5.1.0.
 
 ## Upgrading v6.0 to v6.1
 This version removes the jersey-client in favour of the rest-client sub project. Make sure you follow the migration instructions (see README and MIGRATION docs).

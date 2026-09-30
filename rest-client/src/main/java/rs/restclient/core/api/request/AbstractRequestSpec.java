@@ -102,6 +102,31 @@ public abstract class AbstractRequestSpec<T extends AbstractRequestSpec<T>> {
 	}
 	
 	/**
+	 * Replaces a header.
+	 * @param name name of header
+	 * @param values value(s)
+	 * @return this object for chaining
+	 */
+	public T replaceHeader(String name, Object ...values) {
+		headers.replace(name, values);
+		@SuppressWarnings("unchecked")
+		T t = (T)this;
+		return t;
+	}
+	
+	/**
+	 * Removes a header.
+	 * @param name name of header
+	 * @return this object for chaining
+	 */
+	public T removeHeader(String name) {
+		headers.remove(name);
+		@SuppressWarnings("unchecked")
+		T t = (T)this;
+		return t;
+	}
+	
+	/**
 	 * Adds multiple headers.
 	 * @param headers headers to add
 	 * @return this object for chaining
@@ -170,7 +195,6 @@ public abstract class AbstractRequestSpec<T extends AbstractRequestSpec<T>> {
 		return UnmodifiableQueryParamsSpec.unmodifiableQueryParamsSpec(queryParams);
 	}
 
-	
 	/**
 	 * Adds a query parameter.
 	 * @param name name of parameter
@@ -193,6 +217,33 @@ public abstract class AbstractRequestSpec<T extends AbstractRequestSpec<T>> {
 	 */
 	public T queryParams(MultiValuedMap<String, Object> params) {
 		queryParams.add(params);
+		@SuppressWarnings("unchecked")
+		T t = (T)this;
+		return t;
+	}
+
+	/**
+	 * Removes a query parameter.
+	 * @param name name of parameter
+	 * @return this object for chaining
+	 * @see QueryParamsSpec#add(java.lang.String, java.lang.Object[])
+	 */
+	public T removeQueryParam(String name) {
+		queryParams.remove(name);
+		@SuppressWarnings("unchecked")
+		T t = (T)this;
+		return t;
+	}
+
+	/**
+	 * Replaces a query parameter.
+	 * @param name name of parameter
+	 * @param values value(s)
+	 * @return this object for chaining
+	 * @see QueryParamsSpec#add(java.lang.String, java.lang.Object[])
+	 */
+	public T replaceQueryParam(String name, Object... values) {
+		queryParams.set(name, values);
 		@SuppressWarnings("unchecked")
 		T t = (T)this;
 		return t;

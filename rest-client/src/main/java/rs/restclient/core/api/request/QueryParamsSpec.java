@@ -56,6 +56,24 @@ public class QueryParamsSpec {
 	}
 	
 	/**
+	 * Adds a query parameter.
+	 * @param name name of parameter
+	 * @param values value(s)
+	 */
+	public void set(String name, Object ...values) {
+		remove(name);
+		add(name, values);
+	}
+	
+	/**
+	 * Removes a query parameter.
+	 * @param name name of parameter
+	 */
+	public void remove(String name) {
+		params.remove(name);
+	}
+	
+	/**
 	 * Adds all query parameters.
 	 * @param params parameters to add
 	 */
