@@ -221,6 +221,27 @@ public class Target extends AbstractRequestSpec<Target> {
 	}
 
 	/**
+	 * Replaces a query param.
+	 * @param name name of query param
+	 * @param values values to replace
+	 * @return a new target
+	 */
+	@Override
+	public Target replaceQueryParam(String name, Object... values) {
+		return builder(this).replaceQueryParam(name, values).build();
+	}
+
+	/**
+	 * Removes a query param.
+	 * @param name name of query param
+	 * @return a new target
+	 */
+	@Override
+	public Target removeQueryParam(String name) {
+		return builder(this).removeQueryParam(name).build();
+	}
+
+	/**
 	 * Sets the authorization strategy.
 	 * @param authorizationStrategy the new strategy
 	 * @return a new target
