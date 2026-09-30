@@ -149,6 +149,27 @@ public class Target extends AbstractRequestSpec<Target> {
 	}
 
 	/**
+	 * Replaces a header.
+	 * @param name name of header
+	 * @param values values to add
+	 * @return a new target
+	 */
+	@Override
+	public Target replaceHeader(String name, Object... values) {
+		return builder(this).replaceHeader(name, values).build();
+	}
+
+	/**
+	 * Removes a header.
+	 * @param name name of header
+	 * @return a new target
+	 */
+	@Override
+	public Target removeHeader(String name) {
+		return builder(this).removeHeader(name).build();
+	}
+
+	/**
 	 * Adds headers.
 	 * @param headers headers to add
 	 * @return a new target
