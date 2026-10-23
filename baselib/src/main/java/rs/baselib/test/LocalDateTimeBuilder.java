@@ -18,6 +18,7 @@
 package rs.baselib.test;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.ZoneId;
@@ -31,8 +32,10 @@ import org.apache.commons.lang3.time.DateUtils;
  */
 public class LocalDateTimeBuilder extends AbstractBuilder<LocalDateTime> {
 
-	private static ZoneId DEFAULT = ZoneId.systemDefault();;
+	private static ZoneId DEFAULT = ZoneId.of("UTC");
 	
+	/** the current time */
+	private LocalDateTime current;
 	/** the start time */
 	private LocalDateTime start;
 	/** the step for days and beyond */
@@ -44,7 +47,7 @@ public class LocalDateTimeBuilder extends AbstractBuilder<LocalDateTime> {
 	/** whether to create random numbers */
 	private boolean random = false;
 	/** The long builder for random generation */
-	private ZonedDateTimeBuilder zonedBuilder;
+	private LongBuilder msBuilder;
 	
 	/**
 	 * Constructor.
@@ -116,8 +119,15 @@ public class LocalDateTimeBuilder extends AbstractBuilder<LocalDateTime> {
 	 */
 	@Override
 	protected LocalDateTime _build() {
-		if (zonedBuilder == null) zonedBuilder = createZonedBuilder();
-		return zonedBuilder.build().toLocalDateTime();
+		if (random) {
+			if (msBuilder == null) msBuilder = createRandomBuilder();
+			current = LocalDateTime.ofInstant(Instant.ofEpochMilli(msBuilder.build()), DEFAULT);
+		} else if (current == null) {
+			current = createCurrent();
+		} else {
+			current = current.plus(periodStep).plus(durationStep);
+		}
+		return current;
 	}
 
 	/**
@@ -131,4 +141,35 @@ public class LocalDateTimeBuilder extends AbstractBuilder<LocalDateTime> {
 		if (random)        rc.withRandom();
 		return rc;
 	}
+	
+	/**
+	 * Creates the random builder.
+	 * @return the random builder to time in ms
+	 */
+	protected LongBuilder createRandomBuilder() {
+		if (start == null) throw new RuntimeException("Minimum LocalDateTime is not set");
+		if (end   == null) throw new RuntimeException("Maximum LocalDateTime is not set");
+		long start = this.start.atZone(DEFAULT).toInstant().toEpochMilli();
+		long end   = this.end.atZone(DEFAULT).toInstant().toEpochMilli();
+		return new LongBuilder().withStart(start).withEnd(end).withRandom();
+	}
+
+	/**
+	 * Creates the current value based on start.
+	 * @return the current value to be used
+	 */
+	protected LocalDateTime createCurrent() {
+		if (start == null) return getStart();
+		return start;
+	}
+	
+	/**
+	 * Get the start using the correct zone id
+	 * @return the start
+	 */
+	protected LocalDateTime getStart() {
+		if (start  == null) return LocalDateTime.now();
+		return start;
+	}
+	
 }

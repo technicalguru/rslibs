@@ -38,9 +38,10 @@ public class LocalDateTimeBuilderTest {
 	@Test
 	public void testDefaultStart() {
 		LocalDateTimeBuilder b      = $LocalDateTime();
-		LocalDateTime        start  = LocalDateTime.now().minusNanos(1);
+		LocalDateTime        now    = LocalDateTime.now();
+		LocalDateTime        start  = now.minusSeconds(1);
 		LocalDateTime        actual = b.build();
-		LocalDateTime        end    = LocalDateTime.now().plusNanos(1);
+		LocalDateTime        end    = now.plusSeconds(1);
 		assertTrue(actual.isAfter(start));
 		assertTrue(actual.isBefore(end));
 	}
