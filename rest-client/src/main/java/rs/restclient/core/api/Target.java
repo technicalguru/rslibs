@@ -317,7 +317,8 @@ public class Target extends AbstractRequestSpec<Target> {
 	@Override
 	public String toString() {
 		return "Target [configuration=" + configuration + ", implementation=" + implementation + ", headers=" 
-				+ headers() + ", interceptors=" + interceptors() + ", uri=" + uri + ", authStrategy=" + authorizationStrategy() 
+				+ headers() + ", interceptors=" + interceptors() + ", uri=" + uri + ", queryParams=" + queryParams() 
+				+ ", authStrategy=" + authorizationStrategy() 
 				+", verbose=" + verbose() + "]";
 	}
 

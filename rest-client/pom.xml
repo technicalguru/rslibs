@@ -3,13 +3,13 @@
 	<parent>
 		<groupId>eu.ralph-schuster</groupId>
 		<artifactId>libs</artifactId>
-		<version>6.1.5</version>
+		<version>6.1.6</version>
 	</parent>
   	
 	<properties>
 		<project.home>https://github.com/technicalguru/rslibs</project.home>
-		<jersey.version>4.0.2</jersey.version>
-		<springboot.version>7.0.9</springboot.version>
+		<jersey.version>4.0.3</jersey.version>
+		<springboot.version>7.0.10</springboot.version>
 	</properties>
 
 	<artifactId>rest-client</artifactId>
@@ -100,7 +100,7 @@
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
         	<artifactId>logback-classic</artifactId>
-			<version>1.6.4</version>
+			<version>1.6.5</version>
 			<scope>test</scope>
 		</dependency>
 		

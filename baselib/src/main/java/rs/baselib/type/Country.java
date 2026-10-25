@@ -88,7 +88,7 @@ public enum Country {
 	CZECH_REPUBLIC("Czech Republic", Continent.EUROPE, "Prag", "CZ", "CZE", "203", "+420", ".cz"),
 	IVORY_COAST("Ivory Coast", Continent.AFRICA, "Yamoussoukro", "CI", "CIV", "384", "+225", ".ci"),
 	DENMARK("Denmark", Continent.EUROPE, "Kopenhagen", "DK", "DNK", "208", "+45", ".dk"),
-	DIEGO_GARCIA("Diego Garcia", Continent.AFRICA, "Diego Garcia (Main Island)", "DG", "DGA", null, "+246", "-/-"),
+	DIEGO_GARCIA("Diego Garcia", Continent.AFRICA, "Diego Garcia (Main Island)", "DG", "DGA", null, "+246", null),
 	DJIBOUTI("Djibouti", Continent.AFRICA, "Dschibuti", "DJ", "DJI", "262", "+253", "dj"),
 	DOMINICA("Dominica", Continent.NORTH_AMERICA, "Roseau", "DM", "DMA", "212", "+1767", ".dm"),
 	DOMINICAN_REPUBLIC("Dominican Republic", Continent.SOUTH_AMERICA, "Santo Domingo", "DO", "DOM", "214", "+1809", ".do"),
