@@ -238,4 +238,12 @@ public class BuilderUtils {
 	public static HostnameBuilder $Hostname() {
 		return new HostnameBuilder();
 	}
+
+	/**
+	 * Returns the UUID Builder factory.
+	 * @return the builder for UUIDs.
+	 */
+	public static UuidBuilder $UUIDs() {
+		return new UuidBuilder();
+	}
 }
